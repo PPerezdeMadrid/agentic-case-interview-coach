@@ -217,6 +217,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Never commit PDF files
+*.pdf
+
 # Research draft materials: keep only the folder README in git
 00 first draft/**
 !00 first draft/
@@ -229,5 +232,3 @@ __marimo__/
 
 # Dataset sources managed outside git
 02 Dataset/eacl23_soqg/
-02 Dataset/*.pdf
-02 Dataset/**/*.pdf

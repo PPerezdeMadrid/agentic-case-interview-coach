@@ -15,6 +15,7 @@ PDF_GLOBS = [
 ]
 JSON_GLOBS = [
     "script/output/**/*.json",
+    "duke_data_preprocessed/**/*.json",
     "duke_data_processed/**/*.json",
 ]
 
@@ -64,6 +65,9 @@ def suggest_pdf_for_json(json_relative_path: str) -> str | None:
     lowered = json_relative_path.lower()
 
     if "duke_casebook_2017_profitability_18" in lowered:
+        return DEFAULT_PDF
+
+    if "duke_data_preprocessed/duke_" in lowered:
         return DEFAULT_PDF
 
     if "yachtco" in lowered:
