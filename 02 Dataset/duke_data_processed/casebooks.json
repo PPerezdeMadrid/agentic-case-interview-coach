@@ -1,0 +1,41 @@
+[
+  {
+    "casebook_id": "harvard_business_school_case_interview_guide",
+    "casebook_name": "Harvard Business School Case Interview Guide",
+    "school": "Harvard Business School",
+    "year": null,
+    "source_type": "https://careerinconsulting.com/case-interview-examples/#elementor-toc__heading-anchor-11",
+    "cases_ids": [
+      "duke_yachtco_01"
+    ],
+    "notes": "Prepared by the Harvard Business School Management Consulting Club. Used as a source of consulting cases, frameworks, and interview preparation material for agentic interview simulation."
+  },
+  {
+    "casebook_id": "duke_fuqua_2017",
+    "casebook_name": "The Duke MBA Consulting Club Casebook",
+    "school": "Duke Fuqua School of Business",
+    "year": 2017,
+    "cases_ids": [
+      "duke_yachtco_01",
+      "duke_swipe_right_for_canoodle_02",
+      "duke_cackalacky_construction_03",
+      "duke_sardine_airlines_04",
+      "duke_the_run_of_the_mill_nowoco_05",
+      "duke_dealer_jacks_06",
+      "duke_fresher_breath_07",
+      "duke_off_broadway_blues_08",
+      "duke_galacticas_epic_struggle_09",
+      "duke_from_breakdowns_to_make_ups_10",
+      "duke_devco_11",
+      "duke_pharmaceutical_rare_disease_business_growth_12",
+      "duke_mobilizing_your_world_13",
+      "duke_walter_black_industries_14",
+      "duke_activist_action_15",
+      "duke_orange_yoga_studio_16",
+      "duke_the_everything_retailer_17",
+      "duke_purple_pill_company_18"
+    ],
+    "source_type": "https://careerinconsulting.com/case-interview-examples/#elementor-toc__heading-anchor-11",
+    "notes": "2016-2017 Duke MBA Consulting Club casebook from The Fuqua School of Business. Used as a source of profitability consulting cases for agentic interview simulation."
+  }
+]

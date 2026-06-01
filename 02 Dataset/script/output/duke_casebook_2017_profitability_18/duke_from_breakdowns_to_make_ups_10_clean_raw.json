@@ -1,0 +1,135 @@
+{
+  "case_id": "from_breakdowns_to_makeups_001",
+  "case_title": "From Breakdowns to Make-ups",
+  "industry": "Industrial Goods",
+  "quantitative_level": "Difficult",
+  "qualitative_level": "Difficult",
+  "case_content": [
+    {
+      "block_id": "from_breakdowns_to_makeups_data_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 95,
+      "content": "Industry: Industrial Goods\nQuantitative Level: Difficult\nQualitative Level: Difficult"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 96,
+      "content": "From Breakdown to Make-ups\n\nPrompt #1:\n• Your client is PrimeCo, a major producer and distributor of advanced industrial products. For this purpose, “advanced industrials” refers to products that have technically complex design and manufacturing processes, and typically includes industries like advanced electronics, aerospace and defense, and automotive assembly. Your client is one of the largest aerospace and defense prime contractors (a prime contractor is the firm that is hired to complete the final product and fulfill the order contract). The CEO of PrimeCo has hired your firm to investigate why PrimeCo’s profits have been declining, and to recommend solutions to improve their situation."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 96,
+      "content": "Interviewer Guidance:\n• This case begins as a straight-forward profitability case.\n• Tangential information (such as the definitions of “advanced industrials” and “prime contractors”) is inserted to force the candidate to filter out the unnecessary noise.\n• As an aerospace and defense prime contractor, PrimeCo sells finished products to both the U.S. government and to private sector clients.\n• PrimeCo has both its headquarters and all of its manufacturing operations in the U.S."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit #1",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_from_breakdowns_to_make_ups_10_page_97_full.png",
+      "source_page": 97,
+      "content": "Exhibit #1\n\nPrimeCo Historical Financials\n\n$800\n\n$700\n\n$600\n\n$512\n\n$489\n\nFigured in $M\n\n$500\n\n$459\n\n$438\n\n$419 $375\n\n$400\n\n$327 $293\n\n$300\n\n$200\n\n$100\n\n$-\n\n$700\n\n$621\n\n$594\n\n$545 $488\n\n$434 $428\n\n$400\n\nPrimeCo\n\n2015 2008 2009 2010 2011 2012 2013 2014\n\nRevenue Profit"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 98,
+      "content": "Interviewer guidance on Exhibit #1\n\nExhibit #1 Guidance:\nAnalysis:\n\n• Exhibit represents PrimeCo’s revenue and profits (in $ million) over the past 8 years.\n\n• Interviewee should recognize that PrimeCo’s profits have been declining for the past 3 years, even as revenue has continued to rise.\n\n• Interviewee should draw the following\ninsights:\n– Revenue is rising steadily – Profit grew with revenue for the first 5 years, but has been declining for the past 3. – Profit margin has dropped significantly from nearly 90% in 2008 to 66% in year 2015 (not important that the interviewee actually do the calculations, simply that they recognize the severity of the decline).\n\n• Interviewee should want to dig deeper into PrimeCo’s cost structure."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_exhibit_002",
+      "block_type": "exhibit",
+      "title": "Exhibit #2",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_from_breakdowns_to_make_ups_10_page_99_full.png",
+      "source_page": 99,
+      "content": "Exhibit #2\n\nPrimeCo Cost Structure\n\n2012\n\nDistribution, 14%\n\nRaw Materials, 18%\n\nOverhead, 5%\n\nSub-component #1, 7%\n\nSub-component #2, 9%\n\nManufacturing Labor,\n\n22%\n\nSub-component #3, 25%\n\n2015\n\nRaw Materials, 16.0%\n\nSub-component #1,\n\n7.0%\n\nSub-component #2,\n\n14.0%\n\n8.0%\n\nSub-component #3,\n\n39.0%\n\nDistribution, 11.0%\n\nOverhead, 5.0%\n\nManufacturing Labor,"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 100,
+      "content": "Interviewer guidance on Exhibit #2\n\nExhibit #2 Guidance:\nAnalysis:\n\n• Exhibit represents PrimeCo’s cost structure in 2012 (the last year before profits began declining) and 2015.\n\n• Interviewee should recognize that sub-component #3 has increased dramatically as a proportion of PrimeCo’s costs, while labor and distribution costs have shrunk.\n\n• If asked, interviewer can explain that a sub-component is an item that is assembled by a subcontractor (supplier) and sold to PrimeCo, who then uses the sub-component as one part of the final product. For example, GM, an automotive manufacturer may purchase already assembled brake pads from Callahan Automotive.\n\n• Interviewee should draw the following\ninsights:\n– Sub-component #3 has increased dramatically as a proportion of PrimeCo’s total costs (25% to 39%). – Manufacturing labor and distribution has both shrunk as a proportion of PrimeCo’s costs (22% to 14% and 14% to 11%, respectively), possibly as a result of increased efficiency through technology improvements and automation.\n\n• Interviewee should want to dig deeper into the costs of sub-component #3."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_exhibit_003",
+      "block_type": "exhibit",
+      "title": "Exhibit #3",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_from_breakdowns_to_make_ups_10_page_101_full.png",
+      "source_page": 101,
+      "content": "Exhibit #3\n\nSubPrime Co Product Breakdown and Market Analysis\n\nSub-Component #3 Cost Teardown ($10.00/unit)\n\nComponent Worldwide Market Price Part A 0.83 $ Part B 0.85 $ Part C 3.12 $\n\nPart A,\n\nProfit, 12.0%\n\n10.0% Part B, 8.0%\n\nOverhead, 9.9%\n\nPart C, 33.3% Labor, 26.8%\n\nCompany Profit Margin Overhead Rate Competitor A 15.0% 2.8% Competitor B 14.5% 3.2% Competitor C 15.5% 3.0%\n\nTable 1\n| Component | Worldwide Market Price |\n| --- | --- |\n| Part A | $ 0 .83 |\n| Part B | $ 0 .85 |\n| Part C | $ 3 .12 |\n\nTable 2\n| Company | Profit Margin | Overhead Rate |\n| --- | --- | --- |\n| Competitor A | 15.0% | 2.8% |\n| Competitor B | 14.5% | 3.2% |\n| Competitor C | 15.5% | 3.0% |"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #3",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_from_breakdowns_to_make_ups_10_page_102_full.png",
+      "source_page": 102,
+      "content": "Interviewer guidance on Exhibit #3\n\nExhibit #3 Guidance:\nAnalysis:\n\n• Exhibit contains a lot of information, and interviewee should carefully walk-through the data to fully understand it. • Interviewee should recognize that with the given price of $10.00 unit and the breakdown of that prime, the interviewee can derive the dollar amount of each component. These dollar amounts can then be compared to the worldwide market price for selected parts.\n– Part A $1.00 – Part B $0.80 – Part C: $3.33 – Labor $2.68 – Overhead $0.99 – Profit $1.20 • The interviewee should also recognize that SubPrime Co. has significantly higher overhead rates than competitors, which may be contributing to their lower-than-industry average profit margin. • If interviewee suggests that PrimeCo. change suppliers to one of the competitiors, interviewer should note that SubPrime Co. is located in the same city as PrimeCo.’s headquarters, and thus PrimeCo wants to make every effort to keep SubPrime Co. in business.\n\n• Interviewee should draw the following\ninsights:\n– Dollar amounts for each component in the teardown. – SubPrime Co. is significantly marking up both Parts A and C in their pricing of Sub-component #3, while giving PrimeCo. a deal on Part B. – SubPrime Co. has a significantly higher overhead rate than competitors, which may be contributing to compressed profit margins."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 103,
+      "content": "Prompt #2\n• Because of the close relationship between the two companies, PrimeCo wants to offer SubPrime Co a deal:\n– If SubPrime Co. can lower the unit price to $9.00/unit, PrimeCo will help SubPrime Co acquire Parts A, B, and C at worldwide market prices, and will share best-practices in manufacturing efficiency.\n• The new unit price of $9.00/unit will include Parts A, B, and C at market prices, will drop SubPrime Co’s overhead to industry average, and will raise SubPrime Co’s profit margin to industry average.\n\n• Question 1: By how much (in dollars) will SubPrime Co have to reduce labor costs per unit to achieve a $9.00/unit price?\n\n• Give the candidate a chance to work through the first problem and then give the second question\n\n• Question 2: If this decrease in price returned PrimeCo’s spend on Sub-component #3 to 2012 levels, how would this impact PrimeCo’s profits? Assume no changes to revenue or other costs."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_005",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #2",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_from_breakdowns_to_make_ups_10_page_104_full.png",
+      "source_page": 104,
+      "content": "Interviewer Answer – Question 1\n• 1) By how much (in dollars) will SubPrime Co have to reduce labor costs per unit to achieve a $9.00/unit price?\n\nOld Cost Structure New Cost Structure\n\nComponent $ Amount % $ Amount % Part A 1.00 $ 10.0% 0.83 $ 9.2% Part B 0.80 $ 8.0% 0.85 $ 9.4% Part C 3.33 $ 33.3% 3.12 $ 34.7% Labor 2.68 $ 26.8% 2.58 $ 28.7% Overhead 0.99 $ 9.9% 0.27 $ 3.0% Profit 1.20 $ 12.0% 1.35 $ 15.0% Total 10.00 $ 100% 9.00 $ 100.0%\n\n|  | Old Cost Structure |  | New Cost Structure |  |\n| --- | --- | --- | --- | --- |\n| Component | $ Amount | % | $ Amount | % |\n| Part A | $ 1.00 | 10.0% | $ 0.83 | 9.2% |\n| Part B | $ 0.80 | 8.0% | $ 0.85 | 9.4% |\n| Part C | $ 3.33 | 33.3% | $ 3.12 | 34.7% |\n| Labor | $ 2.68 | 26.8% | $ 2 .58 | 28.7% |\n| Overhead | $ 0.99 | 9.9% | $ 0.27 | 3.0% |\n| Profit | $ 1.20 | 12.0% | $ 1.35 | 15.0% |\n| Total | $ 10.00 | 100% | $ 9.00 | 100.0% |"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_006",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #3 Guidance",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 105,
+      "content": "Interviewer Answer – Question 2\n• 2) If this decrease in price returned PrimeCo’s spend on Sub-component #3 to 2012 levels, how would this impact PrimeCo’s profits? Assume no changes to revenue or other costs.\n\n2012 Cost Structure Original 2015 Cost Structure\n\nComponent % of 2012 Costs $ Amt in 2012 % of 2015 Costs $ Amt in 2015 Raw Materials 18% 10.26 $ 16% 48.00 $ Sub-component #1 7% 3.99 $ 7% 21.00 $ Sub-component #2 9% 5.13 $ 8% 24.00 $ Sub-component #3 25% 14.25 $ 39% 117.00 $ Manufacturing Labor 22% 12.54 $ 14% 42.00 $ Overhead 5% 2.57 $ 5% 15.00 $ Distribution 14% 7.98 $ 11% 33.00 $ Total 100% 57.00 $ 100% 300.00 $\n\nFrom Exhibit #1, we can find that PrimeCo’s 2012 total costs were $57M. Because we also know that 25% of the total 2012 costs were on Sub-component #3, we can find that PrimeCo spent $14.25M on Sub-component #3 in 2012. If PrimeCo reduced their spending on Sub-component #3 from $117M to $14.25M, they would reduce costs, and thus increase profit, by $102.75M.\n\nPrimeCo’s new 2015 total cost would be $197.25M, and 2015 profit would be $502.75M.\n\n|  | 2012 Cost Structure |  | Original 2015 Cost Structure |  |\n| --- | --- | --- | --- | --- |\n| Component | % of 2012 Costs | $ Amt in 2012 | % of 2015 Costs | $ Amt in 2015 |\n| Raw Materials | 18% | $ 10.26 | 16% | $ 48.00 |\n| Sub-component #1 | 7% | $ 3.99 | 7% | $ 21.00 |\n| Sub-component #2 | 9% | $ 5.13 | 8% | $ 24.00 |\n| Sub-component #3 | 25% | $ 14.25 | 39% | $ 117.00 |\n| Manufacturing Labor | 22% | $ 12.54 | 14% | $ 42.00 |\n| Overhead | 5% | $ 2.57 | 5% | $ 15.00 |\n| Distribution | 14% | $ 7.98 | 11% | $ 33.00 |\n| Total | 100% | $ 57.00 | 100% | $ 300.00 |"
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 106,
+      "content": "The CEO of PrimeCo has hired your firm to investigate why PrimeCo’s profits have been declining, and to recommend solutions to improve their situation."
+    },
+    {
+      "block_id": "from_breakdowns_to_makeups_guidance_007",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 106,
+      "content": "Interviewer Guidance:\n• The final recommendation should assess the impact that the work with SubPrime Co will have on PrimeCo’s profits, and should also note what other factors PrimeCo will have to take into account.\n• Strategic implications:\n– Once PrimeCo commits to improving a supplier’s operations, how will this impact relations with the producers of Sub-components #1 and #2?\n• Financial implications:\n– What will PrimeCo have to invest in order to help SubPrime Co achieve the reduced overhead and labor costs?\n– What will SubPrime Co have to invest in order to achieve the reduced costs?"
+    }
+  ]
+}

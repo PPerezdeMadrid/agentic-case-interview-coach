@@ -216,3 +216,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Research draft materials: keep only the folder README in git
+00 first draft/**
+!00 first draft/
+!00 first draft/README.md
+
+# Planning and context materials: keep only the folder README in git
+01 plan and context/**
+!01 plan and context/
+!01 plan and context/README.md
+
+# Dataset sources managed outside git
+02 Dataset/eacl23_soqg/
+02 Dataset/*.pdf
+02 Dataset/**/*.pdf

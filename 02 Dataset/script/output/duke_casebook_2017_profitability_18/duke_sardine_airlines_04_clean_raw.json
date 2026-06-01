@@ -1,0 +1,136 @@
+{
+  "case_id": "sardine_airlines_profitability_001",
+  "case_title": "Sardine Airlines",
+  "industry": "Transportation",
+  "quantitative_level": "Medium",
+  "qualitative_level": "Medium",
+  "case_award": "DMCC Case-writing Competition Winner 1st Prize",
+  "case_content": [
+    {
+      "block_id": "sardine_metadata_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 38,
+      "content": "Industry: Transportation\nQuantitative Level: Medium\nQualitative Level: Medium\nAward: DMCC Case-writing Competition Winner 1st Prize"
+    },
+    {
+      "block_id": "sardine_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Profitability Turnaround",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 39,
+      "content": "Sardine Airlines is an ultra low-cost carrier with flights throughout the continental United States. They have hub airports in Oakland, California; Tulsa, Oklahoma, and Hartford, Connecticut. Sardine Airlines is facing increased pressure from other low cost carriers such as Cattle Car Air and Soul Airlines. Sardine Airlines has faced declining profit for the past year. Sardine’s CEO, Penny McPincher, has asked your team for advice on how to reverse the profitability trend."
+    },
+    {
+      "block_id": "sardine_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 39,
+      "content": "Additional information to give the candidate if asked:\n- Sardine Airlines competes primarily on having the lowest cost fares and offering minimal service.\n- Due to its business model, Sardine Airlines has a culture of cost savings that can be passed to the customer.\n- Sardine Airlines is trying to grow profit margin to 20%.\n- Interviewer guidance: profit margin means net income / total revenue.\n- If the interviewee asks about revenues or costs, give them Exhibit #1, Statement of Operations."
+    },
+    {
+      "block_id": "sardine_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit #1 - Statement of Operations",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 40,
+      "content": "Exhibit #1 - Statement of Operations\nUnaudited, in millions\n\n| Item | 2015 | 2014 | 2013 | 2012 |\n| --- | ---: | ---: | ---: | ---: |\n| Passenger Revenue | $1,088 | $1,092 | $908 | $793 |\n| Non-ticket Revenue | $1,055 | $968 | $862 | $769 |\n| Total Revenue | $2,143 | $2,060 | $1,770 | $1,562 |\n| Fuel Expense | $589 | $583 | $625 | $718 |\n| Landing Fees | $383 | $370 | $332 | $296 |\n| Maintenance | $214 | $164 | $106 | $67 |\n| SG&A | $428 | $309 | $185 | $171 |\n| Special Charges | $0 | $0 | $225 | $0 |\n| Net Income Pre Tax | $529 | $634 | $297 | $310 |\n| Taxes | $158 | $189 | $88 | $92 |\n| Net Income | $371 | $445 | $209 | $218 |"
+    },
+    {
+      "block_id": "sardine_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guide - Exhibit #1 Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 41,
+      "content": "Exhibit #1 - Interviewer Guide\n\nYoY change in revenues from prior year:\n| Revenue Item | 2015 | 2014 | 2013 | 2012 |\n| --- | ---: | ---: | ---: | ---: |\n| Passenger | -0.37% | 20.26% | 14.47% | |\n| Non-ticket | 9% | 12% | 12% | |\n| Total Revenue | 4% | 16% | 13% | |\n\nExpenses / Net Income as a percent of total revenue:\n| Item | 2015 | 2014 | 2013 | 2012 |\n| --- | ---: | ---: | ---: | ---: |\n| Fuel | 27% | 28% | 35% | 46% |\n| Landing Fees | 18% | 18% | 19% | 19% |\n| Maintenance | 10% | 8% | 6% | 4% |\n| SG&A | 20% | 15% | 11% | 11% |\n| Special Charges | 0% | 0% | 13% | 0% |\n| Net Income Pre Tax | 25% | 31% | 17% | 20% |\n| Taxes | 30% | 30% | 30% | 30% |\n| Net Income | 17% | 21% | 12% | 14% |"
+    },
+    {
+      "block_id": "sardine_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #1",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_sardine_airlines_04_page_42_full.png",
+      "source_page": 42,
+      "content": "Exhibit #1 Guidance:\n\nAnalysis:\n- The candidate should keep in mind the 20% profit margin that the CEO wants, which given the net income, is $57.6M.\n- The candidate should see that revenue has continued to grow, albeit slower than in the past.\n- The candidate should see that SG&A as a proportion of revenue increased from 15% to 20% and is the primary driver of declining profit.\n- Once SG&A is identified, give the candidate Exhibit #2.\n- If the candidate identifies maintenance costs proportionately increasing, give them Exhibit #3.\n- If Exhibit #3 never comes up, you do not need to push it to the candidate.\n\nAdditional notes:\n- The exhibit is designed to have too much data to synthesize in a reasonable amount of time.\n- Non-ticket revenue includes things like bag fees, food, beverages, customer service charges, paper tickets, etc.\n- Landing fees are what Sardine Airlines pays to use airports."
+    },
+    {
+      "block_id": "sardine_exhibit_002",
+      "block_type": "exhibit",
+      "title": "Exhibit #2 - SG&A Breakdown",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_sardine_airlines_04_page_43_full.png",
+      "source_page": 43,
+      "content": "Exhibit #2 - SG&A Breakdown\nIn $M\n\n| SG&A Category | 2015 | 2014 |\n| --- | ---: | ---: |\n| Marketing | $86 | $62 |\n| Salaries | $171 | $170 |\n| Rent | $86 | $46 |\n| Customer Service | $64 | $12 |\n| Miscellaneous | $21 | $19 |\n| Total SG&A | $428 | $309 |"
+    },
+    {
+      "block_id": "sardine_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #2",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_sardine_airlines_04_page_44_full.png",
+      "source_page": 44,
+      "content": "Exhibit #2 Guidance:\n\nAnalysis:\nThe percent of total SG&A and absolute increases are below.\n\nPercent of total SG&A:\n| SG&A Category | 2015 | 2014 |\n| --- | ---: | ---: |\n| Marketing | 20% | 20% |\n| Salaries | 40% | 55% |\n| Rent | 20% | 15% |\n| Customer Service | 15% | 4% |\n| Miscellaneous | 5% | 6% |\n\nYoY Change:\n| SG&A Category | YoY Change |\n| --- | ---: |\n| Marketing | $24M |\n| Salaries | $1M |\n| Rent | $40M |\n| Customer Service | $52M |\n| Miscellaneous | $2M |\n\nThe candidate should identify that three areas are driving growth in SG&A:\n- Marketing.\n- Rent.\n- Customer Service.\n\nThe other areas are not large enough increases to focus on to get to the $57.6M profit increase the CEO is looking to achieve."
+    },
+    {
+      "block_id": "sardine_exhibit_003",
+      "block_type": "exhibit",
+      "title": "Exhibit #3 - Sardine Maintenance",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 45,
+      "content": "Exhibit #3 - Sardine Maintenance\n\nTO: Penny McPincher, CEO of Sardine Airlines\nFROM: Michael Huerta, Administrator of the Federal Aviation Administration\nDATE: June 30th, 2015\nSUBJECT: Sardine Airlines Maintenance Record\n\nThis memorandum is to notify that as of today, Sardine Airlines is no longer under maintenance supervision from the Federal Aviation Administration (FAA). The FAA believes the improved maintenance program no longer warrants FAA intervention.\n\nAny future decrease in maintenance standards will result in FAA supervision or sanctions."
+    },
+    {
+      "block_id": "sardine_guidance_005",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #3",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_sardine_airlines_04_page_46_full.png",
+      "source_page": 46,
+      "content": "Exhibit #3 Guidance:\n\nAnalysis:\n- The candidate should put together that the increase in maintenance spending is directly tied to the fact that previous maintenance spending was not sufficient to be considered safe.\n- The candidate should move off of maintenance cost cutting.\n- If the candidate is still interested in pursuing cost cutting in maintenance, give them this prompt: “Our client is adamant that the recently improved maintenance program is running at peak efficiency and any cuts would invite unwanted scrutiny from regulators.”\n\nAdditional information:\n- The Federal Aviation Administration, FAA, is the U.S. Government regulatory agency responsible for the safety of U.S. airlines."
+    },
+    {
+      "block_id": "sardine_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2 - Addressing SG&A Cost Drivers",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 47,
+      "content": "Sardine Airlines has been aggressively advertising to combat competitive pressures. Both the CEO and the Board believe this is a critical expenditure. Recently the landlord for the firm’s headquarters in Oakland raised rent by $35M. Customer service complaints have increased nearly 3,000%, which the company believes is due to the new 12 inch seats that were installed in the entire fleet. This has caused Sardine’s call center provider to increase billing by 520% from 2014’s $12.36M. What can Sardine Airlines do to address these issues?"
+    },
+    {
+      "block_id": "sardine_guidance_006",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 47,
+      "content": "Additional information / constraints:\n- Neither the CEO nor the Board will take any recommendations on cutting marketing expenses.\n- The firm does not have to be headquartered in Oakland, but does want to be in a location where it has major operations.\n- The firm is not interested in increasing seat sizes. They are actually looking to pilot 8 inch seats in a new class of service called “steerage”.\n- The call center vendor charges rates that are on average 60% higher because their call centers are based in the United States and staffed with native English speakers.\n- Rent in Tulsa or Hartford would be 40% less than current 2015 rent.\n- Interviewer guidance: this equates to $34.4M."
+    },
+    {
+      "block_id": "sardine_final_prompt_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation Prompt",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 48,
+      "content": "The CEO, Ms. McPincher, is going to be joining us in just a few minutes to hear your recommendations on how to improve profitability."
+    },
+    {
+      "block_id": "sardine_guidance_007",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 48,
+      "content": "The candidate should have a recommendation that includes the following:\n- To increase profit margin to 20%, Sardine Airlines should focus on cutting SG&A costs.\n- There are two key ways to cut SG&A: customer service and rent.\n- Recommend that the call center vendor should transition to an overseas-based vendor, which would save approximately $38M.\n- Move the headquarters to either Tulsa or Hartford, which will have less expensive office real estate markets and thus provide major cost savings.\n- Given the relatively low increase in revenue from installing 12 inch seats, recommend against 8 inch seats.\n\nRisks should include:\n- One-time expenses in moving the headquarters.\n- Unhappy customers from decreased customer service quality."
+    }
+  ]
+}

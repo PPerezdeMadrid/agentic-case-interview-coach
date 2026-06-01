@@ -1,0 +1,72 @@
+{
+  "case_id": "pharmaceutical_BGC_001",
+  "case_title": "Pharmaceutical Rare Disease Business Growth",
+  "industry": "Pharmaceuticals",
+  "quantitative_level": null,
+  "qualitative_level": null,
+  "case_content": [
+    {
+      "block_id": "pharmaceutical_BGC_data_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 117,
+      "content": "Industry: Pharmaceuticals"
+    },
+    {
+      "block_id": "pharmaceutical_BGC_data_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Quantitative Analysis",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_pharmaceutical_BGC_12_page_121.png",
+      "source_page": 121,
+      "content": "Quantitative Analysis and Solutions\n\nLI: Low Income"
+    },
+    {
+      "block_id": "pharmaceutical_BGC_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Rare Disease Growth",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 118,
+      "content": "Prompt Our client is a large pharmaceutical company with a strong business in \"Rare Disease\" (rare diseases are conditions that affect fewer than 200,000 people in the US).\n\nHistorically, pharmaceutical companies have not invested significantly in Rare Disease because it has not been cost effective to conduct research for such small populations. Due to the fall off in the number of pharmaceutical blockbusters and improved regulation to make R&D cheaper for Rare Disease, pharmaceutical companies have begun to invest more in Rare Disease R&D over the last few years.\n\nOur client has hired BCG because it would like to grow its Rare Disease business."
+    },
+    {
+      "block_id": "pharmaceutical_BGC_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_pharmaceutical_BGC_12_page_122.png",
+      "source_page": 118,
+      "content": "Interviewer Guidance Case question to solve\n\n1) How can the client double its Rare Disease business in 5 years?"
+    },
+    {
+      "block_id": "pharmaceutical_BGC_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Case Walkthrough",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 119,
+      "content": "Interviewer Guidance Ask the candidate the following questions\n\n1) How would you approach our client's question on growing its Rare Disease business?\n2) Where would you like to start?\n\nWhen the candidate asks about the existing business, share Exhibit 1 (. Based on the data, how large will the client's rare disease business be in 2016? (duke_pharmaceutical_BGC_12_page_122.png) [If necessary,] what is the shortfall to its goal of doubling its business?\n\nWhat does the client need to do to double the Rare Disease revenues by 2016? [If candidates discusses acquisitions] ask who should the client acquire and how many assets will client need to buy?\n\nInterviewer Guidance (Provide only if requested) Our client is an industry leader with a track record of success. Its existing business is $2.5B, expected to grow at 5% per year\n\nRare disease market is $30B and is as profitable as \"Big Pharma“\n• While research is relatively expensive, the government provides tax credits for drugs designated to treat rare diseases\n• Additionally, prices tend to be higher to make up for the upfront research investment. It's also growing faster than Big Pharma.\n\nThere are many small bio-techs that are attractive targets and there are also other big pharmaceutical companies that have rare disease divisions / assets"
+    },
+    {
+      "block_id": "pharmaceutical_BGC_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 119,
+      "content": "Let's say the CEO walks in, could you summarize for me?"
+    },
+    {
+      "block_id": "pharmaceutical_BGC_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 120,
+      "content": "Recommendation Internal growth will not be sufficient to achieve your goal of doubling your business. You will need to acquire ~3 \"peak revenue\" assets to close the gap between your goal of $2.5B and the $1.1B your portfolio will generate organically."
+    }
+  ]
+}

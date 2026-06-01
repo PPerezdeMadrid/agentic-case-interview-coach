@@ -1,0 +1,171 @@
+{
+  "case_id": "the_run_of_the_mill_nowoco_001",
+  "case_title": "The Run of the Mill NOWOCO",
+  "industry": "Industrial Goods",
+  "quantitative_level": "Medium",
+  "qualitative_level": "Medium",
+  "case_content": [
+    {
+      "block_id": "the_run_of_the_mill_nowoco_data_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 49,
+      "content": "Industry: Industrial Goods\nQuantitative Level: Medium\nQualitative Level: Medium"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 50,
+      "content": "Prompt #1:\nOur client is a Germany-based, material manufacturer called ‘The Run of the Mill NOWOCO’ specializing in a range of products for the construction industry. In recent months, our client has benefited from anti-dumping taxes on the import of similar products. This has resulted in a demand surge for our client and other domestic competitors; however overall profitability is going down and customer complaints about order fulfilment are at an all-time high. As an integral part of your team, what do you think is going on here?"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 50,
+      "content": "Interviewer Guidance (provide only if asked):\n• The ultimate goals are to maximize overall profitability & order fulfilment % for key customers.\n– Key customers will be the ones contributing the most to profitability.\n• The client sells products (specific product lines are irrelevant for this case) for the construction industry. It sells directly to customers & through distributors in Germany only.\n• The client is one of the 3 largest domestic producers with almost 30% market share\n• The client defines:\n– Profitability over variable costs, that is, profitability = R – VC\n– Order fulfilment % is defined as: (% of tons delivered on time / total tons ordered)\n• Framework that captures:\n– Financial aspects (revenues, variable costs) to address profitability\n– Operational issues (manufacturing issues, utilization, logistics, issues in downstream/upstream) to address customer complaint issues\n– External factors (geography, competitors, macroeconomic factors)"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 51,
+      "content": "Prompt #2:\n• What are some ways the client can increase the order fulfillment as defined previously?\n• What are some of the trade-offs of doing that?"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 51,
+      "content": "Interviewer Guidance:\n• Relying on the framework created in the initial prompt, the interviewee should brainstorm to create a new structure/buckets that should touch upon the following points:\n– Reduce process time, transportation time, and/or other lead times\n– Increase inventory levels\n– More accurate forecasting\n– Improve supplier engagements and distribution / transportation planning\n• Challenges/Trade-offs:\n– Increased inventory will imply higher working capital and inventory cost\n– Will put additional pressure on manufacturing\n– Reducing lead times may compromise on the robustness of the current process/may not be feasible\n• Push the discussion towards increasing inventory levels by ramping up production"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 52,
+      "content": "Interviewer guidance on Exhibits\n\nExhibit #1 Guidance:\n• Present Exhibit 1 to the candidate after the discussion on increasing inventory levels by ramping up production.\n• From the exhibit, the candidate should be able to observe that:\n– The client has 3 manufacturing locations\n– The total utilization is 100% (that is, the plants are running at full capacity)\n– That the total available time for production is split into production time and scheduled and unscheduled maintenance.\n• Since the units are all constrained (that is, they are running at full capacity), we need to focus on reallocating volumes to the most profitable customers (profitable in terms of Profitability/Hour). Background\n• Production ratio is the ratio of the total time available when the production happened\n• Schedule loss ratio is the ratio of time lost due to scheduled maintenance\n• Unscheduled loss ratio is the time that is lost as a result of unanticipated breakdowns and quality issues\n• Though the actual production is only about 80% of the total time, it is consistent with the industry standard and the scope for improvement may be minimal\n• Products are similar, and hence the cost structures are not too different (take a customer approach)"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit #1 – Production & Loss Time Info",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_the_run_of_the_mill_05_page_53_full.png",
+      "source_page": 53,
+      "content": "Exhibit #1 – Production & Loss Time Info\n\nUtilization & operational efficiency at Run of the Mill NOWOCO Plants 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0\n\nPlant C Plant B Plant A\n\nProduction time ratio Capacity Scheduled Loss time ratio Unscheduled Loss time ratio\n\nIndustry average (per the research published in the Industry journal)\n\n100%\n\n8%\n\n10%\n\n82%\n\nProduction\n\nLoss Scheduled\n\nUnscheduled\n\nTotal time\n\nloss\n\navailable"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_prompt_003",
+      "block_type": "prompt",
+      "title": "Prompt #3",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 54,
+      "content": "Prompt #3:\n• How can the client prioritize customers and improve the order fulfillment?\n• What information will be required to make this decision?"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #3",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 54,
+      "content": "Interviewer Guidance:\n• The client can prioritize based on how profitable (over variable cost) the different customers are and then reallocate production to these customers\n• The information required will be:\n– Revenues\n– Costs\n– Volumes ordered\n– Volume fulfilled for different customers.\n• After this discussion, handover Exhibit 2 to the interviewee"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_exhibit_002",
+      "block_type": "exhibit",
+      "title": "Exhibit #2",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_the_run_of_the_mill_05_page_55.png",
+      "source_page": 55,
+      "content": "Exhibit #2\n\nCommercial Construction Customer\n\nRevenue (Millions\n\nVolumes Ordered (thousands of tons) Order Fulfilment %\n\nof Euros)\n\nA 6 5 65% B 90 45 60% C 20 10 80% D 10 5 80% E 30 25 75% F 150 60 55% G 40 20 70% Others 25 20 95%\n\nSince the process for manufacturing the product is similar, assume a constant cost of 1,250 Euros/ton\n\n| Commercial\nConstruction Customer | Revenue (Millions\nof Euros) | Volumes Ordered\n(thousands of tons) | Order Fulfilment % |\n| --- | --- | --- | --- |\n| A | 6 | 5 | 65% |\n| B | 90 | 45 | 60% |\n| C | 20 | 10 | 80% |\n| D | 10 | 5 | 80% |\n| E | 30 | 25 | 75% |\n| F | 150 | 60 | 55% |\n| G | 40 | 20 | 70% |\n| Others | 25 | 20 | 95% |"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_prompt_004",
+      "block_type": "prompt",
+      "title": "Prompt #4",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 56,
+      "content": "Prompt #4:\n• Based on Exhibit 2, calculate the best case profitability and order fulfilment % for the customers assuming no demand constraints"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_005",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #4",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 56,
+      "content": "Interviewer Guidance:\n• The candidate should make initial observations about how fulfillment for orders for high-value customers are low and there needs to be a re-allocation of volumes for these prioritized customers\n• When asked for clarification, explain that:\n– Revenues are the total revenues\n– Volumes Ordered is the total quantity ordered by the customer\n– Order fulfilment % is defined as the tons of orders fulfilled/total number of tons as a % for a customer\n• Guide the interviewee to calculate the current profitability and reallocate volumes to the most important customers based on the highest profitability per ton."
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Exhibit #2",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_the_run_of_the_mill_05_page_57.png",
+      "source_page": 57,
+      "content": "Exhibit #2 (Interviewer Guidance 1 of 2)\n\n• The candidate could set up a table as shown below 1. Volume Fulfilled = Volume Ordered * Order Fulfilment % 2. Profitability / Ton = (Revenue/Volume Fulfilled) – Variable cost per ton = (Revenue/Volume Fulfilled) – 1250 3. Total Profitability = Profitability/Ton * Volume fulfilled\n• Rank the customers on the basis of profitability/ton\n– Observe that a number of high-value customers (by profitability) are under-served (i.e., low order\n\nfulfilment %)\n\nVolume Ordered (thousands\n\nRevenue (Millions of\n\nOrder fulfilment %\n\nCustomer\n\nEuros)\n\nof tons)\n\nTotal Profits\n\nRank (by Profitability per\n\nProfitability\n\n(Millions of\n\n(Euro/Ton)\n\nEuros)\n\nton)\n\nVolume fulfilled (thousands of tons)\n\nA 6 5 65% 3 596 2 6 B 90 45 60% 27 2083 56 2 C 20 10 80% 8 1250 10 4 D 10 5 80% 4 1250 5 5 E 30 25 75% 19 350 7 7 F 150 60 55% 33 3295 109 1 G 40 20 70% 14 1607 23 3 Others 25 20 95% 19 63 1 8 Total 127 212 96\n\n| Customer | Revenue\n(Millions of\nEuros) | Volume\nOrdered\n(thousands\nof tons) | Order\nfulfilment % | Volume\nfulfilled\n(thousands of\ntons) | Profitability\n(Euro/Ton) | Total Profits\n(Millions of\nEuros) | Rank\n(by Profitability per\nton) |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| A 6 5 65% |  |  |  | 3 596 2 |  |  | 6 |\n| B 90 45 60% |  |  |  | 27 2083 56 |  |  | 2 |\n| C 20 10 80% |  |  |  | 8 1250 10 |  |  | 4 |\n| D 10 5 80% |  |  |  | 4 1250 5 |  |  | 5 |\n| E 30 25 75% |  |  |  | 19 350 7 |  |  | 7 |\n| F 150 60 55% |  |  |  | 33 3295 109 |  |  | 1 |\n| G 40 20 70% |  |  |  | 14 1607 23 |  |  | 3 |\n| Others 25 20 95% |  |  |  | 19 63 1 |  |  | 8 |\n|  |  |  |  | 127 212 |  |  |  |"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_expected_analysis_002",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Exhibit #2",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_the_run_of_the_mill_05_page_58.png",
+      "source_page": 58,
+      "content": "Exhibit #2 (Interviewer Guidance 2 of 2)\n\n• The candidate calculates a best case scenario to maximize profits and order fulfilment for all customers by reallocating volumes to the key customers F, B, and G\n• In this case, the order fulfillment for F, B, and G will be 100% (60, 45, & 20 kt respectively), and the residual capacity of 2 tons will go to C.\n– The total capacity of 127 kt is a constant.\n• This increases overall profits from 212 M to 326 M (an increase of 54%) and an order fulfillment of the top 3 customers of 100%\n• A good candidate will also talk about the potential risks with this strategy (go to prompt #5)\n\nVolumes\n\nCustomer Revenue (Millions of Euros)\n\nOrdered (thousands of tons)\n\ntons)\n\nTotal Profits\n\nProfitability\n\nOrder fulfillment %\n\n(Millions of\n\n(Euro/Ton)\n\nEuros)\n\nVolume fulfilled (thousands of\n\nF 150 60 60 3295 198 100% B 90 45 45 2083 94 100% G 40 20 20 1607 32 100% C 20 10 2 1250 3 20% D 10 5 0 1250 0 0% A 6 5 0 596 0 0% E 30 25 0 350 0 0% Others 25 20 0 63 0 0% Total 127 326 97\n\n| Customer | Revenue\n(Millions of Euros) | Volumes\nOrdered\n(thousands of\ntons) | Volume\nfulfilled\n(thousands of\ntons) | Profitability\n(Euro/Ton) | Total Profits\n(Millions of\nEuros) | Order\nfulfillment % |\n| --- | --- | --- | --- | --- | --- | --- |\n| F 150 60 |  |  | 60 3295 198 |  |  | 100% |\n| B 90 45 |  |  | 45 2083 94 |  |  | 100% |\n| G 40 20 |  |  | 20 1607 32 |  |  | 100% |\n| C 20 10 |  |  | 2 1250 3 |  |  | 20% |\n| D 10 5 |  |  | 0 1250 0 |  |  | 0% |\n| A 6 5 |  |  | 0 596 0 |  |  | 0% |\n| E 30 25 |  |  | 0 350 0 |  |  | 0% |\n| Others 25 20 |  |  | 0 63 0 |  |  | 0% |\n|  |  |  | 127 326 |  |  |  |"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_prompt_005",
+      "block_type": "prompt",
+      "title": "Prompt #5",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 59,
+      "content": "Prompt #5:\n• What are the risks of suggesting this strategy to focus on the top 3 customers only?\n• What are some of the ways these risks could be mitigated?"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_006",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #5",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 59,
+      "content": "Interviewer Guidance:\n• The answer should be bucketed (e.g., risks can be bucketed into risk involving de-prioritized customers and risks associated with the currently defined key customers)\n• Risks:\n– Future potential and growth of some of the currently less-preferred customers\n– Volatility of the prioritized key customers\n– Risk arising out of less customer diversification\n– Customers served only 20% will likely migrate to another supplier\n• Mitigation:\n– Fulfillment of 100% may not be necessary – identify customers’ expectations and match those\n– New production - outsourcing or set-up\n– Increase the lead time requirement in the contract\n– Reduce orders\n– Prioritize the most crucial parts and deliver them\n– Have different supply chains for different products."
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 60,
+      "content": "You walked into an elevator with the CEO. What would your final recommendation be?\nRecommendation"
+    },
+    {
+      "block_id": "the_run_of_the_mill_nowoco_guidance_007",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 60,
+      "content": "Interviewer Guidance:\n• Recommend undertaking a prioritization exercise & reallocation of volumes to the most profitable customers that would increase profits by 54%.\n• The prioritized customers at this time will be defined as the “Big 3” (F,B & G), which will have 100% order fulfillment. The other customers will not be served or served minimally after demand for F,B & G is met adequately.\n• Risks and mitigations were discussed in the previous prompt and can be quickly summarized\n• There should be careful and sensitive communication with the sales team and all customers (esp. ones that are deprioritized)\n• There should be a weekly process arrangement to implement and coordinate this recommendation & measure the results"
+    }
+  ]
+}

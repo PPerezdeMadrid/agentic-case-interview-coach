@@ -1,0 +1,117 @@
+{
+  "case_id": "fresher_breath_001",
+  "case_title": "Fresher Breath",
+  "industry": "Consumer Goods",
+  "quantitative_level": "Medium",
+  "qualitative_level": "Medium",
+  "case_content": [
+    {
+      "block_id": "fresher_breath_data_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 69,
+      "content": "Industry: Consumer Goods\nQuantitative Level: Medium\nQualitative Level: Medium"
+    },
+    {
+      "block_id": "fresher_breath_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 70,
+      "content": "Prompt #1:\n• Your client, Minty Fresh Co. has been the dominant leader in Oral Mouthwash for over a century since inventing a unique four oil combination that kills 99% of germs and leaves consumers with a “dentist fresh” clean feeling. Minty Fresh has consistently held 80-90% of the market share for mouthwash, but in the last 3 years, share and profit has been rapidly declining. Your client, the CEO of the US division, has hired you to determine what is driving the decline and how to quickly reverse this trend."
+    },
+    {
+      "block_id": "fresher_breath_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 70,
+      "content": "Interviewer Guidance:\n• This case will only be focused on US sales, global impact is ignored.\n• If asked, assume you are in January 2016. In later parts of the case it will be helpful to keep in mind that results need to be achieved within the 11 remaining months of the 2016.\n• Minty Fresh only sells mouthwash, not other oral care products\n• Most common framework would be centered around revenue and profit. The case will go towards revenue drivers, but interviewee should explore both. Competition should be included in the framework as share is mentioned."
+    },
+    {
+      "block_id": "fresher_breath_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 71,
+      "content": "Interviewer guidance on Exhibits\n\nExhibit #1 Guidance/Prompt #2:\nAnalysis:\n• The “key question” to provide exhibit 1 would be around competitive landscape. If they go towards a different path or two, it is ok to say “There has been major competitive activity in the last few years, so the CEO wants us to start there” •\nThe interviewee should identify:\n\n• Q1 Math: Current share in 2015 is 770/1100 or 70%; Assuming the category is flat, 3 percentage points equals ~$33MM (this number will be needed in later questions) • For Q2 the interviewee should have some elements of a marketing and/or revenue framework: price and volume, volume could be broken into new products, increase buy rate of current users, new retail customers (i.e. gas stations, beauty stores) • An good interviewee will keep in mind the time line and recognize that a new product launch or even new retail customers may be difficult to achieve in the short time frame. Thus, pricing will be the quickest way to move towards increased share\n\n– Minty Fresh is declining – 2 new competitors have quickly taken share in the market in the last 3 years – The category is relatively flat thus this is a case of stealing share, not growing the entire category. • AFTER the interviewee reviews, move forward with the"
+    },
+    {
+      "block_id": "fresher_breath_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 71,
+      "content": "Prompt #2:\nMouthwash is a consumer category that has had relatively flat household penetration for almost a decade, thus the new competitors are stealing share rather than growing the market. Given the fierce competitive environment, our client needs a quick action to help turn around the decline. Our client has aligned with the board that she will turn around the decline and even grow share by 3 percentage points in 2016. 1. Assuming the category remains flat, what is the increased revenue needed to hit a 3 percentage point market share growth? 2. What are some strategies Minty Fresh should consider to quickly regain the share?"
+    },
+    {
+      "block_id": "fresher_breath_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit #1",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_fresher_breath_07_page_72_full.png",
+      "source_page": 72,
+      "content": "Exhibit #1: US Mouthwash landscape\n\nOther Sparkle Minty Fresh Clean B Revenues by Company, $Millions\n\n1,000\n\n1,000\n\n100\n\n2012\n\n2013\n\n1,100\n\n40 50\n\n1,050\n\n75\n\n125 170\n\n2014\n\n2015\n\n120 100 50\n\n900 850 800 770"
+    },
+    {
+      "block_id": "fresher_breath_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 73,
+      "content": "Interviewer guidance on Exhibits\n\nExhibit #2 Guidance:\nAnalysis:\n\n• Interviewee should recognize there are different bottle sizes and price points, which vary across competitors\n• Ultimately, the goal is to notice:\n– Minty Fresh is underpriced versus\n\n• Prompt: Given that pricing will be a quick way to impact 2016 share, your team pulled together list prices for Minty Fresh and its 2 top competitors. They were also able to obtain 2015 volumes for Minty Fresh.\n\ncompetitors in 250ML and 500ML and has an opportunity to increase price\n– Minty Fresh is over priced in 1L and 1.5L; Interviewee could argue that they are a premium brand and should maintain a higher price, but should be going towards exploring the impact of elasticity on price\n• A good interviewee should mention elasticity and how that could help improve revenues/share\n• The bottom chart will be used in Prompt 3 analysis, but interviewee may note that 1 and 1.5L are much bigger impact to revenue than 250 and 500 ML. They could also calculate the 2015 revenue by size"
+    },
+    {
+      "block_id": "fresher_breath_exhibit_002",
+      "block_type": "exhibit",
+      "title": "Exhibit #2",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_fresher_breath_07_page_74_full.png",
+      "source_page": 74,
+      "content": "Exhibit #2: Competitive Pricing\n\nList Price by Company, $ 7\n\nMinty Fresh Clean B Sparkle\n\n6\n\n5\n\n4\n\n3\n\n2\n\n1\n\n0 1.5L 500ML 250ML 1L\n\nMinty Fresh Price and Volume Data\n\nMinty Fresh Size Minty Fresh 2015 Volume (Millions) Minty Fresh List Price 250 ML 30 $2.00/bottle 500 ML 20 $3.00/bottle\n\n1 L 60 $5.00/bottle 1.5 L 50 $7.00/bottle\n\n| Minty Fresh Price and Volume Data |  |  |\n| --- | --- | --- |\n| Minty Fresh Size | MintyFresh 2015 Volume (Millions) | MintyFresh List Price |\n| 250 ML | 30 | $2.00/bottle |\n| 500 ML | 20 | $3.00/bottle |\n| 1 L | 60 | $5.00/bottle |\n| 1.5 L | 50 | $7.00/bottle 158 |"
+    },
+    {
+      "block_id": "fresher_breath_prompt_003",
+      "block_type": "prompt",
+      "title": "Prompt #3",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 75,
+      "content": "Prompt #3:\n1. An analyst on your team calculated price elasticities of different sized bottles of Minty Fresh. The proposed changes are within the boundaries of retailer contracts and are what your team thinks are the max price changes Minty Fresh could make without negative profit impact. With the following data, can Minty Fresh hit their incremental sales target? Assume that 2015 sales and volume are the starting point.\n– For 250 ML, 20% price increase drives a 10% volume decrease – For 500ML, a 15% price increase drives a 10% volume decrease – For 1ML, a 20% price decrease drives a 30% volume increase – For 1.5ML a 15% price decrease drives a 20% volume increase 2. After calculations: What factors would need to be considered to implement a price change?\n\n| Size | Old Price | New Price | Old Volume (Millions) | Incremental/Lost Volume (Millions) | Changein Revenue (Millions) |\n| --- | --- | --- | --- | --- | --- |\n| 250ML | $2.00 | $2.40 | 30 | -3 | (27* $2.4) –(30 * $2.00) = $64.80 -$60 = $4.80 |\n| 500 ML | $3.00 | $3.45 | 20 | -2 | (18* $3.50)-(20 * $3.00)= $63 -$60 = $3.00** |\n| 1L | $5.00 | $4.00 | 60 | +18 | (78 * $4.00) –(60 * $5.00)= $312 -$300 = $12 |\n| 1.5 L | $7.00 | $6.00** | 50 | +10 | (60 * $6.00) –(50* $7.00) = $360 -$350 = $10 |\n| TOTAL |  |  |  |  | $29.8MM |"
+    },
+    {
+      "block_id": "fresher_breath_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Prompt #3",
+      "visible_to_candidate": false,
+      "image": "IMG/duke_fresher_breath_07_page_74_full.png",
+      "source_page": 75,
+      "content": "Interviewer Guidance:\n• The interviewee will need to use the data from the previous exhibit to do this analysis. It is not expected to do this in his/her head; a good organized table will be needed (one example below). If struggling, interviewee could just calculate 1L and 1.5L and talk to other ways to get to the revenue increase • For analysis, assume competitors don’t change their prices (put should be a factor in Q2).\n\nSize Old Price New Price Old Volume (Millions) Incremental/Lost Volume (Millions) Change in Revenue (Millions) 250 ML $2.00 $2.40 30 -3 (27 * $2.4) – (30 * $2.00) = $64.80 - $60 = $4.80 500 ML $3.00 $3.45 20 -2 (18 * $3.50) - (20 * $3.00)= $63 - $60 = $3.00** 1L $5.00 $4.00 60 +18 (78 * $4.00) – (60 * $5.00) = $312 - $300 = $12 1.5 L $7.00 $6.00** 50 +10 (60 * $6.00) – (50 * $7.00) = $360 - $350 = $10 TOTAL $29.8MM *The math will get to $5.95, and you can guide them to round to 6.00 ** Can round $3.45 to $3.50\n\n• Q2: End Consumers, Retailers, Internal Supply chain, Profit Impact, Competitor Reaction (not exhaustive) • The interviewee should have the $33MM from Prompt 1; this analysis gets you to ~$30MM which is close enough to move forward. However, interviewee can recommend to not move forward if they defend their argument."
+    },
+    {
+      "block_id": "fresher_breath_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 76,
+      "content": "Recommendation The CEO walks in to get a status update. What would you say is your recommendation to improve her business?"
+    },
+    {
+      "block_id": "fresher_breath_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 76,
+      "content": "Interviewer Guidance:\n• Response should include results, risks/watch outs and next steps\n• Summary results should include if the sales target is achievable and by what actions. It should also include risks of consumer/retailer reaction to price increases, “price wars” with competitors, etc.\n• Next steps could include working with retailers to roll through changes, aligning new volumes with supply chain, thinking through other marketing efforts (TV ads, digital), etc."
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "case_id": "off_broadway_blues_001",
+  "case_title": "Off-Broadway Blues",
+  "industry": "Media & Entertainment",
+  "quantitative_level": "Medium",
+  "qualitative_level": "Medium",
+  "case_content": [
+    {
+      "block_id": "off_broadway_blues_data_001",
+      "block_type": "data",
+      "title": "Case Metadata",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 77,
+      "content": "Industry: Media & Entertainment\nQuantitative Level: Medium\nQualitative Level: Medium"
+    },
+    {
+      "block_id": "off_broadway_blues_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 78,
+      "content": "Prompt #1:\nThe CEO of a nonprofit performing arts theatre has approached us because despite increasing attendance, the theatre’s profit margins have been declining over the past 5 years. The CEO wants you to help him identify what may be causing the decline and what steps he might take to turn around the trend. What would you recommend the CEO consider to help ensure sufficient operating funds for the theatre into the future?"
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 78,
+      "content": "Interviewer Guidance:\nThe interviewee may ask the following questions; provide the following information only if requested: • The theatre produces its own shows, and has an in-house crew and cast of actors and actresses. It also recruits actors from New York who are part of the Actors Equity Association to perform in certain musicals. • The theatre only produces professional musicals for which it pays a one-time licensing fee to obtain the scripts and musical books. • In the summer, the theatre also produces children’s shows, but they are much simpler productions and the cost of production is negligible. • Overall goal is to achieve the profit margins the theatre had in 2010 (12%). • The theatre has 850 seats. • Broadly speaking, the musical theatre industry has seen increasing attendance in recent years as a result of increasing youth interests. We’ve seen an uptick of 2% attendance overall over the past 5 years. • There are no competitors of similar size or quality in the area. • The theatre’s ultimate objective is not to maximize profitability, but the CEO wants to ensure that there are sufficient reserves for future repairs and to cover losses on certain musicals."
+    },
+    {
+      "block_id": "off_broadway_blues_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit #1",
+      "visible_to_candidate": true,
+      "image": "IMG/duke_off_broadway_blues_08_page_79_full.png",
+      "source_page": 79,
+      "content": "Exhibit #1\n\n$1,344,600 $1,100,000\n\n2010 2015"
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Exhibit #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 80,
+      "content": "Interviewer guidance on Exhibit\n\nExhibit #1 Interviewer Prompt:\nOur team has taken an initial look at the cost of operating the theatre in 2010 and 2015. Please look at this exhibit and tell me what you can extract from it.\n\nPotential questions:\n- Overhead includes expenses like accounting services, technical equipment, repairs and maintenance, building supplies, and rental space\n- Payroll includes salaries, health insurance, and parking benefits for full-time administrative staff\n- Cost of shows includes playbill printing expenses, advertising expenses, talent, rehearsal space, costumes, props, musicians, royalties and scripts Guidance:\nGuidance and Analysis, cont:\n\n• After reviewing this chart, the candidate should immediately recognize that cost of shows has nearly doubled (as a percentage of the total) in the past 5 years and now accounts for more than 50% of the theatre’s budget.\n• The interviewer should prompt the candidate to drive the case forward by hypothesizing about what may have caused the increase in cost of shows over the past 5 years.\nReasons considered may include:\n• Cost of obtaining rights to produce the shows\n• Cost of staff\n• Lodging for talent/actors\n• Cost of marketing and promotion\n• Once the candidate has identified the cost of talent (mainly, actors) as a potential key factor in operating income decline, you should move to prompt 2.\n\n• "
+    },
+    {
+      "block_id": "off_broadway_blues_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 81,
+      "content": "Prompt #2:\nThe cost of production has increased dramatically because beginning in 2011, the theatre underwent a massive effort to improve the quality of its plays and musicals. This effort to “bring Broadway home” included bringing in members of the Actors Equity Association, a professional organization (think union) for Broadway-level actors that ensures them certain workers’ protections as well as a base level of pay.\n\nFeedback related to the actors from patrons has been very positive, and reviews of the theatre’s performances have improved. The director is not interested in eliminating actors from the Actors Equity Association, but what other options (beyond cost) might he consider to help him boost his gross profit?"
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 81,
+      "content": "Interviewer Guidance:\nHere, the candidate may list some of the following ideas during the brainstorm:\n\n• Generate new revenue streams through in-house initiatives like adding concessions and alcoholic beverages or dramatically improving fundraising efforts\n• Develop new strategies for generating revenue through entering adjacencies like showing movies on nights when there are no in-house productions\n• Change the price of tickets to balance increased costs from new talent.\n\nThe candidate should be encouraged to arrive at the pricing component."
+    },
+    {
+      "block_id": "off_broadway_blues_prompt_003",
+      "block_type": "prompt",
+      "title": "Prompt #3",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 82,
+      "content": "Prompt #3:\nThe CEO agrees that it has been far too long since ticket pricing has been re-evaluated. What information would you need to evaluate current and new pricing strategies? (here, pause to let candidate generate ideas for what information would be helpful unless they’ve already mentioned everything in their framework).\n\nThe current tickets are priced on a two-tiered structure, $30 for seats on the main floor and $20 for seats in the balcony. There are 450 seats on the floor level, and 400 in the balcony. There are typically 16 performances of each show, and the theatre does 5 professional productions per year. Capacity is, on average, 85% for the floor level and 90% for the balcony."
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #3",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 82,
+      "content": "Interviewer Guidance:\nInterviewer guidance:\n\nTotal revenue:\n• $30 x 450 x 85% capacity = $11,475 • $20 (balcony seat) x 400 balcony seats x 90% capacity = $7,200 • Total revenue per show (not including concessions) = $18,675 • $18,675 x 16 performances of each show = $298,800 • $298,800 max revenue per production x 5 productions per year = $1,494,000 total revenue from productions • Gross profit = $1,494,000 revenue - $1,344,600 cost = $149,400 • Gross profit margin $149,400 / $1,494,000 = 10%\n\n• Prompt on next page for continued analysis"
+    },
+    {
+      "block_id": "off_broadway_blues_prompt_004",
+      "block_type": "prompt",
+      "title": "Prompt #3 cont",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 83,
+      "content": "Prompt #3 cont:\nRegarding new pricing model, the CEO is interested in adopting one price throughout the theatre so as to avoid the impression that the balcony seats are less desirable. However, he does not want the ticket price to be above $35/ticket.\n\nLooking at the analysis you just performed, by how much would the CEO need to increase gross profit to hit 12% margins?"
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_005",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #3 cont",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 83,
+      "content": "Interviewer Guidance cont:\n\nNote: 90% utilization is assumed because of lower price\n\n• 12% profit margin goal: Gross Profits/Revenues = 0.12 => (Revenue –Cost)/Revenue =0.12 where cost is $1,344,600\n• => New revenue = Cost/0.88 = $1,344,600 / 0.88 = $1,530,000 Once the candidate has solved for the new revenue, they can find the necessary ticket price\n• New ticket price: $1,530,000 = 0.9 (Seat utilization) x 16 (number of times a show plays) x 5 (total number of shows) x 850 (total seats including balcony and floor) x P (Price)\n• => P = $25"
+    },
+    {
+      "block_id": "off_broadway_blues_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 84,
+      "content": "Recommendation\n• The CEO will be coming in for a meeting later this afternoon. What is your recommendation?"
+    },
+    {
+      "block_id": "off_broadway_blues_guidance_006",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 84,
+      "content": "Interviewer Guidance:\n• The candidate can use creativity in developing an answer here. While the $25 price/ticket should be included, the candidate can mention that the CEO may have more bandwidth to increase price above that level given past success at selling tickets at $30.\n• Candidate could also mention alternate strategies for increasing revenue, such as major fundraising efforts.\n• Strong candidate will also tie in qualitative factors like the importance of selecting plays that the audience is interested in, optimized scheduling of performances, expanding presence in the community through other events like movie screenings or seniors’ plays, etc."
+    }
+  ]
+}
