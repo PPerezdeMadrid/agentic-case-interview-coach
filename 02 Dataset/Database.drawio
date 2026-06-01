@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Página-1" id="w7KGLlviN3m8zpN6J0jY">
-    <mxGraphModel dx="2238" dy="1473" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2680" dy="1803" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -521,15 +521,12 @@
         <mxCell id="ypl-vASweCwz7WQHjGI5-28" parent="1" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Extract text, tables, and img" vertex="1">
           <mxGeometry height="80" width="220" x="-210" y="4010" as="geometry" />
         </mxCell>
-        <mxCell id="ypl-vASweCwz7WQHjGI5-30" parent="1" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Convert to final JSON (MongoDB)" vertex="1">
-          <mxGeometry height="80" width="220" x="290" y="4010" as="geometry" />
-        </mxCell>
         <mxCell id="ypl-vASweCwz7WQHjGI5-32" edge="1" parent="1" source="ypl-vASweCwz7WQHjGI5-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="ypl-vASweCwz7WQHjGI5-33">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="35" y="4150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ypl-vASweCwz7WQHjGI5-31" parent="1" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Convert each case to intermediate Markdown" vertex="1">
+        <mxCell id="ypl-vASweCwz7WQHjGI5-31" parent="1" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Convert each case to intermediate JSON" vertex="1">
           <mxGeometry height="80" width="295" x="5" y="4010" as="geometry" />
         </mxCell>
         <mxCell id="ypl-vASweCwz7WQHjGI5-33" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Human in the Loop" vertex="1">

@@ -232,3 +232,8 @@ __marimo__/
 
 # Dataset sources managed outside git
 02 Dataset/eacl23_soqg/
+
+# OS and office temporary files
+.DS_Store
+*.drawio.bkp
+~$*.xls*
