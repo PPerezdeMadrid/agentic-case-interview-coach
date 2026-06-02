@@ -44,6 +44,10 @@ NON_CASEBOOK_TITLES = {
     "industryoverviews",
     "resourcesfeedback",
 }
+PRACTICE_CASE_TITLE_RE = re.compile(
+    r"^practice case\s+\d+\s*(?:\(([^)]+)\))?$",
+    re.IGNORECASE,
+)
 
 
 # -------------------------
@@ -346,6 +350,12 @@ def detect_case_start_title(lines: list[str], next_lines: list[str]) -> str | No
 
     if first_line_canonical in NON_CASEBOOK_TITLES:
         return None
+
+    for line in lines[:6]:
+        practice_case_match = PRACTICE_CASE_TITLE_RE.match(line)
+        if practice_case_match:
+            practice_case_title = practice_case_match.group(1) or line
+            return normalize_case_title(practice_case_title)
 
     if first_line.lower().startswith("mock case:") and len(lines) > 1:
         return normalize_case_title(lines[1])
@@ -709,8 +719,9 @@ def extract_casebook_to_intermediates(
     output_dir: str = "output/duke_casebook_2017_profitability_18",
     skip_behavioral: bool = True,
     casebook_prefix: str = "duke",
+    expected_case_count: int = EXPECTED_CASEBOOK_CASE_COUNT,
 ):
-    detected_cases = detect_case_ranges(pdf_path)
+    detected_cases = detect_case_ranges(pdf_path, expected_case_count=expected_case_count)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -772,12 +783,13 @@ def write_markdown_intermediate(pages_data, markdown_path: Path, case_id: str, d
                     f.write("\n\n")
 
 def main():
-    parser = argparse.ArgumentParser(description="Extract Duke-style case PDFs into JSON and Markdown.")
+    parser = argparse.ArgumentParser(description="Extract case PDFs into JSON and Markdown.")
     parser.add_argument("--mode", choices=["single", "casebook"], default="casebook")
     parser.add_argument("--pdf-path", default="../Duke-Casebook-2017-Profitability-18.pdf")
     parser.add_argument("--output-dir", default="output/duke_casebook_2017_profitability_18")
     parser.add_argument("--case-id", default="duke_yachtco")
     parser.add_argument("--casebook-prefix", default="duke")
+    parser.add_argument("--expected-case-count", type=int, default=EXPECTED_CASEBOOK_CASE_COUNT)
     parser.add_argument("--start-page", type=int)
     parser.add_argument("--end-page", type=int)
     parser.add_argument(
@@ -803,6 +815,7 @@ def main():
         output_dir=args.output_dir,
         skip_behavioral=args.skip_behavioral,
         casebook_prefix=args.casebook_prefix,
+        expected_case_count=args.expected_case_count,
     )
 
 

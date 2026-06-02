@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "travel_agency_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Travel Agency",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 14,
+      "content": "A travel agency makes a 10% commission on all of its travel bookings. Their current profit before taxes is $1MM, while the industry average ranges from $2MM to $3.5MM. Why are they making less than the industry average?"
+    },
+    {
+      "block_id": "travel_agency_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 14,
+      "content": "High Level Plan of Attack:\n\n• We need to understand the revenue stream and cost structure of the travel agency and conceptualize how each transaction contributes to the bottom line.\n\n• Focus on the types of customers the agency services and how each type relates to profitability."
+    },
+    {
+      "block_id": "travel_agency_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 14,
+      "content": "Lay Out Your Thoughts:\n\n• Use the Profitability Framework, with a focus on the cost side of the equation.\n\n• Break your analysis down to the two types of customers: business and leisure."
+    },
+    {
+      "block_id": "travel_agency_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Prompt #1",
+      "visible_to_candidate": false,
+      "image": "IMG/harvard_travel_agency_07_page_14.png",
+      "source_page": 14,
+      "content": "Dig Deeper: Gather Facts/Make Calculations:\n\n• What is the total gross revenue for the agency per annum, on average? $10 million.\n\n• How does the revenue compare to other agencies with similar size? They are about the same.\n\n• What about the product line? Does the agency handle any bookings other than travel tickets? No. They just book tickets for their customers.\n\n• What are the different customer segments that the agency services? There's the business traveler segment, which comprises about 40% of total revenue, and the leisure traveler segment with the remaining 60%.\n\n• How many total transactions does the agency process and what is the break down for each customer segment? The total number of transactions is around one million per year. On average, about 300K go to the business segment, and 700K to the leisure.\n\n• Is there a cost associated with each transaction? Yes, each transaction, regardless of which segment, costs $9.\n\no [Now you have all the necessary information to calculate the profitability of transactions for each segment. If you run the numbers, you will find the following information.]\n\nSegment Share Volume Total Revenue Revenue / Transaction Cost / Transaction Profit / Transaction Gain\n\nBusiness 60% 300,000 $ 6,000,000 $ 20.00 $ 9.00 $ 11.00 $ 3,300,000\n\nLeisure 40% 700,000 $ 4,000,000 $ 5.71 $ 9.00 $ (3.29) $ (2,300,000)\n\n$ 10,000,000 $ 1,000,000"
+    },
+    {
+      "block_id": "travel_agency_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 15,
+      "content": "Key Findings:\n\n• The leisure travelers are draining your profitability. Either the cost per transaction is too high or the revenue per transaction made on the leisure is too low."
+    },
+    {
+      "block_id": "travel_agency_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 15,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "travel_agency_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 15,
+      "content": "Recommendations:\n\n• Benchmark the cost structure of other travel agencies.\n\n• Negotiate with the airlines on the possibility of charging a premium for leisure tickets or capture a larger commission through cost charged to the customer.\n\n• Look into the possibility of reducing cost per transaction for the leisure travelers.\n\n• Offer the leisure traveler other products to increase revenue per transaction such as hotel bookings and travel packages.\n\n• Become a niche player and focus only on the business traveler"
+    }
+  ]
+}

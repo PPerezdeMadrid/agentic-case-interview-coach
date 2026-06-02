@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "wheeler_dealer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Wheeler Dealer",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 12,
+      "content": "A major auto service chain, Wheeler Dealer, has enjoyed healthy returns on its 30-store operation for the past 10 years. However, management feels that the chain needs to expand, as the current geographical areas in which they are based have become saturated. For the past couple of years, they have aggressively pursued a growth strategy, opening an additional 15 stores. However, it seems that this approach has had negative returns. For the first time in over a decade, the chain's profits dropped into the negative zone. You were hired to figure out why."
+    },
+    {
+      "block_id": "wheeler_dealer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 12,
+      "content": "High Level Plan of Attack:\n\n• You need to understand the nature of the business. What does the auto service entail?\n\n• Focus on the customer segmentation. Are they serving more than one customer? Any differences?\n\n• What is the profit structure of the different offerings?\n\n• Where did they move? Are the newly formed stores operating differently or serving different markets than before?"
+    },
+    {
+      "block_id": "wheeler_dealer_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 12,
+      "content": "Lay Out Your Thoughts:\n\n• Use the Profitability Framework. Focus on how revenue has changed given the environment."
+    },
+    {
+      "block_id": "wheeler_dealer_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 12,
+      "content": "Dig Deeper: Gather Facts/Make Calculations:\n\n• What type of services has Wheeler Dealer traditionally provided for its customers? There are two main businesses under each roof: off-the-shelf car parts and the garage mechanical services.\n\n• Are these services provided as well in the newly developed chains? Yes.\n\n• Have competitors entered the market stealing market share? A few competitors have entered the market, but not too many. The expansion was planned to explore new markets and prevent the competition from growing.\n\n• What about price? Have prices gone up to help defray some of the costs associated with growth? No, they have stayed the same.\n\n• Given the two types of businesses for each chain, do they have the same profit margin? No. In fact, because the garage services cost the business a great deal more and the mechanics are very well trained, we charge a premium. Profit margin on servicing cars has twice the profit margin of off-the-shelf products.\n\n• Are the customers the same for both businesses? No. The customer that uses the garage service tends to come from a mid-to-high income bracket. Those that use the off the-shelf auto parts tend to be of the lower-income bracket. They fix their cars on their own.\n\n• Where has Wheeler Dealer traditionally been located? Mostly in, or very close to the suburbs.\n\n• Has the geographical location changed as they expanded? Yes, They saw certain urban areas as very inexpensive. They located more in inner cities where there are a lot of used car sales.\n\n• So, would it be fair to assume that the more profitable business, the garage service, has deteriorated and the sale of off-the-shelf parts has increased, causing overall profitability to go down? Yes."
+    },
+    {
+      "block_id": "wheeler_dealer_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 13,
+      "content": "Key Findings:\n\n• The garage service is the major revenue generator for the business. As they expanded into the inner cities, they began to attract the wrong customer. Profit margin on the off- the-shelf products is not enough to cover costs and make a healthy return for Wheeler Dealer. A price increase is unlikely given price sensitivity."
+    },
+    {
+      "block_id": "wheeler_dealer_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 13,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "wheeler_dealer_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 13,
+      "content": "Recommendations:\n\n• Scale back from the urban areas. Focus on geographical areas where you can attract the suburban customers who will use the service aspect of the business. Maintain a healthy return on the car product market from the inner city dwellers.\n\n• Where possible, drop the garage service in under-performing areas to reduce costs and focus on the retail end."
+    }
+  ]
+}

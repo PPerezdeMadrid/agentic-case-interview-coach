@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "juice_producer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Juice Producer",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 4,
+      "content": "A major producer of juice processes and packages fruit juice for retail outlets. Traditionally, the producer packaged the juice in 18-ounce carton containers. Recently, in response to market demand, the producer purchased a machine that packages the juice in plastic gallons of 36 ounces. Over the next couple of years, sales continued to grow by an average of 20% per year. However, as sales increased, profits steadily decreased. The owner does not understand why and has hired you to help identify the issue."
+    },
+    {
+      "block_id": "juice_producer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 4,
+      "content": "High Level Plan of Attack:\n\n• Sales have been increasing, so revenue is probably not the main issue.\n\n• The problem is likely on the cost side.\n\n• Because of the change in packaging, the producer may have incurred additional costs that were not properly accounted for, causing profits to decline."
+    },
+    {
+      "block_id": "juice_producer_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 4,
+      "content": "Lay Out Your Thoughts:\n\n• Use the profitability framework.\n\n• Gather information on both revenue and costs, but focus mainly on the cost side."
+    },
+    {
+      "block_id": "juice_producer_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Revenue and Pricing",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 4,
+      "content": "Dig Deeper: Gather Facts / Make Calculations:\n\n• How much did the producer charge for the 18-ounce carton? The producer charged $2.00 per container.\n\n• How much did the producer charge for the 36-ounce plastic gallon? Since the gallon was twice the size, the producer wanted to provide an incentive to buy and sold it at $3.50 per gallon.\n\n• How was the cost of the new equipment accounted for in the price? The producer raised prices across the board by $0.50 on all packages, both cartons and gallons, selling them at $2.50 and $4.00 respectively. \n\n• Does it cost the same to package juice in cartons as it does in gallons? No. Plastic is more expensive than the paper carton traditionally used.\n\n• The producer also had to hire more experienced labor to operate the gallon-packaging machine because it is more complicated than the carton machine.\n\n• The producer assumed that because demand was higher for gallons, the company would cover the additional costs through increased volume.\n\n• What about overhead costs? All factory costs are added together and divided by the number of units produced.[ This should raise concern because the issue is now clearly related to cost allocation. The plastic gallons should carry higher costs and therefore should likely have a higher price.] \n\n• What percentage of sales are gallons versus cartons? As customers became more aware of the gallons, they liked them more. Plastic gallons now represent 60% of sales.\n\n• The owner has been pleased about that.\n\n• However, gallons cost more to package, while their price is lower on a per-ounce basis than cartons.\n\n• The candidate should identify that the company has not performed proper cost allocation to determine which product should carry which costs.\n\n• The key analytical insight is that the producer is selling more of the product that is underpriced relative to its true cost."
+    },
+    {
+      "block_id": "juice_producer_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 5,
+      "content": "Key Findings:\n\n• The additional costs associated with plastic gallons were averaged across all units, including cartons.\n\n• This caused a misallocation of costs and inappropriate pricing.\n\n• Plastic gallons were priced lower than they should have been.\n\n• As a result, the more gallons the juice producer sold, the more profit the company lost out on."
+    },
+    {
+      "block_id": "juice_producer_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 5,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "juice_producer_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 5,
+      "content": "• The firm should conduct a thorough activity-based costing analysis to determine the overhead and direct costs associated with each item in the product line.\n\n• The company should then use this cost data to price each product appropriately.\n\n• In particular, the producer should reassess the pricing of plastic gallons, since they carry higher packaging and labor costs and are currently underpriced on a cost-adjusted basis."
+    }
+  ]
+}

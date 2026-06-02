@@ -10,11 +10,14 @@ from urllib.parse import parse_qs, unquote, urlparse
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_APP_PATH = "/script/review_static/index.html"
 DEFAULT_PDF = "Duke-Casebook-2017-Profitability-18.pdf"
+HARVARD_PDF = "Harvard-case-book-probitability.pdf"
 PDF_GLOBS = [
     "*.pdf",
 ]
 JSON_GLOBS = [
+    "output/**/*.json",
     "script/output/**/*.json",
+    "data_processed/**/*.json",
     "duke_data_preprocessed/**/*.json",
     "duke_data_processed/**/*.json",
 ]
@@ -22,6 +25,16 @@ JSON_GLOBS = [
 
 def relative_posix(path: Path) -> str:
     return path.relative_to(BASE_DIR).as_posix()
+
+
+def label_for_path(path: Path) -> str:
+    rel_path = relative_posix(path)
+    parent = Path(rel_path).parent.as_posix()
+
+    if parent == ".":
+        return path.name
+
+    return f"{parent}/{path.name}"
 
 
 def discover_files():
@@ -49,7 +62,7 @@ def discover_files():
 
         rel_path = relative_posix(path)
         json_entries.append({
-            "label": path.name,
+            "label": label_for_path(path),
             "path": rel_path,
             "suggested_pdf": suggest_pdf_for_json(rel_path),
         })
@@ -67,7 +80,16 @@ def suggest_pdf_for_json(json_relative_path: str) -> str | None:
     if "duke_casebook_2017_profitability_18" in lowered:
         return DEFAULT_PDF
 
+    if "harvard_casebook_probitability" in lowered:
+        return HARVARD_PDF
+
     if "duke_data_preprocessed/duke_" in lowered:
+        return DEFAULT_PDF
+
+    if "/harvard_" in lowered or lowered.startswith("harvard_"):
+        return HARVARD_PDF
+
+    if "/duke_" in lowered or lowered.startswith("duke_"):
         return DEFAULT_PDF
 
     if "yachtco" in lowered:

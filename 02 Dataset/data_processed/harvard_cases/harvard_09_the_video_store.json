@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "the_video_store_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - The Video Store",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 19,
+      "content": "Two business school classmates laud their entrepreneurship intentions and mock your interest in entering the management consulting industry. They decide that despite trends that indicate otherwise, what is needed is a video rental store closer to the HBS campus. They try to convince you to join, but in your infinite wisdom you instead join a prominent strategy consulting firm in Boston.\n\nTheir first two years meet unprecedented success. They buy matching Porches and a townhouse in Beacon Hill. Needless to say, each time you meet up for social occasions, they share with you (mostly with tongue in cheek) their success and a \"I told you so\" attitude. You handle their jabs well, as you feel you have had a terrific experience at your consulting firm.\n\nThe story, however, changes in about 12 months. Despite two and a half years of dramatic profit and revenue growth, profits have dramatically fallen. They call you (with a fair amount of egg on their face) and say \"we don't know what happened and our mortgage and car payments are getting tougher to meet. Can you help us? We know that you help CEO's of large companies get to the bottom of their issues.\" With more than a little satisfaction and justice in your voice you agree to help.\n\nWhat do you think the problem is?"
+    },
+    {
+      "block_id": "the_video_store_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Suggested Questions",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 19,
+      "content": "Suggested Questions:\n\nThis is an example of a case where the student must probe to get to the heart of the matter. The student needs to ask questions which first diagnose the situation and then (and only then) talk about causes of the situation and then (and only then) talk about areas of improvement.\n\nHere are questions that the student should ask to get to the analysis that will help them diagnose the problem:\n\n• Have costs increased?\n\n• Have revenues declined?\n\n• Have prices been changed?\n\n• Have new video stores opened in the area?\n\n• Are fewer customers coming to the store?\n\n• Are customers renting fewer videos?\n\n• Have other entertainment venues opened in the area?\n\n• Have their been economic changes in the area?\n\nThese key questions will get behind what is happening (competitive changes, pricing adjustments, macro factors, people not coming to the store, or people just not renting as many videos, etc.)"
+    },
+    {
+      "block_id": "the_video_store_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Suggested Excellent Response - Diagnosis",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 20,
+      "content": "Suggested \"Excellent\" Response:\n\nThis is an example of a case that is founded in 3C's type issues. The student has to diagnose the problem and find out what exactly is going on and then find out what is causing it. This is how efficient analysis is performed:\n\nIf profits have declined then I assume that either revenues have declined or costs have increased, what is the case?\n\nRevenues have decreased. Why would you think that cost is probably not the problem?\n\nVideo rental is a high fixed cost business - rent, videos, and labor are all fixed in the context of rental revenue. Thus, the business' profits will be susceptible to changes in revenues (capacity utilization). Revenues are made up of the number of videos we rent in a year and the price we charge.\n\nHas the management changed the price of the videos?\n\nNo. What does that tell you?\n\nThat means that either fewer customers are coming to the store or each customer on average is renting fewer videos. Which is it?\n\nHow would you figure that out?\n\nThe security system probably has a counter so that could tell us store traffic, and clearly the register receipts could give us number of videos rented per day. We can look at that data last year versus this year and determine whether there is a traffic problem or share of wallet problem.\n\nExcellent. If you found out it was a share of wallet problem, what would you think might be the problem?\n\nShare of wallet problems are often driven by internal execution problems (bad selection, poor service, etc) whereas, traffic is often external (or market) problems.\n\nAgain, excellent. The data shows that traffic has fallen. What now?"
+    },
+    {
+      "block_id": "the_video_store_expected_analysis_002",
+      "block_type": "expected_analysis",
+      "title": "Suggested Excellent Response - Hypothesis Development",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 21,
+      "content": "[Here the student should begin to think about hypothesis development. They have diagnosed the problem... i.e. fewer customers are coming into the store.]\n\nIf traffic has fallen, it is either a macro factor or a competitive situation. My inclination is that video rentals are not that impacted by economic factors, so it is probably a competitive situation. Has a new store opened in the area?\n\nNo.\n\nHas a new movie theatre opened?\n\nNo.\n\nHmm... That is surprising. I was sure that this was a competitive situation and we have a fixed pool of rental community (or movie interested community) and that once a new store opened regardless of how good it was, it took share from my client’s store.\n\nLet me ask you something and maybe this will help you along. What business is your client in?\n\nThey are in the video rental business or the entertainment business or leisure business... I see there could be other entertainment preference shifts or options, etc.\n\nThat is good intuition, but have you fully defined your client’s business? What does your client do? What purpose to they serve?\n\nThey rent movies for people to watch at home. They are in the home entertainment business and specifically in the home movie entertainment business. That means that the competitive set is anybody who provides movies in the home. Not just video stores.\n\nExcellent. What do you think is going on?\n\nHere the student has now diagnosed the problem and can make a very good hypothesis that either delivery, cable, PPV, or new Movie on Demand technology has infiltrated the market or is experiencing rapid growth, reducing the market size for video rentals at stores."
+    },
+    {
+      "block_id": "the_video_store_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Summary Comments",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 22,
+      "content": "Summary Comments:\n\nThere is no one right way to approach cases. Structure your case interviews to (1) perform structured analysis and fact gathering to properly diagnose the problem; (2) share your logic and hypothesis whenever you can; (3) drive to an answer/assessment."
+    },
+    {
+      "block_id": "the_video_store_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 22,
+      "content": "Based on your diagnosis, what should the video store owners do next?"
+    },
+    {
+      "block_id": "the_video_store_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 22,
+      "content": "The student should diagnose the problem and find out what exactly is going on and then find out what is causing it. The student should identify that revenues have decreased, that price has not changed, and that traffic has fallen. The student should then broaden the definition of the client’s business from the video rental business to the home movie entertainment business.\n\nThe candidate should recognize that the competitive set is anybody who provides movies in the home, not just video stores. A good hypothesis is that either delivery, cable, PPV, or new Movie on Demand technology has infiltrated the market or is experiencing rapid growth, reducing the market size for video rentals at stores.\n\nThe case should be structured to perform structured analysis and fact gathering to properly diagnose the problem, share logic and hypothesis whenever possible, and drive to an answer or assessment."
+    }
+  ]
+}

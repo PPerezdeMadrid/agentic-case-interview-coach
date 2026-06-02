@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "retailer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Retailer",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 2,
+      "content": "A major retailer of clothing and household products has experienced sluggish growth and lower-than-expected profits over the last few years. The CEO has asked you to determine what is driving the problem across its 15 metropolitan and suburban mall stores and how to improve growth and profitability. \n\n• The retailer has 15 stores located in shopping malls in metropolitan and suburban areas.\n\n• Total revenue from the 15 stores has declined, despite major back-end cost savings."
+    },
+    {
+      "block_id": "retailer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 2,
+      "content": "High Level Plan of Attack: Yoy need to understand why growth has slowed and porfitability has declined despite cost savings\n\n• Do different stores experience variations in revenue? Do they all have the same approach to selling?\n\n• Is purchasing behavior of the consumer different in the two areas?\n\n• Has there been any new competition on the scene? In one area and not the other?"
+    },
+    {
+      "block_id": "retailer_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 2,
+      "content": "Lay on your thoughts. Use the profitability framework. The case tells you that cost savings have been achieved. Focus on the revenue side.\n\n• Focus on the fact that the company has 15 different stores, in two different geographical areas. What are the key differences between the two in terms of the consumer, competition and growth?"
+    },
+    {
+      "block_id": "retailer_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 3,
+      "content": "Dig Deeper: Gather Facts Are some stores more profitable than others? Yes they are. We see variations throughout.\n\n• Are there differences in profitability between the metropolitan and suburban stores? Yes there are. We see that the suburban stores are more profitable than the urban ones \n\n•Is there more competition in the urban areas? No, not really. It's proportionally the same. \n\n•Do the stores sell the same products? Yes they do. All stores have the same product mix. [Given that all stores sell the same product mix and some are more profitable than others, this should lead you to look at consumer behavior] \n\n•Do consumers in the suburban areas have different purchasing behavior than the urban dwellers? Yes, as a matter of fact, they do. The suburban customer tends to buy more of the major appliances and electronic equipment than the urban consumer. The urban consumer buys mostly items such as clothing, small furniture items, and small appliances. [You can make the assumption that suburban consumers have higher incomes and are in more need of major appliances given the difference in living quarters between houses versus apartments in the city.] \n\n• Is there a difference in profitability between the goods purchased by the suburban and urban consumers? Yes. Major appliances and TVs and stereos are higher profit items than clothing and minor appliances. \n\n•Would you say that the current product mix is more suited for the suburban customer than for the urban? Yes. I guess it is."
+    },
+    {
+      "block_id": "retailer_key_findings_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 3,
+      "content": "Key finidings: \n\n•The consumer in the city has different needs and purchasing behavior than the suburban consumer. The stores in the city are not catering to the ndemographics of its surroundings. \n\n•Unnecessary costs are being incurred through inventory and lost floor space in the city stores, resulting in lost revenue for the retailer."
+    },
+    {
+      "block_id": "retailer_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 3,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "retailer_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 3,
+      "content": "• Further analyze the customer for each of the stores and differentiate purchasing behavior and income levels.\n\n• Cater the product mix according to the customer research findings. \n\n•Stores that cannot sustain selling low cost items should consider the possibility of closure."
+    }
+  ]
+}
