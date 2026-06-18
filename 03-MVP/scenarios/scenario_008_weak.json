@@ -1,0 +1,57 @@
+{
+  "scenario_id": "scenario_008_weak",
+  "evaluation_item_id": "duke_dealer_jacks_w_001",
+  "case_id": "duke_dealer_jacks",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 2,
+    "performance_label": "weak",
+    "description": "The candidate notices that private label may matter and that margins differ, but the diagnosis is only partly structured and the math on management's hypothesis is incomplete or weakly explained.",
+    "behaviour_rules": [
+      "Recognize that store closures and geographic expansion are not the main path, but do not anchor strongly on the right growth lever.",
+      "Ask some relevant questions about private label penetration and margins, but not in a disciplined way.",
+      "Notice from Exhibit #1 that private label growth and profit growth appear related, but explain the relationship only superficially.",
+      "Understand that private label margins are higher, but do not sharply frame mix shift as the core driver.",
+      "Attempt the math on a 3-point penetration increase, but explain it unclearly or miss part of the logic.",
+      "Be slow to ask for the tax rate or to include tax in the final impact estimate.",
+      "Give a directionally correct recommendation, but without much nuance on risk, testing, or implementation."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "medium",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 2,
+      "case_structure": 2,
+      "case_math_answer": 2,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 2,
+      "overall_structure": 2,
+      "overall_problem_solving": 2,
+      "overall_communication": 2,
+      "overall": 2
+    },
+    "expected_issues": [
+      "Only partially links private label stagnation to profit pressure.",
+      "Does not structure the problem around margin mix sharply enough.",
+      "Math is incomplete, under-explained, or missing the tax effect initially.",
+      "Recommendation is right in direction but not rigorous on whether the target is truly exceeded.",
+      "Underdevelops risks such as execution costs, assumption testing, and supplier relationship effects."
+    ],
+    "expected_feedback_points": [
+      "Make private label mix a clearer core hypothesis earlier.",
+      "Use the margin differential more explicitly in the diagnosis.",
+      "Complete the math cleanly and include taxes.",
+      "Tie the recommendation directly to the $180M target.",
+      "Add risk checks and next steps such as pilots and assumption testing."
+    ]
+  }
+}

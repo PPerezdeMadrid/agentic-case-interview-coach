@@ -1,0 +1,57 @@
+{
+  "scenario_id": "scenario_002_weak",
+  "evaluation_item_id": "harvard_retailer_w_001",
+  "case_id": "harvard_01_retailer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 2,
+    "performance_label": "weak",
+    "description": "The candidate notices that the problem is probably on the revenue side and explores some store differences, but the logic remains generic, the segmentation is shallow, and the final recommendation lacks precision and evidence.",
+    "behaviour_rules": [
+      "Acknowledge that cost savings have already happened, but do not sharply redirect the case toward the revenue side at first.",
+      "Ask one or two useful clarification questions, but keep them broad rather than hypothesis-driven.",
+      "Use a simple profitability or growth framework, but do not structure the urban versus suburban comparison very cleanly.",
+      "Eventually explore customer differences across store types, but only after some prompting or indirect reasoning.",
+      "Partially recognize that product mix may be part of the problem, but do not articulate the mismatch clearly.",
+      "Give some reasonable observations about suburban stores likely being more profitable, but do not fully connect this to high-margin appliance sales.",
+      "Recommend changing assortment or improving targeting, but keep the recommendation somewhat generic and light on prioritization."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "medium",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 2,
+      "case_structure": 2,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 2,
+      "overall_structure": 2,
+      "overall_problem_solving": 2,
+      "overall_communication": 2,
+      "overall": 2
+    },
+    "expected_issues": [
+      "Only partially focuses the case on revenue despite the prompt ruling out cost as the main issue.",
+      "Does not compare metropolitan and suburban stores in a strongly structured way.",
+      "Recognizes customer differences too slowly or too vaguely.",
+      "Does not sharply connect product mix mismatch to lower urban profitability and lost floor space.",
+      "Recommendation remains generic and lacks clear prioritization across assortment change, customer analysis, and closure decisions."
+    ],
+    "expected_feedback_points": [
+      "Shift the diagnosis more decisively toward revenue drivers from the beginning.",
+      "Structure the analysis around differences between metropolitan and suburban stores.",
+      "Investigate customer purchasing behavior and product mix more directly.",
+      "Explain more clearly why suburban stores are more profitable and why urban stores are misaligned.",
+      "Give a more specific recommendation on changing assortment and reviewing weaker stores for closure."
+    ]
+  }
+}

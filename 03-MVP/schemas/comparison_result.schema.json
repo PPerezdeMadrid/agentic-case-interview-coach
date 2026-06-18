@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comparison_result.schema.json",
+  "title": "ComparisonResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "comparison_id",
+    "scenario_id",
+    "run_ids",
+    "manual_scores",
+    "winner",
+    "justification",
+    "notes"
+  ],
+  "properties": {
+    "comparison_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_ids": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "agentic"],
+      "properties": {
+        "baseline": { "type": "string", "minLength": 1 },
+        "agentic": { "type": "string", "minLength": 1 }
+      }
+    },
+    "manual_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "agentic"],
+      "properties": {
+        "baseline": { "$ref": "#/$defs/manualScoreBlock" },
+        "agentic": { "$ref": "#/$defs/manualScoreBlock" }
+      }
+    },
+    "winner": {
+      "type": "string",
+      "enum": ["baseline", "agentic", "tie"]
+    },
+    "justification": {
+      "type": "string",
+      "minLength": 1
+    },
+    "notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "agentic"],
+      "properties": {
+        "baseline": { "type": "string" },
+        "agentic": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "manualScoreBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score_accuracy",
+        "interaction_quality",
+        "issue_detection",
+        "feedback_quality",
+        "overall"
+      ],
+      "properties": {
+        "score_accuracy": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "interaction_quality": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "issue_detection": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "feedback_quality": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "overall": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      }
+    }
+  }
+}

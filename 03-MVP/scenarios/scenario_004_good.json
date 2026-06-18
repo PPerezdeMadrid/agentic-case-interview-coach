@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_004_good",
+  "evaluation_item_id": "harvard_juice_producer_g_001",
+  "case_id": "harvard_02_juice_producer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 3,
+    "performance_label": "good",
+    "description": "The candidate correctly focuses on the cost side, identifies the new gallon format as the source of margin pressure, and reaches the right broad recommendation, though the explanation is solid rather than especially sharp.",
+    "behaviour_rules": [
+      "Quickly note that if sales are growing while profit is falling, the root cause is likely on the cost side.",
+      "Use a workable profitability framework with stronger emphasis on costs than revenue.",
+      "Ask relevant questions about packaging cost, labor, price points, and overhead treatment.",
+      "Recognize that plastic gallons cost more to package and require more experienced labor.",
+      "Notice that gallons are sold at a lower per-ounce price while also carrying higher cost.",
+      "Identify that averaging overhead across all units creates a cost-allocation problem.",
+      "Conclude that the firm is selling more of the underpriced product as gallons rise to 60% of sales.",
+      "Recommend activity-based costing and repricing of gallons, though the final synthesis may remain somewhat concise."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "medium",
+      "clarity": "medium",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 3,
+      "case_structure": 3,
+      "case_math_answer": 3,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 3,
+      "overall_structure": 3,
+      "overall_problem_solving": 3,
+      "overall_communication": 3,
+      "overall": 3
+    },
+    "expected_issues": [
+      "Gets the right diagnosis but may not prioritize or synthesize it in a highly executive way.",
+      "May describe the cost-allocation issue correctly without fully emphasizing how damaging the sales mix shift has become.",
+      "Recommendation is right but may be short on implementation detail."
+    ],
+    "expected_feedback_points": [
+      "Good recognition that the problem sits on the cost side.",
+      "Good diagnosis of higher gallon packaging and labor costs.",
+      "Good identification of distorted pricing and incorrect cost allocation.",
+      "Correct conclusion that the company is selling more of the underpriced product.",
+      "Correct recommendation to use activity-based costing and reprice gallons."
+    ]
+  }
+}

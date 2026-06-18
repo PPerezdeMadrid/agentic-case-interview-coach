@@ -1,0 +1,622 @@
+<mxfile host="Electron">
+  <diagram name="Página-1" id="w7KGLlviN3m8zpN6J0jY">
+    <mxGraphModel dx="5038" dy="-244" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-3" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;shadow=1;" value="Student" vertex="1">
+          <mxGeometry height="60" width="30" x="35" y="1800" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-4" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-5" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;" value="Case Study Question" vertex="1">
+          <mxGeometry height="60" width="120" x="-10" y="1680" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-7" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;shadow=1;" value="Interviewer Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="260" y="1800" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-8" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.22;shadow=1;" value="" vertex="1">
+          <mxGeometry height="50" width="90" x="60" y="1760" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-9" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=1;shadow=1;" value="" vertex="1">
+          <mxGeometry height="50" width="90" x="160" y="1760" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-10" edge="1" parent="1" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shadow=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="80" y="1820" as="sourcePoint" />
+            <mxPoint x="240" y="1820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-11" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-12" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-22" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="275" y="2060" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-13" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;shadow=1;" value="Judge Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="260" y="1980" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-14" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="1830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-15" parent="1" style="text;whiteSpace=wrap;html=1;shadow=1;" value="&lt;div&gt;&lt;b&gt;Interviewer Agent&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Presents case&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Asks adaptive follow-ups&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Encourages critical thinking&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="70" width="190" x="340" y="1795" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-16" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;shadow=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="160" y="1820" as="sourcePoint" />
+            <mxPoint x="160" y="1940" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-17" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;shadow=1;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="130" y="1980" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Transcript" vertex="1">
+          <mxGeometry height="30" width="80" x="120" y="1950" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-19" parent="1" style="text;whiteSpace=wrap;html=1;shadow=1;" value="&lt;div&gt;&lt;b&gt;LLM-as-a-judge&lt;/b&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Evaluates full interaction&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Checks rubric dimensions&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Decides evidence sufficiency&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="70" width="230" x="350" y="1975" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-20" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;shadow=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-60" y="2150" />
+              <mxPoint x="-60" y="1820" />
+            </Array>
+            <mxPoint x="-10" y="1820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-21" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="930" y="2340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-22" parent="1" style="rhombus;whiteSpace=wrap;html=1;shadow=1;" value="Is sufficient evidence?" vertex="1">
+          <mxGeometry height="80" width="80" x="235" y="2110" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-23" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;shadow=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="274.71000000000004" y="2190" as="sourcePoint" />
+            <mxPoint x="275" y="2250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-24" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;shadow=1;" value="Feedback Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="260" y="2260" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-25" parent="1" style="text;whiteSpace=wrap;html=1;align=left;shadow=1;" value="&lt;div&gt;&lt;b&gt;Simple LLM &lt;/b&gt;(converts evaluation into coaching)&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Strengths&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Weaknesses&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Suggested improvement&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Next practice recommendation&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="80" width="270" x="340" y="2250" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-26" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-27" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="274.78999999999996" y="2340" as="sourcePoint" />
+            <mxPoint x="274.78999999999996" y="2400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-27" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;shadow=1;" value="Final Report" vertex="1">
+          <mxGeometry height="80" width="80" x="235" y="2370" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-28" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="60" x="255" y="2200" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="no" vertex="1">
+          <mxGeometry height="30" width="60" x="180" y="2120" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-30" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontColor=#BFBFBF;shadow=1;" value="Internal Recommendation" vertex="1">
+          <mxGeometry height="30" width="170" x="-70" y="2150" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-31" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;shadow=1;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Data Architecture&lt;/h1&gt;" vertex="1">
+          <mxGeometry height="50" width="260" x="-20" y="1610" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-32" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="280" y="1600" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-33" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Case Studies" vertex="1">
+          <mxGeometry height="30" width="80" x="270" y="1570" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-34" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;size=18;shadow=1;" value="&lt;br&gt;&lt;p style=&quot;margin:0in;font-family:Calibri;font-size:11.0pt&quot;&gt;&lt;a href=&quot;https://careerinconsulting.com/case-interview-examples/&quot;&gt;https://careerinconsulting.com/case-interview-examples/&lt;/a&gt;&lt;/p&gt;" vertex="1">
+          <mxGeometry height="75" width="343.75" x="378.25" y="1545" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-35" parent="1" style="text;whiteSpace=wrap;html=1;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;TYPE of cases:&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Profitability (revenue and/or costs) (29% of cases)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Ind. Analysis,&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Mkt Expansion (15% of cases)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Pricing&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Investment / Aquisitions (19% of cases)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Guesstimate&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); display: inline !important;&quot;&gt;Miscelaneous&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="145" width="560" x="740" y="1530" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-36" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="570" y="1810" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Follow-up questions" vertex="1">
+          <mxGeometry height="30" width="110" x="545" y="1770" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-38" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-60" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-39" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="Option A) {&#xa;    &quot;id&quot;: 28073,    &#xa;    &quot;label&quot;: &quot;clarity&quot;,&#xa;    &quot;context&quot;: &quot;Would an example of a just and worthy police officer be enough to change your view? I wish, truly I do. I would love to be able to trust all Police.&quot;,&#xa;    &quot;question&quot;: &quot;What reforms do you want to see?&quot;&#xa;    }" vertex="1">
+          <mxGeometry height="105" width="710" x="690" y="1730" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-40" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-41" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="Option B)Generate synthetic data with another LLM to train an open-source model&#xa;&#xa;&quot;Generate 50 examples of weak consulting case answers and good interviewer follow-up questions.&#xa;Focus on structure, assumptions, logic, business objective and quantitative reasoning. &quot;" vertex="1">
+          <mxGeometry height="85" width="710" x="690" y="1850" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-42" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.85;entryY=0.95;entryDx=0;entryDy=0;entryPerimeter=0;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-32">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="331" y="2010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-43" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="{&#xa;  &quot;case_id&quot;: &quot;market_entry_001&quot;,&#xa;  &quot;case_prompt&quot;: &quot;A client wants to enter the UK coffee market...&quot;,&#xa;  &quot;expected_solution&quot;: &quot;...&quot;,&#xa;  &quot;rubric&quot;: {...},&#xa;  &quot;transcript&quot;: [...],&#xa;  &quot;retrieved_casebook_context&quot;: [...],&#xa;  &quot;judge_output&quot;: {...}&#xa;}" vertex="1">
+          <mxGeometry height="165" width="530" x="970" y="1965" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-44" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="2005" as="sourcePoint" />
+            <mxPoint x="560" y="2005" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-45" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="RAG" vertex="1">
+          <mxGeometry height="60" width="60" x="580" y="1985" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-46" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Casebooks" vertex="1">
+          <mxGeometry height="30" width="110" x="555" y="1950" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-47" parent="1" style="shape=card;whiteSpace=wrap;html=1;size=20;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="50" width="60" x="580" y="2080" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-48" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Rubric" vertex="1">
+          <mxGeometry height="30" width="110" x="560" y="2050" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-49" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;shadow=1;" value="One casebook in a vectorized database for RAG" vertex="1">
+          <mxGeometry height="30" width="290" x="655" y="1995" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-50" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;shadow=1;" value="Rubric on how to asses" vertex="1">
+          <mxGeometry height="30" width="290" x="655" y="2090" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-51" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=oval;startFill=1;endArrow=oval;endFill=1;shadow=1;" target="RDyThFTYfkmwOs9I9s8V-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-52" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="[&#xa;  {&#xa;    &quot;speaker&quot;: &quot;interviewer&quot;,&#xa;    &quot;turn&quot;: 1,&#xa;    &quot;text&quot;: &quot;How would you approach this case?&quot;&#xa;  },&#xa;  {&#xa;    &quot;speaker&quot;: &quot;student&quot;,&#xa;    &quot;turn&quot;: 2,&#xa;    &quot;text&quot;: &quot;I would look at market size, competitors and costs.&quot;&#xa;  }&#xa;]" vertex="1">
+          <mxGeometry height="195" width="500" x="-630" y="1912.5" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-53" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="{&#xa;  &quot;structure&quot;: {&#xa;    &quot;description&quot;: &quot;Does the student create a clear framework?&quot;,&#xa;    &quot;score_range&quot;: &quot;1-5&quot;&#xa;  },&#xa;  &quot;business_logic&quot;: {&#xa;    &quot;description&quot;: &quot;Does the student connect the analysis to the business objective?&quot;,&#xa;    &quot;score_range&quot;: &quot;1-5&quot;&#xa;  },&#xa;  &quot;assumptions&quot;: {&#xa;    &quot;description&quot;: &quot;Does the student justify assumptions clearly?&quot;,&#xa;    &quot;score_range&quot;: &quot;1-5&quot;&#xa;  },&#xa;  &quot;quantitative_reasoning&quot;: {&#xa;    &quot;description&quot;: &quot;Does the student handle calculations and estimates logically?&quot;,&#xa;    &quot;score_range&quot;: &quot;1-5&quot;&#xa;  },&#xa;  &quot;communication&quot;: {&#xa;    &quot;description&quot;: &quot;Is the answer clear, concise and interview-like?&quot;,&#xa;    &quot;score_range&quot;: &quot;1-5&quot;&#xa;  }&#xa;}" vertex="1">
+          <mxGeometry height="325" width="820" x="1530" y="1965" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-54" parent="1" style="shape=card;whiteSpace=wrap;html=1;size=20;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="50" width="60" x="640" y="2280" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-55" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Prompt Template" vertex="1">
+          <mxGeometry height="30" width="110" x="620" y="2250" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-56" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;shadow=1;" value="{&#xa;  &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,&#xa;  &quot;missing_evidence&quot;: [&#xa;    &quot;No evidence of quantitative reasoning&quot;,&#xa;    &quot;No evidence of assumptions justification&quot;&#xa;  ],&#xa;  &quot;recommended_next_focus&quot;: &quot;Ask a follow-up question about assumptions behind market sizing.&quot;&#xa;}" vertex="1">
+          <mxGeometry height="140" width="740" x="920" y="2360" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-57" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="An example of Judge&#39;s output:" vertex="1">
+          <mxGeometry height="30" width="170" x="920" y="2540" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-58" parent="1" style="text;whiteSpace=wrap;fontFamily=Courier New;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;shadow=1;" value="{&#xa;  &quot;overall_score&quot;: 3,&#xa;  &quot;dimension_scores&quot;: {&#xa;    &quot;structure&quot;: 4,&#xa;    &quot;business_logic&quot;: 3,&#xa;    &quot;assumptions&quot;: 2,&#xa;    &quot;quantitative_reasoning&quot;: 2,&#xa;    &quot;communication&quot;: 4&#xa;  },&#xa;  &quot;strengths&quot;: [&#xa;    &quot;The student used a basic revenue/cost structure.&quot;&#xa;  ],&#xa;  &quot;weaknesses&quot;: [&#xa;    &quot;The student did not justify assumptions.&quot;&#xa;  ],&#xa;  &quot;evidence&quot;: [&#xa;    {&#xa;      &quot;dimension&quot;: &quot;structure&quot;,&#xa;      &quot;quote&quot;: &quot;I would look at market size, competitors and costs.&quot;,&#xa;      &quot;interpretation&quot;: &quot;Shows an initial framework, but not deeply developed.&quot;&#xa;    }&#xa;  ],&#xa;  &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,&#xa;  &quot;recommended_next_focus&quot;: &quot;Ask the student to justify their assumptions.&quot;&#xa;}" vertex="1">
+          <mxGeometry height="380" width="640" x="920" y="2580" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-59" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Adapt socratic questions to consulting cases with an LLM and train with few-example-shot prompt engineer technique" vertex="1">
+          <mxGeometry height="30" width="210" x="1440" y="1877.5" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-60" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Small fine-tuning with socratic questions" vertex="1">
+          <mxGeometry height="30" width="120" x="1460" y="1767.5" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-61" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Socratic Questions dataset (from paper&amp;nbsp;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 0.5rem; font-weight: 500; line-height: 1.2; caret-color: rgb(33, 37, 41); text-align: start;&quot;&gt;&lt;a href=&quot;https://aclanthology.org/2023.eacl-main.12.pdf&quot; style=&quot;box-sizing: border-box; text-decoration: none;&quot;&gt;&lt;font style=&quot;color: rgb(4, 5, 6);&quot;&gt;Socratic Question Generation: A Novel Dataset, Models, and Evaluation&lt;/font&gt;&lt;/a&gt;)&lt;/p&gt;" vertex="1">
+          <mxGeometry height="67.5" width="240" x="1620" y="1751.25" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-62" parent="1" style="text;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;spacingLeft=11;shadow=1;" value="Student&#xa;↓&#xa;Interviewer Agent&#xa;    goal: obtain evidence about the student&#39;s reasoning&#xa;    action: asks follow-up questions&#xa;    tool/data: LoRA-adapted questioning style + case context&#xa;↓&#xa;Shared state / Transcript&#xa;↓&#xa;Judge Agent&#xa;    goal: evaluate whether enough evidence exists&#xa;    action: scores rubric and decides next step&#xa;    tool/data: transcript + rubric + RAG casebook knowledge&#xa;↓&#xa;Decision:&#xa;    if enough evidence → Feedback Agent&#xa;    if not enough evidence → send focus instruction to Interviewer Agent&#xa;↓&#xa;Feedback Agent&#xa;    goal: transform technical evaluation into student-facing coaching&#xa;    action: produces final report" vertex="1">
+          <mxGeometry height="330" width="420" x="-320" y="2270" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-63" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;shadow=1;" value="&lt;h2 style=&quot;margin-top: 0px;&quot;&gt;Agentic System&lt;/h2&gt;" vertex="1">
+          <mxGeometry height="50" width="260" x="-320" y="2220" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-65" parent="1" style="text;whiteSpace=wrap;html=1;" value="&lt;p&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;span data-start=&quot;1116&quot; data-end=&quot;1145&quot; style=&quot;caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;Shared state / transcript --&amp;gt; Paper:&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0);&quot;&gt;Generative Agents — Interactive Simulacra of Human Behavior&lt;/span&gt;&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0);&quot;&gt;Role-Playing --&amp;gt; Paper: CAMEL&lt;/span&gt;&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/p&gt;" vertex="1">
+          <mxGeometry height="90" width="290" x="-630" y="2350" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-68" edge="1" parent="1" source="RDyThFTYfkmwOs9I9s8V-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="RDyThFTYfkmwOs9I9s8V-67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-66" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" value="https://assets.managementconsulted.com/app/uploads/2025/06/02180347/Management-Consulted-Case-Interview-Scoring-Guide-2025.pdf?utm_campaign=Partner+CS%3A+app+deadlines+for+UG%2FMS+V2+-+2025.06.2&amp;amp;utm_medium=ghl" vertex="1">
+          <mxGeometry height="100" width="560" x="2390" y="1990" as="geometry" />
+        </mxCell>
+        <mxCell id="RDyThFTYfkmwOs9I9s8V-67" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontFamily=Courier New;" value="{&#xa;  &quot;rubric_name&quot;: &quot;Reduced Consulting Case Interview Rubric&quot;,&#xa;  &quot;score_scale&quot;: {&#xa;    &quot;1&quot;: &quot;Needs improvement&quot;,&#xa;    &quot;2&quot;: &quot;Developing&quot;,&#xa;    &quot;3&quot;: &quot;Average&quot;,&#xa;    &quot;4&quot;: &quot;Excellent&quot;,&#xa;    &quot;not_tested&quot;: &quot;Insufficient evidence in the transcript&quot;&#xa;  },&#xa;  &quot;dimensions&quot;: {&#xa;    &quot;problem_structuring&quot;: {&#xa;      &quot;description&quot;: &quot;Assesses whether the student breaks the business problem into a clear and logical framework.&quot;,&#xa;      &quot;criteria&quot;: {&#xa;        &quot;1&quot;: &quot;No clear framework or only an uncategorised list.&quot;,&#xa;        &quot;2&quot;: &quot;Some structure is present, but categories are weak, generic or not MECE.&quot;,&#xa;        &quot;3&quot;: &quot;Clear structure with relevant categories, but limited prioritisation or measurable detail.&quot;,&#xa;        &quot;4&quot;: &quot;Clear, MECE, case-specific and prioritised framework with relevant data points.&quot;&#xa;      }&#xa;    },&#xa;    &quot;business_logic&quot;: {&#xa;      &quot;description&quot;: &quot;Assesses whether the student connects their reasoning to the business objective of the case.&quot;,&#xa;      &quot;criteria&quot;: {&#xa;        &quot;1&quot;: &quot;Reasoning is disconnected from the business problem.&quot;,&#xa;        &quot;2&quot;: &quot;Shows partial understanding but often expands or complicates the problem unnecessarily.&quot;,&#xa;        &quot;3&quot;: &quot;Understands the problem and links some insights back to the main issue.&quot;,&#xa;        &quot;4&quot;: &quot;Maintains strong focus on the business objective and consistently drives toward a solution.&quot;&#xa;      }&#xa;    },&#xa;    &quot;assumptions_and_evidence&quot;: {&#xa;      &quot;description&quot;: &quot;Assesses whether the student justifies assumptions and supports claims with evidence from the case.&quot;,&#xa;      &quot;criteria&quot;: {&#xa;        &quot;1&quot;: &quot;Makes claims without justification or evidence.&quot;,&#xa;        &quot;2&quot;: &quot;Provides some assumptions but they are vague, unsupported or not clearly explained.&quot;,&#xa;        &quot;3&quot;: &quot;Uses relevant assumptions and evidence, but not consistently or deeply.&quot;,&#xa;        &quot;4&quot;: &quot;Clearly states, justifies and connects assumptions to case evidence and business implications.&quot;&#xa;      }&#xa;    },&#xa;    &quot;communication&quot;: {&#xa;      &quot;description&quot;: &quot;Assesses whether the student communicates clearly, concisely and in an interview-appropriate way.&quot;,&#xa;      &quot;criteria&quot;: {&#xa;        &quot;1&quot;: &quot;Unclear, hard to follow or lacks confidence.&quot;,&#xa;        &quot;2&quot;: &quot;Some clear points, but often rambling or unstructured.&quot;,&#xa;        &quot;3&quot;: &quot;Mostly clear and concise, but could improve prioritisation or synthesis.&quot;,&#xa;        &quot;4&quot;: &quot;Clear, confident, concise and structured communication using logical points.&quot;&#xa;      }&#xa;    }&#xa;  }&#xa;}" vertex="1">
+          <mxGeometry height="707.5" width="920" x="3060" y="1686.25" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-2" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="Student" vertex="1">
+          <mxGeometry height="60" width="30" x="-2915" y="3110" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-3" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="kh5bWiEy8WdyAaxlAQ-b-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-66" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-64">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2910" y="2950" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-67" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-63">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-68" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-65">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2910" y="2950" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Case Study Question" vertex="1">
+          <mxGeometry height="60" width="120" x="-2960" y="2990" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-5" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=block;startFill=1;" target="kh5bWiEy8WdyAaxlAQ-b-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-47" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" target="kh5bWiEy8WdyAaxlAQ-b-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2685" y="2998" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-6" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="Interview Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="-2700" y="3110" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-7" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.22;" value="" vertex="1">
+          <mxGeometry height="50" width="70" x="-2900" y="3070" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-8" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=1;" value="" vertex="1">
+          <mxGeometry height="50" width="80" x="-2790" y="3070" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-9" edge="1" parent="1" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-2880" y="3130" as="sourcePoint" />
+            <mxPoint x="-2720" y="3130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-10" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2810.0000000000005" y="3130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-11" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2560.0000000000005" y="3140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-12" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="-2715" y="3210" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Transcript" vertex="1">
+          <mxGeometry height="30" width="80" x="-2725" y="3270" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-14" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Data Architecture&lt;/h1&gt;" vertex="1">
+          <mxGeometry height="60" width="260" x="-3040" y="2450" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-15" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2445" y="3290" />
+            </Array>
+            <mxPoint x="-2445" y="3200" as="sourcePoint" />
+            <mxPoint x="-2510" y="3370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-49" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" target="kh5bWiEy8WdyAaxlAQ-b-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-16" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="Judge Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="-2455" y="3110" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-45" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-18" parent="1" style="text;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;Interviewer Agent&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Presents case&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Asks adaptive follow-ups&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Encourages critical thinking&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="70" width="190" x="-2645" y="2980" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-19" parent="1" style="text;whiteSpace=wrap;html=1;align=center;" value="&lt;div&gt;Small fine tuned with Socratic questions&lt;/div&gt;" vertex="1">
+          <mxGeometry height="35" width="140" x="-2395" y="2997.5" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-35" parent="1" style="text;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;LLM-as-a-judge&lt;/b&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Evaluates full interaction&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Checks rubric dimensions&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Decides evidence sufficiency&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="70" width="230" x="-2335" y="3105" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-38" parent="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;rounded=0;shadow=1;" value="Socratic Questions dataset (from paper&amp;nbsp;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 0.5rem; font-weight: 500; line-height: 1.2; caret-color: rgb(33, 37, 41); text-align: start;&quot;&gt;&lt;a href=&quot;https://aclanthology.org/2023.eacl-main.12.pdf&quot; style=&quot;box-sizing: border-box; text-decoration: none;&quot;&gt;&lt;font style=&quot;color: rgb(4, 5, 6);&quot;&gt;Socratic Question Generation: A Novel Dataset, Models, and Evaluation&lt;/font&gt;&lt;/a&gt;)&lt;/p&gt;" vertex="1">
+          <mxGeometry height="67.5" width="240" x="-2165" y="2990" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-60" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="kh5bWiEy8WdyAaxlAQ-b-58" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-39" parent="1" style="shape=card;whiteSpace=wrap;html=1;size=20;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="50" width="60" x="-2405" y="3375" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-40" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Rubric" vertex="1">
+          <mxGeometry height="30" width="110" x="-2435" y="3435" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-51" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-53">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2665" y="3340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-56" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="kh5bWiEy8WdyAaxlAQ-b-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-42" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="RAG" vertex="1">
+          <mxGeometry height="60" width="60" x="-2540" y="3375" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-43" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Casebooks Theory" vertex="1">
+          <mxGeometry height="30" width="95" x="-2557.5" y="3445" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-46" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="Socratic Questions" vertex="1">
+          <mxGeometry height="60" width="60" x="-2235" y="2986.3" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-50" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2435" y="3290" />
+              <mxPoint x="-2375" y="3290" />
+            </Array>
+            <mxPoint x="-2435" y="3200" as="sourcePoint" />
+            <mxPoint x="-2375" y="3370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-53" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Harvard Casebook&#39;s theory" vertex="1">
+          <mxGeometry height="30" width="125" x="-2805" y="3370" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-54" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="AGSM Casebook&#39;s theory" vertex="1">
+          <mxGeometry height="30" width="125" x="-2805" y="3410" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-97" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1710" y="3400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-58" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" value="https://assets.managementconsulted.com/app/uploads/2025/06/02180347/Management-Consulted-Case-Interview-Scoring-Guide-2025.pdf?utm_campaign=Partner+CS%3A+app+deadlines+for+UG%2FMS+V2+-+2025.06.2&amp;amp;utm_medium=ghl" vertex="1">
+          <mxGeometry height="110" width="480" x="-2290" y="3345" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-62" parent="1" style="text;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;spacingLeft=11;shadow=1;" value="Student&#xa;↓&#xa;Interviewer Agent&#xa;    goal: obtain evidence about the student&#39;s reasoning&#xa;    action: asks follow-up questions&#xa;    tool/data: LoRA-adapted questioning style + case context&#xa;↓&#xa;Shared state / Transcript&#xa;↓&#xa;Judge Agent&#xa;    goal: evaluate whether enough evidence exists&#xa;    action: scores rubric and decides next step&#xa;    tool/data: transcript + rubric + RAG casebook knowledge&#xa;↓&#xa;Decision:&#xa;    if enough evidence → Send feedback&#xa;    if not enough evidence → send focus instruction to Interviewer Agent" vertex="1">
+          <mxGeometry height="330" width="420" x="-3300" y="3285" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-12" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="jG--w1IRNCaAB5d-ekmT-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-63" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="Harvard (x10)" vertex="1">
+          <mxGeometry height="60" width="120" x="-2960" y="2860" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-11" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="jG--w1IRNCaAB5d-ekmT-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-3040" y="2680" />
+              <mxPoint x="-2900" y="2680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-64" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="Duke Fuqua 2017 (x18)" vertex="1">
+          <mxGeometry height="60" width="120" x="-3100" y="2860" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-13" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="jG--w1IRNCaAB5d-ekmT-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2760" y="2680" />
+              <mxPoint x="-2900" y="2680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-65" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="AGSM (x21)" vertex="1">
+          <mxGeometry height="60" width="120" x="-2820" y="2860" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-69" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 127, 255); font-weight: 700;&quot;&gt;Synthetic Scenarios&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="60" x="-3180" y="3100" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-70" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; font-weight: 400; text-align: start; white-space: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20parent%3D%221%22%20style%3D%22text%3Bhtml%3D1%3BwhiteSpace%3Dwrap%3BstrokeColor%3Dnone%3BfillColor%3Dnone%3Balign%3Dcenter%3BverticalAlign%3Dmiddle%3Brounded%3D0%3BfontStyle%3D1%3BfontColor%3D%23007FFF%3Bshadow%3D1%3B%22%20value%3D%22Synthetic%20Scenarios%22%20vertex%3D%221%22%3E%3CmxGeometry%20height%3D%2230%22%20width%3D%22130%22%20x%3D%22-3082.5%22%20y%3D%224618.75%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="110" x="-3227.5" y="3170" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-71" edge="1" parent="1" source="kh5bWiEy8WdyAaxlAQ-b-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;" target="kh5bWiEy8WdyAaxlAQ-b-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-78" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-3455" y="3035" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-139" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-3455" y="3035" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-87" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.004;entryY=0.075;entryDx=0;entryDy=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-3750" y="3250.076923076923" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kh5bWiEy8WdyAaxlAQ-b-96" parent="1" style="text;whiteSpace=wrap;fontFamily=Courier New;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=0" value="{&#xa;  &quot;rubric_name&quot;: &quot;Consulting Case Interview Rubric&quot;,&#xa;  &quot;source&quot;: &quot;https://assets.managementconsulted.com/app/uploads/2025/06/02180347/Management-Consulted-Case-Interview-Scoring-Guide-2025.pdf?utm_campaign=Partner+CS%3A+app+deadlines+for+UG%2FMS+V2+-+2025.06.2&amp;utm_medium=ghl&quot;,&#xa;  &quot;score_scale&quot;: {&#xa;    &quot;1&quot;: &quot;Needs improvement&quot;,&#xa;    &quot;2&quot;: &quot;Developing&quot;,&#xa;    &quot;3&quot;: &quot;Average&quot;,&#xa;    &quot;4&quot;: &quot;Excellent&quot;,&#xa;    &quot;not_tested&quot;: &quot;Insufficient evidence or section not covered&quot;&#xa;  },&#xa;  &quot;rubric_sections&quot;: {&#xa;    &quot;case_opening&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates how the candidate recaps the prompt, asks clarifying questions, and frames the business problem.&quot;,&#xa;      &quot;used_for&quot;: [&quot;atomic_response_dataset&quot;, &quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;case_structure&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates whether the candidate builds a clear, MECE, case-specific and prioritized framework.&quot;,&#xa;      &quot;used_for&quot;: [&quot;atomic_response_dataset&quot;, &quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;case_math_answer&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates quantitative setup, calculation accuracy, explanation, and ability to convert numbers into business insights.&quot;,&#xa;      &quot;used_for&quot;: [&quot;atomic_response_dataset&quot;, &quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;case_creative_answer&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates brainstorming quality, structure, creativity, rationale, and ability to generate additional ideas.&quot;,&#xa;      &quot;used_for&quot;: [&quot;atomic_response_dataset&quot;, &quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;final_recommendation&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates whether the candidate gives a clear recommendation supported by case evidence, risks, and next steps.&quot;,&#xa;      &quot;used_for&quot;: [&quot;atomic_response_dataset&quot;, &quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;overall_structure&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates how well the candidate leads the whole case, organizes ideas, prioritizes, and connects different parts of the case.&quot;,&#xa;      &quot;used_for&quot;: [&quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;overall_problem_solving&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates whether the candidate stays focused on the business objective, uses evidence, and drives toward a solution across the full interview.&quot;,&#xa;      &quot;used_for&quot;: [&quot;synthetic_conversation_dataset&quot;]&#xa;    },&#xa;    &quot;overall_communication&quot;: {&#xa;      &quot;purpose&quot;: &quot;Evaluates clarity, confidence, concision, executive presence, and interview-style communication across the full case.&quot;,&#xa;      &quot;used_for&quot;: [&quot;synthetic_conversation_dataset&quot;]&#xa;    }&#xa;  }&#xa;}" vertex="1">
+          <mxGeometry height="790" width="830" x="-1700" y="3075" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-4" edge="1" parent="1" source="jG--w1IRNCaAB5d-ekmT-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="jG--w1IRNCaAB5d-ekmT-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="casebooks" vertex="1">
+          <mxGeometry height="60" width="115" x="-3065" y="2555" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-2" parent="1" style="text;html=1;fillColor=#f5f5f5;fontColor=default;strokeColor=none;fontFamily=Courier New;whiteSpace=wrap;" value="&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;casebook_metadata&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;: {&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;casebook_id&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼk&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;duke_fuqua_2017&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;,&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;casebook_name&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼk&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;Duke Fuqua Casebook&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;,&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;school&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼk&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;Duke Fuqua School of Business&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;,&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;year&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼj&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;2017&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;,&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;source_type&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼk&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;MBA consulting casebook&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;,&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;b&gt;notes&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;:&lt;span class=&quot;Apple-converted-space&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;ͼk&quot; style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&quot;Used as a source of profitability consulting cases for agentic interview simulation.&quot;&lt;/span&gt;&lt;br style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none;&quot;&gt;}&lt;/span&gt;" vertex="1">
+          <mxGeometry height="185" width="300" x="-3410" y="2492.5" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-5" parent="1" style="text;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=default;strokeColor=none;labelBackgroundColor=none;" value="&lt;div style=&quot;font-size: 12px; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;{&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  &quot;&lt;b&gt;case_id&lt;/b&gt;&quot;: &quot;...&quot;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  &quot;&lt;b&gt;case_title&lt;/b&gt;&quot;: &quot;...&quot;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  &quot;&lt;b&gt;source&lt;/b&gt;&quot;: {...},&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  &quot;&lt;b&gt;case_metadata&lt;/b&gt;&quot;: {...},&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  &quot;&lt;b&gt;case_content&lt;/b&gt;&quot;: [&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;    {&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;block_id&lt;/b&gt;&quot;: &quot;...&quot;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;block_type&lt;/b&gt;&quot;: &quot;prompt | background | guidance | expected_analysis | data | exhibit | final_recommendation&quot;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;title&lt;/b&gt;&quot;: &quot;...&quot;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;visible_to_candidate&lt;/b&gt;&quot;: true/false,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;image&lt;/b&gt;&quot;: null,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;source_page&lt;/b&gt;&quot;: 0,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;      &quot;&lt;b&gt;content&lt;/b&gt;&quot;: &quot;...&quot;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;    }&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;  ]&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;}&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="330" width="840" x="-2685" y="2420" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-7" edge="1" parent="1" source="jG--w1IRNCaAB5d-ekmT-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="jG--w1IRNCaAB5d-ekmT-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="case" vertex="1">
+          <mxGeometry height="60" width="115" x="-2850" y="2555" as="geometry" />
+        </mxCell>
+        <mxCell id="jG--w1IRNCaAB5d-ekmT-9" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="RAG" vertex="1">
+          <mxGeometry height="60" width="60" x="-2930" y="2555" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-133" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;dashed=1;dashPattern=1 4;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2610.0000000000005" y="4354.999999999999" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-64" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;" value="{&#xa;  &quot;scenario_id&quot;: &quot;...&quot;,&#xa;  &quot;evaluation_item_id&quot;: &quot;...&quot;,&#xa;  &quot;case_id&quot;: &quot;...&quot;,&#xa;&#xa;    &quot;model&quot;: &quot;phi-4&quot;,&#xa;        &quot;temperature&quot;: 0.7,&#xa;        &quot;seed&quot;: 42,&#xa;&#xa;  &quot;candidate_profile&quot;: {&#xa;    &quot;performance_level&quot;: 1 | 2 | 3 | 4 | 5&#xa;    &quot;performance_label&quot;: very_weak | weak | good | very_good | excellent,&#xa;    &quot;description&quot;: &quot;The candidate shows ...&quot;,&#xa;    &quot;behaviour_rules&quot;: [&#xa;      &quot;...&quot;,&#xa;      &quot;...&quot;,&#xa;      &quot;...&quot;&#xa;    ],&#xa;    &quot;answer_style&quot;: {&#xa;      &quot;length&quot;: short | medium | long ,&#xa;      &quot;confidence&quot;: &quot;low | medium | high&quot;&#xa;      &quot;clarity&quot;: low | medium | high,&#xa;      &quot;business_vocabulary&quot;: &quot;basic | professional&quot;&#xa;    }&#xa;  },&#xa;&#xa;&#xa;  &quot;ground_truth&quot;: {&#xa;    &quot;expected_scores&quot;: {&#xa;      &quot;case_opening&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_structure&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_math&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_creativity&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;final_recommendation&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;overall_structure&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;overall_problem_solving&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;overall_communication&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;overall&quot;: 1 | 2 | 3 | 4 | 5&#xa;    },&#xa;    &quot;expected_issues&quot;: [&#xa;      &quot;...&quot;,&#xa;      &quot;...&quot;&#xa;    ],&#xa;    &quot;expected_feedback_points&quot;: [&#xa;      &quot;...&quot;,&#xa;      &quot;...&quot;&#xa;    ]&#xa;  }&#xa;}" vertex="1">
+          <mxGeometry height="690" width="650" x="-3370" y="4010" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-71" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Single LLM" vertex="1">
+          <mxGeometry height="60" width="30" x="-2060" y="4325" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-105" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="K_BGmsbE8tWditb4g_c6-104">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-72" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="" vertex="1">
+          <mxGeometry height="60" width="55" x="-2365" y="4323.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-73" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1;fontColor=#007FFF;shadow=1;" value="Synthetic Scenarios" vertex="1">
+          <mxGeometry height="30" width="130" x="-2402.5" y="4388.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-78" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 127, 255); font-weight: 700;&quot;&gt;System Runs&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="55" x="-2007.5" y="4453.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-80" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Good overall score?&lt;div&gt;Good feedback points?&lt;/div&gt;&lt;div&gt;Does it makes good follow-up questions?&lt;/div&gt;" vertex="1">
+          <mxGeometry height="65" width="140" x="-1930" y="4598.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-81" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Human" vertex="1">
+          <mxGeometry height="60" width="30" x="-1985" y="4601.25" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-83" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Idea: Human in the Loop, check what is should say vs what it actually said" vertex="1">
+          <mxGeometry height="35" width="140" x="-2150" y="4613.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-85" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="" vertex="1">
+          <mxGeometry height="60" width="30" x="-1950" y="4320" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-88" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="" vertex="1">
+          <mxGeometry height="60" width="30" x="-1930" y="4320" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-89" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Agentic System" vertex="1">
+          <mxGeometry height="30" width="60" x="-1960" y="4380" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-92" parent="1" style="text;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontColor=#007FFF;fontSize=12;" value="&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none; float: none; display: inline !important;&quot;&gt;Real outputs of the single-agent and agentic system&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-2020" y="4523.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-93" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="K_BGmsbE8tWditb4g_c6-72">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2416.5" y="4308.75" />
+              <mxPoint x="-2416.5" y="4353.75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-94" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8CED5;strokeColor=none;" value="Candidate profile" vertex="1">
+          <mxGeometry height="20" width="120" x="-2587.5" y="4298.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-95" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="K_BGmsbE8tWditb4g_c6-72">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2416.5" y="4338.75" />
+              <mxPoint x="-2416.5" y="4363.75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-96" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8CED5;strokeColor=none;" value="&lt;span style=&quot;text-align: left;&quot;&gt;Expected issues&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="120" x="-2587.5" y="4328.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-97" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-98" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" target="K_BGmsbE8tWditb4g_c6-72">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2416.5" y="4368.75" />
+              <mxPoint x="-2416.5" y="4341.75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-98" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8CED5;strokeColor=none;" value="&lt;span style=&quot;text-align: left;&quot;&gt;Expected score&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="120" x="-2587.5" y="4358.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-99" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-100" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.831;entryDx=0;entryDy=0;entryPerimeter=0;" target="K_BGmsbE8tWditb4g_c6-72">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2416.5" y="4398.75" />
+              <mxPoint x="-2416.5" y="4373.75" />
+              <mxPoint x="-2364.5" y="4373.75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-100" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8CED5;strokeColor=none;" value="&lt;span style=&quot;text-align: left;&quot;&gt;Expected feedback&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="120" x="-2587.5" y="4388.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-101" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 127, 255); font-weight: 700;&quot;&gt;Comparison Results&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="95" x="-2305" y="4593.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-103" parent="1" style="text;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontColor=#007FFF;fontSize=12;" value="&lt;span style=&quot;caret-color: rgb(0, 0, 0); font-style: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration: none; float: none; display: inline !important;&quot;&gt;Human evaluation of results from both systems&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-2310" y="4653.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-104" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Candidate LLM" vertex="1">
+          <mxGeometry height="60" width="30" x="-2225" y="4323.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-109" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 127, 255); font-weight: 700;&quot;&gt;Cases&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="55" x="-2057.5" y="4197.5" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-113" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" value="&lt;span style=&quot;color: rgb(0, 127, 255); font-weight: 700;&quot;&gt;RAG&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="55" x="-1942.5" y="4197.5" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-118" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-109" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="K_BGmsbE8tWditb4g_c6-85">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1960" y="4228" />
+              <mxPoint x="-1960" y="4295" />
+              <mxPoint x="-1935" y="4295" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-119" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="K_BGmsbE8tWditb4g_c6-88">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-120" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.4;size=10;position=0.4;base=10;" value="" vertex="1">
+          <mxGeometry height="30" width="50" x="-2195" y="4310" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-121" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.7;size=10;position=0.4;base=10;" value="" vertex="1">
+          <mxGeometry height="30" width="50" x="-2110" y="4310" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-122" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-109" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="K_BGmsbE8tWditb4g_c6-71">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-123" parent="1" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;position2=0.7;size=10;position=0.4;base=10;" value="" vertex="1">
+          <mxGeometry height="30" width="50" x="-2000" y="4310" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-127" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-121" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.001;entryY=0.549;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 4 1 4;" target="K_BGmsbE8tWditb4g_c6-78">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2100" y="4486.75" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-128" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.598;entryY=-0.028;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 4 1 4;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1989.9999999999995" y="4328.75" as="sourcePoint" />
+            <mxPoint x="-1989.6100000000001" y="4450.820000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-131" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.026;entryY=0.611;entryDx=0;entryDy=0;entryPerimeter=0;" target="K_BGmsbE8tWditb4g_c6-101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-132" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Evaluation&lt;/h1&gt;&lt;div&gt;&lt;span style=&quot;text-align: center;&quot;&gt;Instead of having a closed-form conversation (where we would have to predefine the follow-up questions) we create a candidate profile and ask an LLM how to answer based on the score we want to achieve&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="467.5" x="-2587.5" y="4167.5" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-135" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-134" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 4;endArrow=oval;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1940" y="4483.75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-134" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;" value="{&#xa;  &quot;run_id&quot;: &quot;...&quot;,&#xa;  &quot;scenario_id&quot;: &quot;...&quot;,&#xa;  &quot;system_type&quot;: baseline | agentic,&#xa;&#xa;  &quot;transcript&quot;: [&#xa;    {&#xa;      &quot;turn&quot;: 1,&#xa;      &quot;speaker&quot;: interviewer_agent | judge_agent | baseline,&#xa;      &quot;message&quot;: &quot;...&quot;&#xa;    },&#xa;    {&#xa;      &quot;turn&quot;: 2,&#xa;      &quot;speaker&quot;: &quot;candidate_simulator&quot;,&#xa;      &quot;message&quot;: &quot;...&quot;&#xa;    }&#xa;  ],&#xa;&#xa;  &quot;system_feedback&quot;: {&#xa;    &quot;scores&quot;: {&#xa;      &quot;case_opening&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_structure&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_math&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;case_creativity&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;final_recommendation&quot;: 1 | 2 | 3 | 4 | 5,&#xa;      &quot;overall&quot;: 1 | 2 | 3 | 4 | 5&#xa;    },&#xa;    &quot;feedback_text&quot;: &quot;...&quot;,&#xa;    &quot;strengths&quot;: [],&#xa;    &quot;improvement_areas&quot;: [],&#xa;    &quot;recommended_next_steps&quot;: []&#xa;  },&#xa;&#xa;  &quot;run_metadata&quot;: {&#xa;      &quot;model&quot;: &quot;...&quot;,&#xa;      &quot;temperature&quot;: x,&#xa;      &quot;prompt_tokens&quot;: x,&#xa;      &quot;completion_tokens&quot;: x,&#xa;      &quot;total_tokens&quot;: x,&#xa;      &quot;latency_seconds&quot;: x&#xa;    }}" vertex="1">
+          <mxGeometry height="690" width="650" x="-1615" y="4138.75" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-138" edge="1" parent="1" source="K_BGmsbE8tWditb4g_c6-136" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=oval;endFill=1;dashed=1;dashPattern=1 2;" target="K_BGmsbE8tWditb4g_c6-103">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="K_BGmsbE8tWditb4g_c6-136" parent="1" style="text;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=none;fontFamily=Courier New;" value="{&#xa;  &quot;comparison_id&quot;: &quot;...&quot;,&#xa;  &quot;scenario_id&quot;: &quot;...&quot;,&#xa;&#xa;&#xa;  &quot;run_ids&quot;: {&#xa;    &quot;baseline&quot;: &quot;...&quot;,&#xa;    &quot;agentic&quot;: &quot;...&quot;&#xa;  },&#xa;&#xa;&#xa;  &quot;manual_scores&quot;: {&#xa;    &quot;baseline&quot;: {&#xa;      &quot;score_accuracy&quot;: 1,&#xa;      &quot;interaction_quality&quot;: 1,&#xa;      &quot;issue_detection&quot;: 1,&#xa;      &quot;feedback_quality&quot;: 1,&#xa;      &quot;overall&quot;: 1&#xa;    },&#xa;    &quot;agentic&quot;: {&#xa;      &quot;score_accuracy&quot;: 1, (eg. predicted 0 but original is 1)&#xa;      &quot;interaction_quality&quot;: 1,&#xa;      &quot;issue_detection&quot;: 1,&#xa;      &quot;feedback_quality&quot;: 1,&#xa;      &quot;overall&quot;: 1&#xa;    }&#xa;  },&#xa;&#xa;&#xa;  &quot;winner&quot;: &quot;baseline | agentic | tie&quot;,&#xa;&#xa;&#xa;  &quot;justification&quot;: &quot;...&quot;,&#xa;&#xa;&#xa;  &quot;notes&quot;: {&#xa;    &quot;baseline&quot;: &quot;...&quot;,&#xa;    &quot;agentic&quot;: &quot;...&quot;&#xa;  }&#xa;}" vertex="1">
+          <mxGeometry height="600" width="465" x="-2465" y="4903.75" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

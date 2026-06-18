@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_006_very_good",
+  "evaluation_item_id": "duke_cackalacky_vg_001",
+  "case_id": "duke_cackalacky_construction",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong across both the quantitative and qualitative parts of the case. They correctly size the opportunity, choose Texas with good reasoning, analyze the fragmented market well, and recommend a strong entry path with thoughtful risks and mitigations.",
+    "behaviour_rules": [
+      "Open with a concise recap and immediately translate doubling revenue into an additional $20M target within three years.",
+      "Use a clear structure covering market selection, entry mode, competition, and execution risks.",
+      "Complete the market-sizing math cleanly and compare the states against the target.",
+      "Recognize that Texas and Georgia both meet the target, but argue that Texas offers the largest opportunity and stronger scaling potential.",
+      "Use a Build/Borrow/Buy style framework after Texas is selected.",
+      "Interpret the Texas market as fragmented, fast-growing, and favorable to consolidation.",
+      "Recognize that recent high-growth entrants used acquisitions and use that fact to support a buy-or-partner style entry.",
+      "Discuss entry risks such as personnel, industry relationships, regulation, culture, and integration with credible mitigations."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": 4,
+      "case_creative_answer": 4,
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate when comparing Texas versus Georgia or choosing among Build/Borrow/Buy options.",
+      "Could still provide more precise sequencing of the entry plan."
+    ],
+    "expected_feedback_points": [
+      "Strong translation of the growth target into a clear quantitative objective.",
+      "Strong market-sizing and state-selection logic.",
+      "Strong interpretation of the Texas competitive landscape and acquisition signal.",
+      "Strong entry recommendation with realistic risks and mitigations.",
+      "To reach excellent level, make the final recommendation even tighter and more board-ready."
+    ]
+  }
+}

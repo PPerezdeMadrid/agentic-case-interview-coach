@@ -1,0 +1,12 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "mvp_dissertation": "./mvp_dissertation.py:graph",
+    "baseline": "./baseline.py:graph"
+  },
+  "env": "../../../.env",
+  "python_version": "3.11",
+  "dependencies": [
+    "."
+  ]
+}

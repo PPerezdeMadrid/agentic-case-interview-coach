@@ -1,0 +1,54 @@
+{
+  "scenario_id": "scenario_008_very_good",
+  "evaluation_item_id": "duke_dealer_jacks_vg_001",
+  "case_id": "duke_dealer_jacks",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong across the case. They identify mix as the core issue, validate management's hypothesis well, and deliver a strong recommendation with sensible risks and next steps, though with slightly less polish than an excellent answer.",
+    "behaviour_rules": [
+      "Open with a concise recap and explicitly frame the case around mix, margin, and profitability rather than store footprint.",
+      "Recognize quickly that private label penetration is likely the most important commercial lever.",
+      "Use the historical exhibit to link private label stagnation to profit stagnation.",
+      "Structure the math cleanly around a 3-point shift, gross margin delta, and taxes.",
+      "Conclude that the shift creates roughly $189M of after-tax profit, exceeding the $180M target.",
+      "Recommend moving forward with the private label strategy while pressure-testing the 3-point assumption.",
+      "Call out risks such as one-time implementation costs and potential strain with national brand suppliers.",
+      "Suggest pilots or select-store rollout before broad implementation."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": 4,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate in explaining the remaining upside versus Trader Joe's.",
+      "Could still be pushed for more detail on sequencing and supplier relationship management."
+    ],
+    "expected_feedback_points": [
+      "Strong diagnosis of private label mix as the central profitability lever.",
+      "Strong and mostly clean validation of the 3-point penetration hypothesis.",
+      "Strong recognition of taxes, rollout risk, and supplier implications.",
+      "Strong recommendation to pilot and then scale if the assumptions hold."
+    ]
+  }
+}

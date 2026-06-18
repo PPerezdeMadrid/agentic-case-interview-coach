@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_004_very_good",
+  "evaluation_item_id": "harvard_juice_producer_vg_001",
+  "case_id": "harvard_02_juice_producer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is well structured and commercially strong. They move quickly to the cost side, identify the gallon economics clearly, and explain the pricing distortion and cost-allocation issue well, with only slightly less polish than an excellent answer.",
+    "behaviour_rules": [
+      "Open with a concise recap and explicitly state that rising sales with falling profit points toward a cost or pricing problem.",
+      "Ask focused questions on package pricing, unit economics, labor requirements, and cost allocation.",
+      "Structure the problem around revenue confirmation, direct cost differences, and overhead allocation.",
+      "Clearly identify that plastic gallons are more expensive because of both packaging material and higher-skill labor.",
+      "Explain that the gallon price is lower on a per-ounce basis even though the product is more expensive to produce.",
+      "Use the 60% gallon mix shift as evidence that the business is increasingly selling the wrong product at the wrong economics.",
+      "Recognize that factory costs are being averaged in a way that hides the true profitability of each package format.",
+      "Recommend a thorough activity-based costing review and repricing, with a strong but not perfectly polished final synthesis."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": 4,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate when synthesizing the root cause into one decisive statement.",
+      "Could give more concrete detail on how the repricing and costing review should be sequenced."
+    ],
+    "expected_feedback_points": [
+      "Strong and well-prioritized focus on the cost side.",
+      "Strong diagnosis of gallon packaging, labor, and pricing economics.",
+      "Strong explanation of why average cost allocation masks the problem.",
+      "Strong use of the product mix shift to explain worsening profits.",
+      "Strong recommendation to apply activity-based costing and reprice gallons.",
+      "To reach excellent level, make the final synthesis even tighter and more executive-ready."
+    ]
+  }
+}

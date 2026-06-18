@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_007_very_good",
+  "evaluation_item_id": "harvard_chemical_manufacturer_vg_001",
+  "case_id": "harvard_03_chemical_manufacturer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong and commercially grounded. They interpret market share correctly, diagnose the shrinking-market and pricing problem well, and recommend cost reduction plus diversification with solid logic and structure.",
+    "behaviour_rules": [
+      "Open with a concise recap and explicitly question what rising market share means.",
+      "Use a clear framework covering volume, price, cost, industry demand, and competition.",
+      "Quickly establish that costs are steady and that the real issue must be on the revenue-quality side.",
+      "Recognize that volume is only slightly up, while pricing pressure is reducing margin per unit.",
+      "Interpret competitor exits as evidence of industry saturation and unattractive economics.",
+      "Connect lower demand for preservatives to broader consumer movement toward fresh foods.",
+      "Conclude that the client is gaining share largely because the market is shrinking and competitors are disappearing, not because the business is truly stronger.",
+      "Recommend aggressive cost reduction, collaborative purchasing leverage where feasible, and diversification into more attractive chemical categories."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate when synthesizing the full industry story into one decisive statement.",
+      "Could go deeper on the practical sequencing of cost actions and diversification."
+    ],
+    "expected_feedback_points": [
+      "Strong interpretation of market share in context.",
+      "Strong diagnosis of shrinking-market price pressure rather than cost inflation.",
+      "Strong connection between fresh-food substitution and industry decline.",
+      "Strong recommendation to reduce costs and diversify the portfolio.",
+      "To reach excellent level, make the final synthesis even tighter and more executive-ready."
+    ]
+  }
+}

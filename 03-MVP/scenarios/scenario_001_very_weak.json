@@ -1,0 +1,60 @@
+{
+  "scenario_id": "scenario_001_very_weak",
+  "evaluation_item_id": "duke_activist_action_001",
+  "case_id": "duke_activist_action",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate struggles to understand the activist investor context, gives generic ideas instead of case-specific analysis, avoids quantitative reasoning, and produces weak recommendations with little business support.",
+    "behaviour_rules": [
+      "Do not proactively separate short-term shareholder value from long-term company value unless directly pushed.",
+      "Ask few or no clarifying questions and move too quickly into vague suggestions.",
+      "Give generic answers such as cost cutting, marketing, or growth without tying them to the case exhibits.",
+      "Avoid doing the math precisely; if forced into quantitative reasoning, speak vaguely and show low confidence.",
+      "When discussing options, fail to prioritize and do not explain trade-offs clearly.",
+      "In the final recommendation, hesitate, suggest gathering more data, and give weak next steps."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": 1,
+      "case_creative_answer": 2,
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to identify that the activist investor is primarily focused on short-term stock price improvement within a limited time horizon.",
+      "Does not clearly structure the problem into short-term versus long-term value creation options.",
+      "Misses the key conclusion that supply chain restructuring has positive NPV but is too delayed to satisfy the activist investor.",
+      "Does not critique low-cost-country outsourcing using brand, shipping, talent, and long-term operating risks.",
+      "Fails to prioritize divestiture as the strongest short-term option.",
+      "Does not clearly identify Silky Sweets as the most appropriate divestiture candidate based on value and strategic fit.",
+      "Gives a weak recommendation with little evidence, limited risk discussion, and poor next steps."
+    ],
+    "expected_feedback_points": [
+      "Start with a concise recap of the problem and clarify the difference between shareholder pressure and the client's long-term objectives.",
+      "Use a clearer framework that separates short-term activist actions from long-term operational value creation.",
+      "When shown exhibits, interpret them against the decision criteria instead of listing observations.",
+      "State explicitly that supply chain restructuring is not the best primary answer for an activist because the savings arrive too late.",
+      "Rule out low-cost-country options with sharper business reasoning around feasibility and strategic risk.",
+      "Prioritize divestiture and support the recommendation with case evidence, including value creation and limited long-term damage.",
+      "Finish with a confident recommendation, one or two key risks, and action-oriented next steps."
+    ]
+  }
+}

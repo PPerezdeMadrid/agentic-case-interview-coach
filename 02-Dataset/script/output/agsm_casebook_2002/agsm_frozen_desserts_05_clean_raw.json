@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "frozen_dessert_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Frozen Dessert",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 7,
+      "content": "You are consulting for a small, regional maker of high quality premium priced frozen desserts. Ice cream and similar products. Though sales have been increasing, the business is barely making a profit and the management is unsure that they will able to pay their usual dividend this year. They have asked you to help them identify the problem."
+    },
+    {
+      "block_id": "frozen_dessert_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 7,
+      "content": "Additional information:\n\nThe client sells a complete line of product, ice cream and frozen yogurt, in major supermarket chains in the Northeast. In recent years, as Americans jump on the fitness bandwagon, frozen yogurt has begun to outsell ice cream, and currently represents 55% of product sold. The selling price per pint is the same for frozen yogurt and ice cream.\n\nThe ingredients are different, however. Ice cream uses locally available milk and cream, and flavorings such as chocolate, pecans, vanilla and coffee. The premium frozen yogurts use more exotic flavorings such as mangoes, kiwis, pineapple and raspberries. All other costs are equal for the two lines."
+    },
+    {
+      "block_id": "frozen_dessert_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Product lines:\n- Ice cream\n- Frozen yogurt\n\nSales mix:\n- Frozen yogurt currently represents 55% of product sold\n- Frozen yogurt has begun to outsell ice cream\n- Overall sales have been increasing\n\nPricing:\n- Selling price per pint is the same for frozen yogurt and ice cream\n\nCost comparison:\n- Ice cream uses locally available milk and cream\n- Ice cream flavorings include chocolate, pecans, vanilla, and coffee\n- Premium frozen yogurt uses more exotic flavorings such as mangoes, kiwis, pineapple, and raspberries\n- All other costs are equal for the two lines\n\nImplication:\n- Frozen yogurt likely has higher ingredient costs than ice cream while selling at the same price"
+    },
+    {
+      "block_id": "frozen_dessert_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Margins on frozen yogurt products must be lower than for ice cream, or possibly even negative, due to higher ingredient costs. Because frozen yogurt sells at the same price per pint as ice cream but requires more expensive exotic flavorings, the product mix shift toward frozen yogurt is reducing overall profitability.\n\nThe company’s sales are increasing, but the growth is coming from the lower-margin product line. Therefore, the business can grow revenue while still barely making a profit."
+    },
+    {
+      "block_id": "frozen_dessert_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 7,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "frozen_dessert_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Solution:\n\nMargins on frozen yogurt products must be lower than for ice cream, or possibly even negative, due to the higher ingredient costs. Therefore, the shift of sales from ice cream into frozen yogurt is causing the company as a whole to be less profitable.\n\nA strong candidate should recommend that the company address the margin problem in frozen yogurt. Potential actions include raising frozen yogurt prices, reducing ingredient costs, reformulating products to use less expensive inputs, managing the product mix, or promoting higher-margin ice cream products. The candidate should recognize that the issue is not declining sales, but a shift toward a lower-margin product."
+    }
+  ]
+}

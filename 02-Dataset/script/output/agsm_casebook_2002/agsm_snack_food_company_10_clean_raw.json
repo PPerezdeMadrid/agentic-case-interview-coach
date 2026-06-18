@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "snack_food_company_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Snack Food Company",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 13,
+      "content": "A large salted snack food company has steadily been losing market share over that past two years, from a high of 20% to the current level of 18%. Profits as a percent of sales, however, have been growing. What could be causing this?"
+    },
+    {
+      "block_id": "snack_food_company_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 13,
+      "content": "Additional Information to be divulged gradually:\n\nThe size of the total salted snack food market has grown from $15 billion to $17 billion during these two years. The interviewee’s conclusion should be that the client’s total dollar sales have actually grown, but not kept pace with the market.\n\nThe product line of the client has not changed over this period.\n\nThe costs for the client have changed over this period:\n\n| Cost item | Current | Two years ago |\n|---|---:|---:|\n| Raw Ingredients | 28% | 26% |\n| Conversion costs | 24% | 24% |\n| Distribution | 8% | 9% |\n| Marketing | 16% | 18% |\n| Sales force | 7% | 9% |\n| Pre-tax profit | 17% | 14% |\n\nThe total sales force was cut to reduce costs, though the same number of outlets are still covered by this sales force. The changes in the marketing budget come from reduced trade promotions.\n\nThe products are mostly sold through large grocery store chains and convenience stores. The sales force generally visits each customer at least once per quarter. Promotions usually occur at the end of each quarter. Grocery stores and convenience stores require some type of promotion to grant valuable end of aisle displays or advertising space.\n\nThe largest competitors are two multinational consumer products companies that feature complete lines of snack foods. Their sales forces are regarded as the best in the industry. Together, these two companies have 55% of the market."
+    },
+    {
+      "block_id": "snack_food_company_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 13,
+      "content": "Market share:\n- Two years ago: 20%\n- Current: 18%\n- Change: -2 percentage points\n\nMarket size:\n- Two years ago: $15 billion\n- Current: $17 billion\n\nClient sales calculation:\n- Sales two years ago: 20% x $15 billion = $3.0 billion\n- Current sales: 18% x $17 billion = $3.06 billion\n- Dollar sales have increased by $60 million, but the client has underperformed market growth\n\nCost structure as percent of selling price:\n\n| Cost item | Current | Two years ago | Change |\n|---|---:|---:|---:|\n| Raw Ingredients | 28% | 26% | +2 pts |\n| Conversion costs | 24% | 24% | 0 pts |\n| Distribution | 8% | 9% | -1 pt |\n| Marketing | 16% | 18% | -2 pts |\n| Sales force | 7% | 9% | -2 pts |\n| Pre-tax profit | 17% | 14% | +3 pts |\n\nChannel and competitive facts:\n- Products are mostly sold through large grocery store chains and convenience stores\n- Sales force generally visits each customer at least once per quarter\n- Promotions usually occur at the end of each quarter\n- Grocery stores and convenience stores require promotions for end-of-aisle displays or advertising space\n- Two largest competitors have 55% combined market share\n- Competitors have complete snack food lines and sales forces regarded as the best in the industry"
+    },
+    {
+      "block_id": "snack_food_company_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 14,
+      "content": "The client’s dollar sales have grown because the overall market expanded from $15 billion to $17 billion, but its market share declined from 20% to 18%, meaning it has not kept pace with the market.\n\nThe increase in profit as a percent of sales appears to come from cost reductions, especially lower sales force and marketing spending. The company cut the sales force and reduced trade promotions, even though grocery stores and convenience stores are traditionally driven by periodic trade promotions. Reduced trade promotions likely caused a loss of end-of-aisle displays, advertising space, and shelf visibility, directly contributing to the market share decline.\n\nThe sales force reduction may also have weakened customer coverage and execution quality, especially against two large multinational competitors with strong sales forces and 55% combined market share. In addition, the client’s product line has not changed in a category where new products and line extensions are routine, suggesting the company missed opportunities in a growing market.\n\nThe higher profitability may not be sustainable because it is driven by cost-cutting that damages market share and competitive position."
+    },
+    {
+      "block_id": "snack_food_company_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 13,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "snack_food_company_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 14,
+      "content": "Solution:\n\nThe data show that the greatest change is in the sales force numbers. It turns out that the company went on a cost-cutting spree over the past two years. The sales force was drastically cut and the commission scheme was reworked. The marketing expenditure was also decreased. Most of the reduction came from trade promotions.\n\nThe product is sold through the same channels as previously: large grocery chains and convenience stores. These channels are traditionally driven by periodic trade promotions. The reduction in trade promotions brought about a loss of shelf space, which has directly led to the decrease in market share.\n\nAlso, the product line has not changed in the past two years in a product category where new products and line extensions are routine. In addition, the market has been growing, indicating a missed opportunity for new products in the market. Lastly, the increase in profitability has resulted from the lower costs, but may not be sustainable.\n\nA strong candidate should conclude that profitability improved because of cost cuts, especially in sales force and trade promotion spending, but these cuts hurt market share. The client should consider reinvesting selectively in trade promotions, shelf-space support, and sales force effectiveness, while also refreshing the product line through new products or line extensions. The goal should be to protect profitability while restoring growth and market share in a growing category."
+    }
+  ]
+}

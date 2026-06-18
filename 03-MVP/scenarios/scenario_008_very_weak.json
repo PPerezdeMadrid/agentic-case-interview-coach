@@ -1,0 +1,59 @@
+{
+  "scenario_id": "scenario_008_very_weak",
+  "evaluation_item_id": "duke_dealer_jacks_vw_001",
+  "case_id": "duke_dealer_jacks",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate treats the case as a generic grocery profitability problem, does not focus on private label mix, and fails to test whether management's 3-point penetration plan is enough to hit the profit target.",
+    "behaviour_rules": [
+      "Do not anchor clearly on the 10% profit increase target of $180M.",
+      "Ask few or no useful clarification questions about product mix, margin differences, or store-level pervasiveness.",
+      "Suggest weak solutions such as closing stores or expanding geographically even though the case guidance rules those out.",
+      "Use a generic profitability framework without prioritizing private label versus national brand economics.",
+      "Do not connect stagnating private label growth to stagnating profits.",
+      "Miss that private label brands likely carry structurally better margins than national brands.",
+      "Fail to calculate the profit impact of a 3 percentage point increase in private label penetration.",
+      "End with a vague recommendation such as cut costs or market more private label, without showing whether the target is actually achievable."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": 1,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to recognize that profitability is a broad issue across stores and that closures are not the intended answer.",
+      "Does not connect private label stagnation to profit stagnation.",
+      "Misses the importance of the gross margin gap between private label and national brands.",
+      "Fails to calculate whether a 3 percentage point private label penetration increase exceeds the $180M target.",
+      "Does not account for taxes when estimating profit impact.",
+      "Recommendation is generic and not tied to management's concrete hypothesis."
+    ],
+    "expected_feedback_points": [
+      "Focus on mix and margin rather than store closures or near-term geographic expansion.",
+      "Use the exhibit to connect private label growth with profit growth historically.",
+      "Test management's hypothesis quantitatively against the $180M target.",
+      "Recognize that only COGS and taxes change in the private label shift scenario.",
+      "Recommend validating the 3-point penetration assumption and understanding one-time execution costs."
+    ]
+  }
+}

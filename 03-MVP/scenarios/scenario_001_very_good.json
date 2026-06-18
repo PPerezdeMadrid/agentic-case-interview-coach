@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_004_very_good",
+  "evaluation_item_id": "duke_activist_action_vg_001",
+  "case_id": "duke_activist_action",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong, structured, and commercially aware. They understand the activist context, evaluate the exhibits correctly, and reach the right answer with solid support, though with slightly less polish and sharpness than a truly excellent performance.",
+    "behaviour_rules": [
+      "Open with a concise recap and ask two or three relevant clarifying questions.",
+      "Build a clear framework that distinguishes short-term shareholder value from long-term operational value.",
+      "Prioritize options explicitly and explain trade-offs with good business logic.",
+      "Correctly conclude that the supply chain restructuring option has positive value but is too delayed for an activist-led short-term agenda.",
+      "Reject low-cost-country options with strong reasoning around feasibility, operations, brand, and strategic risk.",
+      "Recognize divestiture as the strongest short-term lever and support it with good evidence.",
+      "Select Silky Sweets as the best divestiture candidate and explain why it balances cash generation with limited strategic downside.",
+      "Give a strong recommendation with evidence, one meaningful risk, and practical next steps, but keep the answer slightly less polished than a perfect top-tier performance."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": 4,
+      "case_creative_answer": 4,
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May not push the hypothesis or prioritization quite as sharply as an excellent candidate.",
+      "Recommendation is strong, but the synthesis may be slightly less crisp or less differentiated than the best possible answer."
+    ],
+    "expected_feedback_points": [
+      "Strong distinction between activist short-term goals and client long-term needs.",
+      "Clear and well-prioritized structure across the major options.",
+      "Correct interpretation of the delayed payoff problem in supply chain restructuring.",
+      "Strong rejection of outsourcing on feasibility and strategic grounds.",
+      "Correct prioritization of divestiture and convincing support for Silky Sweets.",
+      "To reach excellent level, push even sharper synthesis, prioritization, and executive presence."
+    ]
+  }
+}

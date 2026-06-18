@@ -1,0 +1,61 @@
+{
+  "scenario_id": "scenario_002_very_weak",
+  "evaluation_item_id": "harvard_retailer_vw_001",
+  "case_id": "harvard_01_retailer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate gives a generic profitability answer, ignores the clue that cost savings have already happened, fails to compare urban and suburban stores, and produces a vague recommendation with little connection to customer behavior or product mix.",
+    "behaviour_rules": [
+      "Do not focus quickly on the revenue side even when the prompt says backend cost savings have already been achieved.",
+      "Ask few or no clarifying questions about differences between metropolitan and suburban stores.",
+      "Use a generic profitability framework without adapting it to store segmentation, customer behavior, or product mix.",
+      "Do not investigate why some stores might be more profitable than others.",
+      "Miss the implication that the same product mix may be mismatched to different customer needs.",
+      "Give broad ideas such as marketing more, cutting costs again, or improving store operations without linking them to the case evidence.",
+      "In the final recommendation, remain uncertain and avoid making a sharp call on changing product mix or closing weak stores."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to recognize that the main problem should be investigated on the revenue side rather than revisiting cost savings.",
+      "Does not compare metropolitan and suburban stores in a structured way.",
+      "Fails to explore differences in customer purchasing behavior between urban and suburban consumers.",
+      "Misses the key insight that all stores carry the same product mix even though customer needs differ by geography.",
+      "Does not connect higher suburban profitability to the sale of major appliances and electronics.",
+      "Does not identify the mismatch between urban customer demand and the current assortment.",
+      "Gives a weak recommendation that is not tied to customer segmentation, product mix redesign, or selective store closure."
+    ],
+    "expected_feedback_points": [
+      "Start by focusing on revenue drivers, because the case already tells you that cost savings have been achieved.",
+      "Structure the diagnosis around differences across stores, especially metropolitan versus suburban locations.",
+      "Investigate customer behavior and purchasing mix rather than assuming all stores should operate the same way.",
+      "Recognize that a uniform product mix can create lost revenue and wasted floor space in city stores.",
+      "Link suburban profitability to higher-margin major appliances and electronics.",
+      "Recommend tailoring assortment by customer segment and consider closing stores that cannot sustain the lower-value mix.",
+      "End with a clearer, evidence-based recommendation and concrete next steps."
+    ]
+  }
+}

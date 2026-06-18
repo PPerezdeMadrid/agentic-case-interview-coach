@@ -1,0 +1,58 @@
+{
+  "scenario_id": "scenario_001_excellent",
+  "evaluation_item_id": "duke_activist_action_ex_001",
+  "case_id": "duke_activist_action",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate quickly understands the activist investor context, separates short-term shareholder pressure from long-term company value, structures the case cleanly, interprets exhibits correctly, and gives a decisive recommendation grounded in both finance and operational realism.",
+    "behaviour_rules": [
+      "Begin with a concise recap of the client problem and explicitly distinguish short-term activist value from long-term strategic value.",
+      "Ask two or three focused, hypothesis-driven clarifying questions before structuring the case.",
+      "Use a clear, prioritized framework that separates short-term actions from long-term actions and highlights decision criteria.",
+      "When evaluating options, explain trade-offs explicitly and tie each option back to activist time horizon, shareholder value, and operational feasibility.",
+      "When shown quantitative exhibits, interpret the numbers confidently and connect them to the business decision instead of stopping at the math.",
+      "Recognize that positive NPV alone is insufficient if the payoff is too delayed for an activist investor.",
+      "Reject weak options clearly and explain why they fail either on timing, feasibility, talent, logistics, or long-term brand impact.",
+      "Identify divestiture as the strongest short-term path and clearly support Silky Sweets as the best option.",
+      "Finish with a concise recommendation, explicit supporting evidence, one key risk, and practical next steps."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": 5,
+      "case_creative_answer": 5,
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May be slightly concise on secondary options if pressed for time, but should still correctly deprioritize them.",
+      "Could understate execution complexity around divestiture if not explicitly challenged on implementation risk."
+    ],
+    "expected_feedback_points": [
+      "Strongly distinguishes the activist investor's short-term agenda from the client's long-term strategic needs.",
+      "Uses a clear, hypothesis-driven framework and prioritizes options effectively.",
+      "Correctly concludes that supply chain restructuring has positive NPV but is too back-loaded to satisfy the activist investor's likely time horizon.",
+      "Correctly rejects low-cost-country outsourcing as strategically weak due to feasibility, brand, shipping, and talent concerns.",
+      "Identifies divestiture as the most viable short-term value-creation lever.",
+      "Correctly selects Silky Sweets as the best divestiture candidate because it can meet the target value while limiting damage to stronger long-term assets.",
+      "Provides a sharp recommendation supported by evidence, includes a risk, and outlines practical next steps."
+    ]
+  }
+}

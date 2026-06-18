@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "agricultural_equipment_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Agricultural Equipment",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 15,
+      "content": "Your client is a large agricultural equipment manufacturer. Their primary product line, farming tractors, is losing money. What questions would you ask of your client to help them solve their profitability problem?"
+    },
+    {
+      "block_id": "agricultural_equipment_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 15,
+      "content": "Answer: Agricultural Equipment Manufacturer\n\nIt is unlikely that there are too many players in this market. You might want to start off by asking how many competitors there are.\n\nCandidate: How many competitors are there?\nInterviewer: There are two direct competitors.\n\nCandidate: What is the client’s market share relative to its competitors?\nInterviewer: Your client has 40% of the market, competitor #1 has 30%, competitor #2 has 15%, with the remaining 15% belonging to many small manufacturers.\n\nCandidate: What are the market share trends in the industry?\nInterviewer: Five years ago, your client had 60% of the market, competitor #1 had 15%, and competitor #2 had 10%. Obviously, your client has lost significant market share to its two competitors over the last few years.\n\nCandidate: Do all three competitors sell to the same customers?\nInterviewer: Yes.\n\nCandidate: How is your product priced relative to your competitors?\nInterviewer: Your client’s product is priced higher than the others.\n\nCandidate: Has this always been the case?\nInterviewer: Yes.\n\nCandidate: Are the products the same?\nInterviewer: Essentially yes, they all have the same basic features. Of course, tractors are not commodity items and a few differences do exist.\n\nCandidate: What are the differences that allow you to charge a premium for your product?\nInterviewer: Your client has a strong reputation and image of quality in the market, and the market has always been willing to pay a premium for that reputation because it meant the tractors would last longer and need less maintenance. This can be critical for some farmers because they cannot afford to have a piece of equipment break down at a critical time.\n\nCandidate: Are sales revenues down? Are sales quantities down?\nInterviewer: Yes.\n\nCandidate: Is the price down? Are all costs the same?\nInterviewer: No. In fact, both the price and costs are up.\n\nCandidate: Have fixed costs increased?\nInterviewer: No. Material costs, which are variable costs, have gone up out of sight, and the client has no answer as to why material prices have gone up so staggeringly.\n\nCandidate: Do you manufacture your tractor or just assemble it?\nInterviewer: It is primarily an assembly operation.\n\nCandidate: Have finished part prices gone up?\nInterviewer: Yes.\n\nCandidate: Have raw material prices for your suppliers gone up?\nInterviewer: I don’t believe so.\n\nCandidate: Have labor costs increased for your suppliers?\nInterviewer: No.\n\nCandidate: Have you changed suppliers?\nInterviewer: No.\n\nCandidate: Why are your suppliers charging higher prices for the same products?\nInterviewer: They are not. The prices have increased as a result of our product improvement efforts. We have tightened tolerances and improved the durability of our component parts.\n\nCandidate: Why do you make these improvements?\nInterviewer: Because we strive to continue to sell the best tractors in the world.\n\nCandidate: Are your customers willing to pay for these product improvements?\nInterviewer: What do you mean?\n\nCandidate: Are your customers willing to pay a marginal price that will cover your cost of implementing these improvements?\nInterviewer: I don’t know. I guess we assume that they will."
+    },
+    {
+      "block_id": "agricultural_equipment_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 15,
+      "content": "Current market share:\n- Client: 40%\n- Competitor #1: 30%\n- Competitor #2: 15%\n- Many small manufacturers: 15%\n\nMarket share five years ago:\n- Client: 60%\n- Competitor #1: 15%\n- Competitor #2: 10%\n\nMarket share change:\n- Client: down 20 percentage points\n- Competitor #1: up 15 percentage points\n- Competitor #2: up 5 percentage points\n\nPricing and sales:\n- Client’s product is priced higher than competitors’ products\n- Client has historically charged a premium due to quality reputation\n- Sales revenues are down\n- Sales quantities are down\n- Price is up\n\nCosts:\n- Fixed costs have not increased\n- Material costs / variable costs have increased significantly\n- Client primarily assembles tractors rather than manufacturing all components\n- Finished part prices have increased\n- Supplier raw material costs have not apparently increased\n- Supplier labor costs have not increased\n- Suppliers have not changed\n\nCause of cost increase:\n- Product improvement efforts\n- Tighter tolerances\n- Improved durability of component parts"
+    },
+    {
+      "block_id": "agricultural_equipment_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 16,
+      "content": "The client is losing profitability because it has raised prices to cover higher component costs caused by product improvement efforts, but customers do not value those improvements enough to pay for them. Sales quantities and revenues are down, even though the client has historically been able to charge a premium for quality.\n\nThe client’s reputation for durability and low maintenance has historically justified a higher price. However, the latest improvements, such as tighter tolerances and more durable components, appear to exceed what customers are willing to pay for. Customers may appreciate quality, but they do not value these marginal improvements unless they are essentially free.\n\nThe client has lost significant market share over five years, falling from 60% to 40%, while competitors gained share. This suggests that the price premium has become too large relative to the customer-perceived benefit of the improvements.\n\nThe core issue is not supplier inflation, labor cost increases, or fixed-cost increases. The issue is that the company’s product improvement process lacks a cost-benefit test tied to customer willingness to pay."
+    },
+    {
+      "block_id": "agricultural_equipment_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 15,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "agricultural_equipment_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 16,
+      "content": "It turns out that prices have been raised to cover the costs of product improvements, but customers do not value these improvements unless they are essentially free, so sales are down. The client needs to incorporate a cost/benefit analysis procedure into its product improvement process. Do not forget, though, that the long-term effects of these decisions must also be considered.\n\nA strong candidate should recommend that the client stop assuming that all quality improvements justify higher prices. The company should evaluate each product improvement based on customer willingness to pay, incremental cost, impact on reliability, and long-term brand effects. The client should consider rolling back or redesigning improvements that add cost without sufficient customer value, while preserving the quality attributes that truly support its premium reputation."
+    }
+  ]
+}

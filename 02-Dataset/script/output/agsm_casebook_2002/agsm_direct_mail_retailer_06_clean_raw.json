@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "direct_mail_retailer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Direct Mail Retailer",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 8,
+      "content": "You are consulting for a direct mail retailer that sells ladies clothing. Your client’s catalog printing and postage costs have just increased to thirty-two cents per catalog. How can your client decide if the new price is acceptable?"
+    },
+    {
+      "block_id": "direct_mail_retailer_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Information to be divulged gradually:\n\nThe average response rate for catalogs mailed is 2%. In other words, each 100 catalogs mailed results in 2 orders placed. The average order size is $80. In addition, 25% of customers who order product can be expected to reorder within six months. The fully allocated profit margin, excluding mailing costs, on catalog orders is 15%."
+    },
+    {
+      "block_id": "direct_mail_retailer_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Catalog economics per 100 catalogs mailed:\n\nMailing cost:\n- Cost per catalog: $0.32\n- Number of catalogs: 100\n- Total printing and postage cost: 100 x $0.32 = $32\n\nOrders:\n- Initial response rate: 2%\n- Initial orders per 100 catalogs: 2\n- Reorder rate within six months: 25% of customers who order\n- Additional reorders: 2 x 25% = 0.5\n- Total orders: 2 + 0.5 = 2.5\n\nSales and profit:\n- Average order size: $80\n- Total sales: 2.5 x $80 = $200\n- Fully allocated profit margin, excluding mailing costs: 15%\n- Profit before mailing costs: $200 x 15% = $30\n- Mailing cost: $32\n- Net profit after mailing costs: $30 - $32 = -$2"
+    },
+    {
+      "block_id": "direct_mail_retailer_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "At thirty-two cents per catalog, the campaign is not profitable under the given assumptions. For every 100 catalogs mailed, the retailer earns $30 of profit before mailing costs but pays $32 in printing and postage costs, resulting in a $2 loss per 100 catalogs.\n\nThe new price is therefore not acceptable unless the retailer can improve response rates, increase average order size, increase reorder rates, improve margins, or reduce mailing costs."
+    },
+    {
+      "block_id": "direct_mail_retailer_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 8,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "direct_mail_retailer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Solution:\n\nFor each 100 catalogs mailed, printing and postage costs are $32: 100 x 32 cents.\n\nEach 100 catalogs will result in 2 orders, plus 2 x 25%, or 0.5 additional reorders, for a total of 2.5 orders placed per 100 catalogs mailed. 2.5 orders will result in 2.5 x $80, or $200 in sales. At a profit margin of 15%, these sales will return a total profit of $30.\n\nThe $30 profit is not sufficient to cover the printing and mailing costs of $32. Therefore, the client should reject the printing arrangement at 32 cents per copy.\n\nA strong candidate should calculate the expected profit per 100 catalogs and conclude that the new catalog cost is not acceptable because it creates a negative contribution after mailing costs."
+    }
+  ]
+}

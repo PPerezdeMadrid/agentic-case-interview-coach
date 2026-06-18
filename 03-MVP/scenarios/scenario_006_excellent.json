@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_006_excellent",
+  "evaluation_item_id": "duke_cackalacky_ex_001",
+  "case_id": "duke_cackalacky_construction",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate is highly structured and commercial. They quantify the growth target, size the markets correctly, identify Texas as the best opportunity, interpret the fragmented competitive landscape well, and recommend a strong entry strategy with credible risks and mitigation plans.",
+    "behaviour_rules": [
+      "Start with a concise recap and explicitly convert doubling revenue into a $20M incremental target by 2019.",
+      "Use a sharp structure that first selects the best market, then evaluates entry mode, then addresses execution risk.",
+      "Calculate projected 2019 funding and Cackalacky's potential penetration revenue accurately enough to compare all three states.",
+      "Recognize that Texas and Georgia both reach the goal, but Texas offers the largest absolute opportunity while Georgia only just meets it.",
+      "Recommend Texas and justify it with both quantitative opportunity and strategic scaling logic.",
+      "Use a Build/Borrow/Buy framework to discuss entry into Texas.",
+      "Interpret the Texas market as fragmented and note that the most successful recent entrants gained share through acquisition.",
+      "Recommend evaluating acquisition or partnership with smaller players as a leading path, while comparing it against organic build-out.",
+      "Address execution challenges such as personnel, regulation, relationships, IT integration, culture, and language with specific mitigations."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": 5,
+      "case_creative_answer": 5,
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not fully resolve the exact acquisition target selection because the case only provides broad competitive information.",
+      "Could still be pushed for a more detailed integration timeline after selecting an entry mode."
+    ],
+    "expected_feedback_points": [
+      "Excellent conversion of the growth goal into a concrete target.",
+      "Excellent market-sizing and state comparison.",
+      "Excellent choice of Texas with clear quantitative and qualitative support.",
+      "Excellent use of market-entry logic and competitive-landscape interpretation.",
+      "Excellent recommendation to evaluate acquisition-led entry while managing execution risks carefully."
+    ]
+  }
+}

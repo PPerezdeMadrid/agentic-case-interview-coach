@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_005_weak",
+  "evaluation_item_id": "agsm_distilled_spirits_w_001",
+  "case_id": "agsm_02_distilled_spirits",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 2,
+    "performance_label": "weak",
+    "description": "The candidate notices that the issue may be on the distribution side and that geography matters, but the diagnosis is incomplete and the final recommendation is still tentative and underdeveloped.",
+    "behaviour_rules": [
+      "Recognize that sales growth alone does not explain falling profits, but do not frame the problem very sharply.",
+      "Ask some relevant questions on cost trends and channels, but not in a cleanly prioritized way.",
+      "Notice that distribution costs have risen, but do not fully connect them to open-state economics.",
+      "Acknowledge that open and regulated states are different, but explain the cost implications only partially.",
+      "Spend some unnecessary time checking product mix or price before ruling them out.",
+      "Be slow to conclude that the sales mix is shifting toward less profitable open states.",
+      "Give a directionally reasonable recommendation, but without much specificity on state-level profitability or distribution actions."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "medium",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 2,
+      "case_structure": 2,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 2,
+      "overall_structure": 2,
+      "overall_problem_solving": 2,
+      "overall_communication": 2,
+      "overall": 2
+    },
+    "expected_issues": [
+      "Only partially explains why open states are less profitable to serve.",
+      "Does not sharply rule out product mix and pricing as root causes.",
+      "Underdevelops the significance of shrinking regulated-state volume.",
+      "Recommendation is too broad and not tightly tied to channel economics."
+    ],
+    "expected_feedback_points": [
+      "Prioritize the channel and distribution question earlier.",
+      "Explain more clearly why open states require more expensive trade support and more frequent deliveries.",
+      "State explicitly that the mix shift toward open states is hurting overall profitability.",
+      "Recommend profitability analysis by state type and more targeted actions in the higher-cost channel."
+    ]
+  }
+}

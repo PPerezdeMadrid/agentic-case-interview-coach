@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_002_very_good",
+  "evaluation_item_id": "harvard_retailer_vg_001",
+  "case_id": "harvard_01_retailer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong and commercially grounded. They focus on revenue, compare store geographies well, diagnose the product mix mismatch, and give a strong recommendation, though with slightly less polish and synthesis than a truly excellent answer.",
+    "behaviour_rules": [
+      "Begin with a concise recap and explicitly note that the problem likely sits on the revenue side because backend cost savings are already in place.",
+      "Ask relevant questions about store profitability variation, geography, consumer behavior, and competition.",
+      "Structure the problem clearly around differences between metropolitan and suburban stores.",
+      "Quickly rule out competition as the main differentiator once the case evidence points elsewhere.",
+      "Identify that all stores carry the same mix and use that clue to investigate customer demand differences.",
+      "Clearly connect suburban profitability to higher sales of major appliances and electronics, which are higher-margin products.",
+      "Conclude that urban stores are carrying inventory and using floor space inefficiently because the assortment is not well matched to urban demand.",
+      "Recommend customer-level analysis, differentiated assortment, and selective closure of stores that cannot sustain the lower-value mix."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May not be quite as hypothesis-driven or executive-ready as a fully excellent candidate.",
+      "Could be slightly less crisp when synthesizing the final recommendation and implementation trade-offs."
+    ],
+    "expected_feedback_points": [
+      "Strong focus on revenue-side diagnosis.",
+      "Clear comparison of metropolitan and suburban store economics.",
+      "Correct identification of customer behavior differences and product mix mismatch.",
+      "Strong recommendation to tailor assortment and review underperforming stores for closure.",
+      "To reach excellent level, make the final synthesis even tighter and more board-ready."
+    ]
+  }
+}

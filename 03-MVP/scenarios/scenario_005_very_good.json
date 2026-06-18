@@ -1,0 +1,54 @@
+{
+  "scenario_id": "scenario_005_very_good",
+  "evaluation_item_id": "agsm_distilled_spirits_vg_001",
+  "case_id": "agsm_02_distilled_spirits",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong and commercially sharp. They quickly isolate the real issue as a geographic and channel mix shift toward higher-cost open states and give a strong recommendation, with only slightly less polish than an excellent answer.",
+    "behaviour_rules": [
+      "Begin with a concise recap and frame the problem as a profitability decline despite normal growth and stable product economics.",
+      "Ask focused questions on product mix, pricing, cost trends, and differences between open and regulated states.",
+      "Rule out stable product mix, pricing, production cost, and average advertising cost efficiently.",
+      "Prioritize distribution costs as the critical worsening cost line.",
+      "Clearly explain that open states are expensive because of shelf-space pressure, trade promotions, and more frequent deliveries.",
+      "Clearly explain that regulated states are cheaper to serve and therefore more profitable.",
+      "Conclude that overall profits are declining because sales are shifting toward open states while regulated-state volume is shrinking.",
+      "Recommend channel-level profitability analysis, tighter management of distribution and trade spend in open states, and actions to defend more profitable regulated-state volume."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate in final synthesis or prioritization of next steps.",
+      "Could be pushed for more detail on how to rebalance channel performance operationally."
+    ],
+    "expected_feedback_points": [
+      "Strong diagnosis of channel economics rather than product economics.",
+      "Strong explanation of why open-state growth reduces profitability.",
+      "Strong elimination of false leads such as product mix or pricing.",
+      "Strong recommendation to manage distribution and trade economics in open states while defending regulated-state volume."
+    ]
+  }
+}

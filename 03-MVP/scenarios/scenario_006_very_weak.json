@@ -1,0 +1,61 @@
+{
+  "scenario_id": "scenario_006_very_weak",
+  "evaluation_item_id": "duke_cackalacky_vw_001",
+  "case_id": "duke_cackalacky_construction",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate gives a generic growth answer, does not size the potential markets correctly, misses why Texas and Georgia are attractive, and does not build a coherent market-entry recommendation with risks and mitigations.",
+    "behaviour_rules": [
+      "Do not anchor clearly on the goal of doubling revenue, meaning an additional $20M in 3 years.",
+      "Ask few or no useful questions about the client, market entry, or public-school funding.",
+      "Use a vague growth framework focused on marketing, more clients, or geographic expansion without quantifying opportunities.",
+      "Do not calculate the three-year market sizes and projected penetrated revenue correctly.",
+      "Miss that Texas and Georgia both meet the growth target while Michigan does not.",
+      "Do not analyze the Texas competitive landscape in a structured way.",
+      "Fail to identify the market as fragmented or to notice that recent entrants grew quickly through acquisition.",
+      "Give a weak entry recommendation and only superficial comments on risks such as personnel, relationships, or integration."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": 1,
+      "case_creative_answer": 1,
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to convert the revenue-doubling objective into an explicit $20M target.",
+      "Does not calculate projected 2019 funding and penetration-based revenue opportunity correctly.",
+      "Misses that Texas and Georgia can meet the target while Michigan cannot.",
+      "Does not interpret the Texas market as fragmented and fast-growing.",
+      "Fails to use Build/Borrow/Buy or a similar entry framework for Texas.",
+      "Does not connect competitor growth to acquisition-based entry strategies.",
+      "Provides a weak recommendation with little discussion of entry risks and mitigations."
+    ],
+    "expected_feedback_points": [
+      "Translate the growth goal into a concrete revenue target before evaluating options.",
+      "Do the market-sizing math cleanly and compare opportunities against the target.",
+      "Recognize that Texas and Georgia both meet the target, then rationalize the better option.",
+      "Use a proper market-entry framework after Texas is selected.",
+      "Interpret the Texas market as fragmented and note that recent winners entered through acquisition.",
+      "Discuss entry risks such as personnel, regulation, industry relationships, IT integration, and culture, along with mitigations."
+    ]
+  }
+}

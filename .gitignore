@@ -1,3 +1,6 @@
+# Database from Socratic LLM
+02-Dataset/eacl23_soqg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

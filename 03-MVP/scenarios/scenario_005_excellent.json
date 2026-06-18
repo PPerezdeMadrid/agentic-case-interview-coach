@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_005_excellent",
+  "evaluation_item_id": "agsm_distilled_spirits_ex_001",
+  "case_id": "agsm_02_distilled_spirits",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate rapidly rules out product-level explanations, isolates distribution as the only worsening cost line, and crisply concludes that a channel and state mix shift toward expensive open states is eroding profitability. The final recommendation is decisive and commercially grounded.",
+    "behaviour_rules": [
+      "Start with a concise recap and explicitly frame the problem as a profitability issue driven by where sales are occurring, not by what is being sold.",
+      "Ask two or three hypothesis-driven questions to test product mix, pricing, cost trends, and channel economics.",
+      "Rule out vodka versus rum mix, selling price, production cost, and average advertising cost quickly because they are stable or not worsening.",
+      "Identify distribution costs as the key variable that has increased significantly.",
+      "Explain that open states are expensive to serve because shelf space is costly, trade promotions are critical, and stores are carrying less inventory, requiring more frequent deliveries.",
+      "Explain that regulated states are cheaper to serve because there are fewer outlets and central warehouses.",
+      "Conclude that overall profitability is declining because more and more volume is coming from open states growing at about 10%, while regulated-state sales are shrinking.",
+      "Recommend profitability analysis by state and channel, active control of distribution frequency and trade promotion spending in open states, and actions to defend or rebuild profitable regulated-state volume."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not specify exact tactical levers by state beyond the guidance-level recommendation, because the case is primarily diagnostic.",
+      "Could still be pushed for a more detailed turnaround sequencing plan after the channel diagnosis."
+    ],
+    "expected_feedback_points": [
+      "Excellent elimination of product and price false leads.",
+      "Excellent identification of distribution cost as the only worsening economic line.",
+      "Excellent explanation of open-state versus regulated-state economics.",
+      "Excellent recognition that growth in open states and decline in regulated states shifts the business toward less profitable volume.",
+      "Excellent recommendation to manage open-state distribution and trade spend while protecting profitable regulated-state volume."
+    ]
+  }
+}

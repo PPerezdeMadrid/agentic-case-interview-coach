@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_003_very_good",
+  "evaluation_item_id": "agsm_chilled_beverages_vg_001",
+  "case_id": "agsm_01_chilled_beverages",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong, commercially aware, and well structured. They diagnose the real problem clearly and recommend keeping the chilled business while fixing ingredient mix and costs, with only slightly less polish than an excellent answer.",
+    "behaviour_rules": [
+      "Open with a concise recap and frame the decision as sell versus retain and repair.",
+      "Ask focused questions on market share, competitor profitability, cost structure, pricing dynamics, and strategic synergies.",
+      "Structure the case around external economics, internal cost disadvantage, and strategic fit with the rest of the division.",
+      "Clearly explain that the market leaders' scale supports heavier advertising, promotions, and trade spend.",
+      "Recognize that the client's more elaborate blends use expensive flavorings, creating a structural cost issue against citrus-based competitors.",
+      "Explicitly connect price sensitivity and branded price parity to the client's inability to pass higher costs through.",
+      "Treat brand and manufacturing synergies as important reasons not to divest hastily.",
+      "Recommend keeping the chilled business and reworking ingredients and costs, with a strong but not perfectly polished final synthesis."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": 4,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less hypothesis-driven or concise than a truly excellent answer.",
+      "Could give more explicit implementation detail on how to rework ingredients and costs."
+    ],
+    "expected_feedback_points": [
+      "Strong structure around market economics, cost disadvantage, and synergies.",
+      "Strong diagnosis of why profitable leaders outperform the client.",
+      "Clear explanation of why costlier blends are a problem in a price-sensitive category.",
+      "Strong recognition that selling chilled juice would hurt brand and plant synergies.",
+      "Strong recommendation to retain the business and improve its economics.",
+      "To reach excellent level, make the final recommendation even tighter and more board-ready."
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "case_content": [
+    {
+      "block_id": "insurance_company_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Insurance Company",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 25,
+      "content": "An insurance company pays its sales people a base salary of monthly wages and commission of 25% of new policy sales and 2% of renewal. Which is the right way to pay the sales agents?"
+    },
+    {
+      "block_id": "insurance_company_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Initial Approach",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 26,
+      "content": "Approach:\n\nThis is an organizational behavior scenario. The candidate must define what the “right way” is. A reasonable generic definition would be the manner by which agents are both motivated and equipped to accomplish their tasks in the interests of the organization."
+    },
+    {
+      "block_id": "insurance_company_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 26,
+      "content": "The candidate should analyze whether the compensation system aligns agent incentives with company objectives.\n\nKey areas to examine:\n- What behaviors the current compensation plan rewards\n- Whether those behaviors are in the long-term interest of the insurance company\n- Whether agents are motivated only to maximize sales dollars\n- Whether agents consider the riskiness and expected profitability of the insured party\n- Whether renewal commissions adequately encourage retention and customer quality\n- Whether the compensation system should incorporate policy profitability or risk-adjusted outcomes"
+    },
+    {
+      "block_id": "insurance_company_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 26,
+      "content": "Having defined the “right way” to pay agents, examine the results achieved by the current compensation system.\n\nThe only factor determining how much the agents are paid is their sales dollars. In essence, they are motivated to issue a policy to anyone at as high a price as possible. They are not motivated to give consideration to the riskiness of the insured party.\n\nThe absence of such consideration would be detrimental to the company in the long run. For example, agents may sell policies to high-risk customers who generate high commissions but later create large claims costs for the company.\n\nA more efficient compensation structure might pay the agent on a sliding scale, depending on how risky or costly an insured party proves to be."
+    },
+    {
+      "block_id": "insurance_company_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 25,
+      "content": "Current compensation structure:\n- Base salary: monthly wages\n- Commission on new policy sales: 25%\n- Commission on renewals: 2%\n\nIncentive implications:\n- Agent pay is driven primarily by new policy sales dollars\n- Agents are incentivized to maximize sales volume and price\n- Agents are not directly incentivized to consider customer riskiness\n- Agents are not directly rewarded for long-term policy profitability or low claims cost\n\nPotential improved compensation structure:\n- Base salary plus commission\n- Commission adjusted by customer risk or expected profitability\n- Sliding-scale commission depending on how risky or costly the insured party proves to be\n- Greater linkage between compensation and long-term company economics"
+    },
+    {
+      "block_id": "insurance_company_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 26,
+      "content": "The current compensation plan may be misaligned with the insurance company’s long-term interests. Because agents are paid mainly based on sales dollars, they are motivated to sell as many policies as possible at the highest possible price, but not to consider the riskiness of the insured party.\n\nThis creates an agency problem: agents may maximize their own compensation while increasing the company’s future claims costs. A better compensation structure would align agent incentives with profitable growth, not just gross sales.\n\nThe company should consider a risk-adjusted or profitability-adjusted commission system, potentially using a sliding scale based on the risk or cost profile of the insured party."
+    },
+    {
+      "block_id": "insurance_company_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 25,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "insurance_company_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 26,
+      "content": "A strong candidate should conclude that the current compensation system rewards sales dollars but does not adequately reward risk-aware, profitable selling. The company should not pay agents solely based on new policy sales and renewals without considering the riskiness of the insured party.\n\nA better approach would be to keep a base salary and commission structure, but adjust commissions using a sliding scale based on customer risk, expected claims cost, or realized profitability. This would motivate agents to sell policies that support the long-term interests of the organization rather than simply maximizing short-term sales."
+    }
+  ]
+}

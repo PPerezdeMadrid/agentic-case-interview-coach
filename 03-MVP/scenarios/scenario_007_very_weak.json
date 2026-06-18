@@ -1,0 +1,60 @@
+{
+  "scenario_id": "scenario_007_very_weak",
+  "evaluation_item_id": "harvard_chemical_manufacturer_vw_001",
+  "case_id": "harvard_03_chemical_manufacturer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate assumes that rising market share must be positive, does not question what market share means in a shrinking market, and fails to identify that price pressure in a declining industry is driving profit down.",
+    "behaviour_rules": [
+      "Treat the increase in market share as automatically good news rather than a metric that needs interpretation.",
+      "Ask few or no useful questions about market size, competitor exits, pricing pressure, or costs.",
+      "Use a generic profitability framework without investigating whether the market itself is shrinking.",
+      "Do not recognize that costs have stayed flat and therefore are unlikely to be the main issue.",
+      "Miss the fact that competitors are exiting because industry economics are worsening.",
+      "Do not connect fresh-food preferences to declining demand for preservatives.",
+      "Fail to conclude that the company is gaining share mainly because rivals are dropping out while prices are being forced down.",
+      "End with vague recommendations such as increase sales or market more, without addressing cost reduction or diversification."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to interpret market share correctly in the context of a shrinking market.",
+      "Does not identify that industry demand is declining as consumers shift toward fresh food.",
+      "Misses that competitor exits are a sign of poor industry economics, not necessarily client strength.",
+      "Does not recognize that prices are being pushed down while costs remain steady.",
+      "Fails to conclude that lower price per unit is driving lower profits despite slight volume gains.",
+      "Recommendation is not aligned with cost reduction, supplier leverage, or diversification."
+    ],
+    "expected_feedback_points": [
+      "Interrogate what market share means rather than assuming it is positive.",
+      "Check whether the overall market is growing or shrinking.",
+      "Recognize that stable costs and lower prices point to a margin problem on the revenue side.",
+      "Connect consumer preference shifts to lower industry demand for preservatives.",
+      "Conclude that the company is gaining share in a worsening market while sacrificing price and profit.",
+      "Recommend cost reduction and diversification into healthier or growing chemical categories."
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "scenario_id": "scenario_003_very_weak",
+  "evaluation_item_id": "agsm_chilled_beverages_vw_001",
+  "case_id": "agsm_01_chilled_beverages",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate jumps too quickly to selling the chilled juice business, does not investigate the cost or market structure properly, ignores manufacturing and brand synergies, and gives a weak recommendation unsupported by the case facts.",
+    "behaviour_rules": [
+      "Move quickly to the conclusion that the chilled juice business should be sold because it is losing money, without properly exploring alternatives.",
+      "Ask few or no useful clarifying questions about market share, customer behavior, competitors, or cost structure.",
+      "Use a shallow profitability framework and fail to connect revenue pressure, scale disadvantage, and higher input costs.",
+      "Do not reason clearly about why market leaders are profitable while the client is not.",
+      "Miss the implication that the market is price sensitive and that branded products sell in a similar price range.",
+      "Do not explain why the client's ingredient mix may be structurally more expensive than competitors'.",
+      "Ignore or underweight the advertising and manufacturing synergies across chilled juices, juice boxes, and frozen concentrate.",
+      "In the final recommendation, suggest selling the chilled business immediately and give weak or generic next steps."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": 1,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to investigate why a large market with profitable leaders is unattractive only for this client.",
+      "Does not connect the client's scale disadvantage to lower ability to fund promotions, coupons, and trade spending.",
+      "Misses the higher-cost ingredient mix created by elaborate blends and expensive flavorings.",
+      "Does not recognize that the market is price sensitive, limiting the client's ability to pass cost disadvantages through pricing.",
+      "Ignores brand and manufacturing synergies with juice boxes and frozen concentrate.",
+      "Recommends selling the chilled juice business too quickly without testing whether reworking the economics could be more feasible.",
+      "Provides a weak recommendation that is not aligned with the case guidance."
+    ],
+    "expected_feedback_points": [
+      "Do not jump straight to divestiture just because one segment is underperforming.",
+      "Investigate market structure, competitive scale, customer price sensitivity, and cost drivers before recommending a sale.",
+      "Recognize that the client's more elaborate blends create a structural cost disadvantage versus citrus-based competitors.",
+      "Explain why price-sensitive consumers and similar branded price points make cost recovery difficult.",
+      "Account for advertising and manufacturing synergies across the three juice formats.",
+      "Consider that keeping the chilled juice business and reworking the ingredient mix and cost structure is likely more feasible than an immediate sale.",
+      "End with a clearer recommendation supported by the economics and strategic synergies of the full division."
+    ]
+  }
+}

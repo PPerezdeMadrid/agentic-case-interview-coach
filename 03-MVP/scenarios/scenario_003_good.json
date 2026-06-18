@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_003_good",
+  "evaluation_item_id": "agsm_chilled_beverages_g_001",
+  "case_id": "agsm_01_chilled_beverages",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 3,
+    "performance_label": "good",
+    "description": "The candidate reaches the right broad answer: keep the chilled juice business and improve it. They identify the main economic drivers, but their prioritization and synthesis are solid rather than outstanding.",
+    "behaviour_rules": [
+      "Start with a concise recap and ask a couple of relevant questions about market structure, profitability, and cost drivers.",
+      "Use a workable framework covering competition, cost structure, pricing, and strategic fit.",
+      "Recognize that the large players benefit from greater scale and can spend more on advertising, promotions, trade, and coupons.",
+      "Correctly identify that the client's more elaborate blend likely carries a cost disadvantage because some flavorings are significantly more expensive.",
+      "Explain that the market is price sensitive, so the client cannot easily recover the cost difference through premium pricing.",
+      "Acknowledge brand and manufacturing synergies across the three juice formats.",
+      "Recommend keeping the chilled juice business and reworking ingredient mix and costs, though the recommendation may still be somewhat concise."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "medium",
+      "clarity": "medium",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 3,
+      "case_structure": 3,
+      "case_math_answer": 3,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 3,
+      "overall_structure": 3,
+      "overall_problem_solving": 3,
+      "overall_communication": 3,
+      "overall": 3
+    },
+    "expected_issues": [
+      "Reasoning is mostly correct but may not be tightly prioritized.",
+      "May mention synergies and cost issues without fully synthesizing why selling is inferior.",
+      "Recommendation is sound, but not especially sharp on implementation detail."
+    ],
+    "expected_feedback_points": [
+      "Good diagnosis of the scale, promotion, and cost-structure disadvantage.",
+      "Good recognition that price-sensitive consumers limit the client's pricing power.",
+      "Correct acknowledgment of brand and plant synergies.",
+      "Correct recommendation to keep the business and improve ingredients and costs.",
+      "To improve further, sharpen prioritization and deliver a more executive-level final synthesis."
+    ]
+  }
+}

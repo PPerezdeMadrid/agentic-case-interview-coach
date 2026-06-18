@@ -1,0 +1,60 @@
+{
+  "scenario_id": "scenario_004_very_weak",
+  "evaluation_item_id": "harvard_juice_producer_vw_001",
+  "case_id": "harvard_02_juice_producer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate gets distracted by sales growth, does not shift the case toward costs, misses the packaging and labor implications of the new gallon format, and fails to identify the core cost-allocation problem.",
+    "behaviour_rules": [
+      "Do not quickly recognize that rising sales with falling profits points to a cost-side issue.",
+      "Ask few or no targeted questions about packaging cost, labor, pricing logic, or overhead allocation.",
+      "Use a generic profitability framework without prioritizing the cost side.",
+      "Focus too much on volume growth or marketing demand for gallons rather than the economics of the new package format.",
+      "Miss that plastic packaging is more expensive and that the gallon machine requires more skilled labor.",
+      "Do not connect the lower per-ounce gallon price to the higher true cost of gallons.",
+      "Fail to identify that averaging overhead across all units masks the profitability problem.",
+      "End with a vague recommendation such as increasing sales or reviewing operations, without identifying activity-based costing or repricing gallons."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": 1,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to shift the diagnosis toward costs despite rising sales.",
+      "Does not identify plastic packaging and additional labor as key cost drivers for gallons.",
+      "Misses that gallons are priced lower on a per-ounce basis despite carrying higher costs.",
+      "Does not detect the incorrect cost allocation from averaging factory costs across all units.",
+      "Fails to conclude that the company is selling more of the underpriced product.",
+      "Recommendation is not aligned with the need for activity-based costing and product repricing."
+    ],
+    "expected_feedback_points": [
+      "Recognize early that the problem is unlikely to be revenue, because sales are growing.",
+      "Focus the framework on cost drivers introduced by the new gallon package.",
+      "Investigate packaging cost, labor cost, pricing, and overhead allocation.",
+      "Identify that gallons are likely underpriced relative to their true cost.",
+      "Explain why average cost allocation across cartons and gallons creates distorted pricing.",
+      "Recommend activity-based costing and repricing of gallons."
+    ]
+  }
+}

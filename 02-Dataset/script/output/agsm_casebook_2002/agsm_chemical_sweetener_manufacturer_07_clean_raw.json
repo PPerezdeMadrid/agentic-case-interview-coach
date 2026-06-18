@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "chemical_sweetener_manufacturer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Chemical Sweetener Manufacturer",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 9,
+      "content": "Your client manufactures a chemical sweetener used in beverages and other food products. The chemical will come off patent in one year. You have been asked to predict what might happen to the profitability of this product when the product comes off patent."
+    },
+    {
+      "block_id": "chemical_sweetener_manufacturer_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Information to be divulged gradually:\n\nThis is the only product of its kind, in terms of taste and safety, meaning lack of harmful health effects, as proven in lab tests. The brand name of the product has slowly become a common household word.\n\nThe largest two customers, which account for 75% of your sales, are two worldwide beverage companies. The companies feature the brand name of your client’s chemical on their product and consider it a sign of quality. In addition, the cost of the chemical sweetener represents 1.5% of their total costs.\n\nThe costs to manufacture the product are extremely low, about 20% of the price of the product. Currently, the margins on this chemical are almost 40%."
+    },
+    {
+      "block_id": "chemical_sweetener_manufacturer_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Product and market facts:\n- Product comes off patent in one year\n- Only product of its kind in terms of taste and safety, as proven in lab tests\n- Brand name has become a common household word\n\nCustomer concentration:\n- Largest two customers account for 75% of sales\n- These customers are two worldwide beverage companies\n- Customers feature the brand name of the chemical on their own products\n- Customers consider the chemical brand name a sign of quality\n\nCustomer cost structure:\n- Chemical sweetener represents 1.5% of customers’ total costs\n\nManufacturer economics:\n- Manufacturing cost is about 20% of product price\n- Current margins are almost 40%"
+    },
+    {
+      "block_id": "chemical_sweetener_manufacturer_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Although many products experience rapid price and margin declines after patent expiration, this product may retain much of its profitability because of its strong brand equity and customer value proposition.\n\nThe two largest customers account for most of sales and actively feature the chemical’s brand name on their products as a sign of quality. Since the sweetener represents only 1.5% of their total costs, these customers have limited incentive to switch to a lower-priced generic alternative if doing so risks product perception, brand quality, or consumer trust.\n\nThe product also has very low manufacturing costs, leaving room to maintain attractive margins even if some price pressure emerges after patent expiration."
+    },
+    {
+      "block_id": "chemical_sweetener_manufacturer_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 9,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "chemical_sweetener_manufacturer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Solution:\n\nThis is a classic customer analysis problem. While most products that come off patent quickly drop in price, such as pharmaceuticals, this product will be able to retain some of its premium due to the strong brand name.\n\nBecause the major two customers feature the chemical name on their product, and because the chemical represents such a small portion of their total costs, they can be expected to be willing to continue to pay the premium into the future. Therefore, the outlook for the product is good even after the patent expires.\n\nA strong candidate should conclude that profitability may decline somewhat after patent expiration due to new competition, but the product should retain significant pricing power because of brand strength, proven taste and safety, customer dependence, and the low share of customer costs represented by the sweetener."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "scenario_id": "scenario_003_excellent",
+  "evaluation_item_id": "agsm_chilled_beverages_ex_001",
+  "case_id": "agsm_01_chilled_beverages",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate quickly identifies that the chilled business should not be sold immediately, diagnoses the economics cleanly, and gives a crisp recommendation centered on fixing the ingredient mix and cost structure while preserving the strategic synergies of the broader juice division.",
+    "behaviour_rules": [
+      "Begin with a concise recap and frame the decision around whether the business is fundamentally broken or just economically disadvantaged in its current form.",
+      "Ask two or three hypothesis-driven questions on market share, competitor profitability, cost structure, pricing constraints, and synergies with the rest of the portfolio.",
+      "Use a sharp framework covering market attractiveness, competitive economics, internal cost disadvantage, and strategic implications of divestiture.",
+      "Clearly explain that the market itself is attractive because it is large and the leaders are profitable.",
+      "Identify scale disadvantage as a major issue because larger players can fund heavier advertising, promotions, couponing, and trade support.",
+      "Explain that the client's elaborate juice blends create a cost disadvantage because the flavoring component is materially more expensive than competitors' citrus-based products.",
+      "Explicitly connect that cost disadvantage to the market's price sensitivity and branded price parity, which block easy price increases.",
+      "Recognize that divesting chilled juice would damage advertising and manufacturing synergies with juice boxes and frozen concentrate, especially given the shared California plant.",
+      "Recommend keeping the chilled business and reworking ingredients and costs rather than selling it immediately."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": 5,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not provide a detailed operational turnaround plan beyond ingredient and cost rework, because the case evidence is diagnostic rather than implementation-heavy.",
+      "Could still be pushed for more detail on sequencing of the turnaround, though the core recommendation should be excellent."
+    ],
+    "expected_feedback_points": [
+      "Excellent framing of the decision as retain-and-fix versus sell.",
+      "Excellent recognition that the market is attractive even though the client is underperforming.",
+      "Excellent diagnosis of scale disadvantage, promotion economics, and costlier ingredient mix.",
+      "Excellent linkage between higher costs and limited pricing power in a price-sensitive branded category.",
+      "Excellent recognition of advertising and manufacturing synergies across the division.",
+      "Excellent recommendation to keep the chilled juice business and rework the economics instead of selling it immediately."
+    ]
+  }
+}

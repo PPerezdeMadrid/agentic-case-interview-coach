@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_007_weak",
+  "evaluation_item_id": "harvard_chemical_manufacturer_w_001",
+  "case_id": "harvard_03_chemical_manufacturer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 2,
+    "performance_label": "weak",
+    "description": "The candidate notices that market share may be misleading and that pricing pressure matters, but the reasoning remains incomplete and the shrinking-market logic is not fully synthesized.",
+    "behaviour_rules": [
+      "Question the market-share increase somewhat, but not in a sharply hypothesis-driven way.",
+      "Ask some useful questions about costs, competitors, and demand, but not in a disciplined sequence.",
+      "Recognize that costs are stable, but be slow to conclude that margins are deteriorating because of price pressure.",
+      "Notice that competitors are exiting, but only partially connect this to market saturation and industry decline.",
+      "Acknowledge reduced demand for preservatives, but do not fully tie this to fresh-food preferences and industry contraction.",
+      "Understand that prices are under pressure, but do not synthesize clearly why slight volume growth cannot offset lower unit margins.",
+      "Give a partially reasonable recommendation, but without enough clarity on cost reduction, coordination, or diversification."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "medium",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 2,
+      "case_structure": 2,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 2,
+      "overall_structure": 2,
+      "overall_problem_solving": 2,
+      "overall_communication": 2,
+      "overall": 2
+    },
+    "expected_issues": [
+      "Only partially interprets market share in context.",
+      "Does not fully distinguish slight volume growth from falling profit per unit.",
+      "Underdevelops the role of shrinking industry demand and competitor exits.",
+      "Recommendation lacks sharp prioritization across cost reduction and portfolio diversification."
+    ],
+    "expected_feedback_points": [
+      "Push harder on what market share means in a declining market.",
+      "Use the stable-cost fact to eliminate cost inflation as the main driver.",
+      "Explain more directly how price competition erodes margin.",
+      "Tie fresh-food substitution to declining industry demand.",
+      "Make the final recommendation more specific and prioritized."
+    ]
+  }
+}

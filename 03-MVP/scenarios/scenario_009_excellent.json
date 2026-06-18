@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_009_excellent",
+  "evaluation_item_id": "agsm_airline_expansion_ex_001",
+  "case_id": "agsm_03_airline_expansion",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate is highly structured and commercially rigorous. They define the route as an incremental profitability decision, identify all major revenue and cost drivers, and handle cannibalization with strong strategic judgment.",
+    "behaviour_rules": [
+      "Start with a concise recap and frame the route decision strictly as whether incremental revenue exceeds incremental operating cost and net cannibalization.",
+      "Use a sharp structure covering demand, pricing, occupancy, competition, route-specific costs, and strategic cannibalization.",
+      "Explain clearly that revenues are driven by expected load factor and average fare, both influenced by demand, competition, and the ability to win share from other routes.",
+      "Explicitly identify fuel, landing rights, and other route-level operating costs as key cost drivers.",
+      "Analyze cannibalization of Tokyo-LA and LA-New York routes as a required part of the economics, not a side note.",
+      "Recognize that self-cannibalization can still create value if it prevents traffic leakage to competitors.",
+      "Recommend acquiring the route only if net incremental profits are positive after all these effects are considered.",
+      "End with a crisp decision rule and clear next analyses to validate demand, pricing, and cannibalization assumptions."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not quantify the route because the case provides no numerical demand or cost inputs.",
+      "Could still be pushed for a more explicit plan to estimate cannibalization, though the framework itself should be excellent."
+    ],
+    "expected_feedback_points": [
+      "Excellent framing of the route as an incremental profitability decision.",
+      "Excellent identification of occupancy, fare, demand, and competition as the key revenue drivers.",
+      "Excellent inclusion of fuel, landing rights, and other incremental operating costs.",
+      "Excellent treatment of cannibalization as a strategic as well as financial issue.",
+      "Excellent recommendation to acquire only if net incremental profit is positive after cannibalization."
+    ]
+  }
+}

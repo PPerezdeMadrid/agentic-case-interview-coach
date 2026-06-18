@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_009_very_good",
+  "evaluation_item_id": "agsm_airline_expansion_vg_001",
+  "case_id": "agsm_03_airline_expansion",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 4,
+    "performance_label": "very_good",
+    "description": "The candidate is strong, structured, and commercially aware. They cover the route economics comprehensively and handle cannibalization with good strategic judgment, though with slightly less polish than a truly excellent answer.",
+    "behaviour_rules": [
+      "Begin with a concise recap and define the route decision as a net incremental profit question.",
+      "Use a clear structure covering demand, pricing, occupancy, competition, operating costs, and cannibalization.",
+      "Explain that occupancy and price depend on demand, competition, and the airline's ability to win share from other routes.",
+      "Treat fuel and landing rights as core incremental cost components.",
+      "Explicitly analyze cannibalization against existing Tokyo-LA and LA-New York routes.",
+      "Recognize that cannibalization is not automatically bad if it prevents competitor capture.",
+      "Recommend acquiring the route only if incremental economics remain positive after considering all these effects.",
+      "Discuss the decision with strong commercial logic, though not with perfect final synthesis."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 4,
+      "case_structure": 4,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 4,
+      "overall_structure": 4,
+      "overall_problem_solving": 4,
+      "overall_communication": 4,
+      "overall": 4
+    },
+    "expected_issues": [
+      "May be slightly less crisp than an excellent candidate when summarizing the decision rule.",
+      "Could still provide more prioritization around which uncertainty to validate first."
+    ],
+    "expected_feedback_points": [
+      "Strong end-to-end route-profitability framework.",
+      "Strong revenue logic around occupancy, pricing, and competition.",
+      "Strong cost coverage including route-specific operating costs.",
+      "Strong strategic treatment of cannibalization.",
+      "To reach excellent level, sharpen final synthesis and validation priorities."
+    ]
+  }
+}

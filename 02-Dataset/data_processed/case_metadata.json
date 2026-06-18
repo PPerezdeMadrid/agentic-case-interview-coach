@@ -1,0 +1,470 @@
+[
+  {
+    "case_metadata": {
+      "case_id": "duke_yachtco",
+      "case_name": "YachtCo",
+      "case_type": "profitability",
+      "industry": "luxury_goods",
+      "quantitative_level": "easy",
+      "qualitative_level": "easy",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "YachtCo is a US luxury motor yacht manufacturer facing declining profitability. The candidate must diagnose the issue across new yacht sales and repairs, evaluate steel versus fiberglass hull costs, and recommend a turnaround strategy."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_swipe_right_for_canoodle",
+      "case_name": "Swipe Right for Canoodle",
+      "case_type": "profitability",
+      "industry": "technology",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Canoodle is a mobile dating app with strong user popularity but no profitability. The candidate must diagnose a revenue problem, evaluate monetization options, and recommend where to launch a premium service."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_cackalacky_construction",
+      "case_name": "Cackalacky Construction",
+      "case_type": "growth_strategy",
+      "industry": "infrastructure",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Cackalacky Construction is a school-building contractor with stagnant growth that wants to double revenue in three years. The candidate must assess potential state markets, evaluate Texas competitive dynamics, and recommend an entry strategy."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_sardine_airlines",
+      "case_name": "Sardine Airlines",
+      "case_type": "profitability",
+      "industry": "transportation",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Sardine Airlines is an ultra-low-cost carrier facing declining profit margins amid pressure from competitors. The candidate must analyze the statement of operations, identify cost drivers, and recommend SG&A cost reductions."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_the_run_of_the_mill_nowoco",
+      "case_name": "The Run of the Mill NOWOCO",
+      "case_type": "profitability",
+      "industry": "industrial_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "NOWOCO is a German construction-materials manufacturer experiencing falling profitability and poor order fulfillment despite a demand surge. The candidate must analyze operational capacity, customer profitability, and volume reallocation."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_dealer_jacks",
+      "case_name": "Dealer Jack’s",
+      "case_type": "profitability",
+      "industry": "retail",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Dealer Jack’s is a US East Coast grocery retailer whose profits have stagnated despite industry growth. The candidate must diagnose the role of product mix, compare national and private-label brands, and evaluate a private-label penetration strategy."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_fresher_breath",
+      "case_name": "Fresher Breath",
+      "case_type": "profitability",
+      "industry": "consumer_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Minty Fresh Co., a dominant US mouthwash brand, is losing market share and profit to new competitors. The candidate must analyze competitive dynamics, evaluate pricing and volume trade-offs, and recommend actions to reverse the decline."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_off_broadway_blues",
+      "case_name": "Off-Broadway Blues",
+      "case_type": "profitability",
+      "industry": "media_entertainment",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "An Off-Broadway theatre is trying to improve gross profit after changes to its actor cost structure. The candidate must analyze revenue, seating, pricing, and alternative revenue opportunities before recommending a pricing strategy."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_galacticas_epic_struggle",
+      "case_name": "Galactica’s Epic Struggle",
+      "case_type": "cost_reduction",
+      "industry": "technology",
+      "quantitative_level": "easy",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Galactica is an on-premise data warehousing and analytics company losing profitability as cloud competitors gain share. The candidate must evaluate country-level performance and recommend cost-cutting actions, including possible market exits."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_from_breakdowns_to_makeups",
+      "case_name": "From Breakdowns to Make-ups",
+      "case_type": "profitability",
+      "industry": "industrial_goods",
+      "quantitative_level": "difficult",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "PrimeCo is an aerospace and defense prime contractor with declining profits despite rising revenue. The candidate must diagnose rising supplier component costs, analyze SubPrime Co.’s economics, and recommend supplier-improvement actions."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_devco",
+      "case_name": "DevCo",
+      "case_type": "portfolio_strategy",
+      "industry": "medical_devices",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "DevCo is a global medical device manufacturer facing margin and market-share pressure after expanding its product portfolio. The candidate must assess portfolio overlap, evaluate product-line attractiveness, and decide whether to launch a new product."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_pharmaceutical_rare_disease_business_growth",
+      "case_name": "Pharmaceutical Rare Disease Business Growth",
+      "case_type": "growth_strategy",
+      "industry": "pharmaceuticals",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A large pharmaceutical company wants to double its rare-disease business in five years. The candidate must size organic growth, identify the revenue gap, and evaluate acquisitions as a path to reach the target."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_mobilizing_your_world",
+      "case_name": "Mobilizing Your World",
+      "case_type": "merger_strategy",
+      "industry": "telecommunications",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Phone Com has acquired a satellite television company and needs to create value from the merger. The candidate must identify synergies, propose differentiated products, and assess new growth opportunities in the US and South America."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_walter_black_industries",
+      "case_name": "Walter Black Industries",
+      "case_type": "revenue_growth",
+      "industry": "industrial_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Walter Black Industries is a car wash chemical manufacturer with stagnant revenue after acquisitions. The candidate must identify ways to grow revenue by 30 percent without lowering margins, focusing on competitive benchmarking and pricing optimization."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_activist_action",
+      "case_name": "Activist Action",
+      "case_type": "shareholder_value",
+      "industry": "consumer_packaged_goods",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A large CPG company is under pressure from an activist investor seeking actions to increase stock price and company performance. The candidate must evaluate short- and long-term value levers, including restructuring, low-cost sourcing, and divestitures."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_orange_yoga_studio",
+      "case_name": "Orange Yoga Studio",
+      "case_type": "profitability",
+      "industry": "fitness",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Orange Yoga Studio is an upscale New York yoga studio whose profits have declined after rent and salary increases. The candidate must analyze class economics, utilization, capacity, and scheduling changes to restore profitability."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_the_everything_retailer",
+      "case_name": "The Everything Retailer",
+      "case_type": "growth_strategy",
+      "industry": "retail",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "The Everything Retailer is a mass retailer facing stagnant year-over-year sales growth. The candidate must diagnose the growth issue, evaluate a new smaller-store format, and use NPV analysis to decide whether to build Local Market stores."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "duke_purple_pill_company",
+      "case_name": "Purple Pill Company",
+      "case_type": "profitability",
+      "industry": "pharmaceuticals",
+      "quantitative_level": null,
+      "qualitative_level": null,
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Purple Pill Company is a pharmaceutical company facing revenue decline and a looming patent loss on a major acid reflux drug. The candidate must identify revenue drivers and evaluate options to preserve revenue and profit after patent expiration."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_01_chilled_beverages",
+      "case_name": "Chilled Beverages",
+      "case_type": "profitability",
+      "industry": "consumer_goods",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A fruit juice division is deciding whether to sell its chilled juice business after weak profitability. The candidate must diagnose the margin problem, assess ingredient-cost and scale disadvantages, and recommend whether to sell or fix the segment."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_02_distilled_spirits",
+      "case_name": "Distilled Spirits",
+      "case_type": "profitability",
+      "industry": "alcoholic_beverages",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A US distilled spirits producer is becoming less profitable despite stable product mix and market growth. The candidate must identify the channel-mix shift toward higher-cost open states and recommend how to restore margins."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_03_airline_expansion",
+      "case_name": "Airline Expansion",
+      "case_type": "investment_decision",
+      "industry": "transportation",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A major airline is evaluating the acquisition of a Tokyo-New York route. The candidate must estimate route economics, demand, competitor dynamics, and cannibalization before deciding whether the expansion creates value."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_04_health_care_costs",
+      "case_name": "Health Care Costs",
+      "case_type": "cost_reduction",
+      "industry": "healthcare",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "Public health spending on kidney dialysis is too high. The candidate must decompose spending into cost per treatment and treatment volume, identify structural drivers, and recommend how to lower total expenditure."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_05_frozen_desserts",
+      "case_name": "Frozen Desserts",
+      "case_type": "profitability",
+      "industry": "consumer_goods",
+      "quantitative_level": "easy",
+      "qualitative_level": "easy",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A regional premium frozen-dessert producer has growing sales but weak profits. The candidate must isolate the product-mix shift toward lower-margin frozen yogurt and recommend actions to restore margins."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_06_direct_mail_retailer",
+      "case_name": "Direct Mail Retailer",
+      "case_type": "profitability",
+      "industry": "retail",
+      "quantitative_level": "easy",
+      "qualitative_level": "easy",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A direct-mail womenswear retailer needs to decide whether a higher catalog cost is economically acceptable. The candidate must calculate contribution per 100 catalogs and determine whether the mailing remains profitable."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_07_chemical_sweetener_manufacturer",
+      "case_name": "Chemical Sweetener Manufacturer",
+      "case_type": "profitability",
+      "industry": "chemicals",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A chemical sweetener will lose patent protection in a year. The candidate must assess how brand strength, customer concentration, and low customer switching incentives will affect post-patent profitability."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_08_aluminum_can_manufacturer",
+      "case_name": "Aluminum Can Manufacturer",
+      "case_type": "pricing_strategy",
+      "industry": "industrial_goods",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "An aluminum can manufacturer has lowered unit cost through process improvement. The candidate must decide whether to cut price, hold price, or use the cost advantage strategically against competitors and substitutes."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_09_magazine_distribution",
+      "case_name": "Magazine Distribution",
+      "case_type": "operations_strategy",
+      "industry": "media_entertainment",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A magazine publisher wants to optimize copies shipped to each outlet. The candidate must use historical demand data and marginal analysis to set delivery quantities that maximize profit."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_10_snack_food_company",
+      "case_name": "Snack Food Company",
+      "case_type": "profitability",
+      "industry": "consumer_packaged_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A snack food company has lost market share while margin percentage improved. The candidate must explain how cost cuts in sales force and trade promotion boosted margins but hurt shelf space and growth."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_11_beverage_company_cost_structure",
+      "case_name": "Beverage Company Cost Structure",
+      "case_type": "cost_reduction",
+      "industry": "beverages",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "The candidate must benchmark RC Cola's cost structure against Coca-Cola's and explain where scale creates cost disadvantages or leaner operations create cost advantages."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_12_agricultural_equipment_manufacturing",
+      "case_name": "Agricultural Equipment Manufacturing",
+      "case_type": "profitability",
+      "industry": "industrial_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A tractor manufacturer is losing money on its core product line. The candidate must diagnose whether product improvements raised costs beyond customer willingness to pay and recommend a better cost-benefit approach."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_13_candy_company",
+      "case_name": "Candy Company",
+      "case_type": "profitability",
+      "industry": "consumer_packaged_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A candy company is growing sales faster than profits after expanding its product line. The candidate must trace margin erosion to packaging complexity, small batches, and retailer-driven revenue pressure, then recommend corrective actions."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_14_cosmetic_company_in_europe",
+      "case_name": "Cosmetic Company in Europe",
+      "case_type": "operations_strategy",
+      "industry": "consumer_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A European cosmetics company has shrinking profits despite strong brands. The candidate must decide whether to centralize production, weigh scale benefits against logistics complexity, and preserve local marketing where fragmentation matters."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_15_fertilizer",
+      "case_name": "Fertilizer",
+      "case_type": "profitability",
+      "industry": "agriculture",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A fertilizer manufacturer is losing share and profits in a commodity market. The candidate must assess a structural phosphate cost disadvantage, test whether scale can offset it, and recommend whether to compete, restructure, or exit."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_16_automobile_industry",
+      "case_name": "Automobile Industry",
+      "case_type": "profitability",
+      "industry": "automotive",
+      "quantitative_level": "medium",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "An Australian auto maker is less profitable than its peers despite selling comparable badged Japanese models. The candidate must identify the design-cost allocation problem in the joint venture and recommend how to reduce that burden."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_17_insurance_company",
+      "case_name": "Insurance Company",
+      "case_type": "organizational_strategy",
+      "industry": "insurance",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "An insurer wants to redesign how it pays sales agents. The candidate must evaluate whether commissions reward profitable risk selection and propose an incentive system aligned with long-term underwriting economics."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_18_meat_packing_industry",
+      "case_name": "Meat Packing Industry",
+      "case_type": "profitability",
+      "industry": "food_processing",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A Spanish meat-packing plant owned by a US firm has rising sales but falling profits. The candidate must use industry and buyer-power analysis to explain margin compression and recommend how to protect profitability."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_19_steam_boiler_hoses",
+      "case_name": "Steam Boiler Hoses",
+      "case_type": "cost_reduction",
+      "industry": "industrial_goods",
+      "quantitative_level": "easy",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A steam boiler hose division is unprofitable and needs a turnaround. The candidate must identify over-design and excess raw material usage as the main cost issue and recommend a redesign grounded in customer needs."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_20_machine_loading_case",
+      "case_name": "Machine-Loading Case",
+      "case_type": "operations_strategy",
+      "industry": "industrial_goods",
+      "quantitative_level": "difficult",
+      "qualitative_level": "difficult",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A packaging materials manufacturer must choose the best product mix on constrained machines. The candidate must build a contribution-per-machine-hour optimization logic that accounts for demand, setup, speed, and pricing differences."
+    }
+  },
+  {
+    "case_metadata": {
+      "case_id": "agsm_21_castor_manufacturer",
+      "case_name": "Castor Manufacturer",
+      "case_type": "profitability",
+      "industry": "industrial_goods",
+      "quantitative_level": "medium",
+      "qualitative_level": "medium",
+      "visible_to_candidate_by_default": false,
+      "case_summary": "A castor manufacturer with plants in East and West Germany has flat revenue but a 20 percent profit decline. The candidate must isolate the weak hospital-bed division, diagnose wage and demand pressures, and recommend operational restructuring."
+    }
+  }
+]

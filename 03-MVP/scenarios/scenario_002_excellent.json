@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_002_excellent",
+  "evaluation_item_id": "harvard_retailer_ex_001",
+  "case_id": "harvard_01_retailer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate immediately focuses on the right problem, structures the diagnosis sharply, uses the urban versus suburban split intelligently, identifies the assortment mismatch, and gives a crisp recommendation grounded in customer behavior, profitability, and store economics.",
+    "behaviour_rules": [
+      "Start with a concise recap and explicitly state that the issue is likely on the revenue side because major backend cost savings have already been captured.",
+      "Ask two or three focused, hypothesis-driven questions on store profitability variation, consumer behavior, and competitive differences across metropolitan and suburban stores.",
+      "Use a clear, prioritized framework centered on geography, customer behavior, and product mix.",
+      "Quickly test and deprioritize competition once the facts indicate it is proportionally similar across areas.",
+      "Recognize that a uniform product mix across all 15 stores is likely inefficient if customer needs differ by geography.",
+      "Clearly explain that suburban customers buy more major appliances and electronics, which are higher-margin categories, while urban customers skew toward clothing, smaller furniture, and smaller appliances.",
+      "Conclude that urban stores are not aligned to local demand and are losing both revenue and floor-space productivity.",
+      "Give a crisp recommendation to analyze customer behavior store by store, localize assortment, and consider closure of stores that cannot sustain a lower-value mix."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not quantify the economic upside explicitly because the case is primarily diagnostic rather than numerical.",
+      "Could still be challenged for a more detailed rollout plan across stores, though the core recommendation should be excellent."
+    ],
+    "expected_feedback_points": [
+      "Excellent focus on revenue rather than cost.",
+      "Excellent structure around store geography, customer behavior, and product mix.",
+      "Correct rejection of competition as the main root cause.",
+      "Excellent diagnosis that the same assortment is better suited to suburban than urban demand.",
+      "Clear linkage between suburban profitability and higher-margin major appliances and electronics.",
+      "Excellent recommendation to localize assortment and consider closure where economics do not work."
+    ]
+  }
+}

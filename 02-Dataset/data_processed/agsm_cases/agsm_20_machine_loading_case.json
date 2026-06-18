@@ -1,0 +1,85 @@
+{
+  "case_content": [
+    {
+      "block_id": "machine_loading_case_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Machine Loading Case",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 29,
+      "content": "A client produces a range of synthetic materials in varying widths and lengths. Each material is used for packaging but differs in physical properties in terms of costs, weight, flexibility, and general performance. Each material can be coated with any one of four or five types of chemical coating which make the materials more or less impervious to heat, light, water, vapor, etc. All of the machines on which these materials are made are housed in one enormous factory location. Each machine is capable of running any one of the various materials and/or coating combinations. The client does not wish to invest in additional equipment at this time. The client has asked us what combination of products he should run to increase his plant's profitability. How would you go about determining the optimal mix of potential products on these machines?"
+    },
+    {
+      "block_id": "machine_loading_case_background_001",
+      "block_type": "background",
+      "title": "Background Information",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 29,
+      "content": "The client produces synthetic materials used for packaging. Products vary by material, width, length, physical properties, and chemical coating. Coatings can affect resistance to heat, light, water, vapor, and other factors. The machines are located in one large factory, and each machine is capable of running any of the material and coating combinations. The client does not want to invest in additional equipment at this time."
+    },
+    {
+      "block_id": "machine_loading_case_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Initial Approach",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 29,
+      "content": "Type: Macroeconomic\n\nPurpose:\n\nTo determine whether the candidate can dissect a general economic problem.\n\nIf asked, the interviewer may provide information on market share, cost, price, products, customers, and suppliers. The candidate should focus on how to determine the most profitable combination of products to run on existing machines, given capacity constraints and no new equipment investment."
+    },
+    {
+      "block_id": "machine_loading_case_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 29,
+      "content": "If asked, the following information may be provided:\n\nMarket share:\nThe industry is highly fragmented. A variety of small manufacturers supply similar products to a range of customers. The client estimates it has less than 1 percent of the total market. No competitor has more than 3 percent of the total market.\n\nCost:\nEach product has a different cost to manufacture depending on materials used and the manufacturing process.\n\nPrice:\nEach product has a different price depending on both the client’s cost to manufacture and the market for the product.\n\nProducts:\nThe client’s machinery can produce hundreds of different products. Some are unique to meet specific customer requirements, while others are used by a wide variety of customers.\n\nCustomers:\nThe client’s customers are primarily consumer or industrial product manufacturers who use the synthetic materials in packaging their own products.\n\nSuppliers:\nThe client uses primarily commodity products in the manufacturing process. All can be obtained from a number of sources.\n\nNote to the interviewer:\n\nThe primary issue of the case is to determine that the profit of the plant will be maximized when the most profitable product mix is produced and sold. The candidate should cover differences for each product in fixed and variable manufacturing and selling costs and prices, as these must be determined to understand each product’s profitability. The interviewee should also address market demand for each product to ensure that what is produced can be sold at an acceptable price.\n\nIf the candidate discusses issues that are not relevant to the profitability of each product line or to maximizing plant profitability, repeat the question and ask how the issue being discussed will lead to a solution for the client."
+    },
+    {
+      "block_id": "machine_loading_case_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 30,
+      "content": "Minimum requirements:\n\nThe candidate should, at a minimum, address the following issues:\n\n1. Are there market limitations to the potential production of any one material?\n2. Is there competition for these products?\n3. Are there differences in costs in the manufacturing of these materials? For example, do some coatings cost more than others? Do some materials have inherent cost differences?\n4. Is there flexibility in pricing of these products?\n\nAdditional observations should include:\n\n1. Are there differences in setup time and cost for various materials or coatings?\n2. Do these materials move at different speeds through the machines?\n3. Are the machines truly interchangeable, or are some better suited to one product or another?\n4. Is there unlimited market demand for these products?\n5. Are there technological displacement or replacement products on the horizon?"
+    },
+    {
+      "block_id": "machine_loading_case_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 29,
+      "content": "Industry and market facts:\n- Industry is highly fragmented\n- Client has less than 1% of the total market\n- No competitor has more than 3% of the total market\n- Customers are consumer or industrial product manufacturers using synthetic materials for packaging\n\nProduct facts:\n- Machinery can produce hundreds of different products\n- Products differ by material, width, length, coating, and physical properties\n- Some products are unique to specific customer requirements\n- Other products are used by a wide variety of customers\n\nCost and price facts:\n- Each product has a different manufacturing cost\n- Costs depend on materials used and manufacturing process\n- Each product has a different price\n- Price depends on client cost and market conditions\n- Suppliers provide primarily commodity inputs from multiple sources\n\nCapacity and profitability algorithm:\n- Objective: maximize total plant profit using existing machine capacity\n- Key metric: profit contribution per machine hour\n- Profit contribution = unit volume x (unit price - variable cost)\n- Machine-hour capacity acts as a constraint and a surrogate for fixed costs per unit of volume\n- Product ranking should account for machine-hour requirements, setup time, setup cost, production speed, market demand, and achievable price"
+    },
+    {
+      "block_id": "machine_loading_case_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 31,
+      "content": "The plant should not simply run the products with the highest price or the highest margin per unit. The limiting resource is machine capacity, so the client should maximize profit contribution per machine hour, subject to market demand and operational constraints.\n\nFor each product and coating combination, the client should estimate unit price, variable cost, unit volume, machine hours required, setup time and cost, production speed, and expected market demand. Products should then be ranked by contribution per machine hour, with adjustments for setup requirements, machine suitability, and demand limitations.\n\nThe analysis must also recognize fixed asset costs and capital implications. Machine-hour capacity is a practical surrogate for fixed costs per unit of volume, including depreciation, standby costs, and other costs independent of variable cost per pound or ton produced.\n\nThe best answer also recognizes that different products may produce substantially different volumes per machine hour and may command different prices depending on demand and competitive actions."
+    },
+    {
+      "block_id": "machine_loading_case_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 29,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "machine_loading_case_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 31,
+      "content": "Outstanding answers:\n\nThe best candidates will formulate a profit maximization algorithm. The best algorithm is to maximize profit contribution per machine hour.\n\n1. Profit contribution is unit volume times unit price minus variable cost.\n2. Machine-hour capacity is a surrogate for fixed costs per unit of volume. Fixed costs take into account depreciation and standby costs, as well as costs that are independent of the variable costs per pound or ton produced.\n\nAn outstanding answer must include recognition of asset costs and capital implied by those assets, as well as income or profit contribution. It should also recognize potential substantial differences in volume produced per machine hour, price obtainable in the market, market demand, and competitive actions.\n\nA strong candidate should recommend building a product-by-product model that ranks each product by contribution per constrained machine hour, then selecting the product mix that maximizes plant profit while respecting demand limits, machine suitability, setup costs, production speeds, pricing flexibility, and competitive dynamics."
+    }
+  ]
+}

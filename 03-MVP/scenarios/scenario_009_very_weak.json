@@ -1,0 +1,60 @@
+{
+  "scenario_id": "scenario_009_very_weak",
+  "evaluation_item_id": "agsm_airline_expansion_vw_001",
+  "case_id": "agsm_03_airline_expansion",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate gives a vague growth answer, does not structure the route decision as a profitability problem, and misses both operating-cost drivers and cannibalization logic.",
+    "behaviour_rules": [
+      "Do not quickly frame the route decision as an incremental profitability question.",
+      "Ask few or no useful questions about demand, pricing, occupancy, competition, or costs.",
+      "Talk broadly about whether New York is an attractive city rather than what makes the route economically viable.",
+      "Do not break revenue into occupancy and expected ticket price.",
+      "Do not identify fuel, landing rights, and other operating costs as key decision inputs.",
+      "Miss the importance of cannibalization from Tokyo-LA and LA-New York routes.",
+      "Treat cannibalization as purely bad rather than recognizing that self-cannibalization can be better than losing passengers to competitors.",
+      "End with a generic recommendation such as expand if demand is high, without a rigorous decision rule."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to structure the case as incremental revenue versus incremental cost.",
+      "Does not identify occupancy and ticket price as the key revenue drivers.",
+      "Misses important operating costs such as fuel and landing rights.",
+      "Does not include cannibalization of existing routes in the analysis.",
+      "Fails to recognize that self-cannibalization may be preferable to losing demand to competitors.",
+      "Recommendation lacks a defensible decision rule."
+    ],
+    "expected_feedback_points": [
+      "Frame the question as a route-level profitability decision.",
+      "Break revenue into occupancy, price, and demand drivers.",
+      "Assess the competitive environment and the ability to win passengers from rivals.",
+      "Include fuel, landing rights, and other incremental operating costs.",
+      "Account for cannibalization of existing Tokyo-LA and LA-New York traffic.",
+      "Use a recommendation rule based on positive incremental profit net of cannibalization."
+    ]
+  }
+}

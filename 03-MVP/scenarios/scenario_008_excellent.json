@@ -1,0 +1,55 @@
+{
+  "scenario_id": "scenario_008_excellent",
+  "evaluation_item_id": "duke_dealer_jacks_ex_001",
+  "case_id": "duke_dealer_jacks",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 5,
+    "performance_label": "excellent",
+    "description": "The candidate sharply diagnoses private label mix as the core driver of stagnating profits, validates management's hypothesis with clean math, and gives a crisp recommendation that exceeds the target while addressing execution risk and future upside.",
+    "behaviour_rules": [
+      "Begin with a concise recap and translate the target into a concrete $180M profit increase objective.",
+      "Use a sharp profitability framework that prioritizes mix and margin while ruling out store closures and short-term geographic expansion.",
+      "Infer from Exhibit #1 that historical profit growth tracked private label growth more closely than total revenue growth.",
+      "Clearly explain why private label margins are structurally better than national brands.",
+      "Perform the math cleanly: 3% of $60B revenue shifts to private label, multiplied by a 15-point gross margin uplift, then taxed at 30%, yielding about $189M of additional profit.",
+      "Conclude that management's plan meets and slightly exceeds the target.",
+      "Recommend pursuing the strategy while pressure-testing the 3-point shift assumption, validating one-time costs, and piloting the rollout.",
+      "Also note remaining upside from still trailing Trader Joe's on private label penetration, while acknowledging possible supplier and scale risks on national brands."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "high",
+      "clarity": "high",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 5,
+      "case_structure": 5,
+      "case_math_answer": 5,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 5,
+      "overall_structure": 5,
+      "overall_problem_solving": 5,
+      "overall_communication": 5,
+      "overall": 5
+    },
+    "expected_issues": [
+      "May not fully quantify second-order margin effects on the remaining national-brand assortment because the case only hints at them qualitatively.",
+      "Could still be pushed for a more detailed execution timeline, though the strategic recommendation should already be excellent."
+    ],
+    "expected_feedback_points": [
+      "Excellent diagnosis that private label mix is the primary profitability lever.",
+      "Excellent use of the exhibit to connect private label growth and profit growth.",
+      "Excellent quantitative validation that the hypothesis exceeds the $180M target.",
+      "Excellent recognition of execution risks, one-time costs, and supplier implications.",
+      "Excellent recommendation to pilot, validate, and scale while preserving future upside."
+    ]
+  }
+}

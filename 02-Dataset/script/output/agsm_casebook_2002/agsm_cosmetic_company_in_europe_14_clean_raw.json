@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "cosmetic_company_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Cosmetic Company",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 19,
+      "content": "Eurocos, Inc. produces and sells various cosmetics products in several European countries. The company's different brands are well established in the markets. The various products are quite similar in terms of raw material and production. The company has been doing very well in the past; however, profits have been shrinking in recent years. The CEO of Eurocos, Inc. thinks of changing his strategy in the industry. He asks you if this is a good idea and what they should do."
+    },
+    {
+      "block_id": "cosmetic_company_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 19,
+      "content": "Additional information:\n\nMany small to medium-size companies and a few big companies owning several brands comprise the market. There are many small to medium-size brands in the market.\n\nEurocos produces all products in all countries. Transportation costs are small.\n\nPossible approach / way of discussion:\n\nWhat is the structure of the industry?\n\nFragmented industry.\n\nWhy?\n- Low entry barriers, such as small setup costs\n- High product differentiation, with many ways of differentiation\n- Diverse markets and customer needs, including language and complexions\n- Barriers such as tariffs and customs\n\nHow can fragmentation be overcome? Is it feasible for Eurocos?\n- Create economies of scale and learning curves: Yes\n- Standardize market needs: No\n- Separate the product's commodity aspect from its fragmenting aspect: Yes\n- Changing environment: reduced tariffs"
+    },
+    {
+      "block_id": "cosmetic_company_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 19,
+      "content": "Company facts:\n- Produces and sells cosmetics in several European countries\n- Different brands are well established\n- Products are similar in raw material and production\n- Historically strong performance, but profits have recently shrunk\n- Produces all products in all countries\n- Transportation costs are small\n\nIndustry structure:\n- Fragmented industry\n- Many small to medium-size companies\n- Few large companies owning several brands\n- Many small to medium-size brands\n\nDrivers of fragmentation:\n- Low entry barriers / small setup costs\n- High product differentiation\n- Diverse market needs by language and complexion\n- Tariffs and customs barriers\n\nPotential ways to overcome fragmentation:\n- Create economies of scale in production\n- Build learning curves\n- Separate commodity production from nationally fragmented marketing and branding\n- Benefit from reduced tariffs\n\nPotential production strategy:\n- Consolidate production while keeping marketing and branding nationally decentralized"
+    },
+    {
+      "block_id": "cosmetic_company_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 20,
+      "content": "The cosmetics industry is fragmented because of low entry barriers, many forms of product differentiation, diverse country-specific customer needs, and historical trade barriers such as tariffs and customs. Eurocos cannot easily standardize market needs because cosmetics branding, language, and complexion preferences remain local.\n\nHowever, the company can separate the commodity aspect of the business from the fragmenting aspect. Since products are similar in raw materials and production, Eurocos can centralize or consolidate production to capture economies of scale, sourcing benefits, longer production runs, quality improvements, learning curve benefits, and lower inventory through pooled safety stock.\n\nAt the same time, marketing and branding should remain nationally decentralized because local market differences still matter.\n\nThe main trade-offs are greater central-operation complexity, increased logistics complexity, and higher transportation costs."
+    },
+    {
+      "block_id": "cosmetic_company_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 19,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "cosmetic_company_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 19,
+      "content": "Possible solution:\n\nConsolidate production while keeping the marketing and branding nationally decentralized.\n\nPros:\n- Economies of scale in production, including better sourcing, longer runs, and quality improvements\n- Ability to optimize production location based on interest rates, wages, and labor\n- Learning curve benefits from running a more complex plant and logistics operation\n- Keeps the fragmented marketing required in the market\n- Total inventory decreases because safety stock at original plant locations can be pooled centrally\n\nCons:\n- More complex central operation\n- Increased logistics complexity\n- Transportation costs increase\n\nA strong candidate should recommend changing the strategy selectively: consolidate production to capture scale benefits while preserving local marketing and branding. Eurocos should not try to fully standardize the market-facing side of the business, because customer needs remain diverse across European countries."
+    }
+  ]
+}

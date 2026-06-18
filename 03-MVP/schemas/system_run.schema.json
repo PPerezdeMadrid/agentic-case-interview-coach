@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "system_run.schema.json",
+  "title": "SystemRun",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "scenario_id",
+    "system_type",
+    "transcript",
+    "system_feedback",
+    "run_metadata"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "system_type": {
+      "type": "string",
+      "enum": ["baseline", "agentic"]
+    },
+    "transcript": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["turn", "speaker", "message"],
+        "properties": {
+          "turn": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "speaker": {
+            "type": "string",
+            "enum": ["baseline_agent", "interviewer_agent", "candidate_simulator"]
+          },
+          "message": {
+            "type": "string"
+          },
+          "stage_id": {
+            "type": ["string", "null"]
+          },
+          "stage_type": {
+            "type": ["string", "null"],
+            "enum": [
+              "case_opening",
+              "case_structure",
+              "case_math_answer",
+              "case_creative_answer",
+              "final_recommendation",
+              null
+            ]
+          },
+          "metadata": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "judge_trace": {
+      "type": "array",
+      "description": "Optional: judge decisions are not currently stored as transcript turns in the MVP.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stage_type", "score", "rationale", "needs_follow_up"],
+          "properties": {
+            "stage_type": {
+              "type": "string",
+            "enum": [
+              "case_opening",
+              "case_structure",
+              "case_math_answer",
+              "case_creative_answer",
+              "final_recommendation"
+            ]
+          },
+            "score": {
+              "oneOf": [
+              { "type": "integer", "minimum": 1, "maximum": 5 },
+              { "type": "string", "enum": ["not_tested"] }
+              ]
+            },
+          "rationale": {
+            "type": "string"
+          },
+          "needs_follow_up": {
+            "type": "boolean"
+          },
+          "follow_up_question": {
+            "type": ["string", "null"]
+          },
+          "knowledge_chunk_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "system_feedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scores",
+        "feedback_text",
+        "strengths",
+        "improvement_areas",
+        "recommended_next_steps"
+      ],
+      "properties": {
+        "scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "case_opening",
+            "case_structure",
+            "case_math_answer",
+            "case_creative_answer",
+            "final_recommendation",
+            "overall"
+          ],
+          "properties": {
+            "case_opening": { "$ref": "#/$defs/mvpScore" },
+            "case_structure": { "$ref": "#/$defs/mvpScore" },
+            "case_math_answer": { "$ref": "#/$defs/mvpScore" },
+            "case_creative_answer": { "$ref": "#/$defs/mvpScore" },
+            "final_recommendation": { "$ref": "#/$defs/mvpScore" },
+            "overall": { "$ref": "#/$defs/mvpScore" }
+          }
+        },
+        "feedback_text": {
+          "type": "string"
+        },
+        "strengths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "improvement_areas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommended_next_steps": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "run_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_model",
+        "candidate_temperature",
+        "prompt_tokens",
+        "completion_tokens",
+        "total_tokens",
+        "latency_seconds"
+      ],
+      "properties": {
+        "candidate_model": {
+          "type": "string"
+        },
+        "candidate_temperature": {
+          "type": "number",
+          "minimum": 0
+        },
+        "candidate_seed": {
+          "type": ["integer", "null"]
+        },
+        "interviewer_backend": {
+          "type": ["string", "null"]
+        },
+        "judge_backend": {
+          "type": ["string", "null"]
+        },
+        "prompt_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completion_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "latency_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stop_reason": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "mvpScore": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        {
+          "type": "string",
+          "enum": ["not_tested"]
+        }
+      ]
+    }
+  }
+}

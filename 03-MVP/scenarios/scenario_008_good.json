@@ -1,0 +1,54 @@
+{
+  "scenario_id": "scenario_008_good",
+  "evaluation_item_id": "duke_dealer_jacks_g_001",
+  "case_id": "duke_dealer_jacks",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 3,
+    "performance_label": "good",
+    "description": "The candidate correctly identifies private label mix as the key profitability lever and can broadly validate management's plan, though the synthesis and risk framing are solid rather than outstanding.",
+    "behaviour_rules": [
+      "Start with a clear recap and frame the case as a profitability issue driven by revenue mix and margins.",
+      "Recognize that the issue is pervasive across stores and that store closures or short-term expansion are not the immediate answer.",
+      "Use Exhibit #1 to infer that private label growth historically supported profit growth.",
+      "Understand that private label has a materially higher gross margin than national brands.",
+      "Correctly compute or approximately explain that a 3 percentage point penetration shift on $60B revenue produces enough profit improvement to meet the target after taxes.",
+      "Ask for the tax rate or otherwise recognize that after-tax profit is the relevant metric.",
+      "Recommend proceeding with the private label focus, while also calling for some validation of the assumptions."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "medium",
+      "clarity": "medium",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 3,
+      "case_structure": 3,
+      "case_math_answer": 3,
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 3,
+      "overall_structure": 3,
+      "overall_problem_solving": 3,
+      "overall_communication": 3,
+      "overall": 3
+    },
+    "expected_issues": [
+      "Gets to the right answer, but may not make the private-label-to-profit linkage especially sharp at first.",
+      "Math may be correct but not especially elegant or executive-ready.",
+      "Recommendation can be somewhat light on one-time costs, supplier effects, and pilot design."
+    ],
+    "expected_feedback_points": [
+      "Good diagnosis that private label mix is a major profitability lever.",
+      "Good validation that management's hypothesis meets the profit goal.",
+      "Good recognition that taxes matter in the final impact estimate.",
+      "Reasonable recommendation to pursue private label, with some validation work before rollout."
+    ]
+  }
+}

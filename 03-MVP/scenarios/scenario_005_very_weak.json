@@ -1,0 +1,58 @@
+{
+  "scenario_id": "scenario_005_very_weak",
+  "evaluation_item_id": "agsm_distilled_spirits_vw_001",
+  "case_id": "agsm_02_distilled_spirits",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 1,
+    "performance_label": "very_weak",
+    "description": "The candidate gives a generic profitability answer, gets distracted by product mix and pricing, and fails to identify that profits are falling because sales are shifting toward higher-cost open states.",
+    "behaviour_rules": [
+      "Do not quickly separate revenue growth from profitability decline.",
+      "Ask few or no targeted questions about geography, channel economics, or cost differences by state type.",
+      "Spend too much time on vodka versus rum mix even though the split is stable and pricing is similar.",
+      "Do not focus sharply on distribution costs as the key changing cost line.",
+      "Miss the importance of open states having expensive shelf space, critical trade promotions, and more frequent deliveries.",
+      "Do not connect shrinking regulated-state share to lower overall profitability.",
+      "End with a vague recommendation such as cutting costs or increasing marketing, without diagnosing the channel mix shift."
+    ],
+    "answer_style": {
+      "length": "short",
+      "confidence": "low",
+      "clarity": "low",
+      "business_vocabulary": "basic"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 1,
+      "case_structure": 1,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 1,
+      "overall_structure": 1,
+      "overall_problem_solving": 1,
+      "overall_communication": 2,
+      "overall": 1
+    },
+    "expected_issues": [
+      "Fails to identify distribution costs as the main worsening cost line.",
+      "Gets distracted by stable product mix and similar pricing instead of channel economics.",
+      "Does not distinguish open states from regulated states in economic terms.",
+      "Misses the fact that open-state growth and regulated-state decline are changing the profit mix.",
+      "Does not conclude that more volume is coming from less profitable channels.",
+      "Recommendation is generic and not aligned with the case guidance."
+    ],
+    "expected_feedback_points": [
+      "Focus on the cost line that is actually changing: distribution.",
+      "Rule out product mix, pricing, production cost, and average advertising cost more explicitly.",
+      "Compare open states and regulated states as different channels with different economics.",
+      "Recognize that growth in open states can hurt profits if those states are more expensive to serve.",
+      "Recommend state or channel profitability analysis and actions to manage open-state economics."
+    ]
+  }
+}

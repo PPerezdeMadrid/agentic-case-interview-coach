@@ -1,0 +1,56 @@
+{
+  "scenario_id": "scenario_002_good",
+  "evaluation_item_id": "harvard_retailer_g_001",
+  "case_id": "harvard_01_retailer",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "performance_level": 3,
+    "performance_label": "good",
+    "description": "The candidate correctly focuses on revenue, compares urban and suburban stores, and reaches the right broad conclusion on customer behavior and assortment mismatch, but the analysis is not especially sharp or top-tier in prioritization and synthesis.",
+    "behaviour_rules": [
+      "Quickly note that costs have already been reduced and the main issue is likely on the revenue side.",
+      "Ask a couple of relevant questions about store differences, customer behavior, and competition.",
+      "Use a workable framework that distinguishes differences across geography, customer, and product mix.",
+      "Recognize that competition is not the main explanation and shift attention toward consumer behavior.",
+      "Correctly identify that the same product mix across all stores is likely part of the problem.",
+      "Explain that suburban customers buy more major appliances and electronics, which carry higher profitability.",
+      "Conclude that urban stores are less aligned with the needs of their local customer base.",
+      "Recommend tailoring assortment and studying weaker stores further, though the recommendation may still be somewhat concise."
+    ],
+    "answer_style": {
+      "length": "medium",
+      "confidence": "medium",
+      "clarity": "medium",
+      "business_vocabulary": "professional"
+    }
+  },
+  "ground_truth": {
+    "expected_scores": {
+      "case_opening": 3,
+      "case_structure": 3,
+      "case_math_answer": "not_tested",
+      "case_creative_answer": "not_tested",
+      "final_recommendation": 3,
+      "overall_structure": 3,
+      "overall_problem_solving": 3,
+      "overall_communication": 3,
+      "overall": 3
+    },
+    "expected_issues": [
+      "Reasoning is mostly correct but not highly prioritized or hypothesis-driven.",
+      "May not draw the urban versus suburban contrast as crisply as a stronger candidate.",
+      "Recommendation is sensible but may underdevelop the closure decision or implementation detail."
+    ],
+    "expected_feedback_points": [
+      "Good redirection toward revenue rather than cost.",
+      "Strong enough diagnosis of different customer behavior across urban and suburban stores.",
+      "Correct identification of the product mix mismatch.",
+      "Reasonable recommendation to tailor assortment and further assess weaker stores.",
+      "To improve further, sharpen prioritization, synthesis, and final executive recommendation."
+    ]
+  }
+}
