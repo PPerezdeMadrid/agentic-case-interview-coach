@@ -4,24 +4,68 @@ from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemM
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from typing_extensions import TypedDict
-from langchain_openai import ChatOpenAI
 from prompts import (
     CANDIDATE_SYSTEM_PROMPT,
     CONSULTANCY_QUESTIONS,
+    INTERVIEWER_INFORMATION_PROMPT,
     INTERVIEWER_SYSTEM_PROMPT,
-    MVP_JUDGE_SYSTEM_PROMPT,
+    JUDGE_SYSTEM_PROMPT,
 )
 from state import InterviewState
-
-
-llm_server = ChatOpenAI(
-    model="local-model",
-    base_url="http://localhost:8081/v1",
-    api_key="lm-studio",
-    temperature=0.14,
-)
+from llm_server import llm_server
 
 MAX_JUDGE_ROUNDS = 2
+
+
+def _latest_candidate_message(candidate_transcript: list[str]) -> str:
+    for line in reversed(candidate_transcript):
+        if line.startswith("Candidate: "):
+            return line.removeprefix("Candidate: ").strip()
+    return ""
+
+
+def _candidate_requested_information(candidate_message: str) -> bool:
+    lowered = candidate_message.lower()
+    request_signals = [
+        "data",
+        "details",
+        "metrics",
+        "metric",
+        "baseline",
+        "current",
+        "blocked transactions",
+        "blocked customers",
+        "number of",
+        "how many",
+        "what is the current",
+        "what are the current",
+        "available data",
+        "constraints",
+        "stakeholders",
+        "business impact",
+        "historical sales",
+        "inventory",
+        "if available",
+        "could you share",
+        "can you share",
+    ]
+    return any(signal in lowered for signal in request_signals)
+
+
+def _interviewer_requests_final_recommendation(interviewer_message: str) -> bool:
+    lowered = interviewer_message.lower()
+    recommendation_signals = [
+        "what would you recommend",
+        "what is your recommendation",
+        "what's your recommendation",
+        "final recommendation",
+        "your recommendation",
+        "your final answer",
+        "your conclusion",
+        "what should the ceo do",
+        "what should the client do",
+    ]
+    return any(signal in lowered for signal in recommendation_signals)
 
 
 def _parse_judge_decision(raw_output: str) -> tuple[str, str, str, str, bool, int, str]:
@@ -80,9 +124,27 @@ def interviewer_node(state: InterviewState) -> InterviewState:
     latest_feedback = state.get("latest_feedback", "")
     focus_area = state.get("focus_area", "")
     interviewer_guidance = state.get("interviewer_guidance", "")
+    latest_candidate_message = _latest_candidate_message(candidate_transcript)
 
     if turn_index == 0 and not transcript:
-        question = CONSULTANCY_QUESTIONS[1]
+        content = CONSULTANCY_QUESTIONS[1]
+        interviewer_action: Literal["question", "information"] = "question"
+    elif _candidate_requested_information(latest_candidate_message):
+        messages = [
+            SystemMessage(content=INTERVIEWER_INFORMATION_PROMPT),
+            HumanMessage(
+                content=(
+                    "Latest candidate message:\n"
+                    + latest_candidate_message
+                    + "\n\nConversation transcript so far:\n"
+                    + ("\n".join(transcript) if transcript else "No previous messages.")
+                    + "\n\nAnswer the candidate's request directly with relevant case information."
+                )
+            ),
+        ]
+        response = llm_server.invoke(messages)
+        content = response.content.strip()
+        interviewer_action = "information"
     else:
         messages = [
             SystemMessage(content=INTERVIEWER_SYSTEM_PROMPT),
@@ -101,15 +163,22 @@ def interviewer_node(state: InterviewState) -> InterviewState:
             ),
         ]
         response = llm_server.invoke(messages)
-        question = response.content.strip() or CONSULTANCY_QUESTIONS[1]
+        content = response.content.strip() or CONSULTANCY_QUESTIONS[1]
+        interviewer_action = "question"
 
-    transcript = transcript + [f"Interviewer: {question}"]
-    candidate_transcript = candidate_transcript + [f"Interviewer: {question}"]
+    interviewer_decision: Literal["ask_candidate", "judge"] = "ask_candidate"
+    if interviewer_action == "question" and _interviewer_requests_final_recommendation(content):
+        interviewer_decision = "judge"
+
+    transcript_label = "Interviewer info" if interviewer_action == "information" else "Interviewer"
+    transcript = transcript + [f"{transcript_label}: {content}"]
+    candidate_transcript = candidate_transcript + [f"Interviewer: {content}"]
 
     return {
-        "latest_question": question,
-        "interviewer_decision": "ask_candidate",
-        "messages": [AIMessage(content=question, name="interviewer")],
+        "latest_question": content,
+        "interviewer_decision": interviewer_decision,
+        "interviewer_action": interviewer_action,
+        "messages": [AIMessage(content=content, name="interviewer")],
         "transcript": transcript,
         "candidate_transcript": candidate_transcript,
     }
@@ -138,17 +207,12 @@ def candidate_node(state: InterviewState) -> InterviewState:
 
     next_turn_index = turn_index + 1
 
-    decision: Literal["ask_candidate", "judge"] = (
-        "judge" if next_turn_index % 2 == 0 else "ask_candidate"
-    )
-
     transcript = transcript + [f"Candidate: {answer}"]
     candidate_transcript = candidate_transcript + [f"Candidate: {answer}"]
 
     return {
         "turn_index": next_turn_index,
         "latest_answer": answer,
-        "interviewer_decision": decision,
         "messages": [HumanMessage(content=answer, name="candidate")],
         "transcript": transcript,
         "candidate_transcript": candidate_transcript,
@@ -161,7 +225,7 @@ def judge_node(state: InterviewState) -> InterviewState:
     turn_index = state.get("turn_index", 0)
 
     messages = [
-        SystemMessage(content=MVP_JUDGE_SYSTEM_PROMPT),
+        SystemMessage(content=JUDGE_SYSTEM_PROMPT),
         HumanMessage(
             content=(
                 f"Judge round: {judge_round + 1}\n"
@@ -204,7 +268,7 @@ def judge_node(state: InterviewState) -> InterviewState:
         focus_area = "none"
         feedback = (
             feedback
-            or "Final judge review. Score = 3/5. The candidate showed some useful reasoning, but the evaluation remained incomplete."
+            or "Final judge review. Score = 3/5. The candidate showed some useful reasoning, but the evaluation remained incomplete." # CHANGE!!!
         )
         interviewer_guidance = ""
         judge_reason = "Maximum judge rounds reached."
@@ -228,12 +292,10 @@ def judge_node(state: InterviewState) -> InterviewState:
 
 
 # ROUTING
-
-def route_after_candidate(state: InterviewState) -> Literal["interviewer", "judge"]:
-    if state.get("interviewer_decision", "ask_candidate") == "judge":
+def route_after_interviewer(state: InterviewState) -> Literal["judge", "candidate"]:
+    if state.get("interviewer_decision") == "judge":
         return "judge"
-    return "interviewer"
-
+    return "candidate"
 
 def route_after_judge(state: InterviewState) -> Literal["interviewer", "end"]:
     if state.get("judge_decision") == "score":
@@ -250,16 +312,17 @@ builder.add_node("candidate", candidate_node)
 builder.add_node("judge", judge_node)
 
 builder.add_edge(START, "interviewer")
-builder.add_edge("interviewer", "candidate")
 
 builder.add_conditional_edges(
-    "candidate",
-    route_after_candidate,
+    "interviewer",
+    route_after_interviewer,
     {
-        "interviewer": "interviewer",
+        "candidate": "candidate",
         "judge": "judge",
     },
 )
+
+builder.add_edge("candidate", "interviewer")
 
 builder.add_conditional_edges(
     "judge",
@@ -275,7 +338,8 @@ graph = builder.compile()
 
 # --------------------------------------------------
 # Demo input
-# --------------------------------------------------
+
+"""
 
 demo_input: InterviewState = {
     "messages": [],
@@ -290,6 +354,7 @@ demo_input: InterviewState = {
     "latest_feedback": "",
 
     "interviewer_decision": "ask_candidate",
+    "interviewer_action": "question",
     "judge_decision": "continue",
 
     "focus_area": "",
@@ -300,12 +365,12 @@ demo_input: InterviewState = {
 }
 
 
-# --------------------------------------------------
 # Run demo
-# --------------------------------------------------
 
 result = graph.invoke(demo_input)
 
 for line in result["transcript"]:
     print(line)
     print()
+"""
+# --------------------------------------------------

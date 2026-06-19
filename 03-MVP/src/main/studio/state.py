@@ -24,6 +24,7 @@ class InterviewState(TypedDict):
     latest_answer: str
     latest_feedback: str
     interviewer_decision: Literal["ask_candidate", "judge"]
+    interviewer_action: NotRequired[Literal["question", "information"]]
     judge_decision: Literal["continue", "score"]
     focus_area: str
     interviewer_guidance: str

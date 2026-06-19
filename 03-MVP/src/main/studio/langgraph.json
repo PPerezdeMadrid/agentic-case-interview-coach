@@ -1,7 +1,7 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "mvp_dissertation": "./mvp_dissertation.py:graph",
+    "agentic_mvp": "./agentic_mvp.py:graph",
     "baseline": "./baseline.py:graph"
   },
   "env": "../../../.env",

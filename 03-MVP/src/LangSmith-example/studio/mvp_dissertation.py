@@ -16,8 +16,8 @@ INTERVIEW_QUESTIONS_PHASE_1 = [
 ]
 
 INTERVIEW_QUESTIONS_PHASE_2 = [
-    "The judge suggests focusing more on prioritisation and hypothesis-driven thinking. Based on your structure, which area would you investigate first and why?",
-    "Good. Now make this more concrete: what specific analysis or metric would you use to confirm your hypothesis?",
+    "Based on your structure, which area would you investigate first and why?",
+    "You have identified a priority area. What specific analysis or metric would you use to confirm your hypothesis?",
 ]
 
 CANDIDATE_ANSWERS_PHASE_1 = [
@@ -52,6 +52,7 @@ JUDGE_FINAL_FEEDBACK = (
 class InterviewState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     transcript: list[str]
+    candidate_transcript: list[str]
 
     turn_index: int
     judge_round: int
@@ -72,8 +73,13 @@ class InterviewState(TypedDict):
 # --------------------------------------------------
 
 def interviewer_node(state: InterviewState) -> InterviewState:
+    transcript_so_far = state.get("transcript", [])
     turn_index = state.get("turn_index", 0)
     judge_round = state.get("judge_round", 0)
+    latest_answer = state.get("latest_answer", "")
+    latest_feedback = state.get("latest_feedback", "")
+    focus_area = state.get("focus_area", "")
+    last_transcript_entry = transcript_so_far[-1] if transcript_so_far else ""
 
     if judge_round == 0:
         questions = INTERVIEW_QUESTIONS_PHASE_1
@@ -82,20 +88,34 @@ def interviewer_node(state: InterviewState) -> InterviewState:
 
     local_turn_index = turn_index % 2
     question = questions[local_turn_index]
+    interviewer_decision: Literal["ask_candidate", "judge"] = (
+        "judge"
+        if latest_answer and turn_index % 2 == 0 and last_transcript_entry.startswith("Candidate: ")
+        else "ask_candidate"
+    )
 
-    transcript = state.get("transcript", []) + [f"Interviewer: {question}"]
+    if interviewer_decision == "ask_candidate" and judge_round > 0 and local_turn_index < len(INTERVIEW_QUESTIONS_PHASE_2):
+        if focus_area:
+            question = f"{question} Focus on {focus_area.lower()}."
+        elif latest_feedback:
+            question = f"{question} Use the previous evaluation to probe the weak spots more directly."
+
+    transcript = transcript_so_far + [f"Interviewer: {question}"]
+    candidate_transcript = state.get("candidate_transcript", []) + [f"Interviewer: {question}"]
 
     return {
         "latest_question": question,
-        "interviewer_decision": "ask_candidate",
+        "interviewer_decision": interviewer_decision,
         "messages": [AIMessage(content=question, name="interviewer")],
         "transcript": transcript,
+        "candidate_transcript": candidate_transcript,
     }
 
 
 def candidate_node(state: InterviewState) -> InterviewState:
     turn_index = state.get("turn_index", 0)
     judge_round = state.get("judge_round", 0)
+    candidate_transcript = state.get("candidate_transcript", [])
 
     if judge_round == 0:
         answers = CANDIDATE_ANSWERS_PHASE_1
@@ -107,19 +127,15 @@ def candidate_node(state: InterviewState) -> InterviewState:
 
     next_turn_index = turn_index + 1
 
-    # Every two candidate answers, send conversation to judge
-    decision: Literal["ask_candidate", "judge"] = (
-        "judge" if next_turn_index % 2 == 0 else "ask_candidate"
-    )
-
     transcript = state["transcript"] + [f"Candidate: {answer}"]
+    candidate_transcript = candidate_transcript + [f"Candidate: {answer}"]
 
     return {
         "turn_index": next_turn_index,
         "latest_answer": answer,
-        "interviewer_decision": decision,
         "messages": [HumanMessage(content=answer, name="candidate")],
         "transcript": transcript,
+        "candidate_transcript": candidate_transcript,
     }
 
 
@@ -145,7 +161,7 @@ def judge_node(state: InterviewState) -> InterviewState:
         "judge_decision": judge_decision,
         "focus_area": focus_area,
         "final_score": final_score,
-        "messages": [AIMessage(content=feedback, name="judge")],
+        "messages": [],
         "transcript": transcript,
     }
 
@@ -154,7 +170,7 @@ def judge_node(state: InterviewState) -> InterviewState:
 # Routing
 # --------------------------------------------------
 
-def route_after_candidate(state: InterviewState) -> Literal["interviewer", "judge"]:
+def route_after_interviewer(state: InterviewState) -> Literal["interviewer", "judge"]:
     if state.get("interviewer_decision", "ask_candidate") == "judge":
         return "judge"
     return "interviewer"
@@ -177,16 +193,15 @@ builder.add_node("candidate", candidate_node)
 builder.add_node("judge", judge_node)
 
 builder.add_edge(START, "interviewer")
-builder.add_edge("interviewer", "candidate")
-
 builder.add_conditional_edges(
-    "candidate",
-    route_after_candidate,
+    "interviewer",
+    route_after_interviewer,
     {
-        "interviewer": "interviewer",
+        "interviewer": "candidate",
         "judge": "judge",
     },
 )
+builder.add_edge("candidate", "interviewer")
 
 builder.add_conditional_edges(
     "judge",
@@ -207,6 +222,7 @@ graph = builder.compile()
 demo_input: InterviewState = {
     "messages": [],
     "transcript": [],
+    "candidate_transcript": [],
 
     "turn_index": 0,
     "judge_round": 0,
