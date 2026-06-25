@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_02_baluarte",
+  "case_id": "02-football-team",
+  "candidate_profile": {
+    "id": "candidate_02_03",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You perform the case strongly on opening, structure, diagnosis, and recommendation, but you handle the math poorly. When asked the wage-bill question, you make a clear calculation mistake or fail to translate the figures correctly, even though the rest of your business reasoning remains strong.",
+      "behavioural_rules": [
+        "Open the case clearly and structure it well around revenue streams, cost base, and timing of levers.",
+        "Diagnose the broadcasting decline and wage mismatch correctly.",
+        "When the math question comes, give an incorrect or badly reasoned answer and do not land on the correct EUR16.25M reduction.",
+        "Keep the rest of the interview concise, grounded, and responsive.",
+        "Never invent major new facts.",
+        "The final recommendation should still restructure the wage bill, monetize at least one cantera player, reconsider naming rights, and build a credible promotion plan."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly, frames the problem well, and sets up an appropriate initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear profitability structure that separates revenue streams, costs, and strategic levers."
+        },
+        "case_math_answer": {
+          "expected": 1,
+          "rationale": "The candidate fails to solve the wage-bill calculation correctly or does not interpret the math accurately."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation remains directionally strong and addresses the club's core issues."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through analysis."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate diagnoses the problem well, but the incorrect math weakens the analytical rigor of the solution."
+        },
+        "overall_communication": {
+          "expected": 4,
+          "rationale": "Communication remains clear, concise, and easy to follow overall."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "The candidate explains ideas clearly and efficiently throughout the interview."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts and adjusts the line of analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case and avoids unsupported details."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate is generally well calibrated outside the math error and does not overclaim beyond the case evidence."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "The candidate maintains a strong and logically connected reasoning thread across the interview."
+        }
+      }
+    }
+  }
+}

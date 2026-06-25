@@ -1,0 +1,76 @@
+{
+  "case_content": [
+    {
+      "block_id": "cf_baluarte_levante_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - CF Baluarte Levante Profitability Diagnosis",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Your client is CF Baluarte Levante, a mid-sized Spanish football club. After being promoted to La Liga in 2019, the club took on significant debt to fund player signings and was relegated back to Segunda Division in 2023. Since relegation, profitability has deteriorated sharply. The majority owner, a US private equity fund, wants to understand why and what levers are available to improve performance within the next 18 months."
+    },
+    {
+      "block_id": "cf_baluarte_levante_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected opening approach:\n- Use a profitability framework with emphasis on revenue streams and cost base.\n- Map broadcasting, matchday, merchandising, transfers, and sponsorship separately.\n- Distinguish between immediate cash levers and long-term value creation.\n\nProvide upon request:\n- A stadium renovation is underway, reducing hospitality revenue from palco and premium matchday sales.\n- Net debt stands at EUR47M.\n- The club has a strong cantera and a loyal abonado base.\n\nStrong candidates should recognize this began as a structural revenue shock from relegation, then became a cost mismatch problem."
+    },
+    {
+      "block_id": "cf_baluarte_levante_data_001",
+      "block_type": "data",
+      "title": "Data - Revenue and Cost Drivers",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Key facts:\n- Broadcasting revenue: down approximately 52% after relegation\n- Merchandising revenue: up 40% year-on-year\n- Net debt: EUR47M\n- Cantera estimated market value: more than EUR25M across three players\n\nAdditional context:\n- Matchday revenue is down because Segunda Division attendance is lower and stadium hospitality is unavailable during renovation.\n- Sponsorship revenue is down modestly because some contracts had La Liga clauses.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently."
+    },
+    {
+      "block_id": "cf_baluarte_levante_math_001",
+      "block_type": "math",
+      "title": "Math Question - Wage Reduction Target",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "The interviewer now provides the following numbers: before relegation, the club generated EUR100M of annual revenue and had a wage bill equal to 65% of revenue. After relegation, revenue fell by 35% to EUR65M, but the wage bill only fell by 10% because most player contracts were fixed. If the club wants to return to a 65% wage-to-revenue ratio, by how many euros does the wage bill need to be reduced from its current level?"
+    },
+    {
+      "block_id": "cf_baluarte_levante_guidance_math_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Math Question",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected calculation:\n- Pre-relegation wage bill = 65% of EUR100M = EUR65M.\n- Current wage bill after a 10% reduction = EUR65M x 0.9 = EUR58.5M.\n- Target wage bill at a 65% ratio on EUR65M revenue = EUR42.25M.\n- Required further reduction = EUR58.5M - EUR42.25M = EUR16.25M.\n\nStrong candidates should state that the club needs to reduce the wage bill by EUR16.25M and explain that the core issue is a cost base still built for top-division revenue."
+    },
+    {
+      "block_id": "cf_baluarte_levante_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Root Cause",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "A strong candidate should conclude that the profitability problem has two layers.\n\nFirst, relegation caused a structural collapse in broadcasting revenue, which is the club's largest income stream. That decline is immediate and cannot be reversed until promotion is achieved. Second, the wage bill and broader cost structure were built for a La Liga revenue base and are now misaligned with Segunda Division economics.\n\nMerchandising growth is positive but far too small to offset the broadcasting decline. The club also has blocked monetization levers, including naming rights and cantera-player sales, which could improve liquidity but involve strategic and reputational tradeoffs."
+    },
+    {
+      "block_id": "cf_baluarte_levante_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "cf_baluarte_levante_final_recommendation_002",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation - Expected Answer",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected answer:\n- Immediate cost restructuring, especially around the wage bill.\n- Monetize at least one cantera player to improve liquidity without fully depleting the club's long-term asset base.\n- Reassess the naming-rights opportunity as a commercial lever.\n- Build a credible promotion plan because returning to La Liga is the only structural fix to the broadcasting gap.\n\nRisks and next steps:\n- Selling too much football talent may hurt promotion chances.\n- Aggressive cost cuts could weaken sporting performance and brand support.\n- The private equity owner's 18-month horizon may conflict with the club's medium-term sporting needs."
+    }
+  ]
+}

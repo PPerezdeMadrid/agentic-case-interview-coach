@@ -1,0 +1,80 @@
+{
+  "scenario_id": "scenario_xxx",
+  "case_id": "your_case_id",
+  "candidate_model": {
+    "model": "phi-4",
+    "temperature": 0.7,
+    "seed": 42
+  },
+  "candidate_profile": {
+    "id": "candidate_xx",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Candidate Name. You are being interviewed on a case interview. Behave exactly as described below and do not break character.",
+      "behaviour_description": "Describe the candidate's overall interview behaviour here so that it naturally produces the expected score profile below.",
+      "behavioural_rules": [
+        "Add specific behavioural rule 1.",
+        "Add specific behavioural rule 2.",
+        "Add specific behavioural rule 3."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 3,
+          "rationale": "Explain why this opening score is expected."
+        },
+        "case_structure": {
+          "expected": 3,
+          "rationale": "Explain why this structure score is expected."
+        },
+        "case_math_answer": {
+          "expected": "not_tested",
+          "rationale": "Use 'not_tested' when the scenario does not include a math question."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "Use 'not_tested' when the scenario does not include a creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 3,
+          "rationale": "Explain why this recommendation score is expected."
+        },
+        "overall_structure": {
+          "expected": 3,
+          "rationale": "Explain why this overall structure score is expected."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "Explain why this overall problem-solving score is expected."
+        },
+        "overall_communication": {
+          "expected": 3,
+          "rationale": "Explain why this overall communication score is expected."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 3,
+          "rationale": "Explain why this clarity and concision score is expected."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 3,
+          "rationale": "Explain why this responsiveness and adaptation score is expected."
+        },
+        "groundedness": {
+          "expected": 3,
+          "rationale": "Explain why this groundedness score is expected."
+        },
+        "confidence_calibration": {
+          "expected": 3,
+          "rationale": "Explain why this confidence calibration score is expected."
+        },
+        "multi_turn_coherence": {
+          "expected": 3,
+          "rationale": "Explain why this multi-turn coherence score is expected."
+        }
+      }
+    }
+  }
+}

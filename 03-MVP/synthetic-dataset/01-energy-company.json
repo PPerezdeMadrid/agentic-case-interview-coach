@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "solventus_energy_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Solventus Energy Profitability Diagnosis",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Your client is Solventus Energy, a Spanish renewable energy company. Over the past two years, EBITDA has fallen 34% even though total revenue has grown 18%. The company operates three business units: onshore wind generation, residential electricity retail, and large-scale battery storage construction. The CEO has asked you to identify what is driving the profit decline and recommend a path forward."
+    },
+    {
+      "block_id": "solventus_energy_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected opening approach:\n- Use a profitability framework: profit = revenue - costs.\n- Separate performance by business unit before diagnosing the decline.\n- Recognize that blended revenue growth can hide unit-level losses.\n\nProvide upon request:\n- The company operates across wind generation, B2C retail, and battery storage.\n- Revenue growth has been driven entirely by the two newer units.\n- The CFO resigned three weeks ago.\n\nStrong candidates should hypothesize that one or both expansion businesses are dragging profitability."
+    },
+    {
+      "block_id": "solventus_energy_data_001",
+      "block_type": "data",
+      "title": "Data - Business Unit Economics",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Business unit facts:\n- Wind generation EBITDA margin: 41%\n- B2C retail EBITDA margin: -8%\n- Battery storage revenue: none yet\n- Battery storage CAPEX: 3x original budget\n- Battery storage project delay: 22 months\n- B2C annual customer churn: 28%\n\nAdditional operating context:\n- Wind generation remains operationally healthy.\n- B2C retail faces high customer acquisition costs and weak differentiation.\n- Battery storage is facing permitting and supply chain delays.\n- Management has strong generation experience but limited retail and project execution capability."
+    },
+    {
+      "block_id": "solventus_energy_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Root Cause",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "A strong candidate should conclude that the company does not have one single company-wide profitability problem. Instead, it has three different business situations inside one P&L.\n\nWind generation is the only healthy profit engine and is not the source of the decline. B2C retail has structurally negative unit economics because high churn and high acquisition costs destroy value. Battery storage is a distressed capital project with no near-term revenue, severe budget overruns, and accumulating fixed and financing costs.\n\nThe key insight is that the legacy wind business is cross-subsidizing two expansion bets that are both value-destructive in their current form."
+    },
+    {
+      "block_id": "solventus_energy_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "solventus_energy_final_recommendation_002",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation - Expected Answer",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected answer:\n- Separate reporting and performance management by business unit immediately.\n- Protect and reinvest in the wind generation business.\n- Either fix B2C retail unit economics through pricing and churn reduction quickly, or exit before losses compound.\n- Conduct an independent review of the battery project to decide whether to restructure, bring in a specialist partner, or write down the investment.\n\nRisks and next steps:\n- Exiting B2C retail may create reputational and strategic consequences.\n- Restructuring battery storage may require admitting sunk-cost losses.\n- The company needs management capability aligned to each business model, not just to generation."
+    }
+  ]
+}

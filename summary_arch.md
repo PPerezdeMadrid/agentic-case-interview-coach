@@ -98,6 +98,53 @@ flowchart TD
 
 The key difference from the baseline is that the interview is not only driven by one agent. Instead, the judge agent can guide the interviewer agent towards areas that need further exploration.
 
+## 5.1 Agentic 02 Interview Graph
+
+This alternative graph shows the detailed control flow for the agentic interview system, including case retrieval, the interviewer-candidate loop, the judge decision, and the final split between case-performance evaluation and dialog-quality evaluation.
+
+```mermaid
+flowchart TD
+    Start{{Start}} --> RetrieveCase[Retrieve Case]
+
+    RetrieveCase --> InterviewerAgent((Interviewer Agent))
+
+    InterviewerAgent --> CandidateAgent((Candidate Agent))
+    CandidateAgent --> InterviewerAgent
+
+    InterviewerAgent --> JudgeAgent((Judge Agent))
+
+    JudgeAgent --> EnoughEvidence{Enough Evidence?}
+
+    EnoughEvidence -- No --> InterviewerAgent
+
+    EnoughEvidence -- Yes --> EvalCasePerformance((Eval Case Performance))
+    EnoughEvidence -- Yes --> EvalDialogQuality((Eval Dialog Quality))
+
+    EvalCasePerformance --> GiveFeedback((Give Feedback))
+    EvalDialogQuality --> GiveFeedback
+
+    GiveFeedback --> End{{End}}
+```
+
+The process begins with the `Start` node. The system first retrieves the consulting case that will be used in the simulated interview.
+
+After the case is retrieved, the `Interviewer Agent` starts the interaction. This agent is responsible for presenting the case, asking questions, and guiding the interview.
+
+The `Candidate Agent` responds to the interviewer. The interaction between the `Interviewer Agent` and the `Candidate Agent` is iterative: the interviewer asks questions, the candidate answers, and the interviewer continues probing the candidate's reasoning.
+
+The `Judge Agent` observes or receives the information generated during the interview. Its role is to assess whether the conversation contains enough evidence to evaluate the candidate properly.
+
+The decision node `Enough Evidence?` controls whether the interview should continue.
+
+If the answer is `No`, the system returns to the `Interviewer Agent`, which asks further questions to gather more evidence.
+
+If the answer is `Yes`, the system moves to the evaluation stage. Two types of evaluation are performed:
+
+- `Eval Case Performance`: evaluates the candidate's case-solving ability, including structure, business logic, quantitative reasoning, assumptions, and final recommendation.
+- `Eval Dialog Quality`: evaluates the quality of the interaction, including clarity, coherence, responsiveness, repetition, confidence level, and communication issues.
+
+Both evaluation outputs are then combined in the `Give Feedback` node. Finally, the system ends once feedback has been generated.
+
 
 ## 6. Interviewer Agent
 

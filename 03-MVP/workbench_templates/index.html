@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synthetic Scenario Workbench</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260623e') }}">
+  </head>
+  <body data-page="scenario" class="page-scenario">
+    <div class="shell">
+      <aside class="sidebar panel">
+        <div class="panel-head">
+          <span class="panel-tag">Filed Set</span>
+          <h1>Scenario Groups</h1>
+          <p>Switch group, then switch grade without reloading the page.</p>
+        </div>
+        <div class="scenario-list">
+          {% for group in scenario_groups %}
+          <a
+            class="scenario-link {% if group.scenario_group == selected_group %}is-active{% endif %}"
+            href="{{ url_for('index', scenario_group=group.scenario_group, grade=preview.scenario_key if group.scenario_group == selected_group else group.variants[0].scenario_key) }}"
+          >
+            <strong>{{ group.scenario_group }}</strong>
+            <span>{{ group.case_id }}</span>
+            <span>{{ group.variant_count }} variants</span>
+          </a>
+          {% endfor %}
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="panel hero">
+          <div class="panel-head split">
+            <div class="hero-copy">
+              <p class="eyebrow">Synthetic dataset workbench</p>
+              <span class="hero-stamp">Live Evaluation Desk</span>
+              <h2>{{ preview.scenario_id }}</h2>
+              <p>{{ preview.case_summary.prompt_title }}</p>
+            </div>
+            <form id="run-form" class="run-controls">
+              <input type="hidden" name="scenario_group" value="{{ preview.scenario_group }}">
+              <div class="field">
+                <label for="grade-select">Grade / variant</label>
+                <select id="grade-select" name="grade">
+                  {% for option in preview.available_grades %}
+                  <option value="{{ option.scenario_key }}" {% if option.scenario_key == preview.scenario_key %}selected{% endif %}>
+                    {{ option.variant_title }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="field small">
+                <label for="seed-input">Seed</label>
+                <input id="seed-input" name="seed" type="number" placeholder="Optional">
+              </div>
+              <button type="submit">Run scenario</button>
+            </form>
+          </div>
+
+          <div class="hero-grid">
+            <article class="card card-profile">
+              <span class="kicker">Candidate profile</span>
+              <h3 id="variant-title">{{ preview.variant_title }}</h3>
+              <p id="behaviour-description">{{ preview.candidate_profile.behaviour_description }}</p>
+              <div class="pill-row">
+                <span class="pill" id="variant-key">{{ preview.scenario_key }}</span>
+                <span class="pill">Expected overall {{ preview.expected_overall }}</span>
+              </div>
+            </article>
+            <article class="card card-case">
+              <span class="kicker">Case prompt</span>
+              <p id="case-prompt">{{ preview.case_summary.prompt_content }}</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="layout">
+          <article class="panel panel-rules">
+            <div class="panel-head">
+              <span class="panel-tag">Operating Notes</span>
+              <h3>Behaviour Rules</h3>
+            </div>
+            <ul id="behaviour-rules" class="rule-list">
+              {% for rule in preview.candidate_profile.behavioural_rules %}
+              <li>{{ rule }}</li>
+              {% endfor %}
+            </ul>
+          </article>
+
+          <article class="panel panel-compare">
+            <div class="panel-head">
+              <span class="panel-tag">Score Grid</span>
+              <h3>Comparison Preview</h3>
+            </div>
+            <div class="comparison-summary">
+              <div class="stat">
+                <span class="stat-label">Primary issues</span>
+                <strong id="primary-issues">{{ preview.primary_issues|join(', ') if preview.primary_issues else 'None' }}</strong>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Scenario key</span>
+                <strong id="scenario-key">{{ preview.scenario_key }}</strong>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Expected</th>
+                    <th>Rationale</th>
+                  </tr>
+                </thead>
+                <tbody id="rubric-body">
+                  {% for row in preview.expected_scores.rubric %}
+                  <tr>
+                    <td>{{ row.dimension }}</td>
+                    <td>{{ row.expected }}</td>
+                    <td>{{ row.rationale }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel panel-interaction">
+          <div class="panel-head">
+            <span class="panel-tag">Dialogue Layer</span>
+            <h3>Interaction Quality</h3>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>Expected</th>
+                  <th>Rationale</th>
+                </tr>
+              </thead>
+              <tbody id="interaction-body">
+                {% for row in preview.expected_scores.case_interaction_quality %}
+                <tr>
+                  <td>{{ row.dimension }}</td>
+                  <td>{{ row.expected }}</td>
+                  <td>{{ row.rationale }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel panel-runs">
+          <div class="panel-head">
+            <span class="panel-tag">Archive</span>
+            <h3>Recent Runs</h3>
+          </div>
+          <div class="run-list">
+            {% for run in recent_runs %}
+            <a class="run-item" href="{{ url_for('get_run', run_id=run.run_id) }}">
+              <strong>{{ run.run_id }}</strong>
+              <span>{{ run.scenario_key }}</span>
+              <span>actual {{ run.final_score }} / expected {{ run.expected_overall or 0 }}</span>
+            </a>
+            {% else %}
+            <p class="empty">No runs yet.</p>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      window.__WORKBENCH_STATE__ = {{ {
+        "scenarioGroup": preview.scenario_group,
+        "selectedGrade": preview.scenario_key
+      }|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='app.js', v='20260623e') }}"></script>
+  </body>
+</html>

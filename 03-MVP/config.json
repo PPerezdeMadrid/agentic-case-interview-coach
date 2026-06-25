@@ -1,0 +1,18 @@
+{
+  "paths": {
+    "scenarios_dir": "scenarios",
+    "case_dirs": [
+      "synthetic-dataset",
+      "database/harvard_cases",
+      "database/duke_cases",
+      "database/agsm_cases"
+    ],
+    "rubric_path": "scenarios/rubric/rubric.json",
+    "case_metadata_path": "database/case_metadata.json"
+  },
+  "runtime_defaults": {
+    "default_rubric_id": "default_consulting_rubric",
+    "default_max_judge_rounds": 2,
+    "rounds_till_judge": 3
+  }
+}

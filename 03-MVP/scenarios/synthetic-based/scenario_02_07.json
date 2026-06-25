@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_02_baluarte",
+  "case_id": "02-football-team",
+  "candidate_profile": {
+    "id": "candidate_02_07",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You appear polished and structured, but your interaction quality is poor because you repeatedly introduce unsupported details, invented numbers, or external business context that the case does not provide. Your answers sound plausible, but they are not tightly grounded in the actual case materials.",
+      "behavioural_rules": [
+        "Open the case well and use a strong profitability structure.",
+        "Reach the correct high-level diagnosis, solve the math, and give the right final recommendation.",
+        "Frequently add unsupported assumptions, invented specifics, or external facts as if they were part of the case.",
+        "Do not explicitly flag many of these additions as assumptions.",
+        "Stay concise and generally responsive to interviewer prompts.",
+        "The final recommendation should still broadly restructure the wage bill, monetize a cantera player, reconsider naming rights, and build a promotion plan."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly and frames the problem well."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear profitability structure and separates the main issues effectively."
+        },
+        "case_math_answer": {
+          "expected": 4,
+          "rationale": "The candidate still lands on the correct math answer even though parts of the supporting narrative are not well grounded."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation is directionally strong and actionable, even though some supporting details are unsupported."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through analysis."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate reaches the right broad conclusions, but unsupported additions weaken the evidentiary quality of the analysis."
+        },
+        "overall_communication": {
+          "expected": 3,
+          "rationale": "The candidate sounds polished, but credibility is reduced by claims that are not properly grounded in the case."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "The candidate explains ideas clearly and efficiently."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts and adjusts the line of analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 1,
+          "rationale": "The candidate repeatedly introduces invented facts, unsupported assumptions, or external context without clear justification."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate expresses conclusions with confidence that matches their stated reasoning, even if some of that reasoning is not well grounded."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "The candidate maintains a strong and logically connected reasoning thread across the interview."
+        }
+      }
+    }
+  }
+}

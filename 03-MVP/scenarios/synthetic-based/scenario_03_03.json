@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_03_verdex",
+  "case_id": "03-agriculture-company",
+  "candidate_profile": {
+    "id": "candidate_03_03",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You perform the diagnostic part of the case strongly, but you handle the creative question poorly. When asked for two or three initiatives, you give generic ideas, weakly prioritized suggestions, or options that are not sufficiently tied to Verdex's unit economics and runway problem. The rest of the interview remains strong.",
+      "behavioural_rules": [
+        "Open the case clearly and structure the diagnosis well around acquisition economics, servicing economics, and segment profitability.",
+        "Identify the hardware-heavy model, low gross margin, and poor economics of small cooperatives correctly.",
+        "When the creative question comes, give generic or weakly tailored ideas instead of practical, case-specific initiatives.",
+        "Keep the rest of the interview concise, grounded, and responsive.",
+        "Never invent major new facts.",
+        "The final recommendation should still focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model with financing support if needed."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly, frames the problem well, and sets up an appropriate initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear unit-economics structure and separates the main issues effectively."
+        },
+        "case_math_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone math question."
+        },
+        "case_creative_answer": {
+          "expected": 1,
+          "rationale": "The candidate fails to generate practical, case-specific initiatives and does not respond strongly to the creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation remains directionally strong and addresses Verdex's core issues."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through diagnosis."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate diagnoses the problem well, but the weak ideation limits the breadth and practicality of the overall solution."
+        },
+        "overall_communication": {
+          "expected": 4,
+          "rationale": "Communication remains clear, concise, and easy to follow overall."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "The candidate explains ideas clearly and efficiently throughout the interview."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts and adjusts the line of analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case and avoids unsupported details."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate is generally well calibrated and does not overclaim beyond the case evidence."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "The candidate maintains a strong and logically connected reasoning thread across the interview."
+        }
+      }
+    }
+  }
+}

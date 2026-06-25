@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_02_baluarte",
+  "case_id": "02-football-team",
+  "candidate_profile": {
+    "id": "candidate_02_09",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You sound good at the turn level, but your interaction quality is poor because the conversation lacks a coherent through-line. Your answers are individually plausible, yet they do not build consistently on prior reasoning, and the discussion feels fragmented rather than cumulative.",
+      "behavioural_rules": [
+        "Open the case well and use a strong initial profitability structure.",
+        "Give answers that sound locally sensible and stay broadly within the case.",
+        "Solve the math correctly when asked and give the right broad recommendation.",
+        "Allow the reasoning across turns to become fragmented, with weak links between earlier and later points.",
+        "Stay generally responsive and grounded in the case materials.",
+        "The final recommendation should still broadly restructure the wage bill, monetize a cantera player, reconsider naming rights, and build a promotion plan."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly, frames the problem well, and sets up an appropriate initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate initially presents a strong structure and covers the main business issues."
+        },
+        "case_math_answer": {
+          "expected": 4,
+          "rationale": "The candidate correctly solves the wage-bill calculation and interprets it properly."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation remains directionally strong and addresses the right business issues."
+        },
+        "overall_structure": {
+          "expected": 3,
+          "rationale": "The candidate starts with a good structure, but weak coherence across turns reduces the overall sense of a well-integrated case progression."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate touches the right issues, but fragmented reasoning across the conversation weakens the overall analytical flow."
+        },
+        "overall_communication": {
+          "expected": 3,
+          "rationale": "The candidate can sound clear in individual responses, but the conversation as a whole lacks a strong cumulative logic."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "The candidate explains ideas clearly and efficiently at the turn level."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts and generally adapts when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case and avoids unsupported details."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate expresses conclusions with confidence that broadly matches the evidence."
+        },
+        "multi_turn_coherence": {
+          "expected": 1,
+          "rationale": "The candidate’s answers do not build consistently on earlier reasoning, so the interview feels fragmented rather than logically cumulative."
+        }
+      }
+    }
+  }
+}

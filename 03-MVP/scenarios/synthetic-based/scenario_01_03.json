@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_01_solventus",
+  "case_id": "01-energy-company",
+  "candidate_profile": {
+    "id": "candidate_03",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You perform the full case extremely well until the end: you open clearly, structure the problem cleanly, separate the three business units correctly, stay grounded in the case facts, follow interviewer cues closely, and communicate with confidence and concision. However, your final recommendation is weak: instead of giving a decisive, prioritized answer, you become vague, hedge too much, and fail to translate your analysis into a specific action plan for the client.",
+      "behavioural_rules": [
+        "Start with a clear and professional opening that restates the problem, clarifies the objective, and sets up a sensible approach.",
+        "Use a clear profitability structure and separate analysis by business unit throughout the case.",
+        "Never invent data or facts not present in the case materials.",
+        "If the interviewer redirects you, adjust immediately.",
+        "Keep answers concise and avoid repetition.",
+        "In the final recommendation, do not give a crisp, prioritized action plan; instead, sound hesitant, generic, and non-committal despite having done strong prior analysis."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly, frames the problem well, and sets up an appropriate initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear profitability structure and correctly separates the analysis across the three business units."
+        },
+        "case_math_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario includes quantitative evidence, but it does not require a standalone math calculation."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
+        },
+        "final_recommendation": {
+          "expected": 1,
+          "rationale": "Despite strong prior analysis, the candidate fails to convert the diagnosis into a clear, specific, and prioritized recommendation for the client."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through analysis."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate diagnoses the problem well, but the failure to land on a decisive recommendation limits the overall quality of the problem-solving outcome."
+        },
+        "overall_communication": {
+          "expected": 3,
+          "rationale": "Communication is strong for most of the interview, but the hesitant and vague ending weakens the final impression."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 3,
+          "rationale": "The candidate is clear and concise for most of the interview, but the final recommendation becomes less crisp and more hesitant."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to interviewer prompts, incorporates new information quickly, and adjusts the line of analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case, avoids inventing data or external context, and keeps any implied assumptions controlled."
+        },
+        "confidence_calibration": {
+          "expected": 3,
+          "rationale": "The candidate is generally well calibrated, but becomes overly cautious in the final recommendation despite having enough evidence to be more decisive."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "The candidate maintains a strong and logically connected reasoning thread across the interview, even though the final recommendation is weak."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "case_content": [
+    {
+      "block_id": "verdex_ai_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability."
+    },
+    {
+      "block_id": "verdex_ai_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected opening approach:\n- Use a profitability framework with emphasis on unit economics.\n- Separate customer acquisition economics from customer servicing economics.\n- Test whether growth is improving margins or worsening cash burn.\n\nProvide upon request:\n- The company charges an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly.\n- The company has about 14 months of runway remaining.\n\nStrong candidates should question why an AI business has such weak margins and whether the operating model is more hardware-heavy than it appears."
+    },
+    {
+      "block_id": "verdex_ai_data_001",
+      "block_type": "data",
+      "title": "Data - Unit Economics",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Key facts:\n- Current gross margin: approximately 18%\n- Customer base: 340 agricultural cooperatives\n- Revenue growth: 60% per year for the past two years\n- Customer acquisition cost payback: 38 months\n- Remaining runway: approximately 14 months\n\nAdditional operating context:\n- The product requires physical field sensors, technician installation, maintenance visits, and replacement sensors.\n- Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller olive and vineyard groups in places like Candeleda and inland Castilla-La Mancha.\n- Large cooperatives are materially more profitable than small ones because fixed onboarding and installation costs are spread across more hectares.\n- Small cooperatives are loss-making on a per-account basis.\n- A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital."
+    },
+    {
+      "block_id": "verdex_ai_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Root Cause",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "A strong candidate should conclude that Verdex AI has a structural unit economics problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale.\n\nLow pricing, high service costs, and long CAC payback mean growth destroys cash instead of creating operating leverage. The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue.\n\nThe key insight is that faster growth makes losses worse because the company must spend cash upfront on hardware and acquisition well before recovering value through recurring revenue."
+    },
+    {
+      "block_id": "verdex_ai_creative_001",
+      "block_type": "creative",
+      "title": "Creative Question - Near-Term Unit Economics Fixes",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?"
+    },
+    {
+      "block_id": "verdex_ai_guidance_creative_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Creative Question",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Strong answers should propose practical, case-specific ideas such as:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n- Shift sales effort toward larger cooperatives with better payback economics.\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, or propose ideas that require large upfront investment before cash burn improves."
+    },
+    {
+      "block_id": "verdex_ai_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 1,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "verdex_ai_final_recommendation_002",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation - Expected Answer",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 1,
+      "content": "Expected answer:\n- Stop or sharply limit acquisition of small, unprofitable cooperatives.\n- Focus sales on larger accounts with better unit economics.\n- Raise prices or separate hardware and installation fees from the recurring software contract.\n- Prioritize the software-only satellite model as the structural fix, supported by bridge financing or a strategic partner if needed.\n\nRisks and next steps:\n- Price increases may slow growth further in the short term.\n- Pausing certain segments may hurt top-line optics but improve survival odds.\n- Management must act within 6 months because the runway constraint is material."
+    }
+  ]
+}

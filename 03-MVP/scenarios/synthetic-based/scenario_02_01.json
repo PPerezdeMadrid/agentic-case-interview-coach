@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_02_baluarte",
+  "case_id": "02-football-team",
+  "candidate_profile": {
+    "id": "candidate_02_01",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You have a weak case opening: you start too quickly without a clean recap of the situation, without clarifying the objective, and without laying out a proper initial structure, so the opening feels abrupt and underdeveloped. Immediately after that weak start, you recover and perform the rest of the interview very strongly: you structure the analysis well, diagnose the revenue shock and cost mismatch correctly, solve the math accurately, and give a crisp final recommendation.",
+      "behavioural_rules": [
+        "During the opening, do not restate the situation clearly, do not clarify the objective, and do not lay out a framework before diving in.",
+        "From the second response onward, structure the case clearly around revenue streams, cost base, and immediate versus longer-term levers.",
+        "Solve the wage-reduction math accurately and explain its business meaning.",
+        "Never invent data or facts not present in the case materials.",
+        "If the interviewer redirects you, adjust immediately.",
+        "The final recommendation should restructure the wage bill, monetize at least one cantera player, reconsider naming rights, and build a credible promotion plan."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 1,
+          "rationale": "The candidate opens abruptly, without summarizing the problem, clarifying the objective, or setting an initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "After the weak opening, the candidate builds a clear profitability structure that separates revenue streams, cost mismatch, and timing of levers."
+        },
+        "case_math_answer": {
+          "expected": 4,
+          "rationale": "The candidate correctly calculates the required EUR16.25M wage reduction and explains what it implies about the cost base."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone creative prompt."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation is specific, actionable, and grounded in the club's broadcasting shock, wage bill problem, and asset options."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "Despite the poor start, the candidate structures the core analysis clearly and consistently for the remainder of the case."
+        },
+        "overall_problem_solving": {
+          "expected": 3,
+          "rationale": "The candidate identifies the main drivers of the decline and the right levers, but the weak opening initially limits the quality of the problem framing."
+        },
+        "overall_communication": {
+          "expected": 4,
+          "rationale": "Communication is concise, responsive, and easy to follow overall, although the first response is noticeably weak."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "After the weak first response, the candidate communicates in a crisp and efficient way with little filler or repetition."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts, incorporates new information quickly, and adjusts the analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case and avoids inventing unsupported details."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate shows strong but disciplined confidence, making firm conclusions when supported by the evidence."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "Despite the abrupt opening, the rest of the interview follows a strong and logically connected reasoning thread."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "scenario_id": "scenario_01_solventus",
+  "case_id": "01-energy-company",
+  "candidate_profile": {
+    "id": "candidate_02",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You have a weak case structure: after hearing the prompt, you do not organize the problem cleanly, you fail to lay out a proper framework, and you move into the analysis in a somewhat scattered way. Despite that structural weakness, you perform the rest of the interview extremely well: you identify the right issues, use only facts provided in the case, follow interviewer cues closely, stay concise, adapt smoothly to new information, and close with a crisp final recommendation.",
+      "behavioural_rules": [
+        "Do not present a clean, explicit framework or structured issue tree early in the case.",
+        "Your analysis should initially feel somewhat unstructured, even if you eventually touch the right topics.",
+        "Despite the weak structure, identify the correct business issues and conclusions once the discussion progresses.",
+        "Never invent data or facts not present in the case materials.",
+        "If the interviewer redirects you, adjust immediately.",
+        "Keep answers concise and avoid repetition.",
+        "The final recommendation should protect wind generation, fix or exit B2C retail, and call for an independent review of battery storage."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens appropriately, understanding the prompt and engaging the case without the opening weakness seen in other variants."
+        },
+        "case_structure": {
+          "expected": 1,
+          "rationale": "The candidate fails to organize the problem into a clear framework and approaches the case in a scattered, weakly structured way."
+        },
+        "case_math_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not require a distinct quantitative calculation."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation is specific, actionable, and grounded in the business-unit diagnosis provided by the case."
+        },
+        "overall_structure": {
+          "expected": 3,
+          "rationale": "The candidate's weak case structure materially hurts the organization of the interview, even though the later reasoning becomes more understandable."
+        },
+        "overall_problem_solving": {
+          "expected": 4,
+          "rationale": "Despite the poor structure, the candidate identifies the main drivers of profitability decline and reaches the correct substantive conclusions."
+        },
+        "overall_communication": {
+          "expected": 4,
+          "rationale": "Communication remains concise, responsive, and easy to follow at the turn level, even though the higher-level structure is weak."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 4,
+          "rationale": "The candidate communicates crisply and efficiently, with little filler or repetition, even if the overall case structure is weak."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to interviewer prompts, incorporates new information quickly, and adjusts the line of analysis smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case, avoids inventing data or external context, and keeps any implied assumptions controlled."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate shows strong but disciplined confidence, making firm conclusions when supported by the evidence and not overclaiming beyond what the case establishes."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "Although the explicit structure is weak, the candidate still maintains a strong and logically connected discussion across turns once the interview progresses."
+        }
+      }
+    }
+  }
+}

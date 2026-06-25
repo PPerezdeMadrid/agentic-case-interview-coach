@@ -1,0 +1,78 @@
+{
+  "scenario_id": "scenario_03_verdex",
+  "case_id": "03-agriculture-company",
+  "candidate_profile": {
+    "id": "candidate_03_05",
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You solve the case correctly, but your communication quality is poor because your answers are rambling, repetitive, and inefficient. Even though your underlying analysis is strong, you frequently over-explain simple points and make it harder than necessary for the interviewer to follow your reasoning.",
+      "behavioural_rules": [
+        "Open the case well and use a strong unit-economics structure.",
+        "Reach the correct diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
+        "Be verbose, repetitive, and less efficient than necessary in how you explain ideas.",
+        "Do not invent data or facts not present in the case materials.",
+        "Follow interviewer cues and adjust when redirected.",
+        "The final recommendation should still focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model with financing support if needed."
+      ]
+    },
+    "expected_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly and frames the problem well."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear unit-economics structure and separates the main issues effectively."
+        },
+        "case_math_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not include a standalone math question."
+        },
+        "case_creative_answer": {
+          "expected": 4,
+          "rationale": "The candidate proposes practical, case-specific initiatives that improve near-term economics while preserving the best customers."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation is specific, actionable, and grounded in Verdex's main issues."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through analysis."
+        },
+        "overall_problem_solving": {
+          "expected": 4,
+          "rationale": "The candidate identifies the main drivers of the losses and reaches the correct substantive conclusions."
+        },
+        "overall_communication": {
+          "expected": 3,
+          "rationale": "The underlying communication logic is sound, but excessive verbosity and repetition reduce the effectiveness of delivery."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 1,
+          "rationale": "The candidate is repeatedly verbose, inefficient, and somewhat repetitive, making the reasoning harder to follow than necessary."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate still responds directly to prompts and adjusts smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate stays tightly anchored to the facts provided in the case and avoids inventing unsupported details."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate expresses conclusions with confidence that matches the evidence and does not overclaim beyond the case."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "Despite poor concision, the candidate maintains a strong and logically connected reasoning thread across the interview."
+        }
+      }
+    }
+  }
+}

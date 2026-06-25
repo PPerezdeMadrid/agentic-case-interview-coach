@@ -1,0 +1,13 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "agentic_mvp": "./agentic_mvp.py:graph",
+    "agentic_02": "./agentic_mvp.py:agentic_02_graph",
+    "baseline": "./baseline.py:graph"
+  },
+  "env": "../../../.env",
+  "python_version": "3.11",
+  "dependencies": [
+    "."
+  ]
+}

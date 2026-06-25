@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Run {{ run.run_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260623f') }}">
+  </head>
+  <body class="page-run">
+    <div class="run-shell">
+      <header class="panel hero">
+        <div class="panel-head split">
+          <div class="hero-copy">
+            <p class="eyebrow">Run summary</p>
+            <span class="hero-stamp">Trace Review</span>
+            <h1>{{ run.run_id }}</h1>
+            <p>{{ run.scenario_snapshot.scenario_key }} • {{ run.scenario_snapshot.variant_title }}</p>
+          </div>
+          <div class="pill-row">
+            <span class="pill">Actual {{ run.actual_scores.overall }}</span>
+            <span class="pill">Expected {{ run.comparison_result.expected_overall }}</span>
+            <span class="pill">{{ run.comparison_result.alignment }}</span>
+            <a class="button-link" href="{{ url_for('index', scenario_group=run.scenario_snapshot.scenario_group, grade=run.scenario_snapshot.scenario_key) }}">Back to scenarios</a>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel panel-graph">
+        <div class="panel-head">
+          <span class="panel-tag">Graph View</span>
+          <h2>Execution Map</h2>
+        </div>
+        <div class="graph-board">
+          <div class="graph-legend">
+            <span class="graph-legend-item"><span class="legend-dot legend-dot-active"></span>Visited in this run</span>
+            <span class="graph-legend-item"><span class="legend-dot legend-dot-idle"></span>Available route</span>
+            <span class="graph-legend-item"><span class="legend-line legend-line-active"></span>Actual path</span>
+          </div>
+
+          <div class="graph-structure">
+            <div class="graph-structure-title">Graph structure</div>
+            <div class="graph-lane">
+              {% for node in run.graph_view.nodes if node.id in ['start', 'interviewer', 'candidate', 'judge', 'end'] %}
+              <div class="graph-box {% if node.is_visited %}is-visited{% endif %} {% if node.id in ['start', 'end'] %}is-boundary{% endif %}">
+                <span class="graph-box-name">{{ node.label }}</span>
+                {% if node.visits %}
+                <span class="graph-box-meta">
+                  {% if node.visits|length == 1 %}
+                  visited at step {{ node.visits[0] }}
+                  {% else %}
+                  visited at steps {{ node.visits|join(', ') }}
+                  {% endif %}
+                </span>
+                {% endif %}
+              </div>
+              {% if not loop.last %}
+              <div class="graph-arrow">→</div>
+              {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="graph-routes">
+              {% for edge in run.graph_view.edges %}
+              <div class="graph-route {% if edge.is_active %}is-active{% endif %}">
+                <span class="graph-route-nodes">{{ edge.from }} → {{ edge.to }}</span>
+                <span class="graph-route-label">{{ edge.label }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="graph-path">
+            <div class="graph-structure-title">Actual execution path</div>
+            <div class="graph-path-strip">
+              {% for step in run.graph_view.path_steps %}
+              <div class="graph-path-step {% if step.kind == 'boundary' %}is-boundary{% endif %}">
+                <span class="graph-path-index">{{ step.step_index }}</span>
+                <span class="graph-path-label">{{ step.label }}</span>
+              </div>
+              {% if not loop.last %}
+              <div class="graph-path-arrow">→</div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="three-col">
+        <article class="panel panel-transcript">
+          <div class="panel-head">
+            <span class="panel-tag">Conversation Log</span>
+            <h2>Transcript</h2>
+          </div>
+          <ol class="transcript">
+            {% for line in run.transcript %}
+            <li>{{ line }}</li>
+            {% endfor %}
+          </ol>
+        </article>
+
+        <article class="panel panel-timeline">
+          <div class="panel-head">
+            <span class="panel-tag">Node Order</span>
+            <h2>Node Timeline</h2>
+          </div>
+          <div class="timeline">
+            {% for event in run.node_trace %}
+            <div class="timeline-item">
+              <div class="timeline-meta">
+                <strong>#{{ event.step_index }} {{ event.node_name }}</strong>
+                <span>{{ event.action_type }}</span>
+              </div>
+              <p>{{ event.output_text }}</p>
+              {% if event.metadata.interviewer_guidance %}
+              <p class="muted">Private guidance: {{ event.metadata.interviewer_guidance }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </article>
+
+        <article class="panel panel-audit">
+          <div class="panel-head">
+            <span class="panel-tag">Audit Layer</span>
+            <h2>Comparison</h2>
+          </div>
+          <div class="comparison-panel">
+            <div class="stat-grid">
+              <div class="stat">
+                <span class="stat-label">Overall delta</span>
+                <strong>{{ run.comparison_result.overall_delta }}</strong>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Expected issues</span>
+                <strong>{{ run.comparison_result.expected_issues|join(', ') if run.comparison_result.expected_issues else 'None' }}</strong>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Detected issues</span>
+                <strong>{{ run.comparison_result.detected_issues|join(', ') if run.comparison_result.detected_issues else 'None' }}</strong>
+              </div>
+            </div>
+            <p class="muted">{{ run.comparison_result.notes }}</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Expected</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for dimension, value in run.expected_scores.flat.items() %}
+                  <tr>
+                    <td>{{ dimension }}</td>
+                    <td>{{ value }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </body>
+</html>
