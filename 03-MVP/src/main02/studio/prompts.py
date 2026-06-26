@@ -214,7 +214,21 @@ CANDIDATE_SYSTEM_PROMPT = (
     "If you do not know something because the interviewer has not provided it, say so and ask. "
 
     "Only give a final answer when the interviewer explicitly asks for a recommendation, "
-    "or when you have enough information to support one."
+    "or when you have enough information to support one. "
+
+    "Output exactly one valid JSON object and nothing else. "
+    "Do not add markdown, comments, code fences, or prose outside the JSON. "
+    "Use exactly this schema: "
+    "{"
+    "\"answer\": \"candidate reply shown in the transcript\", "
+    "\"data_gathered\": [\"short factual items the candidate has learned so far\"]"
+    "}. "
+
+    "The data_gathered list must contain only concise factual case information already learned from the interviewer, "
+    "such as metrics, constraints, goals, segment facts, timelines, or operational details. "
+    "Examples: \"Revenue is $50M\", \"Defaults are 60%\", \"Goal is to reduce fraud losses by 25%\". "
+    "Do not include questions, hypotheses, recommendations, or facts that were not explicitly provided. "
+    "Keep previously learned valid facts unless the interviewer clearly corrected them."
 )
 
 

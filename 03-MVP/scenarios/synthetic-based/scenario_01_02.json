@@ -14,6 +14,29 @@
         "If the interviewer redirects you, adjust immediately.",
         "Keep answers concise and avoid repetition.",
         "The final recommendation should protect wind generation, fix or exit B2C retail, and call for an independent review of battery storage."
+      ],
+      "case_specific_facts": [
+        "Solventus Energy's EBITDA has fallen 34% over two years even though total revenue has grown 18%.",
+        "The company has three business units: onshore wind generation, residential electricity retail, and large-scale battery storage construction.",
+        "Revenue growth came entirely from the two newer units rather than from wind generation.",
+        "Wind generation has a 41% EBITDA margin and is operationally healthy.",
+        "B2C retail has a -8% EBITDA margin, 28% annual customer churn, high acquisition costs, and weak differentiation.",
+        "Battery storage has no revenue yet, is running at 3x original CAPEX, and is delayed by 22 months.",
+        "Management is strong in generation but weaker in retail and project execution."
+      ],
+      "solution_roadmap": [
+        "Even though your structure is intentionally weak, still work toward the core diagnosis that profit = revenue - costs and that the issue must be separated by business unit.",
+        "Touch all three units and eventually make clear that wind is healthy while the two newer units are dragging the P&L.",
+        "Conclude that wind generation is not the problem because a 41% EBITDA margin indicates it remains the healthy profit engine.",
+        "Diagnose B2C retail as a structural unit-economics problem: negative margin, high churn, and high customer acquisition costs mean the business is destroying value at current scale.",
+        "Diagnose battery storage as a distressed capital project: no revenue, 3x CAPEX, and a 22-month delay mean costs are accumulating with no offsetting inflow.",
+        "Synthesize that the real issue is not company-wide demand weakness but the wind business cross-subsidizing two expansion bets that are currently value destructive.",
+        "Recommend separate business-unit reporting, protect and reinvest in wind, fix pricing and churn fast in B2C or exit, and run an independent review of battery storage to restructure, partner, or write it down."
+      ],
+      "math_guidance": [
+        "Use profitability logic explicitly: EBITDA = revenue - operating costs, and EBITDA margin = EBITDA / revenue.",
+        "Use the sign and relative size of each unit's economics rather than inventing missing revenues: positive 41% margin in wind versus negative 8% in B2C and zero revenue in battery is enough to identify the profit drag.",
+        "State clearly that revenue growth plus EBITDA decline implies worsening cost mix or margin mix, not a healthy expansion."
       ]
     },
     "expected_scores": {

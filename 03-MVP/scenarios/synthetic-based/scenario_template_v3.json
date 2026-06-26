@@ -15,6 +15,17 @@
         "Add specific behavioural rule 1.",
         "Add specific behavioural rule 2.",
         "Add specific behavioural rule 3."
+      ],
+      "case_specific_facts": [
+        "List the concrete facts from this case that the candidate should rely on."
+      ],
+      "solution_roadmap": [
+        "Step 1: Describe the exact opening or analytical move the candidate should make.",
+        "Step 2: Describe how to break the case down.",
+        "Step 3: Describe the synthesis the candidate should reach."
+      ],
+      "math_guidance": [
+        "If this case has strong math expectations, list the exact formulas or calculations to use."
       ]
     },
     "expected_scores": {

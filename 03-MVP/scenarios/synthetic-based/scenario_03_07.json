@@ -13,6 +13,34 @@
         "Do not explicitly flag many of these additions as assumptions.",
         "Stay concise and generally responsive to interviewer prompts.",
         "The final recommendation should still broadly focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model."
+      ],
+      "case_specific_facts": [
+        "Verdex AI is a Spanish agri-tech startup offering AI-powered crop disease detection for olive groves and vineyards in Spain and Portugal.",
+        "Annual recurring revenue has grown 60% per year for the last two years and the company serves 340 agricultural cooperative clients.",
+        "Losses have widened each quarter and burn accelerated in the last two periods despite strong top-line growth.",
+        "The company charges an annual fee per hectare monitored and has about 14 months of runway remaining.",
+        "Current gross margin is only about 18%, which is very low for a business positioned as AI software.",
+        "The product requires physical sensors, technician installation, maintenance visits, and replacement sensors.",
+        "CAC payback is 38 months, so customer acquisition is too slow to recover cash within the available runway.",
+        "Pricing was intentionally set low to penetrate price-sensitive cooperatives, especially smaller ones.",
+        "Large cooperatives are materially more profitable because fixed onboarding and installation costs are spread across more hectares.",
+        "Small cooperatives are loss-making on a per-account basis.",
+        "A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital."
+      ],
+      "solution_roadmap": [
+        "Open the case around profit = revenue - costs with a strict unit-economics lens rather than a generic profitability discussion.",
+        "Separate acquisition economics from servicing economics: diagnose CAC payback on one side and gross margin or delivery cost on the other.",
+        "Identify the structural problem that Verdex looks like a software company commercially but operates like a hardware-enabled field-service business operationally.",
+        "Explain why growth is making losses worse: each new customer requires upfront acquisition, hardware, installation, and servicing cash before recurring revenue pays back.",
+        "Segment customers explicitly and conclude that large cooperatives can work economically while small cooperatives are structurally loss-making on a per-account basis.",
+        "Use the runway constraint to prioritize only ideas that can improve economics within 6 months rather than long-term ideas alone.",
+        "For the creative prompt, propose practical actions such as stopping sales to small cooperatives, unbundling hardware or maintenance fees, setting minimum-acreage or multi-year terms, shifting sales toward larger accounts, and reducing technician routing costs in dense clusters like Candeleda and Talavera.",
+        "Conclude that Verdex must stop scaling the current bad economics, focus on profitable larger customers, recover hardware costs through pricing or contract changes, and use financing or a partner to reach the software-only model."
+      ],
+      "math_guidance": [
+        "There is no standalone case math question, but use unit-economics logic explicitly: low gross margin plus 38-month CAC payback plus 14 months of runway means growth is cash-destructive.",
+        "State clearly that a business with 18% gross margin and hardware-heavy servicing does not have software-like economics.",
+        "Use relative economics rather than invented numbers: larger cooperatives spread fixed onboarding costs better, while small cooperatives are loss-making per account."
       ]
     },
     "expected_scores": {

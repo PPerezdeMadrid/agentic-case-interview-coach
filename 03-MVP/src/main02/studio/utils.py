@@ -43,6 +43,21 @@ def load_json_object(text: str) -> dict:
         return {}
 
 
+def normalize_string_list(values: object) -> list[str]:
+    if not isinstance(values, list):
+        return []
+
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for item in values:
+        value = str(item).strip()
+        if not value or value in seen:
+            continue
+        normalized.append(value)
+        seen.add(value)
+    return normalized
+
+
 def format_case_blocks(blocks: list[dict]) -> str:
     if not blocks:
         return "None."
@@ -99,6 +114,9 @@ def format_candidate_persona(candidate_profile: dict) -> str:
     role = str(persona.get("role", "")).strip()
     description = str(persona.get("behaviour_description", "")).strip()
     rules = persona.get("behavioural_rules", [])
+    case_facts = persona.get("case_specific_facts", [])
+    roadmap = persona.get("solution_roadmap", [])
+    math_guidance = persona.get("math_guidance", [])
 
     sections = []
     if role:
@@ -109,6 +127,22 @@ def format_candidate_persona(candidate_profile: dict) -> str:
         cleaned_rules = [f"- {str(rule).strip()}" for rule in rules if str(rule).strip()]
         if cleaned_rules:
             sections.append("Behavioural rules:\n" + "\n".join(cleaned_rules))
+    if isinstance(case_facts, list):
+        cleaned_facts = [f"- {str(fact).strip()}" for fact in case_facts if str(fact).strip()]
+        if cleaned_facts:
+            sections.append("Case-specific facts to use:\n" + "\n".join(cleaned_facts))
+    if isinstance(roadmap, list):
+        cleaned_steps = [
+            f"{index}. {str(step).strip()}"
+            for index, step in enumerate(roadmap, start=1)
+            if str(step).strip()
+        ]
+        if cleaned_steps:
+            sections.append("Case-solving roadmap:\n" + "\n".join(cleaned_steps))
+    if isinstance(math_guidance, list):
+        cleaned_math = [f"- {str(item).strip()}" for item in math_guidance if str(item).strip()]
+        if cleaned_math:
+            sections.append("Math guidance:\n" + "\n".join(cleaned_math))
     return "\n\n".join(sections) if sections else "No scenario persona provided."
 
 

@@ -2,6 +2,7 @@ import json
 from typing import Literal
 
 from langchain_core.messages import SystemMessage
+# from langgraph.checkpoint.memory import InMemorySaver --> Handled automatically by LangGraph API
 from langgraph.graph import END, START, StateGraph
 
 from adapter import (
@@ -38,6 +39,7 @@ from utils import (
     format_rubric,
     load_json_object,
     merge_focus_areas,
+    normalize_string_list,
     normalize_eval_payload,
     normalize_focus_areas,
     parse_interviewer_output,
@@ -45,6 +47,7 @@ from utils import (
 )
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
+DEFAULT_THREAD_ID = "main02_default"
 
 CASE_PERFORMANCE_FIELDS = [
     "case_opening",
@@ -69,28 +72,6 @@ QUALITY_DIALOG_FIELDS = [
 def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
     visible_prefixes = ("Interviewer:", "Interviewer reveal:", "Candidate:")
     return [line for line in transcript if line.startswith(visible_prefixes)]
-
-
-def get_candidate_gathered_data(
-    transcript: list[str],
-    existing_data: list[str],
-) -> list[str]:
-    gathered_data = list(existing_data)
-    seen = set(existing_data)
-
-    for line in transcript:
-        if line.startswith("Interviewer reveal:"):
-            item = line.removeprefix("Interviewer reveal:").strip()
-        elif line.startswith("Interviewer:"):
-            item = line.removeprefix("Interviewer:").strip()
-        else:
-            continue
-
-        if item and item not in seen:
-            gathered_data.append(item)
-            seen.add(item)
-
-    return gathered_data
 
 
 
@@ -240,9 +221,8 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     case_prompt = state.get("case_prompt", "")
     candidate_profile = state.get("candidate_profile", {})
     transcript = state.get("transcript", [])
-    data_gathered = state.get("data_gathered", [])
+    data_gathered = normalize_string_list(state.get("data_gathered", []))
     visible_transcript = get_candidate_visible_transcript(transcript)
-    updated_data_gathered = get_candidate_gathered_data(visible_transcript, data_gathered)
 
     messages = [
         SystemMessage(
@@ -254,15 +234,22 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
                 + format_candidate_persona(candidate_profile if isinstance(candidate_profile, dict) else {})
                 + "\n\nThis is the only conversation you can see:\n"
                 + ("\n".join(visible_transcript) if visible_transcript else "No previous messages.")
-                + "\n\nInformation you have already gathered from the interviewer:\n"
-                + ("\n".join(updated_data_gathered) if updated_data_gathered else "None yet.")
-                + "\n\nAnswer only as the candidate."
+                + "\n\nCurrent factual data_gathered list:\n"
+                + ("\n".join(data_gathered) if data_gathered else "None yet.")
+                + "\n\nUpdate data_gathered so it contains the factual case information you have learned so far."
             )
         ),
     ]
 
     response = llm_server.invoke(messages)
-    answer = strip_thinking(response.content)
+    payload = load_json_object(response.content)
+    answer = str(payload.get("answer", "")).strip()
+    updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
+
+    if not answer:
+        answer = strip_thinking(response.content)
+        updated_data_gathered = data_gathered
+
     transcript = transcript + [f"Candidate: {answer}"]
 
     return {
@@ -450,6 +437,14 @@ def route_after_judge_agentic_02(
     return "interviewer"
 
 
+def build_graph_config(thread_id: str | None = None) -> dict:
+    return {
+        "configurable": {
+            "thread_id": thread_id or DEFAULT_THREAD_ID,
+        }
+    }
+
+
 builder = StateGraph(AgenticGraphState)
 builder.add_node("load_scenario", load_scenario_node)
 builder.add_node("interviewer", interviewer_node)
@@ -481,5 +476,8 @@ builder.add_conditional_edges(
 )
 builder.add_edge(["eval_case_performance", "eval_dialog_quality"], "give_feedback")
 builder.add_edge("give_feedback", END)
+
+# checkpointer = InMemorySaver()
+# graph = builder.compile(checkpointer=checkpointer)
 
 graph = builder.compile()
