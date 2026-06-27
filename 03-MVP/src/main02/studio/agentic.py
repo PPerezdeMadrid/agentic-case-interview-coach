@@ -2,8 +2,9 @@ import json
 from typing import Literal
 
 from langchain_core.messages import SystemMessage
-# from langgraph.checkpoint.memory import InMemorySaver --> Handled automatically by LangGraph API
+from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
+from typing_extensions import TypedDict
 
 from adapter import (
     get_candidate_visible_blocks,
@@ -20,6 +21,7 @@ from loader import (
     load_selected_simulation_bundle,
 )
 from llm_server import llm_server
+from persistence import make_persist_run_node, resolve_thread_id
 from prompts import (
     CANDIDATE_SYSTEM_PROMPT,
     CASE_EVAL_SYSTEM_PROMPT,
@@ -38,7 +40,6 @@ from utils import (
     format_full_case_data,
     format_rubric,
     load_json_object,
-    merge_focus_areas,
     normalize_string_list,
     normalize_eval_payload,
     normalize_focus_areas,
@@ -47,6 +48,7 @@ from utils import (
 )
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
+MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = 4
 DEFAULT_THREAD_ID = "main02_default"
 
 CASE_PERFORMANCE_FIELDS = [
@@ -67,6 +69,10 @@ QUALITY_DIALOG_FIELDS = [
     "confidence_calibration",
     "multi_turn_coherence",
 ]
+
+
+class GraphConfig(TypedDict, total=False):
+    thread_id: str
 
 
 def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
@@ -102,6 +108,7 @@ def build_initial_interview_state(
         "case_performance": {},
         "quality_dialog": {},
         "data_gathered": [],
+        "thread_id": DEFAULT_THREAD_ID,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
         "knowledge_base": knowledge_base,
@@ -110,9 +117,13 @@ def build_initial_interview_state(
     }
 
 
-def load_scenario_node(state: AgenticGraphState) -> AgenticGraphState:
+def load_scenario_node(
+    state: AgenticGraphState,
+    config: RunnableConfig | None = None,
+) -> AgenticGraphState:
+    thread_id = resolve_thread_id(state, config)
     if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
-        return {}
+        return {"thread_id": thread_id}
 
     bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
     scenario = bundle["scenario"]
@@ -120,6 +131,8 @@ def load_scenario_node(state: AgenticGraphState) -> AgenticGraphState:
     knowledge_base = build_case_knowledge_base(case_data)
 
     return {
+        "thread_id": thread_id,
+        "scenario_ref": str(state.get("scenario_ref") or scenario.get("scenario_id", "")),
         "case_prompt": extract_case_prompt(case_data),
         "candidate_profile": scenario.get("candidate_profile", {}),
         "case_guidance": extract_case_guidance(case_data),
@@ -204,9 +217,10 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
     transcript_label = "Interviewer reveal" if interviewer_action == "reveal" else "Interviewer"
     transcript = transcript + [f"{transcript_label}: {content}"]
 
+    next_turn_index = turn_index + 1
     return {
-        "enough_evidence": ready_for_judge,
-        "turn_index": turn_index + 1,
+        "enough_evidence": ready_for_judge or next_turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
+        "turn_index": next_turn_index,
         "transcript": transcript,
         "retrieved_public_context": [
             str(chunk.get("content", "")).strip() for chunk in public_context if str(chunk.get("content", "")).strip()
@@ -315,14 +329,10 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
         enough_evidence = True
         new_focus_areas = []
 
-    merged_focus_areas = focus_areas if enough_evidence else merge_focus_areas(focus_areas, new_focus_areas)
-    if enough_evidence:
-        merged_focus_areas = []
-
     return {
         "judge_round": judge_round + 1,
         "enough_evidence": enough_evidence,
-        "focus_areas": merged_focus_areas,
+        "focus_areas": None if enough_evidence else new_focus_areas,
     }
 
 
@@ -445,7 +455,7 @@ def build_graph_config(thread_id: str | None = None) -> dict:
     }
 
 
-builder = StateGraph(AgenticGraphState)
+builder = StateGraph(AgenticGraphState, config_schema=GraphConfig)
 builder.add_node("load_scenario", load_scenario_node)
 builder.add_node("interviewer", interviewer_node)
 builder.add_node("candidate", candidate_node)
@@ -453,6 +463,7 @@ builder.add_node("judge", judge_node)
 builder.add_node("eval_case_performance", eval_case_performance_node)
 builder.add_node("eval_dialog_quality", eval_dialog_quality_node)
 builder.add_node("give_feedback", give_feedback_node)
+builder.add_node("persist_run", make_persist_run_node("agentic"))
 
 builder.add_edge(START, "load_scenario")
 builder.add_edge("load_scenario", "interviewer")
@@ -475,9 +486,7 @@ builder.add_conditional_edges(
     },
 )
 builder.add_edge(["eval_case_performance", "eval_dialog_quality"], "give_feedback")
-builder.add_edge("give_feedback", END)
-
-# checkpointer = InMemorySaver()
-# graph = builder.compile(checkpointer=checkpointer)
+builder.add_edge("give_feedback", "persist_run")
+builder.add_edge("persist_run", END)
 
 graph = builder.compile()

@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% macro score_value(value) -%}
+  {{ value if value not in ['', none] else 'missing' }}
+{%- endmacro %}
+
+{% block title %}Run {{ run.run_id }}{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Run Detail</p>
+      <h1>{{ run.run_id }}</h1>
+      <p class="lede">{{ run.graph_name }} • created {{ run.created_at }}</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip">turns {{ run.turn_index }}</span>
+      <span class="chip">judge rounds {{ run.judge_round }}</span>
+      <span class="chip">{{ 'enough evidence' if run.enough_evidence else 'ongoing logic' }}</span>
+    </div>
+  </div>
+  <div class="meta-grid">
+    <div>
+      <strong>Scenario</strong>
+      <p>{{ run.scenario_ref or 'n/a' }}</p>
+    </div>
+    <div>
+      <strong>Thread</strong>
+      <p>{{ run.thread_id }}</p>
+    </div>
+    <div>
+      <strong>Focus Areas</strong>
+      <p>{{ run.focus_areas|join(', ') if run.focus_areas else 'none' }}</p>
+    </div>
+  </div>
+  <div class="prompt-box">
+    <strong>Case Prompt</strong>
+    <p>{{ run.case_prompt or 'No case prompt stored.' }}</p>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Quantitative Evaluation Metrics</p>
+      <h2>Model vs Human Error</h2>
+      {% if run.human_evaluation %}
+      <p class="lede">Human scores are treated as the reference. Numeric metrics exclude missing and <code>not_tested</code> values.</p>
+      {% else %}
+      <p class="lede">No human evaluation available yet. Quantitative error metrics require human scores.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-card"><span>Model vs Human MAE</span><strong>{{ run.metrics.model_vs_human_mae if run.metrics.model_vs_human_mae is not none else 'n/a' }}</strong></div>
+    <div class="metric-card"><span>Exact Match Rate</span><strong>{{ run.metrics.exact_match_rate if run.metrics.exact_match_rate is not none else 'n/a' }}{% if run.metrics.exact_match_rate is not none %}%{% endif %}</strong></div>
+    <div class="metric-card"><span>Off-by-One Rate</span><strong>{{ run.metrics.off_by_one_rate if run.metrics.off_by_one_rate is not none else 'n/a' }}{% if run.metrics.off_by_one_rate is not none %}%{% endif %}</strong></div>
+    <div class="metric-card"><span>Bias / Signed Error</span><strong>{{ run.metrics.signed_error if run.metrics.signed_error is not none else 'n/a' }}</strong></div>
+    <div class="metric-card"><span>Overestimated Dimensions</span><strong>{{ run.metrics.overestimation_count }}</strong></div>
+    <div class="metric-card"><span>Underestimated Dimensions</span><strong>{{ run.metrics.underestimation_count }}</strong></div>
+    <div class="metric-card"><span>Expected vs Human MAE</span><strong>{{ run.metrics.expected_vs_human_mae if run.metrics.expected_vs_human_mae is not none else 'n/a' }}</strong></div>
+    <div class="metric-card"><span>Comparable Dimensions</span><strong>{{ run.metrics.comparable_dimensions }}</strong></div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Score Comparison</p>
+      <h2>Expected vs Model vs Human</h2>
+      <p class="lede">The comparison table uses human scores as the primary reference for evaluation quality.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Section</th>
+          <th>Dimension</th>
+          <th>Expected</th>
+          <th>Model</th>
+          <th>Human</th>
+          <th>Expected vs Model</th>
+          <th>Model vs Human Error</th>
+          <th>Expected vs Human Error</th>
+          <th>Model vs Human Status</th>
+          <th>Expected vs Human Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in run.comparison_rows %}
+        <tr>
+          <td>{{ row.section_label }}</td>
+          <td>{{ row.dimension }}</td>
+          <td>{{ score_value(row.expected_score) }}</td>
+          <td>{{ score_value(row.model_score) }}</td>
+          <td>{{ score_value(row.human_score) }}</td>
+          <td><span class="status status-{{ row.expected_model_status|replace(' ', '-') }}">{{ row.expected_model_status }}</span></td>
+          <td>{{ row.model_human_absolute_error if row.model_human_absolute_error is not none else 'not applicable' }}</td>
+          <td>{{ row.expected_human_absolute_error if row.expected_human_absolute_error is not none else 'not applicable' }}</td>
+          <td><span class="status status-{{ row.model_human_status|replace(' ', '-') }}">{{ row.model_human_status }}</span></td>
+          <td><span class="status status-{{ row.expected_human_status|replace(' ', '-') }}">{{ row.expected_human_status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Human Evaluation</p>
+      <h2>Post-Run Annotation</h2>
+      <p class="lede">Only dimensions missing from the candidate profile appear here. Saving again updates the existing annotation.</p>
+    </div>
+  </div>
+  <form class="human-form" method="post" action="{{ url_for('save_human_evaluation_page', run_id=run.run_id) }}">
+    <div class="form-grid">
+      <label>
+        <span>Evaluator Name</span>
+        <input type="text" name="evaluator_name" value="{{ run.human_evaluation.evaluator_name if run.human_evaluation else '' }}">
+      </label>
+      <label>
+        <span>Overall Human Score</span>
+        <input type="number" name="overall_human_score" min="1" max="4" step="0.1" value="{{ run.human_evaluation.overall_human_score if run.human_evaluation and run.human_evaluation.overall_human_score is not none else '' }}">
+      </label>
+    </div>
+
+    {% for section_name, section_label in [('rubric', 'Case Performance'), ('case_interaction_quality', 'Dialog Quality')] %}
+    {% set annotation_rows = run.annotation_sections[section_name] %}
+    {% if annotation_rows %}
+    <div class="subsection">
+      <h3>{{ section_label }}</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Expected Score</th>
+              <th>Model Score</th>
+              <th>Human Score</th>
+              <th>Human Rationale</th>
+              <th>Optional Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in annotation_rows %}
+            <tr>
+              <td>{{ row.dimension }}</td>
+              <td>{{ score_value(row.expected_score) }}</td>
+              <td>{{ score_value(row.model_score) }}</td>
+              <td>
+                <select name="{{ section_name }}__{{ row.dimension }}__score">
+                  {% for option in ['', '1', '2', '3', '4', 'not_tested'] %}
+                  <option value="{{ option }}" {% if (row.human_score|string) == option %}selected{% endif %}>
+                    {{ option if option else 'missing' }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <textarea name="{{ section_name }}__{{ row.dimension }}__rationale" rows="3">{{ row.human_rationale }}</textarea>
+              </td>
+              <td>
+                <textarea name="{{ section_name }}__{{ row.dimension }}__evidence" rows="3">{{ row.human_evidence }}</textarea>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% if not run.annotation_sections['rubric'] and not run.annotation_sections['case_interaction_quality'] %}
+    <p class="helper">No extra dimensions require human annotation for this run.</p>
+    {% endif %}
+
+    <label class="notes-field">
+      <span>Notes</span>
+      <textarea name="notes" rows="5">{{ run.human_evaluation.notes if run.human_evaluation else '' }}</textarea>
+    </label>
+
+    <div class="form-actions">
+      <button class="button" type="submit">Save Human Evaluation</button>
+      {% if run.human_evaluation %}
+      <p class="helper">Last updated {{ run.human_evaluation.updated_at }}</p>
+      {% endif %}
+    </div>
+  </form>
+</section>
+
+<section class="two-col">
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Transcript</p>
+        <h2>Conversation</h2>
+      </div>
+    </div>
+    <ol class="transcript-chat">
+      {% for line in run.transcript %}
+      {% if not line.startswith('Eval Case Performance: ') and not line.startswith('Eval Dialog Quality: ') and not line.startswith('Give Feedback: ') %}
+      {% set role = "system" %}
+      {% set label = "System" %}
+      {% set content = line %}
+      {% if line.startswith('Interviewer reveal: ') %}
+        {% set role = "reveal" %}
+        {% set label = "Interviewer reveal" %}
+        {% set content = line.removeprefix('Interviewer reveal: ') %}
+      {% elif line.startswith('Interviewer: ') %}
+        {% set role = "interviewer" %}
+        {% set label = "Interviewer" %}
+        {% set content = line.removeprefix('Interviewer: ') %}
+      {% elif line.startswith('Candidate: ') %}
+        {% set role = "candidate" %}
+        {% set label = "Candidate" %}
+        {% set content = line.removeprefix('Candidate: ') %}
+      {% elif line.startswith('Judge: ') %}
+        {% set role = "judge" %}
+        {% set label = "Judge" %}
+        {% set content = line.removeprefix('Judge: ') %}
+      {% endif %}
+      <li class="chat-message chat-message-{{ role }}">
+        <div class="chat-bubble">
+          <span class="chat-label">{{ label }}</span>
+          <p>{{ content }}</p>
+        </div>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ol>
+  </article>
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Final Feedback</p>
+        <h2>Automatic Summary</h2>
+      </div>
+    </div>
+    <div class="markdown-block">
+      <pre>{{ run.final_feedback or 'No final feedback stored.' }}</pre>
+    </div>
+  </article>
+</section>
+{% endblock %}

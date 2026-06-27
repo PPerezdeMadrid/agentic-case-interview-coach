@@ -186,14 +186,6 @@ def normalize_focus_areas(raw_focus_areas: object) -> list[str]:
     return normalized
 
 
-def merge_focus_areas(existing: list[str], new_values: list[str]) -> list[str]:
-    merged = list(existing)
-    for value in new_values:
-        if value not in merged:
-            merged.append(value)
-    return merged
-
-
 def score_value(value: object) -> int | str:
     if isinstance(value, str) and value.strip().lower() == "not_tested":
         return "not_tested"

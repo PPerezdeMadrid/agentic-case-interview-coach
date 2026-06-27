@@ -1,7 +1,8 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "agentic": "./agentic.py:graph"
+    "agentic": "./agentic.py:graph",
+    "baseline": "./baseline.py:graph"
   },
   "env": "../../../.env",
   "python_version": "3.11",
