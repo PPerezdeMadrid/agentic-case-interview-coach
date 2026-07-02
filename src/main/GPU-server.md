@@ -98,3 +98,40 @@ HPC_KEY=sk-Dissertation2026
 squeue -u $USER          # find the jobid
 scancel <jobid>          # free up the GPU
 ```
+
+## 8. Optional second service: socratic fine-tuned interviewer
+
+If you want to keep the main Studio LLM and the fine-tuned question generator
+separate, run `src/interviewer_ft/server.py` as its own GPU-backed service.
+
+Recommended environment on the GPU node:
+
+```bash
+cd agentic-case-interview-coach/src/interviewer_ft
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Run the service:
+
+```bash
+uvicorn server:app --host 0.0.0.0 --port 8008
+```
+
+From your Mac, create a tunnel if needed:
+
+```bash
+ssh -N -L 8008:NODE_HOSTNAME:8008 ppdm1@hypatia.st-andrews.ac.uk
+```
+
+Then enable it in the main project:
+
+```bash
+SOCRATIC_QUESTION_MODE=finetuned
+SOCRATIC_FT_URL=http://localhost:8008
+```
+
+With this setup, the main interviewer still controls the interview loop. The
+GPU service is only used to phrase targeted follow-up questions.
