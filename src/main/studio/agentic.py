@@ -11,8 +11,8 @@ from adapter import (
     get_case_block_by_id,
 )
 from knowledge_base import (
-    build_case_knowledge_base,
-    build_retrieval_query,
+    build_profitability_knowledge_base,
+    build_profitability_retrieval_query,
     format_retrieved_chunks,
     retrieve_knowledge_context,
 )
@@ -92,7 +92,7 @@ def build_initial_interview_state(
     bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
     scenario = bundle["scenario"]
     case_data = bundle["case"]
-    knowledge_base = build_case_knowledge_base(case_data)
+    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
@@ -111,9 +111,8 @@ def build_initial_interview_state(
         "thread_id": DEFAULT_THREAD_ID,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
-        "knowledge_base": knowledge_base,
-        "retrieved_public_context": [],
-        "retrieved_private_context": [],
+        "profitability_knowledge_base": profitability_knowledge_base,
+        "retrieved_profitability_context": [],
     }
 
 
@@ -128,7 +127,7 @@ def load_scenario_node(
     bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
     scenario = bundle["scenario"]
     case_data = bundle["case"]
-    knowledge_base = build_case_knowledge_base(case_data)
+    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "thread_id": thread_id,
@@ -139,9 +138,8 @@ def load_scenario_node(
         "case_data": case_data,
         "case_recommendation": extract_case_recommendation(case_data),
         "rubric_data": bundle["rubric"],
-        "knowledge_base": knowledge_base,
-        "retrieved_public_context": [],
-        "retrieved_private_context": [],
+        "profitability_knowledge_base": profitability_knowledge_base,
+        "retrieved_profitability_context": [],
     }
 
 
@@ -152,7 +150,6 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
     case_data = state.get("case_data", {})
     case_guidance = state.get("case_guidance", "")
     focus_areas = state.get("focus_areas", [])
-    knowledge_base = state.get("knowledge_base", {})
 
     if turn_index == 0 and not transcript:
         content = case_prompt or "Walk me through your approach."
@@ -161,24 +158,9 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
             "enough_evidence": False,
             "turn_index": turn_index + 1,
             "transcript": transcript,
-            "retrieved_public_context": [],
-            "retrieved_private_context": [],
         }
 
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
-    retrieval_query = build_retrieval_query(case_prompt, transcript, focus_areas)
-    public_context = retrieve_knowledge_context(
-        knowledge_base if isinstance(knowledge_base, dict) else {},
-        retrieval_query,
-        top_k=3,
-        visibility="candidate_visible",
-    )
-    private_context = retrieve_knowledge_context(
-        knowledge_base if isinstance(knowledge_base, dict) else {},
-        retrieval_query,
-        top_k=3,
-        visibility="interviewer_only",
-    )
 
     messages = [
         SystemMessage(
@@ -190,12 +172,8 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
                 + ("\n".join(transcript) if transcript else "No previous messages.")
                 + "\n\nCandidate-visible case blocks:\n"
                 + format_case_blocks(visible_blocks)
-                + "\n\nRetrieved candidate-visible context:\n"
-                + format_retrieved_chunks(public_context)
                 + "\n\nHidden case guidance:\n"
                 + (case_guidance or "None.")
-                + "\n\nRetrieved interviewer-only context:\n"
-                + format_retrieved_chunks(private_context)
                 + "\n\nCurrent judge focus areas:\n"
                 + (", ".join(focus_areas) if focus_areas else "None.")
                 + "\n\nDecide the best next interviewer move."
@@ -222,12 +200,6 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
         "enough_evidence": ready_for_judge or next_turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
         "turn_index": next_turn_index,
         "transcript": transcript,
-        "retrieved_public_context": [
-            str(chunk.get("content", "")).strip() for chunk in public_context if str(chunk.get("content", "")).strip()
-        ],
-        "retrieved_private_context": [
-            str(chunk.get("content", "")).strip() for chunk in private_context if str(chunk.get("content", "")).strip()
-        ],
     }
 
 
@@ -276,21 +248,6 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     judge_round = state.get("judge_round", 0)
     transcript = state.get("transcript", [])
     rubric_data = state.get("rubric_data", {})
-    focus_areas = state.get("focus_areas", [])
-    knowledge_base = state.get("knowledge_base", {})
-    retrieval_query = build_retrieval_query(str(state.get("case_prompt", "")), transcript, focus_areas)
-    public_context = retrieve_knowledge_context(
-        knowledge_base if isinstance(knowledge_base, dict) else {},
-        retrieval_query,
-        top_k=4,
-        visibility="candidate_visible",
-    )
-    private_context = retrieve_knowledge_context(
-        knowledge_base if isinstance(knowledge_base, dict) else {},
-        retrieval_query,
-        top_k=4,
-        visibility="interviewer_only",
-    )
 
     messages = [
         SystemMessage(
@@ -306,10 +263,6 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
                 + ("\n".join(transcript) if transcript else "No previous messages.")
                 + "\n\nCase guidance:\n"
                 + str(state.get("case_guidance", "None."))
-                + "\n\nRetrieved candidate-visible context:\n"
-                + format_retrieved_chunks(public_context)
-                + "\n\nRetrieved interviewer-only context:\n"
-                + format_retrieved_chunks(private_context)
                 + "\n\nCase data:\n"
                 + format_full_case_data(state.get("case_data", {}))
                 + "\n\nExpected recommendation:\n"
@@ -336,19 +289,27 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     }
 
 
+# def retrieve_info_node(state: AgenticGraphState) -> AgenticGraphState:
+#     """Placeholder for future profitability-RAG retrieval before evaluation."""
+#     return {
+#         "retrieved_profitability_context": [],
+#     }
+
+
 def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
     rubric_data = state.get("rubric_data", {})
-    retrieval_query = build_retrieval_query(
+    retrieval_query = build_profitability_retrieval_query(
         str(state.get("case_prompt", "")),
         state.get("transcript", []),
-        state.get("focus_areas", []),
+        evaluation_target="case_performance",
+        focus_areas=state.get("focus_areas", []),
     )
-    knowledge_base = state.get("knowledge_base", {})
-    private_context = retrieve_knowledge_context(
-        knowledge_base if isinstance(knowledge_base, dict) else {},
+    profitability_knowledge_base = state.get("profitability_knowledge_base", {})
+    profitability_context = retrieve_knowledge_context(
+        profitability_knowledge_base if isinstance(profitability_knowledge_base, dict) else {},
         retrieval_query,
         top_k=5,
-        visibility="interviewer_only",
+        visibility="all",
     )
     messages = [
         SystemMessage(
@@ -361,8 +322,8 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
                 + "\n".join(state.get("transcript", []))
                 + "\n\nCase guidance:\n"
                 + str(state.get("case_guidance", "None."))
-                + "\n\nRetrieved interviewer-only context:\n"
-                + format_retrieved_chunks(private_context)
+                + "\n\nRetrieved profitability methodology context:\n"
+                + format_retrieved_chunks(profitability_context)
                 + "\n\nCase data:\n"
                 + format_full_case_data(state.get("case_data", {}))
                 + "\n\nExpected recommendation:\n"
@@ -378,6 +339,11 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
 
     return {
         "case_performance": case_performance,
+        "retrieved_profitability_context": [
+            str(chunk.get("content", "")).strip()
+            for chunk in profitability_context
+            if str(chunk.get("content", "")).strip()
+        ],
     }
 
 
@@ -460,6 +426,7 @@ builder.add_node("load_scenario", load_scenario_node)
 builder.add_node("interviewer", interviewer_node)
 builder.add_node("candidate", candidate_node)
 builder.add_node("judge", judge_node)
+# builder.add_node("retrieve_info", retrieve_info_node)
 builder.add_node("eval_case_performance", eval_case_performance_node)
 builder.add_node("eval_dialog_quality", eval_dialog_quality_node)
 builder.add_node("give_feedback", give_feedback_node)
@@ -467,6 +434,8 @@ builder.add_node("persist_run", make_persist_run_node("agentic"))
 
 builder.add_edge(START, "load_scenario")
 builder.add_edge("load_scenario", "interviewer")
+# builder.add_edge("load_scenario", "retrieve_info")
+# builder.add_edge("retrieve_info", "interviewer")
 builder.add_conditional_edges(
     "interviewer",
     route_after_interviewer,

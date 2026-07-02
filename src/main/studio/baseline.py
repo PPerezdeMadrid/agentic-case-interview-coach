@@ -10,6 +10,12 @@ from adapter import (
     get_candidate_visible_blocks,
     get_case_block_by_id,
 )
+from knowledge_base import (
+    build_profitability_knowledge_base,
+    build_profitability_retrieval_query,
+    format_retrieved_chunks,
+    retrieve_knowledge_context,
+)
 from loader import load_selected_simulation_bundle
 from llm_server import llm_server
 from persistence import make_persist_run_node, resolve_thread_id
@@ -76,6 +82,7 @@ def build_initial_baseline_state(
     bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
     scenario = bundle["scenario"]
     case_data = bundle["case"]
+    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
@@ -94,6 +101,8 @@ def build_initial_baseline_state(
         "thread_id": DEFAULT_THREAD_ID,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
+        "profitability_knowledge_base": profitability_knowledge_base,
+        "retrieved_profitability_context": [],
     }
 
 
@@ -108,6 +117,7 @@ def load_scenario_node(
     bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
     scenario = bundle["scenario"]
     case_data = bundle["case"]
+    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "thread_id": thread_id,
@@ -118,6 +128,8 @@ def load_scenario_node(
         "case_data": case_data,
         "case_recommendation": extract_case_recommendation(case_data),
         "rubric_data": bundle["rubric"],
+        "profitability_knowledge_base": profitability_knowledge_base,
+        "retrieved_profitability_context": [],
     }
 
 
@@ -179,6 +191,19 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 
 def evaluate_case_performance(state: AgenticGraphState) -> dict:
     rubric_data = state.get("rubric_data", {})
+    retrieval_query = build_profitability_retrieval_query(
+        str(state.get("case_prompt", "")),
+        state.get("transcript", []),
+        evaluation_target="case_performance",
+        focus_areas=state.get("focus_areas", []),
+    )
+    profitability_knowledge_base = state.get("profitability_knowledge_base", {})
+    profitability_context = retrieve_knowledge_context(
+        profitability_knowledge_base if isinstance(profitability_knowledge_base, dict) else {},
+        retrieval_query,
+        top_k=5,
+        visibility="all",
+    )
     messages = [
         SystemMessage(
             content=(
@@ -190,6 +215,8 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
                 + "\n".join(state.get("transcript", []))
                 + "\n\nCase guidance:\n"
                 + str(state.get("case_guidance", "None."))
+                + "\n\nRetrieved profitability methodology context:\n"
+                + format_retrieved_chunks(profitability_context)
                 + "\n\nCase data:\n"
                 + format_full_case_data(state.get("case_data", {}))
                 + "\n\nExpected recommendation:\n"
@@ -201,7 +228,15 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
     ]
     response = llm_server.invoke(messages)
     payload = load_json_object(response.content)
-    return normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
+    case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
+    return {
+        "case_performance": case_performance,
+        "retrieved_profitability_context": [
+            str(chunk.get("content", "")).strip()
+            for chunk in profitability_context
+            if str(chunk.get("content", "")).strip()
+        ],
+    }
 
 
 def evaluate_dialog_quality(state: AgenticGraphState) -> dict:
@@ -251,6 +286,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     case_guidance = state.get("case_guidance", "")
     case_recommendation = state.get("case_recommendation", "")
     rubric_data = state.get("rubric_data", {})
+    profitability_knowledge_base = state.get("profitability_knowledge_base", {})
 
     transcript = list(state.get("transcript", []))
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
@@ -267,6 +303,17 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     if turn_index >= MAX_BASELINE_TURNS:
         enough_evidence = True
     else:
+        retrieval_query = build_profitability_retrieval_query(
+            str(case_prompt),
+            transcript,
+            evaluation_target="baseline_interviewer",
+        )
+        profitability_context = retrieve_knowledge_context(
+            profitability_knowledge_base if isinstance(profitability_knowledge_base, dict) else {},
+            retrieval_query,
+            top_k=3,
+            visibility="all",
+        )
         messages = [
             SystemMessage(
                 content=(
@@ -279,6 +326,8 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                     + ("\n".join(transcript) if transcript else "No previous messages.")
                     + "\n\nCase prompt:\n"
                     + (case_prompt or "None.")
+                    + "\n\nRetrieved profitability methodology context:\n"
+                    + format_retrieved_chunks(profitability_context)
                     + "\n\nCandidate-visible case blocks:\n"
                     + format_case_blocks(visible_blocks)
                     + "\n\nHidden case guidance:\n"
@@ -311,6 +360,11 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                 "turn_index": turn_index + 1,
                 "transcript": transcript + [f"{transcript_label}: {content}"],
                 "enough_evidence": False,
+                "retrieved_profitability_context": [
+                    str(chunk.get("content", "")).strip()
+                    for chunk in profitability_context
+                    if str(chunk.get("content", "")).strip()
+                ],
             }
 
     final_state: AgenticGraphState = {
@@ -319,7 +373,8 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         "transcript": transcript,
         "enough_evidence": True,
     }
-    case_performance = evaluate_case_performance(final_state)
+    case_performance_payload = evaluate_case_performance(final_state)
+    case_performance = case_performance_payload["case_performance"]
     quality_dialog = evaluate_dialog_quality(final_state)
     latest_feedback = generate_final_feedback(transcript, case_performance, quality_dialog)
     return {
@@ -333,6 +388,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         "enough_evidence": True,
         "case_performance": case_performance,
         "quality_dialog": quality_dialog,
+        "retrieved_profitability_context": case_performance_payload["retrieved_profitability_context"],
     }
 
 

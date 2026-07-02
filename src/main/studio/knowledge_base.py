@@ -12,6 +12,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 TOKEN_PATTERN = re.compile(r"[a-z0-9]{2,}", re.IGNORECASE)
 DEFAULT_CHUNK_SIZE = 900
 DEFAULT_CHUNK_OVERLAP = 120
+DEFAULT_PROFITABILITY_SOURCE_FIELD = "profitability_knowledge_sources"
 
 
 def _tokenize(text: str) -> list[str]:
@@ -50,6 +51,18 @@ def _resolve_knowledge_sources(case_data: dict[str, Any]) -> list[dict[str, Any]
     if not isinstance(raw_sources, list):
         return []
     return [source for source in raw_sources if isinstance(source, dict)]
+
+
+def _resolve_profitability_knowledge_sources(case_data: dict[str, Any]) -> list[dict[str, Any]]:
+    for field_name in (
+        DEFAULT_PROFITABILITY_SOURCE_FIELD,
+        "profitability_rag_sources",
+        "rag_knowledge_sources",
+    ):
+        raw_sources = case_data.get(field_name, [])
+        if isinstance(raw_sources, list) and raw_sources:
+            return [source for source in raw_sources if isinstance(source, dict)]
+    return []
 
 
 def _build_source_documents(case_data: dict[str, Any]) -> list[dict[str, Any]]:
@@ -129,12 +142,106 @@ def _build_block_documents(case_data: dict[str, Any]) -> list[dict[str, Any]]:
     return documents
 
 
+def _build_documents_from_sources(
+    sources: list[dict[str, Any]],
+    *,
+    source_path: Path | None = None,
+    default_source_kind: str = "external_document",
+    default_visibility: str = "internal",
+) -> list[dict[str, Any]]:
+    documents: list[dict[str, Any]] = []
+
+    for source in sources:
+        raw_path = str(source.get("path", "")).strip()
+        if not raw_path:
+            continue
+
+        path = Path(raw_path)
+        if not path.is_absolute() and source_path is not None:
+            path = (source_path.parent / path).resolve()
+
+        if not path.exists():
+            continue
+
+        try:
+            content = _read_knowledge_source(path).strip()
+        except (OSError, ValueError, RuntimeError, json.JSONDecodeError):
+            continue
+
+        if not content:
+            continue
+
+        documents.append(
+            {
+                "source_id": str(source.get("source_id", path.stem)).strip() or path.stem,
+                "source_name": str(source.get("title", path.name)).strip() or path.name,
+                "source_kind": str(source.get("source_kind", default_source_kind)).strip() or default_source_kind,
+                "visibility": str(source.get("visibility", default_visibility)).strip() or default_visibility,
+                "content": content,
+                "metadata": {
+                    "path": str(path),
+                    "format": path.suffix.lower().lstrip("."),
+                },
+            }
+        )
+
+    return documents
+
+
 def build_case_knowledge_base(
     case_data: dict[str, Any],
     chunk_size: int = DEFAULT_CHUNK_SIZE,
     chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
 ) -> dict[str, Any]:
     documents = _build_block_documents(case_data) + _build_source_documents(case_data)
+    return build_knowledge_base_from_documents(
+        documents,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        knowledge_type="case_context",
+    )
+
+
+def build_profitability_knowledge_base(
+    case_data: dict[str, Any] | None = None,
+    *,
+    sources: list[dict[str, Any]] | None = None,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
+) -> dict[str, Any]:
+    resolved_case_data = case_data if isinstance(case_data, dict) else {}
+    resolved_sources = sources
+    if resolved_sources is None:
+        resolved_sources = _resolve_profitability_knowledge_sources(resolved_case_data)
+
+    source_path = (
+        Path(str(resolved_case_data.get("source_path", "")).strip())
+        if resolved_case_data.get("source_path")
+        else None
+    )
+    documents = _build_documents_from_sources(
+        resolved_sources,
+        source_path=source_path,
+        default_source_kind="profitability_methodology",
+        default_visibility="internal",
+    )
+    return build_knowledge_base_from_documents(
+        documents,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        knowledge_type="profitability_methodology",
+    )
+
+
+def build_knowledge_base_from_documents(
+    documents: list[dict[str, Any]],
+    *,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
+    knowledge_type: str = "generic",
+) -> dict[str, Any]:
+    if not isinstance(documents, list):
+        documents = []
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -185,6 +292,7 @@ def build_case_knowledge_base(
         "document_frequency": document_frequency,
         "chunk_count": len(chunks),
         "source_count": len(documents),
+        "knowledge_type": knowledge_type,
         "config": {
             "chunk_size": chunk_size,
             "chunk_overlap": chunk_overlap,
@@ -275,5 +383,30 @@ def build_retrieval_query(
         case_prompt.strip(),
         "\n".join(relevant_lines),
         focus_area_text,
+    ]
+    return "\n".join(section for section in sections if section)
+
+
+def build_profitability_retrieval_query(
+    case_prompt: str,
+    transcript: list[str],
+    *,
+    evaluation_target: str = "",
+    focus_areas: list[str] | None = None,
+) -> str:
+    relevant_lines = [line.strip() for line in transcript[-8:] if isinstance(line, str) and line.strip()]
+    candidate_final_recommendation = ""
+    for line in reversed(transcript):
+        if isinstance(line, str) and line.startswith("Candidate:"):
+            candidate_final_recommendation = line.strip()
+            break
+
+    sections = [
+        "Consulting profitability case methodology",
+        f"Evaluation target: {evaluation_target.strip()}" if evaluation_target.strip() else "",
+        case_prompt.strip(),
+        "\n".join(relevant_lines),
+        candidate_final_recommendation,
+        ", ".join(focus_areas or []),
     ]
     return "\n".join(section for section in sections if section)
