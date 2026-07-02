@@ -239,6 +239,9 @@ __marimo__/
 
 # Dataset sources managed outside git
 archive/research/02-Dataset/eacl23_soqg/
+archive/research/02-Dataset/data_processed/duke_cases/
+archive/research/02-Dataset/data_processed/harvard_cases/
+archive/research/02-Dataset/data_processed/agsm_cases/
 
 # OS and office temporary files
 .DS_Store
