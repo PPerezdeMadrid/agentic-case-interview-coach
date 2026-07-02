@@ -13,3 +13,13 @@ The project focuses on reducing the dependency on large labelled datasets by usi
 - Rubric-based evaluation of the interview transcript
 - Retrieval-augmented feedback using consulting frameworks and casebook material
 - Multi-agent orchestration using LangGraph
+
+## Repository Structure
+
+- `src/main`: active MVP implementation
+- `src/scenarios`: interview scenarios and rubric configuration
+- `src/synthetic-dataset`: synthetic case material used by the active MVP
+- `src/database`: structured case database in JSON
+- `src/schemas`: shared JSON schemas
+- `doc/`: project documentation and diagrams
+- `archive/`: legacy code and research material kept out of the active project structure

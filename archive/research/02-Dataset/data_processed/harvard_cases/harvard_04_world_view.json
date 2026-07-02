@@ -1,0 +1,67 @@
+{
+  "case_content": [
+    {
+      "block_id": "world_view_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - World View",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 8,
+      "content": "A cable TV company from Canada, World View, had recently entered the US market in the northeast to expand its market share. World View saw this move as an opportunity to capture a large part of the US market (4MM consumers) in a market with very little competition. However, in the last couple of years, much to the surprise of management, World View has been unable to make a profit. You have been hired to figure out why and advise them on their next move."
+    },
+    {
+      "block_id": "world_view_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "High Level Plan of Attack:\n\n• We need to understand why the company is losing money despite the market being uncompetitive.\n\n• We must analyze both the revenue and cost side of the problem.\n\n• We should also analyze the differences in viewing behavior and income between the customer base of World View in Canada and in the northeast.\n\n• We will also determine the strength of any competitors and substitutes."
+    },
+    {
+      "block_id": "world_view_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Framework",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Lay Out Your Thoughts:\n\n• Use the profitability framework.\n\n• Focus very heavily on the consumer."
+    },
+    {
+      "block_id": "world_view_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 8,
+      "content": "Dig Deeper: Gather Facts/Make Calculations:\n\n• Let's look at costs first. Did World View incur additional costs per customer on average in the new market? No, based on the potential number of subscribers, they have instituted the same system that was in place. Costs associated with cable wire, debt, maintenance costs, etc. are all proportionally the same.\n\n• What about the number of subscribers. Out of the 4MM potential customers, how many are signed up? Only 2.1 MM.\n\n• Are other cable companies capturing the remaining market? No, competition is not an issue. Those that we have not acquired as customers simply do not have cable.\n\n• What about substitutes and viewing behavior? How is the consumer in the northeast US different from the one in Canada? Well, the Canadian consumer does not rely much on local stations for watching TV. Cable is a major source of entertainment and news coverage. In the northeast US, we tend to see consumers shy away from paying the $40 a month. They settle for watching local stations.\n\n• Does the new market lave a lower income level? Yes, they do, by about 20% on average.\n\n• What about the local stations? How many are they? Do they meet most of the needs of the consumer? There about 16 local stations that have coverage over the entire northeast. I guess they are doing pretty well by providing programming that the consumer wants. You tend to see the average consumer in the northeast watch regular TV more than Cable when compared with the Canadian consumer.\n\n• Do these stations have good reception and how much do they charge? They have a very good reception and they are part of basic TV, so they are free.\n\n• Is World View providing any type of programming that the local stations are not providing? Some, but the consumers don't seem to be interested. They don't feel that it's worth $40."
+    },
+    {
+      "block_id": "world_view_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Key Findings:\n\n• There is a great deal of competition in the area, not from other cable companies, but local TV stations.\n\n• The consumer in northeast US is quite different from the consumer in Canada with respect to television viewing habits.\n\n• Consumers are not willing to pay $40 for a service that they already get for free."
+    },
+    {
+      "block_id": "world_view_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 9,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "world_view_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 9,
+      "content": "Recommendations:\n\n• World View could try to cater its current channel offering by offering a smaller package for those that would be interested in couple of cable channels.\n\n• Scale back its operations to a specific region.\n\n• Educate the consumer on the extra benefit and new low price.\n\n• If none of these strategies work, move out of that market."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "case_content": [
+    {
+      "block_id": "steam_boiler_hoses_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Steam Boiler Hoses",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 27,
+      "content": "McKinsey was asked by a diversified manufacturing client to help turn around the steam boiler hose division. This boiler hose division provides boiler hoses for both external customers and the client's boiler division. How would you structure an analysis aimed at restoring profitability? Where do you expect to be able to save costs?"
+    },
+    {
+      "block_id": "steam_boiler_hoses_background_001",
+      "block_type": "background",
+      "title": "Background Information",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 27,
+      "content": "Background information on the client and industry includes:\n\n- Boiler hoses are sold both with original equipment and as replacements.\n- There has been increasing price pressure in the industry.\n- The client is third of eight industry participants."
+    },
+    {
+      "block_id": "steam_boiler_hoses_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Initial Approach",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 27,
+      "content": "Purpose:\n\nTo determine whether the candidate is capable and comfortable with constructing a logical framework which will expose opportunities for profit improvement.\n\nThe candidate should structure an analysis aimed at restoring profitability by examining the P&L, identifying the largest cost buckets, comparing the client to competitors, and testing which cost areas have real savings potential."
+    },
+    {
+      "block_id": "steam_boiler_hoses_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 27,
+      "content": "The following information is available in response to questions asked by the candidate:\n\nLast year's P&L showed, as a percent of sales:\n\n| Item | Percent of sales |\n|---|---:|\n| Raw Material | 70% |\n| Labor | 20% |\n| Distributed overhead | 10% |\n| SG&A | 15% |\n| Profit | -15% |\n\nThe raw material is a commodity petrochemical. At least two of the other companies in the industry are making moderate profits.\n\nMinimum requirements:\n\nThe candidate should avoid getting bogged down in the following areas:\n\n1. Drop the product line: apparently not possible because hoses are necessary for boiler sales.\n2. Raw material prices: they are the same as everyone else's.\n3. Allocation of overhead: no cash savings and provides little potential.\n4. SG&A: standard industry fee paid for independent installers.\n\nBetter answers will move beyond the previous answers to consider:\n\n1. Scale economies: client is big enough to achieve scale production.\n2. Production technology: client has a modern plant.\n3. Labor costs: wage rates and productivity are average for the industry.\n4. Raw material purchasing practices: materials are purchased through long-term contracts with prices based on the spot market minus a discount.\n\nOutstanding answers, following a logical progression, should stumble upon the actual answer: the product has been over-designed, requiring excess raw material."
+    },
+    {
+      "block_id": "steam_boiler_hoses_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 27,
+      "content": "P&L as percent of sales:\n\n| Item | Percent of sales |\n|---|---:|\n| Raw Material | 70% |\n| Labor | 20% |\n| Distributed overhead | 10% |\n| SG&A | 15% |\n| Profit | -15% |\n\nIndustry and cost facts:\n- Client is third of eight industry participants\n- At least two competitors are making moderate profits\n- Raw material is a commodity petrochemical\n- Raw material prices are the same as competitors'\n- Raw materials are purchased through long-term contracts with prices based on spot market minus a discount\n- Client is large enough to achieve scale production\n- Client has a modern plant\n- Labor wage rates and productivity are average for the industry\n- SG&A is a standard industry fee paid for independent installers\n- Distributed overhead allocation provides little cash savings potential\n\nKey issue:\n- Product has been over-designed\n- Over-design requires excess raw material\n- Raw material is the largest cost bucket at 70% of sales"
+    },
+    {
+      "block_id": "steam_boiler_hoses_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 28,
+      "content": "The main opportunity is not to drop the product line, renegotiate raw material prices, reallocate overhead, or cut SG&A. Dropping the product line is not feasible because hoses are necessary for boiler sales. Raw material prices are similar to competitors' prices, overhead allocation does not generate cash savings, and SG&A reflects a standard industry fee.\n\nThe client also does not appear disadvantaged on scale, production technology, or labor. It is large enough for scale production, has a modern plant, and has average industry wage rates and productivity.\n\nThe actual issue is product over-design. The hoses have more features or specifications than customers require, causing the division to use excess raw material. Since raw material is 70% of sales, over-design has a major impact on profitability.\n\nThe organizational root cause is weak linkage between product engineering and the marketplace. There is little contact between engineering and marketing or sales. Sales feedback indicates that customers are delighted with the hoses but do not require all the product features. Similar over-engineering problems may exist elsewhere in the company."
+    },
+    {
+      "block_id": "steam_boiler_hoses_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 27,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "steam_boiler_hoses_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 28,
+      "content": "The best answer is that the product has been over-designed, requiring excess raw material.\n\nA strong candidate should recommend redesigning the steam boiler hoses to remove unnecessary features and reduce raw material usage while preserving the functionality customers actually need. Because raw material is 70% of sales, reducing excess material should be the largest cost-saving opportunity.\n\nThe recommendation should also include organizational implications:\n\n1. Improve the connection between product engineering and the marketplace, since there is little contact between engineering and marketing/sales.\n2. Use sales force feedback to determine which product features customers truly require.\n3. Investigate whether similar over-design problems exist in other areas of the company.\n\nThe client should restore profitability by redesigning the product around customer-required specifications, not by cutting costs in areas that either are not feasible or do not create real cash savings."
+    }
+  ]
+}

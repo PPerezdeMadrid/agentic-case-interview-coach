@@ -225,6 +225,7 @@ __marimo__/
 
 # Never commit PDF files
 *.pdf
+*.PDF
 
 # Research draft materials: keep only the folder README in git
 00 first draft/**
@@ -237,7 +238,7 @@ __marimo__/
 !01 plan and context/README.md
 
 # Dataset sources managed outside git
-02 Dataset/eacl23_soqg/
+archive/research/02-Dataset/eacl23_soqg/
 
 # OS and office temporary files
 .DS_Store

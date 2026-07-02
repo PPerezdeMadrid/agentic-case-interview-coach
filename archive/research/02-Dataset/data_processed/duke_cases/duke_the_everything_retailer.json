@@ -1,0 +1,103 @@
+{
+  "case_content": [
+    {
+      "block_id": "the_everything_retailer_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Stagnating Sales Growth",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 163,
+      "content": "Prompt A mass retailer Everything Retailer is seeing stagnating growth in its year-over-year sales. You were brought in to identify the issue and propose ways to boost sales growth."
+    },
+    {
+      "block_id": "the_everything_retailer_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #1",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 163,
+      "content": "Interviewer Guidance This starts as a broad case on strategy – there are many different ways the interviewee may want to proceed. Quantitative analysis begins when the interviewee identifies the need for a new store format. Bonus points if, at the end, the interviewee mentions other risks and ways to mitigate them.\nAdditional information:\n• Large US retailer (think Walmart) with an extensive network of big-box discount stores across the US.\n• Sales growth slowed to 1-2%, while industry is growing at 3%. Client’s target: double-digit “comp sales” growth.\n• If asked about any increases in costs, say no. This is irrelevant."
+    },
+    {
+      "block_id": "the_everything_retailer_prompt_002",
+      "block_type": "prompt",
+      "title": "Prompt #2 - Diagnose Flat Growth",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 164,
+      "content": "Please look at Exhibit 1 and identify the source of Everything Retailer’s problem."
+    },
+    {
+      "block_id": "the_everything_retailer_guidance_002",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #2",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 164,
+      "content": "Show Exhibit 1.\n\nSome potential sources of flat growth that the interviewee may mention are:\n• New competitors, especially e-commerce as consumers shift away from big-box stores to shopping online – tell him/her that this is an interesting additional consideration, but steer him/her away from delving into this.\n• Big-box stores’ product assortment – no longer as relevant to the customers shopping in those stores.\n• Macroeconomic factors – recession and decrease in consumers’ disposable income.\n\nExhibit 1 shows that stores are now opening faster than the sales are increasing. Thus, the current store format has reached its maximum penetration, and sales are flat.\n• Need to tap into a new customer segment."
+    },
+    {
+      "block_id": "the_everything_retailer_exhibit_001",
+      "block_type": "exhibit",
+      "title": "Exhibit 1",
+      "visible_to_candidate": true,
+      "image": "../script/output/duke_casebook_2017_profitability_18/IMG/duke_everything_retailer_17_page_165.png",
+      "source_page": 165,
+      "content": "Exhibit 1\n\nEverything Retailer's Historical Sales ($M) and\n\nNumber of Stores\n\n5,000 4,500 4,000 3,500 3,000 2,500 2,000 1,500 1,000 500 -\n\n1980 1982 1984 1986 1988 1990 1992 1994 1996 1998 2000 2002 2004 2006 2008 2010 2012 2014\n\n# of Stores Sales ($M)"
+    },
+    {
+      "block_id": "the_everything_retailer_prompt_003",
+      "block_type": "prompt",
+      "title": "Prompt #3 - Evaluate Growth Paths",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 166,
+      "content": "What growth paths should Everything Retailer consider next? Based on those options, what analysis would you need to determine whether it should go ahead with opening Local Market stores?"
+    },
+    {
+      "block_id": "the_everything_retailer_guidance_003",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #3",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 166,
+      "content": "In proposing ways to grow sales, the interviewee may have the following MECE options:\n\n• International – expand overseas (build stores or M&A or Joint Venture) – steer interviewee away.\n• Domestic:\n- Grow current big-box store sales – steer interviewee away; current stores already have the optimal product mix and locations for a big-box retailer.\n- Reach a new customer:\n  Product – go up-market or down-market to target more affluent or less affluent shoppers. Good point, but steer the interviewee away.\n  Format – say that the client has piloted 3 formats and show Exhibit 2.\n\nEntering the grocery market with “Local Market” stores represents the biggest revenue opportunity."
+    },
+    {
+      "block_id": "the_everything_retailer_exhibit_002",
+      "block_type": "exhibit",
+      "title": "Exhibit 2",
+      "visible_to_candidate": true,
+      "image": "../script/output/duke_casebook_2017_profitability_18/IMG/duke_everything_retailer_17_page_167.png",
+      "source_page": 167,
+      "content": "Exhibit 2\n\nLocal Market Grocery store + pharmacy\n\nMiniBox Same product assortment as big-box stores, but much smaller size\n\nBig-box stores on college campuses, with some assortment tailored to students’ shopping habits\n\nCampus Companion\n\nExpected market share\n\n$620B 30%\n\n$106B 60%\n\nN/A N/A\n\nFormat Description Competitors Market (FY2015)\n\nKroger, Safeway, regional grocers\n\nDollar stores, convenience stores\n\nDepends on location (urban vs. college town)\n\n| Format | Description | Competitors | Market\n(FY2015) | Expected\nmarket share |\n| --- | --- | --- | --- | --- |\n| Local Market | Grocery store + pharmacy | Kroger, Safeway, regional grocers | $620B | 30% |\n| MiniBox | Same product assortment as big- box stores, but much smaller size | Dollar stores, convenience stores | $106B | 60% |\n| Campus Companion | Big-box stores on college campuses, with some assortment tailored to students’ shopping habits | Depends on location (urban vs. college town) | N/A | N/A |"
+    },
+    {
+      "block_id": "the_everything_retailer_prompt_004",
+      "block_type": "prompt",
+      "title": "Prompt #4 - Local Market NPV",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 168,
+      "content": "Use a simple NPV analysis to determine whether Everything Retailer should go ahead with opening Local Markets. Show Exhibit 3 and ask the candidate to calculate NPV. Give the formula if needed: NPV = ∑ (FCFt)/(1+WACC)^t.\n\nAfter the calculation, ask whether the client should undertake this venture."
+    },
+    {
+      "block_id": "the_everything_retailer_guidance_004",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Prompt #4",
+      "visible_to_candidate": false,
+      "image": "../script/output/duke_casebook_2017_profitability_18/IMG/duke_everything_retailer_17_page_168.png",
+      "source_page": 168,
+      "content": "Assume market growth rate of 0% annually.\n\nExhibit 3 Guidance:\n\nYear 0 Year 1 Year 2 Year 3\n\nMarket share 10% 20% 30% Revenue $62,000,000,000 $124,000,000,000 $186,000,000,000 Costs $6.25M *1,000 stores =\n\n$6.25B $1,000,000,000 $4,000,000,000 $8,000,000,000\n\nDiscount rate (WACC) 10% 10% 10%\n\nFCF ($6,250,000,000) $61,000,000,000 $120,000,000,000 $178,000,000,000 FCFt/(1+WACC)t ($6,250,000,000) $55,454,545,455 $99,173,553,719 $133,734,034,560 NPV $282,112,133,734 * Acceptable for the interviewee to round numbers.\n\nThe answer should be “Yes” since it is NPV-positive.\n\n| 0 | 1 | 2 | 3 | 4 |\n| --- | --- | --- | --- | --- |\n|  |  |  |  |  |\n|  | Year 0 | Year 1 | Year 2 | Year 3 |\n| Market share |  | 10% | 20% | 30% |\n| Revenue |  | $62,000,000,000 | $124,000,000,000 | $186,000,000,000 |\n| Costs | $6.25M *1,000 stores = $6.25B | $1,000,000,000 | $4,000,000,000 | $8,000,000,000 |\n| Discount rate (WACC) |  | 10% | 10% | 10% |\n| FCF | ($6,250,000,000) | $61,000,000,000 | $120,000,000,000 | $178,000,000,000 |\n| FCF/(1+WACC)t t | ($6,250,000,000) | $55,454,545,455 | $99,173,553,719 | $133,734,034,560 |\n| NPV | $282,112,133,734 |  |  |  |"
+    },
+    {
+      "block_id": "the_everything_retailer_exhibit_003",
+      "block_type": "exhibit",
+      "title": "Exhibit 3",
+      "visible_to_candidate": true,
+      "image": "../script/output/duke_casebook_2017_profitability_18/IMG/duke_everything_retailer_17_page_169.png",
+      "source_page": 169,
+      "content": "Exhibit 3\n\nCosts $6.25M per store\n\nto build\n\nNPV ?\n\n$4M per store to\n\n$8M per store to\n\nmaintain\n\nmaintain\n\nNPV of building 1,000 Local Market stores\n\nYear 0 Year 1 Year 2 Year 3\n\nMarket share 10% 20% 30% Revenue ? ? ?\n\n$1M per store to maintain\n\nDiscount rate (WACC) 10% 10% 10%\n\n(1+WACC)t 1.10 1.21 1.33 FCF ? ? ? ?\n\nFCFt/(1+WACC)t ? ? ? ?\n\n|  | Year 0 | Year 1 | Year 2 | Year 3 |\n| --- | --- | --- | --- | --- |\n| Market share |  | 10% | 20% | 30% |\n| Revenue |  | ? | ? | ? |\n| Costs | $6.25Mper store to build | $1Mper store to maintain | $4Mper store to maintain | $8Mper store to maintain |\n| Discount rate (WACC) |  | 10% | 10% | 10% |\n| (1+WACC)t |  | 1.10 | 1.21 | 1.33 |\n| FCF | ? | ? | ? | ? |\n| FCF/(1+WACC)t t | ? | ? | ? | ? |\n| NPV | ? |  |  |  |"
+    }
+  ]
+}

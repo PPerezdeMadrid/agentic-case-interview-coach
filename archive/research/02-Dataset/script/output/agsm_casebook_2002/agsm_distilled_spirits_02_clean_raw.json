@@ -1,0 +1,58 @@
+{
+  "case_content": [
+    {
+      "block_id": "distilled_spirits_prompt_001",
+      "block_type": "prompt",
+      "title": "Prompt #1 - Distilled Spirits",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 3,
+      "content": "You are consulting for a major United States producer of distilled spirits. Their primary products are a line of mid-priced vodkas and two brands of mid-range rum. Over the past few years, the business has become less and less profitable. What could be causing this?"
+    },
+    {
+      "block_id": "distilled_spirits_expected_analysis_001",
+      "block_type": "expected_analysis",
+      "title": "Expected Analysis - Fact Gathering",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 3,
+      "content": "Other information:\n\nThe split of product sold has consistently been 60% vodka / 40% rum over the past few years. The selling prices of the two lines are essentially the same. Overall sales are growing at about 3 to 5% per year, the same as the industry average for these product lines. An analysis of the costs reveals the following:\n\n- Production Costs have remained constant\n- Advertising Costs have remained constant on average\n- Distribution Costs have increased significantly\n\nThe products are sold throughout the country. In 27 states, where alcohol is sold in privately managed supermarkets and liquor stores, “open” states, shelf space is extremely expensive and trade promotions are critical. Such stores are also becoming less and less willing to hold inventory, which is increasing distribution costs by requiring more frequent deliveries.\n\nIn the other 23 states, liquor is only sold through state regulated liquor stores. Distribution costs in these states is much lower, as there are far fewer outlets to service and central warehouses for the state-run stores. Advertising of alcohol is much more tightly regulated, and therefore, advertising spending is lower."
+    },
+    {
+      "block_id": "distilled_spirits_data_001",
+      "block_type": "data",
+      "title": "Data / Calculations",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 3,
+      "content": "Product mix:\n- Vodka: 60% of product sold\n- Rum: 40% of product sold\n- Product split has remained consistent over the past few years\n- Selling prices of the two lines are essentially the same\n\nSales growth:\n- Overall sales growth: 3% to 5% per year\n- Industry average growth for these product lines: 3% to 5% per year\n- Open-state sales growth: about 10% per year\n- Regulated-state sales: decreasing\n\nCost trends:\n- Production costs: constant\n- Advertising costs: constant on average\n- Distribution costs: increased significantly\n\nChannel / state structure:\n- 27 “open” states: alcohol sold in privately managed supermarkets and liquor stores\n- 23 regulated states: liquor sold only through state-regulated liquor stores\n\nOpen states:\n- Shelf space is extremely expensive\n- Trade promotions are critical\n- Stores are becoming less willing to hold inventory\n- More frequent deliveries are required\n- Distribution costs are increasing\n\nRegulated states:\n- Distribution costs are much lower\n- Fewer outlets to service\n- Central warehouses for state-run stores\n- Advertising is more tightly regulated\n- Advertising spending is lower"
+    },
+    {
+      "block_id": "distilled_spirits_key_findings_001",
+      "block_type": "expected_analysis",
+      "title": "Key Findings",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 4,
+      "content": "A greater and greater share of volume is being sold in the “open” states, where sales are increasing at about 10% per year. Sales in the regulated states are decreasing.\n\nBecause regulated states are less expensive to serve and therefore more profitable, the fact that they represent a shrinking portion of total sales has caused total profits to decline. The business is not becoming less profitable because of product mix, pricing, production costs, or average advertising costs. The key issue is geographic/channel mix shift toward higher-cost open states, which has increased distribution costs and reduced overall profitability."
+    },
+    {
+      "block_id": "distilled_spirits_final_recommendation_001",
+      "block_type": "final_recommendation",
+      "title": "Final Recommendation",
+      "visible_to_candidate": true,
+      "image": null,
+      "source_page": 3,
+      "content": "Based on your analysis, what recommendation would you give the client?"
+    },
+    {
+      "block_id": "distilled_spirits_guidance_001",
+      "block_type": "guidance",
+      "title": "Interviewer Guidance - Final Recommendation",
+      "visible_to_candidate": false,
+      "image": null,
+      "source_page": 4,
+      "content": "Solution:\n\nA greater and greater share of the volume is being sold in the “open” states, with sales in these states increasing at about 10% per year. Sales in the regulated states are actually decreasing.\n\nBecause the regulated states are less expensive to serve, and therefore more profitable, the fact that they represent a shrinking portion of the total has caused total profits to decline.\n\nA strong candidate should conclude that profitability is declining because of a mix shift toward more expensive-to-serve open states. The client should analyze profitability by state/channel, manage distribution frequency and trade promotion spending in open states, and consider actions to defend or rebuild volume in more profitable regulated states."
+    }
+  ]
+}

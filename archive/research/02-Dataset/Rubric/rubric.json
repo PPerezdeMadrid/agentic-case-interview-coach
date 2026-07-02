@@ -1,0 +1,103 @@
+{
+  "rubric_name": "Consulting Case Interview Rubric",
+  "source": "Management Consulted Case Interview Scoring Guide 2025",
+  "source_url": "https://assets.managementconsulted.com/app/uploads/2025/06/02180347/Management-Consulted-Case-Interview-Scoring-Guide-2025.pdf",
+  "score_scale": {
+    "1": "Needs improvement",
+    "2": "Developing",
+    "3": "Competent",
+    "4": "Strong",
+    "5": "Excellent",
+    "not_tested": "Insufficient evidence in the transcript or section not covered in the case"
+  },
+  "rubric_sections": {
+    "case_opening": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses how the candidate recaps the prompt, asks clarifying questions, and frames the business problem before structuring.",
+      "criteria": {
+        "1": "Does not recap the prompt or begins with questions immediately. Asks no questions or unrelated questions.",
+        "2": "Provides a long or uncertain recap. Asks too few questions, or questions are unfocused, rambling, or unexplained.",
+        "3": "Provides a workable recap and asks several relevant questions, but the logic is still generic or uneven.",
+        "4": "Provides a solid, concise, confident recap. Asks three or more relevant questions, but they may still lack sharp hypothesis orientation.",
+        "5": "Begins with a confident recap, builds connection, and asks two to three hypothesis-driven questions focused on understanding the business and problem."
+      }
+    },
+    "case_structure": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate creates a clear, case-specific, MECE and prioritized framework.",
+      "criteria": {
+        "1": "No clear framework, or framework is only an uncategorised list. It does not specify data and is not specific to the business problem.",
+        "2": "Some structure is present, usually with two to three categories, but ideas are not data-driven and/or categories are not MECE.",
+        "3": "Clear structure with relevant categories, but ideas remain somewhat generic, weakly prioritized, or not fully MECE.",
+        "4": "Clear structure with three to four relevant categories. Ideas are case-specific but may lack measurable detail or stronger prioritisation.",
+        "5": "Clear, easy-to-follow, numbered framework with four categories, relevant data points, MECE logic, prioritisation, and a hypothesis."
+      }
+    },
+    "case_math_answer": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses the candidate's quantitative setup, calculation process, accuracy, confidence, and ability to turn numbers into insights.",
+      "criteria": {
+        "1": "Lacks confidence in the process, gets lost, takes too long, or cannot deliver an answer without help.",
+        "2": "Eventually completes some math, but the answer is incomplete or wrong, or the candidate does not clearly talk through the process.",
+        "3": "Math setup is partially sound and the process is understandable, but accuracy, speed, or interpretation is inconsistent.",
+        "4": "Math setup and calculations are mostly correct and easy to follow, but insights are basic or limited.",
+        "5": "Confirms setup and hypothesis, structures the calculation out loud, reaches the correct answer efficiently, and provides numerical, action-oriented, and next-step insights."
+      }
+    },
+    "case_creative_answer": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses brainstorming, creativity, structure, rationale, and ability to generate additional ideas when challenged.",
+      "criteria": {
+        "1": "Unclear, hard to follow, or lacks structure. Ideas are not organized.",
+        "2": "Shares ideas as a list without clear categories. Ideas are conceptual but not data-driven.",
+        "3": "Uses categories, but ideas remain generic, repetitive, or weakly justified.",
+        "4": "Uses categories and shows some rationale, though ideas may still be unevenly developed or not fully MECE.",
+        "5": "Shares ideas confidently in MECE buckets or with clear rationale, and can push to deeper insights when asked follow-up questions."
+      }
+    },
+    "final_recommendation": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate gives a clear recommendation supported by case evidence, risks, and next steps.",
+      "criteria": {
+        "1": "Gives no real recommendation other than collecting more data. Provides no next steps.",
+        "2": "Recommendation is rambling, not tied to case data, and includes zero or one next step.",
+        "3": "Gives a recommendation, but the synthesis is partial and support from data, risks, or next steps is weak.",
+        "4": "Gives a clear recommendation from the case, but support from data, big-picture synthesis, risks, or next steps are limited.",
+        "5": "Gives a clear and concise recommendation supported by case data, addresses the business problem, highlights a risk, and provides action-oriented next steps."
+      }
+    },
+    "overall_structure": {
+      "applies_to": ["conversation"],
+      "description": "Assesses whether the candidate leads the case, breaks down ideas clearly, prioritizes, and connects different parts of the case.",
+      "criteria": {
+        "1": "Does not lead the case and gets lost when asked to break big ideas into smaller pieces.",
+        "2": "Can break down big concepts but does not build ideas thoroughly, prioritize effectively, or take initiative.",
+        "3": "Shows some structure and can break down ideas, but sequencing, prioritization, or ownership of the case is inconsistent.",
+        "4": "Communicates in lists and generally leads the case, but prioritization or transitions could still be sharper.",
+        "5": "Consistently presents ideas in logical, numbered lists and manages the flow of the case with ease."
+      }
+    },
+    "overall_problem_solving": {
+      "applies_to": ["conversation"],
+      "description": "Assesses whether the candidate understands the business problem, stays focused on the objective, uses data well, and drives toward a solution.",
+      "criteria": {
+        "1": "Does not gain a clear understanding of the business or business problem.",
+        "2": "Understands the problem initially but complicates or expands the case ask unnecessarily.",
+        "3": "Understands the problem and makes some relevant connections, but the path to insight is slow, partial, or not well prioritized.",
+        "4": "Understands the problem and ties key pieces of the case back to the main issue, though insight may still be indirect or incomplete.",
+        "5": "Maintains consistent focus on the hypothesis, drives toward solutions, handles math well, corrects mistakes, and ties data to conclusions."
+      }
+    },
+    "overall_communication": {
+      "applies_to": ["conversation"],
+      "description": "Assesses clarity, confidence, concision, executive presence, and how easy the candidate would be to work with.",
+      "criteria": {
+        "1": "Lacks confidence or would be difficult to work with.",
+        "2": "Communicates in a narrative or unclear style, requiring frequent clarification.",
+        "3": "Communicates understandably, but confidence, concision, or audience awareness is uneven.",
+        "4": "Strong communicator overall, but could improve executive presence, audience awareness, or composure under challenge.",
+        "5": "Provides concise, well-spoken responses, demonstrates confidence, works through difficulty positively, and would be trusted to be clear and complete."
+      }
+    }
+  }
+}
