@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Traces | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Agent State Traces</p>
+      <h1>Trace Explorer</h1>
+      <p class="lede">Vista rápida por run para abrir la secuencia de pasos del grafo y los cambios de estado que dejó cada agente.</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Runs</p>
+      <h2>Trace coverage</h2>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Run ID</th>
+          <th>Graph</th>
+          <th>Scenario</th>
+          <th>Created</th>
+          <th>Trace Rows</th>
+          <th>Max Step</th>
+          <th>Last Trace</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in trace_runs %}
+        <tr>
+          <td><a href="{{ url_for('get_run', run_id=run.run_id) }}">{{ run.run_id }}</a></td>
+          <td>{{ run.graph_name }}</td>
+          <td>{{ run.scenario_ref or 'n/a' }}</td>
+          <td>{{ run.created_at }}</td>
+          <td>{{ run.trace_count }}</td>
+          <td>{{ run.max_step_index }}</td>
+          <td>{{ run.last_trace_at or 'n/a' }}</td>
+          <td>
+            {% if run.has_traces %}
+            <a href="{{ url_for('get_run_trace', run_id=run.run_id) }}">Open trace</a>
+            {% else %}
+            <span class="helper">No traces</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8">No runs found or the <code>agent_state_traces</code> table does not exist yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

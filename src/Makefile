@@ -14,7 +14,7 @@ help:
 	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios"
 
 langgraph:
-	cd main/studio && langgraph dev
+	cd main/studio && langgraph dev --no-browser
 
 workbench:
 	cd main/web && WORKBENCH_PORT=$(WORKBENCH_PORT) $(PYTHON) app.py

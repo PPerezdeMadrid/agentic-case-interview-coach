@@ -34,6 +34,18 @@ def get_db_connection() -> sqlite3.Connection:
     return connection
 
 
+def _table_exists(connection: sqlite3.Connection, table_name: str) -> bool:
+    row = connection.execute(
+        """
+        SELECT name
+        FROM sqlite_master
+        WHERE type = 'table' AND name = ?
+        """,
+        (table_name,),
+    ).fetchone()
+    return row is not None
+
+
 def ensure_dashboard_db() -> Path:
     RUNS_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -137,6 +149,75 @@ def _extract_human_sections(evaluation_row: sqlite3.Row | None) -> dict[str, dic
 
 def _score_sort_key(value: Any) -> tuple[int, str]:
     return (0, str(value))
+
+
+def _summarize_changed_field(name: str, change: dict[str, Any]) -> dict[str, Any]:
+    before_value = change.get("before")
+    after_value = change.get("after")
+    summary = ""
+
+    if name == "transcript" and isinstance(before_value, list) and isinstance(after_value, list):
+        appended = after_value[len(before_value) :] if after_value[: len(before_value)] == before_value else []
+        if appended:
+            summary = f"+{len(appended)} transcript line(s)"
+        else:
+            summary = "transcript updated"
+    elif isinstance(before_value, list) and isinstance(after_value, list):
+        delta = len(after_value) - len(before_value)
+        if delta > 0:
+            summary = f"+{delta} item(s)"
+        elif delta < 0:
+            summary = f"{delta} item(s)"
+        else:
+            summary = "list updated"
+    elif isinstance(before_value, dict) and isinstance(after_value, dict):
+        added_keys = sorted(set(after_value) - set(before_value))
+        removed_keys = sorted(set(before_value) - set(after_value))
+        changed_keys = sorted(
+            key for key in set(before_value) & set(after_value) if before_value.get(key) != after_value.get(key)
+        )
+        parts = []
+        if added_keys:
+            parts.append(f"+{len(added_keys)} key(s)")
+        if removed_keys:
+            parts.append(f"-{len(removed_keys)} key(s)")
+        if changed_keys:
+            parts.append(f"~{len(changed_keys)} key(s)")
+        summary = ", ".join(parts) or "object updated"
+    else:
+        summary = f"{before_value!r} -> {after_value!r}"
+
+    return {
+        "field": name,
+        "summary": summary,
+        "before": before_value,
+        "after": after_value,
+    }
+
+
+def _extract_trace_transcript_updates(changed_fields: dict[str, Any]) -> list[dict[str, str]]:
+    transcript_change = changed_fields.get("transcript")
+    if not isinstance(transcript_change, dict):
+        return []
+
+    before_value = transcript_change.get("before")
+    after_value = transcript_change.get("after")
+    if not isinstance(before_value, list) or not isinstance(after_value, list):
+        return []
+
+    appended = after_value[len(before_value) :] if after_value[: len(before_value)] == before_value else after_value
+    updates: list[dict[str, str]] = []
+    for line in appended:
+        if not isinstance(line, str):
+            continue
+        role = "system"
+        if ": " in line:
+            prefix, content = line.split(": ", 1)
+            role = prefix.strip().lower().replace(" ", "_")
+        else:
+            content = line
+        updates.append({"role": role, "content": content.strip()})
+    return updates
 
 
 def to_numeric_score(value: Any) -> float | None:
@@ -478,6 +559,152 @@ def _build_run_payload(run_row: sqlite3.Row) -> dict[str, Any]:
         "annotation_sections": annotation_sections,
         "metrics": metrics,
         "created_at": run_row["created_at"],
+    }
+
+
+def list_trace_runs(limit: int = 100) -> list[dict[str, Any]]:
+    ensure_dashboard_db()
+
+    with get_db_connection() as connection:
+        if not _table_exists(connection, "agent_state_traces"):
+            return []
+
+        rows = connection.execute(
+            """
+            SELECT
+                runs.run_id,
+                runs.graph_name,
+                runs.scenario_ref,
+                runs.created_at,
+                COUNT(agent_state_traces.trace_id) AS trace_count,
+                MAX(agent_state_traces.step_index) AS max_step_index,
+                MAX(agent_state_traces.created_at) AS last_trace_at
+            FROM runs
+            LEFT JOIN agent_state_traces
+                ON runs.run_id = agent_state_traces.run_id
+            GROUP BY
+                runs.run_id,
+                runs.graph_name,
+                runs.scenario_ref,
+                runs.created_at
+            ORDER BY runs.created_at DESC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+
+    return [
+        {
+            "run_id": row["run_id"],
+            "graph_name": row["graph_name"],
+            "scenario_ref": row["scenario_ref"] or "",
+            "created_at": row["created_at"],
+            "trace_count": int(row["trace_count"] or 0),
+            "max_step_index": int(row["max_step_index"] or 0),
+            "last_trace_at": row["last_trace_at"] or "",
+            "has_traces": bool(row["trace_count"]),
+        }
+        for row in rows
+    ]
+
+
+def load_run_traces(run_id: str) -> dict[str, Any]:
+    run_payload = load_run(run_id)
+
+    with get_db_connection() as connection:
+        if not _table_exists(connection, "agent_state_traces"):
+            return {
+                "run": run_payload,
+                "summary": {
+                    "trace_count": 0,
+                    "actor_count": 0,
+                    "node_count": 0,
+                    "changed_field_names": [],
+                    "has_trace_table": False,
+                },
+                "traces": [],
+            }
+
+        rows = connection.execute(
+            """
+            SELECT
+                trace_id,
+                run_id,
+                graph_name,
+                thread_id,
+                step_index,
+                node_name,
+                actor,
+                scenario_ref,
+                turn_index_before,
+                turn_index_after,
+                judge_round_before,
+                judge_round_after,
+                enough_evidence_before,
+                enough_evidence_after,
+                focus_areas_before_json,
+                focus_areas_after_json,
+                changed_fields_json,
+                created_at
+            FROM agent_state_traces
+            WHERE run_id = ?
+            ORDER BY step_index ASC, created_at ASC
+            """,
+            (run_id,),
+        ).fetchall()
+
+    traces: list[dict[str, Any]] = []
+    actors: set[str] = set()
+    nodes: set[str] = set()
+    changed_field_names: set[str] = set()
+
+    for row in rows:
+        changed_fields = _json_loads(row["changed_fields_json"], {})
+        field_changes = []
+        if isinstance(changed_fields, dict):
+            for field_name, change in sorted(changed_fields.items()):
+                if not isinstance(change, dict):
+                    continue
+                changed_field_names.add(field_name)
+                field_changes.append(_summarize_changed_field(field_name, change))
+
+        transcript_updates = _extract_trace_transcript_updates(changed_fields if isinstance(changed_fields, dict) else {})
+        actors.add(str(row["actor"]))
+        nodes.add(str(row["node_name"]))
+
+        traces.append(
+            {
+                "trace_id": row["trace_id"],
+                "step_index": row["step_index"],
+                "node_name": row["node_name"],
+                "actor": row["actor"],
+                "scenario_ref": row["scenario_ref"] or "",
+                "turn_index_before": row["turn_index_before"],
+                "turn_index_after": row["turn_index_after"],
+                "judge_round_before": row["judge_round_before"],
+                "judge_round_after": row["judge_round_after"],
+                "enough_evidence_before": bool(row["enough_evidence_before"]),
+                "enough_evidence_after": bool(row["enough_evidence_after"]),
+                "focus_areas_before": _json_loads(row["focus_areas_before_json"], []),
+                "focus_areas_after": _json_loads(row["focus_areas_after_json"], []),
+                "changed_fields": changed_fields,
+                "field_changes": field_changes,
+                "changed_field_names": [item["field"] for item in field_changes],
+                "transcript_updates": transcript_updates,
+                "created_at": row["created_at"],
+            }
+        )
+
+    return {
+        "run": run_payload,
+        "summary": {
+            "trace_count": len(traces),
+            "actor_count": len(actors),
+            "node_count": len(nodes),
+            "changed_field_names": sorted(changed_field_names),
+            "has_trace_table": True,
+        },
+        "traces": traces,
     }
 
 

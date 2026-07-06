@@ -10,7 +10,11 @@ from adapter import (
     get_candidate_visible_blocks,
     get_case_block_by_id,
 )
-from knowledge_base import (
+from rag.case_guide_context import (
+    build_case_guide_query,
+    format_case_guide_snippets,
+)
+from rag.knowledge_base import (
     build_profitability_knowledge_base,
     build_profitability_retrieval_query,
     format_retrieved_chunks,
@@ -21,8 +25,10 @@ from loader import (
     load_selected_simulation_bundle,
 )
 from llm_server import llm_server
-from persistence import make_persist_run_node, resolve_thread_id
+from persistence import make_persist_run_node, make_trace_node, resolve_thread_id
+from rag.rag_case_guide import retrieve_case_guide_context
 from prompts import (
+    CASE_GUIDE_NAVIGATION_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
     CASE_EVAL_SYSTEM_PROMPT,
     DIALOG_EVAL_SYSTEM_PROMPT,
@@ -80,12 +86,46 @@ def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
     return [line for line in transcript if line.startswith(visible_prefixes)]
 
 
+def format_focus_areas_for_prompt(focus_areas: list[str]) -> str:
+    """Format judge focus areas as direct interviewer instructions."""
+    normalized_focus_areas = normalize_string_list(focus_areas)
+    if not normalized_focus_areas:
+        return "None."
+    return "\n".join(f"- {focus_area}" for focus_area in normalized_focus_areas)
+
+
+def resolve_case_guide_query(state: AgenticGraphState) -> str:
+    """Resolve the base case-guide query from the current scenario."""
+    case_prompt = str(state.get("case_prompt", "")).strip()
+    if case_prompt:
+        return case_prompt
+
+    bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
+    return str(extract_case_prompt(bundle["case"])).strip()
+
+
+def get_case_guide_context(state: AgenticGraphState, node_name: str, *, top_k: int = 4) -> list[str]:
+    """Retrieve guide snippets tailored to a specific evaluation node."""
+    case_prompt = resolve_case_guide_query(state)
+    query = build_case_guide_query(state, case_prompt, node_name)
+    if not query.strip():
+        return []
+
+    case_guide_chunks = retrieve_case_guide_context(query, top_k=top_k)
+    return [
+        str(chunk.get("content", "")).strip()
+        for chunk in case_guide_chunks
+        if str(chunk.get("content", "")).strip()
+    ]
+
+
 
 def build_initial_interview_state(
     case_name: str | None = None,
     seed: int | None = None,
     scenario_ref: str | None = None,
 ) -> AgenticGraphState:
+    """Build the initial runtime state for the agentic interview graph."""
     # Primary entrypoint for LangSmith / Studio: pass scenario_ref with a synthetic scenario id
     # such as "scenario_01_solventus". If omitted, the loader falls back to a random synthetic scenario.
     selected_ref = scenario_ref or case_name
@@ -109,6 +149,7 @@ def build_initial_interview_state(
         "quality_dialog": {},
         "data_gathered": [],
         "thread_id": DEFAULT_THREAD_ID,
+        "trace_step_index": 0,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
         "profitability_knowledge_base": profitability_knowledge_base,
@@ -120,6 +161,7 @@ def load_scenario_node(
     state: AgenticGraphState,
     config: RunnableConfig | None = None,
 ) -> AgenticGraphState:
+    """Load scenario assets into state if they are not present yet."""
     thread_id = resolve_thread_id(state, config)
     if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
         return {"thread_id": thread_id}
@@ -144,6 +186,7 @@ def load_scenario_node(
 
 
 def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Generate the next interviewer move and update the transcript."""
     turn_index = state.get("turn_index", 0)
     transcript = state.get("transcript", [])
     case_prompt = state.get("case_prompt", "")
@@ -174,8 +217,8 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
                 + format_case_blocks(visible_blocks)
                 + "\n\nHidden case guidance:\n"
                 + (case_guidance or "None.")
-                + "\n\nCurrent judge focus areas:\n"
-                + (", ".join(focus_areas) if focus_areas else "None.")
+                + "\n\nCurrent judge focus areas to act on directly:\n"
+                + format_focus_areas_for_prompt(focus_areas if isinstance(focus_areas, list) else [])
                 + "\n\nDecide the best next interviewer move."
             )
         ),
@@ -204,6 +247,7 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Generate the synthetic candidate reply and update known facts."""
     case_prompt = state.get("case_prompt", "")
     candidate_profile = state.get("candidate_profile", {})
     transcript = state.get("transcript", [])
@@ -245,9 +289,11 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def judge_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Decide whether there is enough evidence to evaluate the candidate."""
     judge_round = state.get("judge_round", 0)
     transcript = state.get("transcript", [])
     rubric_data = state.get("rubric_data", {})
+    case_guide_context = get_case_guide_context(state, "judge")
 
     messages = [
         SystemMessage(
@@ -269,6 +315,10 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
                 + str(state.get("case_recommendation", "None."))
                 + "\n\nRubric:\n"
                 + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
+                + "\n\nGuide navigation rules:\n"
+                + CASE_GUIDE_NAVIGATION_PROMPT
+                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -289,15 +339,10 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     }
 
 
-# def retrieve_info_node(state: AgenticGraphState) -> AgenticGraphState:
-#     """Placeholder for future profitability-RAG retrieval before evaluation."""
-#     return {
-#         "retrieved_profitability_context": [],
-#     }
-
-
 def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Score case-performance dimensions using transcript and rubric evidence."""
     rubric_data = state.get("rubric_data", {})
+    case_guide_context = get_case_guide_context(state, "eval_case_performance")
     retrieval_query = build_profitability_retrieval_query(
         str(state.get("case_prompt", "")),
         state.get("transcript", []),
@@ -330,6 +375,10 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
                 + str(state.get("case_recommendation", "None."))
                 + "\n\nRubric:\n"
                 + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
+                + "\n\nGuide navigation rules:\n"
+                + CASE_GUIDE_NAVIGATION_PROMPT
+                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -348,7 +397,9 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Score interaction-quality dimensions from the transcript."""
     rubric_data = state.get("rubric_data", {})
+    case_guide_context = get_case_guide_context(state, "eval_dialog_quality")
     messages = [
         SystemMessage(
             content=(
@@ -360,6 +411,10 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
                 + "\n".join(state.get("transcript", []))
                 + "\n\nRubric:\n"
                 + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
+                + "\n\nGuide navigation rules:\n"
+                + CASE_GUIDE_NAVIGATION_PROMPT
+                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -372,6 +427,8 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
+    """Write final user-facing feedback from the evaluation outputs."""
+    case_guide_context = get_case_guide_context(state, "give_feedback")
     messages = [
         SystemMessage(
             content=(
@@ -382,6 +439,10 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
                 + json.dumps(state.get("case_performance", {}), ensure_ascii=True, indent=2)
                 + "\n\nDialog quality:\n"
                 + json.dumps(state.get("quality_dialog", {}), ensure_ascii=True, indent=2)
+                + "\n\nGuide navigation rules:\n"
+                + CASE_GUIDE_NAVIGATION_PROMPT
+                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -401,6 +462,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def route_after_interviewer(state: AgenticGraphState) -> Literal["judge", "candidate"]:
+    """Route to judge when enough evidence exists, otherwise continue."""
     if state.get("enough_evidence") is True:
         return "judge"
     return "candidate"
@@ -408,12 +470,14 @@ def route_after_interviewer(state: AgenticGraphState) -> Literal["judge", "candi
 def route_after_judge_agentic_02(
     state: AgenticGraphState,
 ) -> Literal["interviewer"] | list[Literal["eval_case_performance", "eval_dialog_quality"]]:
+    """Route from judge either back to interview or into evaluation."""
     if state.get("enough_evidence") is True:
         return ["eval_case_performance", "eval_dialog_quality"]
     return "interviewer"
 
 
 def build_graph_config(thread_id: str | None = None) -> dict:
+    """Build the LangGraph config payload for a thread id."""
     return {
         "configurable": {
             "thread_id": thread_id or DEFAULT_THREAD_ID,
@@ -423,10 +487,9 @@ def build_graph_config(thread_id: str | None = None) -> dict:
 
 builder = StateGraph(AgenticGraphState, config_schema=GraphConfig)
 builder.add_node("load_scenario", load_scenario_node)
-builder.add_node("interviewer", interviewer_node)
+builder.add_node("interviewer", make_trace_node("agentic", "interviewer", "interviewer", interviewer_node))
 builder.add_node("candidate", candidate_node)
-builder.add_node("judge", judge_node)
-# builder.add_node("retrieve_info", retrieve_info_node)
+builder.add_node("judge", make_trace_node("agentic", "judge", "judge", judge_node))
 builder.add_node("eval_case_performance", eval_case_performance_node)
 builder.add_node("eval_dialog_quality", eval_dialog_quality_node)
 builder.add_node("give_feedback", give_feedback_node)
@@ -434,8 +497,6 @@ builder.add_node("persist_run", make_persist_run_node("agentic"))
 
 builder.add_edge(START, "load_scenario")
 builder.add_edge("load_scenario", "interviewer")
-# builder.add_edge("load_scenario", "retrieve_info")
-# builder.add_edge("retrieve_info", "interviewer")
 builder.add_conditional_edges(
     "interviewer",
     route_after_interviewer,

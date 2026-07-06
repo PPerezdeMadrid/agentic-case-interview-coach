@@ -12,8 +12,10 @@ from dashboard_store import (
     NOT_TESTED,
     ensure_dashboard_db,
     get_human_evaluation,
+    list_trace_runs,
     list_runs,
     load_run,
+    load_run_traces,
     save_human_evaluation,
 )
 
@@ -113,6 +115,13 @@ def compare_runs():
     )
 
 
+@app.get("/traces")
+def trace_index():
+    ensure_dashboard_db()
+    trace_runs = list_trace_runs(limit=100)
+    return render_template("trace_index.html", trace_runs=trace_runs)
+
+
 @app.get("/runs/<run_id>")
 def get_run(run_id: str):
     try:
@@ -124,6 +133,19 @@ def get_run(run_id: str):
         return jsonify(run_payload)
 
     return render_template("run_detail.html", run=run_payload)
+
+
+@app.get("/runs/<run_id>/trace")
+def get_run_trace(run_id: str):
+    try:
+        trace_payload = load_run_traces(run_id)
+    except FileNotFoundError as exc:
+        abort(404, str(exc))
+
+    if _wants_json():
+        return jsonify(trace_payload)
+
+    return render_template("run_trace.html", trace=trace_payload)
 
 
 @app.get("/runs/<run_id>/human-evaluation")
@@ -160,7 +182,12 @@ def save_human_evaluation_page(run_id: str):
 def get_human_evaluation_api(run_id: str):
     load_run(run_id)
     payload = get_human_evaluation(run_id)
-    return jsonify(payload or {"run_id": run_id, "human_evaluation": None})
+    return jsonify(
+        {
+            "run_id": run_id,
+            "human_evaluation": payload,
+        }
+    )
 
 
 @app.post("/api/runs/<run_id>/human-evaluation")

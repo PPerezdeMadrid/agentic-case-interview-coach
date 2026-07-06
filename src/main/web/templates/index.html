@@ -31,6 +31,7 @@
           <th>Created</th>
           <th>Human Eval</th>
           <th>Model vs Human MAE</th>
+          <th>Trace</th>
           <th>Compare</th>
         </tr>
       </thead>
@@ -43,11 +44,12 @@
           <td>{{ run.created_at }}</td>
           <td>{{ 'yes' if run.has_human_evaluation else 'no' }}</td>
           <td>{{ run.metrics.model_vs_human_mae if run.metrics.model_vs_human_mae is not none else 'n/a' }}</td>
+          <td><a href="{{ url_for('get_run_trace', run_id=run.run_id) }}">Open trace</a></td>
           <td><a href="{{ url_for('compare_runs', run_a=run.run_id) }}">Use as A</a></td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="7">No persisted runs found in <code>artifacts/runs.sqlite</code>.</td>
+          <td colspan="8">No persisted runs found in <code>artifacts/runs.sqlite</code>.</td>
         </tr>
         {% endfor %}
       </tbody>

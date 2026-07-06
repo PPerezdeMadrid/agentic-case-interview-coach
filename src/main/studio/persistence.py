@@ -47,6 +47,33 @@ def ensure_runs_db() -> Path:
         connection.execute(
             "CREATE INDEX IF NOT EXISTS idx_runs_thread_id ON runs(thread_id)"
         )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS agent_state_traces (
+                trace_id TEXT PRIMARY KEY,
+                run_id TEXT NOT NULL,
+                graph_name TEXT NOT NULL,
+                thread_id TEXT NOT NULL,
+                step_index INTEGER NOT NULL,
+                node_name TEXT NOT NULL,
+                actor TEXT NOT NULL,
+                scenario_ref TEXT,
+                turn_index_before INTEGER,
+                turn_index_after INTEGER,
+                judge_round_before INTEGER,
+                judge_round_after INTEGER,
+                enough_evidence_before INTEGER,
+                enough_evidence_after INTEGER,
+                focus_areas_before_json TEXT NOT NULL,
+                focus_areas_after_json TEXT NOT NULL,
+                changed_fields_json TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
+        connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_agent_state_traces_run_step ON agent_state_traces(run_id, step_index)"
+        )
 
     return RUNS_DB_PATH
 
@@ -171,9 +198,122 @@ def _extract_final_feedback(transcript: Any) -> str | None:
     return None
 
 
+def _resolve_run_id(state: dict[str, Any], config: Any = None) -> str:
+    state_run_id = str(state.get("run_id", "") or "").strip()
+    if state_run_id:
+        return state_run_id
+
+    config_run_id = _find_first_string(
+        config,
+        (
+            "run_id",
+            "runId",
+        ),
+    )
+    if config_run_id:
+        return config_run_id
+
+    return str(uuid.uuid4())
+
+
+def _snapshot_trace_relevant_state(state: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "turn_index": int(state.get("turn_index", 0) or 0),
+        "judge_round": int(state.get("judge_round", 0) or 0),
+        "enough_evidence": bool(state.get("enough_evidence", False)),
+        "focus_areas": state.get("focus_areas", []),
+        "transcript": state.get("transcript", []),
+        "data_gathered": state.get("data_gathered", []),
+        "case_guidance": state.get("case_guidance", ""),
+        "case_prompt": state.get("case_prompt", ""),
+        "retrieved_profitability_context": state.get("retrieved_profitability_context", []),
+        "case_performance": state.get("case_performance", {}),
+        "quality_dialog": state.get("quality_dialog", {}),
+    }
+
+
+def _compute_state_changes(before: dict[str, Any], after: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    changes: dict[str, dict[str, Any]] = {}
+    for key in sorted(set(before) | set(after)):
+        before_value = before.get(key)
+        after_value = after.get(key)
+        if before_value == after_value:
+            continue
+        changes[key] = {
+            "before": before_value,
+            "after": after_value,
+        }
+    return changes
+
+
+def persist_agent_state_trace(
+    *,
+    graph_name: str,
+    node_name: str,
+    actor: str,
+    state_before: dict[str, Any],
+    state_after: dict[str, Any],
+    config: Any = None,
+) -> str:
+    db_path = ensure_runs_db()
+    trace_id = str(uuid.uuid4())
+    created_at = datetime.now(timezone.utc).isoformat()
+    before_snapshot = _snapshot_trace_relevant_state(state_before)
+    after_snapshot = _snapshot_trace_relevant_state(state_after)
+    changes = _compute_state_changes(before_snapshot, after_snapshot)
+
+    with sqlite3.connect(db_path, timeout=30) as connection:
+        connection.execute(
+            """
+            INSERT INTO agent_state_traces (
+                trace_id,
+                run_id,
+                graph_name,
+                thread_id,
+                step_index,
+                node_name,
+                actor,
+                scenario_ref,
+                turn_index_before,
+                turn_index_after,
+                judge_round_before,
+                judge_round_after,
+                enough_evidence_before,
+                enough_evidence_after,
+                focus_areas_before_json,
+                focus_areas_after_json,
+                changed_fields_json,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                trace_id,
+                _resolve_run_id(state_after, config),
+                graph_name,
+                resolve_thread_id(state_after, config),
+                int(state_after.get("trace_step_index", 0) or 0),
+                node_name,
+                actor,
+                _extract_scenario_ref(state_after, config),
+                before_snapshot["turn_index"],
+                after_snapshot["turn_index"],
+                before_snapshot["judge_round"],
+                after_snapshot["judge_round"],
+                1 if before_snapshot["enough_evidence"] else 0,
+                1 if after_snapshot["enough_evidence"] else 0,
+                _json_dumps(before_snapshot["focus_areas"]),
+                _json_dumps(after_snapshot["focus_areas"]),
+                _json_dumps(changes),
+                created_at,
+            ),
+        )
+
+    return trace_id
+
+
 def persist_run(graph_name: str, state: dict[str, Any], config: Any = None) -> str:
     db_path = ensure_runs_db()
-    run_id = str(uuid.uuid4())
+    run_id = _resolve_run_id(state, config)
     transcript = state.get("transcript", [])
     created_at = datetime.now(timezone.utc).isoformat()
 
@@ -229,3 +369,36 @@ def make_persist_run_node(graph_name: str):
         return {}
 
     return persist_run_node
+
+
+def make_trace_node(
+    graph_name: str,
+    node_name: str,
+    actor: str,
+    node_fn,
+):
+    def traced_node(
+        state: dict[str, Any],
+        config: RunnableConfig | None = None,
+    ) -> dict[str, Any]:
+        state_before = dict(state)
+        update = node_fn(state)
+        run_id = _resolve_run_id(state_before, config)
+        step_index = int(state_before.get("trace_step_index", 0) or 0) + 1
+        update_with_meta = dict(update)
+        update_with_meta["run_id"] = run_id
+        update_with_meta["trace_step_index"] = step_index
+
+        state_after = dict(state_before)
+        state_after.update(update_with_meta)
+        persist_agent_state_trace(
+            graph_name=graph_name,
+            node_name=node_name,
+            actor=actor,
+            state_before=state_before,
+            state_after=state_after,
+            config=config,
+        )
+        return update_with_meta
+
+    return traced_node

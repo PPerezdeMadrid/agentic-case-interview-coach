@@ -6,7 +6,25 @@ from pathlib import Path
 from typing import Any
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+def _resolve_runtime_root() -> Path:
+    """Find the asset root regardless of where the repository is cloned."""
+    loader_path = Path(__file__).resolve()
+
+    for parent in loader_path.parents:
+        if (parent / "scenarios" / "synthetic-based").exists() and (
+            parent / "synthetic-dataset"
+        ).exists():
+            return parent
+
+        src_parent = parent / "src"
+        if (src_parent / "scenarios" / "synthetic-based").exists() and (
+            src_parent / "synthetic-dataset"
+        ).exists():
+            return src_parent
+
+    raise LoaderError(
+        f"Could not locate runtime asset root from loader path: {loader_path}"
+    )
 
 
 class LoaderError(ValueError):
@@ -27,6 +45,7 @@ def _coerce_path(value: str | Path) -> Path:
     return value if isinstance(value, Path) else Path(value)
 
 
+REPO_ROOT = _resolve_runtime_root()
 SCENARIOS_DIR = REPO_ROOT / "scenarios" / "synthetic-based"
 CASE_DIRS = (REPO_ROOT / "synthetic-dataset",)
 RUBRIC_PATH = REPO_ROOT / "scenarios" / "rubric" / "rubric.json"

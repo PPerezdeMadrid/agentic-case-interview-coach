@@ -9,3 +9,6 @@ aiohttp>=3.13.4
 python-dotenv>=1.0.1
 pypdf>=5.6.0
 requests>=2.31.0
+chromadb>=1.5.9
+langchain-chroma>=1.1.0
+fastembed>=0.8.0

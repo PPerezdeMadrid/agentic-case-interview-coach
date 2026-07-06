@@ -186,6 +186,7 @@ def run_graph_for_scenario(
     runtime: GraphRuntime,
     scenario_path: Path,
     seed: int,
+    
     batch_id: str,
     index: int,
 ) -> dict[str, Any]:

@@ -41,6 +41,30 @@ def create_runs_table(db_path: Path) -> None:
             )
             """
         )
+        connection.execute(
+            """
+            CREATE TABLE agent_state_traces (
+                trace_id TEXT PRIMARY KEY,
+                run_id TEXT NOT NULL,
+                graph_name TEXT NOT NULL,
+                thread_id TEXT NOT NULL,
+                step_index INTEGER NOT NULL,
+                node_name TEXT NOT NULL,
+                actor TEXT NOT NULL,
+                scenario_ref TEXT,
+                turn_index_before INTEGER,
+                turn_index_after INTEGER,
+                judge_round_before INTEGER,
+                judge_round_after INTEGER,
+                enough_evidence_before INTEGER,
+                enough_evidence_after INTEGER,
+                focus_areas_before_json TEXT NOT NULL,
+                focus_areas_after_json TEXT NOT NULL,
+                changed_fields_json TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
 
 
 def insert_sample_run(db_path: Path, run_id: str = "run_001") -> None:
@@ -119,6 +143,123 @@ def insert_sample_run(db_path: Path, run_id: str = "run_001") -> None:
                 "2026-07-02T10:00:00+00:00",
             ),
         )
+        connection.execute(
+            """
+            INSERT INTO agent_state_traces (
+                trace_id,
+                run_id,
+                graph_name,
+                thread_id,
+                step_index,
+                node_name,
+                actor,
+                scenario_ref,
+                turn_index_before,
+                turn_index_after,
+                judge_round_before,
+                judge_round_after,
+                enough_evidence_before,
+                enough_evidence_after,
+                focus_areas_before_json,
+                focus_areas_after_json,
+                changed_fields_json,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                "trace_001",
+                run_id,
+                "agentic",
+                "thread_001",
+                1,
+                "interviewer",
+                "interviewer",
+                "scenario_test",
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                json.dumps([]),
+                json.dumps(["structure"]),
+                json.dumps(
+                    {
+                        "transcript": {
+                            "before": [],
+                            "after": ["Interviewer: Our profits are falling."],
+                        },
+                        "turn_index": {
+                            "before": 0,
+                            "after": 1,
+                        },
+                        "focus_areas": {
+                            "before": [],
+                            "after": ["structure"],
+                        },
+                    }
+                ),
+                "2026-07-02T10:00:01+00:00",
+            ),
+        )
+        connection.execute(
+            """
+            INSERT INTO agent_state_traces (
+                trace_id,
+                run_id,
+                graph_name,
+                thread_id,
+                step_index,
+                node_name,
+                actor,
+                scenario_ref,
+                turn_index_before,
+                turn_index_after,
+                judge_round_before,
+                judge_round_after,
+                enough_evidence_before,
+                enough_evidence_after,
+                focus_areas_before_json,
+                focus_areas_after_json,
+                changed_fields_json,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                "trace_002",
+                run_id,
+                "agentic",
+                "thread_001",
+                2,
+                "candidate",
+                "candidate",
+                "scenario_test",
+                1,
+                2,
+                0,
+                0,
+                0,
+                1,
+                json.dumps(["structure"]),
+                json.dumps(["structure"]),
+                json.dumps(
+                    {
+                        "transcript": {
+                            "before": ["Interviewer: Our profits are falling."],
+                            "after": [
+                                "Interviewer: Our profits are falling.",
+                                "Candidate: I would split revenue and costs.",
+                            ],
+                        },
+                        "enough_evidence": {
+                            "before": False,
+                            "after": True,
+                        },
+                    }
+                ),
+                "2026-07-02T10:00:02+00:00",
+            ),
+        )
 
 
 class DashboardStoreTests(unittest.TestCase):
@@ -139,6 +280,55 @@ class DashboardStoreTests(unittest.TestCase):
         self.assertEqual(metrics["expected_vs_human_mae"], 0.5)
         self.assertEqual(metrics["comparable_dimensions"], 1)
         self.assertEqual(metrics["expected_human_comparable_dimensions"], 2)
+
+    def test_calculate_error_metrics_exact_match_rate_is_100_for_all_matches(self) -> None:
+        rows = [
+            {"expected_score": 4, "model_score": 4, "human_score": 4},
+            {"expected_score": 3, "model_score": 3, "human_score": 3},
+        ]
+
+        metrics = dashboard_store.calculate_error_metrics(rows)
+
+        self.assertEqual(metrics["exact_match_rate"], 100.0)
+        self.assertEqual(metrics["off_by_one_rate"], 100.0)
+        self.assertEqual(metrics["model_vs_human_mae"], 0.0)
+        self.assertEqual(metrics["comparable_dimensions"], 2)
+
+    def test_calculate_error_metrics_exact_match_rate_is_50_for_mixed_results(self) -> None:
+        rows = [
+            {"expected_score": 4, "model_score": 4, "human_score": 4},
+            {"expected_score": 3, "model_score": 2, "human_score": 3},
+        ]
+
+        metrics = dashboard_store.calculate_error_metrics(rows)
+
+        self.assertEqual(metrics["exact_match_rate"], 50.0)
+        self.assertEqual(metrics["off_by_one_rate"], 100.0)
+        self.assertEqual(metrics["model_vs_human_mae"], 0.5)
+        self.assertEqual(metrics["comparable_dimensions"], 2)
+
+    def test_calculate_error_metrics_exact_match_rate_ignores_missing_pairs(self) -> None:
+        rows = [
+            {"expected_score": 4, "model_score": 4, "human_score": 4},
+            {"expected_score": 3, "model_score": "", "human_score": 3},
+            {"expected_score": 2, "model_score": 2, "human_score": None},
+        ]
+
+        metrics = dashboard_store.calculate_error_metrics(rows)
+
+        self.assertEqual(metrics["exact_match_rate"], 100.0)
+        self.assertEqual(metrics["comparable_dimensions"], 1)
+
+    def test_calculate_error_metrics_exact_match_rate_is_none_without_comparable_pairs(self) -> None:
+        rows = [
+            {"expected_score": 4, "model_score": "", "human_score": 4},
+            {"expected_score": 3, "model_score": "not_tested", "human_score": None},
+        ]
+
+        metrics = dashboard_store.calculate_error_metrics(rows)
+
+        self.assertIsNone(metrics["exact_match_rate"])
+        self.assertEqual(metrics["comparable_dimensions"], 0)
 
     def test_load_run_builds_expected_model_and_human_scores(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -175,8 +365,27 @@ class DashboardStoreTests(unittest.TestCase):
         self.assertEqual(payload["model_scores"]["rubric"]["case_structure"]["score"], 3)
         self.assertEqual(payload["human_scores"]["rubric"]["case_structure"]["score"], 4)
         self.assertEqual(payload["metrics"]["model_vs_human_mae"], 1.0)
-        self.assertEqual(payload["metrics"]["exact_match_rate"], 50.0)
+        self.assertEqual(payload["metrics"]["exact_match_rate"], 0.0)
         self.assertEqual(payload["annotation_sections"]["rubric"], [])
+
+    def test_load_run_traces_builds_timeline_payload(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            db_path = Path(temp_dir) / "runs.sqlite"
+            create_runs_table(db_path)
+            insert_sample_run(db_path)
+
+            with patch.object(dashboard_store, "RUNS_DB_PATH", db_path):
+                trace_payload = dashboard_store.load_run_traces("run_001")
+
+        self.assertEqual(trace_payload["run"]["run_id"], "run_001")
+        self.assertEqual(trace_payload["summary"]["trace_count"], 2)
+        self.assertEqual(trace_payload["summary"]["actor_count"], 2)
+        self.assertIn("transcript", trace_payload["summary"]["changed_field_names"])
+        self.assertEqual(trace_payload["traces"][0]["transcript_updates"][0]["role"], "interviewer")
+        self.assertEqual(
+            trace_payload["traces"][1]["transcript_updates"][0]["content"],
+            "I would split revenue and costs.",
+        )
 
 
 class WorkbenchAppTests(unittest.TestCase):
@@ -246,6 +455,30 @@ class WorkbenchAppTests(unittest.TestCase):
         scores_payload = scores_response.get_json()
         self.assertEqual(scores_payload["human_scores"]["rubric"]["case_structure"]["score"], "4")
         self.assertEqual(scores_payload["metrics"]["model_vs_human_mae"], 1.0)
+
+    def test_human_evaluation_api_returns_wrapper_when_missing(self) -> None:
+        response = self.client.get("/api/runs/run_001/human-evaluation")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["run_id"], "run_001")
+        self.assertIsNone(payload["human_evaluation"])
+
+    def test_trace_index_page_lists_runs(self) -> None:
+        response = self.client.get("/traces")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Trace Explorer", response.get_data(as_text=True))
+        self.assertIn("run_001", response.get_data(as_text=True))
+
+    def test_get_run_trace_json_returns_trace_payload(self) -> None:
+        response = self.client.get("/runs/run_001/trace?format=json")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["run"]["run_id"], "run_001")
+        self.assertEqual(payload["summary"]["trace_count"], 2)
+        self.assertEqual(payload["traces"][0]["step_index"], 1)
 
     def test_human_evaluation_api_rejects_invalid_section_shape(self) -> None:
         response = self.client.post(

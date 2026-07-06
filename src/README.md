@@ -246,5 +246,5 @@ This executes:
 - `../README.md`: repository-level overview
 - `../doc/scenario-case-rubric-integration-plan.md`: data-layer integration design
 - `../doc/RAG.md`: retrieval design notes
-- `../doc/rag-knowledge-layer.md`: knowledge-layer rationale and implementation notes
+- `../RAG_GUIDE_PDF.md`: case-guide PDF RAG implementation and refactor notes
 - `main/GPU-server.md`: optional vLLM/HPC deployment setup

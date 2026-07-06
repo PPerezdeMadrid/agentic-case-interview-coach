@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 
 STUDIO_DIR = Path(__file__).resolve().parents[1]
@@ -14,6 +14,7 @@ if str(STUDIO_DIR) not in sys.path:
 
 try:
     import agentic
+    import baseline
     import persistence
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Studio test dependencies are not installed: {exc.name}") from exc
@@ -123,7 +124,8 @@ def make_state() -> dict:
 
 
 class AgenticGraphTests(unittest.TestCase):
-    def test_build_initial_interview_state_populates_runtime_fields(self) -> None:
+    def test_initial_state(self) -> None:
+        # Checks that the initial graph state is populated from the runtime bundle.
         bundle = make_runtime_bundle()
 
         with patch.object(agentic, "load_selected_simulation_bundle", return_value=bundle):
@@ -136,13 +138,15 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertEqual(state["judge_round"], 0)
         self.assertIn("case_structure", agentic.format_rubric(state["rubric_data"]))
 
-    def test_interviewer_first_turn_uses_case_prompt_without_llm(self) -> None:
+    def test_interviewer_first_turn(self) -> None:
+        # Checks that the first interviewer turn uses the case prompt without calling the LLM.
         state = make_state()
+        mock_llm = Mock()
 
-        with patch.object(agentic.llm_server, "invoke") as invoke:
+        with patch.object(agentic, "llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
-        invoke.assert_not_called()
+        mock_llm.invoke.assert_not_called()
         self.assertEqual(update["turn_index"], 1)
         self.assertFalse(update["enough_evidence"])
         self.assertEqual(
@@ -150,8 +154,10 @@ class AgenticGraphTests(unittest.TestCase):
             ["Interviewer: Our profits are down. What would you look at first?"],
         )
 
-    def test_candidate_node_ignores_hidden_transcript_and_falls_back_to_plain_text(self) -> None:
+    def test_candidate_visible_transcript(self) -> None:
+        # Checks that the candidate only sees public transcript lines and supports plain-text fallback.
         state = make_state()
+        mock_llm = Mock()
         state["transcript"] = [
             "Interviewer: Start with the objective.",
             "Interviewer reveal: Revenue is flat year over year.",
@@ -164,7 +170,8 @@ class AgenticGraphTests(unittest.TestCase):
             observed_prompt["content"] = messages[0].content
             return SimpleNamespace(content="<think>scratchpad</think>I'd split revenue and costs first.")
 
-        with patch.object(agentic.llm_server, "invoke", side_effect=fake_invoke):
+        mock_llm.invoke.side_effect = fake_invoke
+        with patch.object(agentic, "llm_server", mock_llm):
             update = agentic.candidate_node(state)
 
         self.assertIn("Interviewer: Start with the objective.", observed_prompt["content"])
@@ -176,31 +183,93 @@ class AgenticGraphTests(unittest.TestCase):
         )
         self.assertEqual(update["data_gathered"], [])
 
-    def test_judge_forces_evaluation_when_max_rounds_is_reached(self) -> None:
+    def test_interviewer_focus_areas(self) -> None:
+        # Checks that judge focus areas are injected into the interviewer prompt as direct instructions.
         state = make_state()
+        mock_llm = Mock()
+        state["turn_index"] = 1
+        state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
+        state["focus_areas"] = [
+            "test whether the candidate can break profit into revenue and cost drivers",
+            "push for a sharper recommendation with risks and next steps",
+        ]
+
+        observed_prompt = {}
+
+        def fake_invoke(messages):
+            observed_prompt["content"] = messages[0].content
+            return SimpleNamespace(
+                content=json.dumps(
+                    {
+                        "action": "question",
+                        "content": "How would you prioritise between revenue and cost drivers first?",
+                        "block_id": "",
+                        "ready_for_judge": False,
+                    }
+                )
+            )
+
+        mock_llm.invoke.side_effect = fake_invoke
+        with patch.object(agentic, "llm_server", mock_llm):
+            update = agentic.interviewer_node(state)
+
+        self.assertIn("Current judge focus areas to act on directly:", observed_prompt["content"])
+        self.assertIn("- test whether the candidate can break profit into revenue and cost drivers", observed_prompt["content"])
+        self.assertIn("- push for a sharper recommendation with risks and next steps", observed_prompt["content"])
+        self.assertEqual(
+            update["transcript"][-1],
+            "Interviewer: How would you prioritise between revenue and cost drivers first?",
+        )
+
+    def test_judge_max_rounds(self) -> None:
+        # Checks that the judge forces evaluation after the maximum number of rounds.
+        state = make_state()
+        mock_llm = Mock()
         state["judge_round"] = agentic.MAX_JUDGE_ROUNDS - 1
         state["focus_areas"] = ["structure"]
 
         with patch.object(
-            agentic.llm_server,
-            "invoke",
-            return_value=SimpleNamespace(
+            agentic,
+            "retrieve_case_guide_context",
+            return_value=[{"content": "Start with a clean issue tree."}],
+        ):
+            mock_llm.invoke.return_value = SimpleNamespace(
                 content=json.dumps(
                     {
                         "enough_evidence": False,
                         "focus_areas": ["structure", "communication"],
                     }
                 )
-            ),
-        ):
-            update = agentic.judge_node(state)
+            )
+            with patch.object(agentic, "llm_server", mock_llm):
+                update = agentic.judge_node(state)
 
         self.assertEqual(update["judge_round"], agentic.MAX_JUDGE_ROUNDS)
         self.assertTrue(update["enough_evidence"])
         self.assertIsNone(update["focus_areas"])
 
-    def test_graph_runs_end_to_end_and_persists_feedback(self) -> None:
+    def test_case_guide_context_without_prompt(self) -> None:
+        # Checks that case-guide retrieval can rebuild the query when case_prompt is missing.
+        state = {"scenario_ref": "scenario_test"}
+
+        with patch.object(agentic, "load_selected_simulation_bundle", return_value=make_runtime_bundle()):
+            with patch.object(
+                agentic,
+                "retrieve_case_guide_context",
+                return_value=[{"content": "Clarify the objective first."}],
+            ) as retrieve:
+                context = agentic.get_case_guide_context(state, "judge")
+
+        retrieve.assert_called_once()
+        retrieval_query = retrieve.call_args.args[0]
+        self.assertIn("Case prompt: Our profits are down. What would you look at first?", retrieval_query)
+        self.assertIn("Current goal: Decide what evidence is still missing before evaluating the candidate.", retrieval_query)
+        self.assertEqual(context, ["Clarify the objective first."])
+
+    def test_graph_end_to_end(self) -> None:
+        # Checks the full graph run, including final feedback and SQLite persistence.
         state = make_state()
+        mock_llm = Mock()
         llm_responses = [
             SimpleNamespace(
                 content=json.dumps(
@@ -251,13 +320,19 @@ class AgenticGraphTests(unittest.TestCase):
             artifacts_dir = Path(temp_dir)
             db_path = artifacts_dir / "runs.sqlite"
 
-            with patch.object(agentic.llm_server, "invoke", side_effect=llm_responses):
-                with patch.object(persistence, "ARTIFACTS_DIR", artifacts_dir):
-                    with patch.object(persistence, "RUNS_DB_PATH", db_path):
-                        result = agentic.graph.invoke(
-                            state,
-                            config=agentic.build_graph_config("thread_integration"),
-                        )
+            with patch.object(
+                agentic,
+                "retrieve_case_guide_context",
+                return_value=[],
+            ):
+                mock_llm.invoke.side_effect = llm_responses
+                with patch.object(agentic, "llm_server", mock_llm):
+                    with patch.object(persistence, "ARTIFACTS_DIR", artifacts_dir):
+                        with patch.object(persistence, "RUNS_DB_PATH", db_path):
+                            result = agentic.graph.invoke(
+                                state,
+                                config=agentic.build_graph_config("thread_integration"),
+                            )
 
             self.assertIn(
                 "Interviewer reveal: Revenue is flat year over year.",
@@ -277,6 +352,13 @@ class AgenticGraphTests(unittest.TestCase):
                 row = connection.execute(
                     "SELECT thread_id, final_feedback, transcript_json FROM runs"
                 ).fetchone()
+                trace_rows = connection.execute(
+                    """
+                    SELECT node_name, step_index, changed_fields_json
+                    FROM agent_state_traces
+                    ORDER BY step_index
+                    """
+                ).fetchall()
 
             self.assertIsNotNone(row)
             self.assertEqual(row[0], "thread_test")
@@ -285,6 +367,89 @@ class AgenticGraphTests(unittest.TestCase):
                 "Clear structure. Push harder on cost drill-downs next time.",
             )
             self.assertIn("Give Feedback", row[2])
+            self.assertGreaterEqual(len(trace_rows), 2)
+            self.assertEqual(trace_rows[0][0], "interviewer")
+            self.assertIn('"turn_index"', trace_rows[0][2])
+            self.assertTrue(any(trace_row[0] == "judge" for trace_row in trace_rows))
+
+
+class BaselineGraphTests(unittest.TestCase):
+    def test_baseline_prompt_context(self) -> None:
+        # Checks that the baseline interviewer prompt includes retrieved guide context.
+        state = make_state()
+        mock_llm = Mock()
+        state["turn_index"] = 1
+        state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
+        state["case_guide_context"] = [
+            "Start by clarifying the objective and metric.",
+            "Split the problem into revenue and cost drivers.",
+        ]
+
+        observed_prompt = {}
+
+        def fake_invoke(messages):
+            observed_prompt["content"] = messages[0].content
+            return SimpleNamespace(
+                content=json.dumps(
+                    {
+                        "action": "question",
+                        "content": "What has happened to costs over time?",
+                        "block_id": "",
+                        "ready_for_evaluation": False,
+                    }
+                )
+            )
+
+        mock_llm.invoke.side_effect = fake_invoke
+        with patch.object(baseline, "llm_server", mock_llm):
+            update = baseline.baseline_node(state)
+
+        self.assertIn("Consulting Case Interview Guide excerpts:", observed_prompt["content"])
+        self.assertIn("Start by clarifying the objective and metric.", observed_prompt["content"])
+        self.assertEqual(
+            update["transcript"][-1],
+            "Interviewer: What has happened to costs over time?",
+        )
+
+    def test_baseline_retrieve_context(self) -> None:
+        # Checks that retrieved guide chunks are stored as baseline case_guide_context.
+        state = make_state()
+
+        with patch.object(
+            baseline,
+            "retrieve_case_guide_context",
+            return_value=[
+                {"content": "Probe the objective before branching."},
+                {"content": "Check revenue versus cost drivers."},
+            ],
+        ):
+            update = baseline.retrieve_case_guide_node(state)
+
+        self.assertEqual(
+            update["case_guide_context"],
+            [
+                "Probe the objective before branching.",
+                "Check revenue versus cost drivers.",
+            ],
+        )
+
+    def test_baseline_context_without_prompt(self) -> None:
+        # Checks that baseline retrieval can rebuild the query when case_prompt is missing.
+        state = {"scenario_ref": "scenario_test"}
+
+        with patch.object(baseline, "load_selected_simulation_bundle", return_value=make_runtime_bundle()):
+            with patch.object(
+                baseline,
+                "retrieve_case_guide_context",
+                return_value=[{"content": "Split revenue from cost drivers."}],
+            ) as retrieve:
+                update = baseline.retrieve_case_guide_node(state)
+
+        retrieve.assert_called_once_with(
+            "Our profits are down. What would you look at first?",
+            top_k=4,
+        )
+        self.assertEqual(update["case_guide_context"], ["Split revenue from cost drivers."])
 
 
 if __name__ == "__main__":

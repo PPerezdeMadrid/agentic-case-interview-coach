@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Trace {{ trace.run.run_id }}{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Run Trace</p>
+      <h1>{{ trace.run.run_id }}</h1>
+      <p class="lede">{{ trace.run.graph_name }} • {{ trace.run.scenario_ref or 'no scenario ref' }}</p>
+    </div>
+    <div class="chip-row">
+      <a class="chip chip-link" href="{{ url_for('get_run', run_id=trace.run.run_id) }}">open run</a>
+      <span class="chip">{{ trace.summary.trace_count }} trace steps</span>
+      <span class="chip">{{ trace.summary.actor_count }} actors</span>
+      <span class="chip">{{ trace.summary.node_count }} nodes</span>
+    </div>
+  </div>
+  <div class="meta-grid">
+    <div>
+      <strong>Thread</strong>
+      <p>{{ trace.run.thread_id }}</p>
+    </div>
+    <div>
+      <strong>Created</strong>
+      <p>{{ trace.run.created_at }}</p>
+    </div>
+    <div>
+      <strong>Changed Fields</strong>
+      <p>{{ trace.summary.changed_field_names|join(', ') if trace.summary.changed_field_names else 'none' }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Timeline</p>
+      <h2>Agent interaction</h2>
+      {% if not trace.summary.has_trace_table %}
+      <p class="lede">The database does not have an <code>agent_state_traces</code> table yet.</p>
+      {% elif not trace.traces %}
+      <p class="lede">This run exists, but no trace rows were recorded for it.</p>
+      {% else %}
+      <p class="lede">Cada tarjeta representa un paso persistido del grafo y resume qué cambió en el estado.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if trace.traces %}
+  <div class="trace-timeline">
+    {% for item in trace.traces %}
+    <article class="trace-card">
+      <div class="trace-card__header">
+        <div>
+          <p class="eyebrow">Step {{ item.step_index }}</p>
+          <h3>{{ item.actor }} → {{ item.node_name }}</h3>
+          <p class="lede">{{ item.created_at }}</p>
+        </div>
+        <div class="trace-badges">
+          <span class="chip">turn {{ item.turn_index_before }} → {{ item.turn_index_after }}</span>
+          <span class="chip">judge {{ item.judge_round_before }} → {{ item.judge_round_after }}</span>
+          <span class="chip">{{ 'enough evidence' if item.enough_evidence_after else 'still gathering' }}</span>
+        </div>
+      </div>
+
+      {% if item.transcript_updates %}
+      <div class="trace-section">
+        <strong>Transcript additions</strong>
+        <div class="trace-message-list">
+          {% for message in item.transcript_updates %}
+          <div class="trace-message">
+            <span class="trace-message__role">{{ message.role }}</span>
+            <p>{{ message.content }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="trace-section">
+        <strong>Changed fields</strong>
+        {% if item.field_changes %}
+        <div class="trace-field-grid">
+          {% for field in item.field_changes %}
+          <div class="trace-field-card">
+            <span class="trace-field-card__name">{{ field.field }}</span>
+            <p>{{ field.summary }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="helper">No relevant state diff persisted for this step.</p>
+        {% endif %}
+      </div>
+
+      <div class="trace-section trace-section-split">
+        <div>
+          <strong>Focus Areas Before</strong>
+          <p>{{ item.focus_areas_before|join(', ') if item.focus_areas_before else 'none' }}</p>
+        </div>
+        <div>
+          <strong>Focus Areas After</strong>
+          <p>{{ item.focus_areas_after|join(', ') if item.focus_areas_after else 'none' }}</p>
+        </div>
+      </div>
+
+      <details class="trace-json">
+        <summary>Raw changed_fields_json</summary>
+        <pre>{{ item.changed_fields|tojson(indent=2) }}</pre>
+      </details>
+    </article>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

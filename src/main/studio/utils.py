@@ -8,17 +8,6 @@ from adapter import (
 )
 
 
-FOCUS_AREA_VALUES = {
-    "structure",
-    "prioritisation",
-    "business_logic",
-    "assumptions",
-    "quantitative_reasoning",
-    "communication",
-    "recommendation",
-}
-
-
 def strip_thinking(text: str) -> str:
     cleaned = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
     return cleaned.strip()
@@ -178,12 +167,19 @@ def parse_interviewer_output(raw_output: str) -> tuple[str, str, str, bool]:
 def normalize_focus_areas(raw_focus_areas: object) -> list[str]:
     if not isinstance(raw_focus_areas, list):
         return []
-    normalized = []
+
+    normalized: list[str] = []
+    seen: set[str] = set()
     for item in raw_focus_areas:
-        value = str(item).strip().lower()
-        if value in FOCUS_AREA_VALUES and value not in normalized:
-            normalized.append(value)
-    return normalized
+        value = " ".join(str(item).strip().split())
+        if not value:
+            continue
+        dedupe_key = value.lower()
+        if dedupe_key in seen:
+            continue
+        normalized.append(value)
+        seen.add(dedupe_key)
+    return normalized[:3]
 
 
 def score_value(value: object) -> int | str:

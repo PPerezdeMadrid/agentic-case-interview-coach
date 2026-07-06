@@ -1,310 +1,335 @@
-# System Architecture Explanation
+# System Architecture Summary
 
 ## 1. Overview
 
-The proposed system is an AI-based platform for simulating consulting case interviews and generating automatic feedback on a student's performance. The project compares two different architectures:
+The active program is a LangGraph-based evaluation workbench for consulting case interview simulations. It currently supports two executable graph variants:
 
-1. **Baseline system**: a single-agent system that manages the whole interaction.
-2. **Agentic system**: a multi-agent architecture where different agents have specialised responsibilities and coordinate during the interview.
+1. `baseline`: one graph node acts as the interviewer and later performs evaluation and feedback.
+2. `agentic`: separate interviewer and judge nodes coordinate before the evaluation stage.
 
-The purpose of this comparison is to evaluate whether an agentic architecture provides better assessment and feedback than a simpler single-agent baseline.
+The current MVP is not yet a live student-facing application. Instead, it runs controlled simulations with:
 
+- a scenario JSON that defines the candidate profile and expected scores;
+- a case JSON that contains prompt, visible data blocks, hidden guidance, and final recommendation;
+- a shared rubric;
+- an LLM-backed synthetic candidate node used to answer interview questions.
 
-## 2. Main Goal of the System
-
-In consulting case interview, the student receives a business problem, asks questions, analyses information, performs calculations when needed, and proposes a final recommendation.
-
-The system does not only check whether the final answer is correct. Instead, it evaluates the quality of the student's reasoning process, including:
-
-- problem structuring;
-- business logic;
-- quantitative reasoning;
-- use of assumptions;
-- communication clarity;
-- final recommendation quality.
-
-> Note: consulting case interviews usually do not have a single correct answer.
+This makes the system suitable for comparing architectures under repeatable conditions.
 
 
-## 3. High-Level Architecture
+## 2. Active Runtime Structure
 
-At a high level, the system starts from a case study question and interacts with the student through an interview flow. The student's answers are stored as a transcript, which becomes the main evidence used for evaluation.
+The active code lives under `src/main/`:
 
-The architecture contains two alternative execution modes:
+- `studio/`: LangGraph graphs, prompt orchestration, retrieval, loading, and persistence
+- `web/`: Flask dashboard for inspecting runs, traces, and human evaluations
+- `artifacts/`: SQLite database storing runs and state traces
+
+Supporting assets live under:
+
+- `src/scenarios/`: scenario definitions
+- `src/synthetic-dataset/`: case content used by the active runtime
+- `src/database/`: shared knowledge assets, rubric data, and vector store
+- `doc/`: architecture and prompt documentation
+- `archive/`: older prototypes and research material, not part of the active system
+
+
+## 3. High-Level Execution Model
+
+Both graph variants consume the same runtime bundle:
 
 ```mermaid
 flowchart TD
-    A[Case Study Question] --> B[Student]
+    A[Scenario JSON] --> D[Loader]
+    B[Case JSON] --> D
+    C[Rubric JSON] --> D
 
-    B --> C1[Baseline System]
-    B --> C2[Agentic System]
+    D --> E[Initial Graph State]
 
-    C1 --> D1[Single Baseline Agent]
-    D1 --> E1[Interview + Evaluation + Feedback]
+    E --> F1[Baseline Graph]
+    E --> F2[Agentic Graph]
 
-    C2 --> D2[Interviewer Agent]
-    C2 --> D3[Judge Agent]
-    D2 <--> D3
-    D2 --> E2[Transcript]
-    D3 --> E2
-    E2 --> F2[Final Evaluation and Feedback]
+    F1 --> G[Persisted Run]
+    F2 --> G
+
+    G --> H[Flask Dashboard]
+    G --> I[Human Evaluation]
 ```
 
-The baseline system is used as a reference point. The agentic system is the proposed improvement, because it separates the responsibilities of interviewing and judging.
+The loader resolves a scenario, loads the referenced case, adapts the shared rubric, and builds a runtime state consumed by the graph.
 
 
-## 4. Baseline System
+## 4. Shared State Model
 
-This agent is responsible for the full interview cycle:
+Both graphs use the same typed state object (`AgenticGraphState`). The main fields are:
 
-1. Presenting or managing the case interview;
-2. Interacting with the student;
-3. Applying the evaluation rubric;
-4. Assigning a score or grade;
-5. Generating feedback at the end of the interaction.
+- `scenario_ref`
+- `case_prompt`
+- `candidate_profile`
+- `transcript`
+- `turn_index`
+- `case_guidance`
+- `case_data`
+- `case_recommendation`
+- `focus_areas`
+- `enough_evidence`
+- `judge_round`
+- `case_performance`
+- `quality_dialog`
+- `data_gathered`
+- `profitability_knowledge_base`
+- `retrieved_profitability_context`
+
+The transcript is the main shared evidence structure. It stores interviewer turns, candidate turns, evaluation markers, and the final feedback line.
+
+
+## 5. Input Assets
+
+### 5.1 Scenarios
+
+Synthetic scenarios live in `src/scenarios/synthetic-based/`. A scenario primarily provides:
+
+- `scenario_id`
+- `case_id`
+- candidate persona instructions
+- expected rubric scores for later comparison
+
+### 5.2 Cases
+
+Case JSON files live in `src/synthetic-dataset/`. They are adapted into:
+
+- `opening_block`
+- `visible_blocks`
+- `hidden_blocks`
+- `blocks_by_type`
+- `knowledge_sources`
+
+This allows the interviewer to reveal only candidate-visible data while still keeping hidden guidance and the expected recommendation available for evaluation.
+
+### 5.3 Rubric
+
+The runtime uses one shared rubric file from `src/scenarios/rubric/rubric.json`. It is adapted into a stable list of dimensions with criteria and score scale metadata.
+
+
+## 6. Baseline Graph
+
+The baseline graph is compiled from `src/main/studio/baseline.py`.
 
 ```mermaid
 flowchart TD
-    A[Case Study Question] --> B[Student]
-    B <--> C[Baseline Agent]
-    C --> D[Rubric + Goal]
-    C --> E[Prompting]
-    C --> F[Final Grade and Feedback]
+    Start --> LoadScenario
+    Start --> RetrieveGuide
+    LoadScenario --> BaselineNode
+    RetrieveGuide --> BaselineNode
+    BaselineNode -->|needs more evidence| Candidate
+    Candidate --> BaselineNode
+    BaselineNode -->|enough evidence| PersistRun
+    PersistRun --> End
 ```
 
-If both systems perform similarly, then the added complexity of multiple agents may not be justified. If the agentic system provides more accurate, specific, or useful feedback, then the architecture has a stronger justification.
+The baseline flow works as follows:
+
+1. Load scenario and case assets.
+2. Retrieve consulting guide context from the persistent PDF RAG store.
+3. Run a single baseline interviewer/evaluator node.
+4. Alternate with the synthetic candidate until the node decides it has enough evidence, or until the maximum number of interviewer turns is reached.
+5. Run case-performance scoring, dialog-quality scoring, and final feedback generation inside the baseline path.
+6. Persist the final run.
+
+In this architecture, the same logical agent handles interviewing, stopping, evaluation, and final feedback.
 
 
-## 5. Agentic System
+## 7. Agentic Graph
 
-The agentic system is composed of two specialised agents:
-
-1. Interviewer Agent
-2. Judge Agent
-
-These agents interact during the interview. The interviewer agent speaks directly with the student, while the judge agent analyses the conversation and decides whether more evidence is needed.
-
-```mermaid
-flowchart TD
-    A[Case Study Question] --> B[Student]
-    B <--> C[Interviewer Agent]
-    C --> D[Transcript]
-    D --> E[Judge Agent]
-    E --> F{Enough evidence?}
-    F -- No --> G[Instruction to Interviewer Agent]
-    G --> C
-    F -- Yes --> H[Final Evaluation and Feedback]
-```
-
-The key difference from the baseline is that the interview is not only driven by one agent. Instead, the judge agent can guide the interviewer agent towards areas that need further exploration.
-
-## 5.1 Agentic 02 Interview Graph
-
-This alternative graph shows the detailed control flow for the agentic interview system, including case retrieval, the interviewer-candidate loop, the judge decision, and the final split between case-performance evaluation and dialog-quality evaluation.
+The agentic graph is compiled from `src/main/studio/agentic.py`.
 
 ```mermaid
 flowchart TD
-    Start{{Start}} --> RetrieveCase[Retrieve Case]
-
-    RetrieveCase --> InterviewerAgent((Interviewer Agent))
-
-    InterviewerAgent --> CandidateAgent((Candidate Agent))
-    CandidateAgent --> InterviewerAgent
-
-    InterviewerAgent --> JudgeAgent((Judge Agent))
-
-    JudgeAgent --> EnoughEvidence{Enough Evidence?}
-
-    EnoughEvidence -- No --> InterviewerAgent
-
-    EnoughEvidence -- Yes --> EvalCasePerformance((Eval Case Performance))
-    EnoughEvidence -- Yes --> EvalDialogQuality((Eval Dialog Quality))
-
-    EvalCasePerformance --> GiveFeedback((Give Feedback))
+    Start --> LoadScenario
+    LoadScenario --> Interviewer
+    Interviewer -->|continue interview| Candidate
+    Candidate --> Interviewer
+    Interviewer -->|ready for review| Judge
+    Judge -->|more evidence needed| Interviewer
+    Judge -->|enough evidence| EvalCasePerformance
+    Judge -->|enough evidence| EvalDialogQuality
+    EvalCasePerformance --> GiveFeedback
     EvalDialogQuality --> GiveFeedback
-
-    GiveFeedback --> End{{End}}
+    GiveFeedback --> PersistRun
+    PersistRun --> End
 ```
 
-The process begins with the `Start` node. The system first retrieves the consulting case that will be used in the simulated interview.
+The agentic flow separates responsibilities:
 
-After the case is retrieved, the `Interviewer Agent` starts the interaction. This agent is responsible for presenting the case, asking questions, and guiding the interview.
+- `interviewer_node`: asks the next question or reveals candidate-visible data
+- `candidate_node`: produces the synthetic candidate response and updates `data_gathered`
+- `judge_node`: decides whether enough evidence exists and, if not, writes `focus_areas`
+- `eval_case_performance_node`: scores case-solving performance
+- `eval_dialog_quality_node`: scores communication quality
+- `give_feedback_node`: writes final coaching feedback
 
-The `Candidate Agent` responds to the interviewer. The interaction between the `Interviewer Agent` and the `Candidate Agent` is iterative: the interviewer asks questions, the candidate answers, and the interviewer continues probing the candidate's reasoning.
-
-The `Judge Agent` observes or receives the information generated during the interview. Its role is to assess whether the conversation contains enough evidence to evaluate the candidate properly.
-
-The decision node `Enough Evidence?` controls whether the interview should continue.
-
-If the answer is `No`, the system returns to the `Interviewer Agent`, which asks further questions to gather more evidence.
-
-If the answer is `Yes`, the system moves to the evaluation stage. Two types of evaluation are performed:
-
-- `Eval Case Performance`: evaluates the candidate's case-solving ability, including structure, business logic, quantitative reasoning, assumptions, and final recommendation.
-- `Eval Dialog Quality`: evaluates the quality of the interaction, including clarity, coherence, responsiveness, repetition, confidence level, and communication issues.
-
-Both evaluation outputs are then combined in the `Give Feedback` node. Finally, the system ends once feedback has been generated.
+The interviewer uses judge-generated `focus_areas` as direct instructions for the next follow-up question. This is the key behavioural difference from the baseline graph.
 
 
-## 6. Interviewer Agent
+## 8. Synthetic Candidate Role
 
-The Interviewer Agent is responsible for conducting the interview with the student. Its main tasks are:
+The current system simulates the candidate with an LLM node rather than a human user. The candidate node:
 
-- presenting the case;
-- asking initial questions;
-- asking adaptive follow-up questions;
-- encouraging structured reasoning;
-- encouraging critical thinking;
-- keeping the conversation close to a real consulting case interview.
+- sees only public transcript lines;
+- does not see judge notes or hidden guidance;
+- follows the scenario persona;
+- updates a running `data_gathered` list of factual case information learned so far.
 
-The interviewer agent should not immediately give away the answer. Its role is to help reveal the student's reasoning by asking targeted questions. 
-
-In the diagram, this agent is also connected to a small fine-tuning component based on Socratic questions. The purpose of this is to make the interviewer better at asking questions that guide the student without directly solving the case for them.
+This design keeps experiments reproducible and allows architecture comparison before building a full interactive front end.
 
 
-## 7. Judge Agent
+## 9. Retrieval Architecture
 
-The Judge Agent is responsible for evaluating the interaction. It analyses the full transcript and evaluates the student's performance against a rubric.
+The active retrieval layer is split into two independent paths.
 
-Its main tasks are:
+### 9.1 Local Profitability Retrieval
 
-- reading the full interaction;
-- checking the rubric dimensions;
-- identifying strengths and weaknesses;
-- deciding whether there is enough evidence to evaluate the student;
-- guiding the interviewer agent when more information is needed;
-- producing or supporting the final evaluation.
+Implemented in `src/main/studio/rag/knowledge_base.py`.
 
-The judge agent uses an LLM to assess open-ended student responses according to explicit criteria. This is useful because consulting cases involve qualitative reasoning, assumptions, business judgement, and communication, not only numerical answers.
+This path:
 
+- reads case-declared knowledge sources;
+- supports local chunking of `.pdf`, `.md`, `.txt`, and `.json`;
+- performs lightweight lexical retrieval in memory;
+- is used mainly for case-performance evaluation and baseline interviewing.
 
-## 8. Transcript as Shared State
+### 9.2 Persistent Guide PDF RAG
 
-The transcript stores the conversation between the student and the interviewer agent.It acts as shared evidence for the judge agent. Instead of evaluating isolated answers, the judge can evaluate the full reasoning process across the interview.
+Implemented in `src/main/studio/rag/rag_case_guide.py` and `src/main/studio/rag/case_guide_context.py`.
 
-A simplified transcript structure could look like this:
+This path:
 
-```json
-{
-  "run_id": "run_001",
-  "scenario_id": "case_001",
-  "system_type": "agentic",
-  "transcript": [
-    {
-      "turn": 1,
-      "speaker": "interviewer_agent",
-      "message": "Your client is a fast-food restaurant that has been losing money..."
-    },
-    {
-      "turn": 2,
-      "speaker": "student",
-      "message": "I would first split the problem into revenue and costs."
-    }
-  ]
-}
-```
+- indexes `src/database/ConsultingCaseGuide-PPML.pdf`;
+- stores embeddings in Chroma under `src/database/vectorstore/consulting_case_guide/`;
+- builds query text from graph state, node goal, focus areas, and latest candidate reasoning;
+- injects retrieved guide snippets into judge, evaluation, and feedback prompts.
 
-This structure makes the system easier to evaluate because the same case and the same student response can be tested with both the baseline and the agentic system.
+The retrieval split exists because case-specific methodology and general consulting interview guidance play different roles in the prompts.
 
 
-## 9. RAG System
+## 10. LLM Layer
 
-The agentic architecture includes a Retrieval-Augmented Generation component. The RAG system gives the judge agent access to external documents related to consulting case interview preparation.
+All active graph nodes use the shared LLM client in `src/main/studio/llm_server.py`.
 
-The RAG system will retrieve:
-- Evaluation rubric;
-- Harvard profitability framework;
-- Harvard guidance on how to approach consulting cases.
+The runtime is configured to call an OpenAI-compatible endpoint, usually LM Studio, through:
 
-The purpose of RAG is to ground the judge's evaluation in external case interview knowledge. Instead of relying only on the LLM's internal knowledge, the system can retrieve relevant material about how consulting cases should be structured and evaluated.
+- `LMSTUDIO_BASE_URL`
+- `LMSTUDIO_MODEL`
+- `LMSTUDIO_API_KEY`
+- `LMSTUDIO_TEMPERATURE`
 
-```mermaid
-flowchart TD
-    A[Judge Agent] --> B[RAG System]
-    B --> C[Evaluation Rubric]
-    B --> D[Profitability Framework]
-    B --> E[Consulting Case Approach Guides]
-    C --> F[Grounded Evaluation]
-    D --> F
-    E --> F
-```
+This means the program is model-agnostic as long as the backend exposes the OpenAI chat interface.
 
 
-## 10. Evaluation Rubric
+## 11. Persistence and Observability
 
-The evaluation rubric provides the criteria used by the judge agent to assess performance. A possible rubric includes the following dimensions:
+Run persistence is implemented in `src/main/studio/persistence.py` and stored in `src/main/artifacts/runs.sqlite`.
 
-| Dimension | What it evaluates |
-|---|---|
-| Case opening | Whether the student clarifies the objective and understands the problem. |
-| Case structure | Whether the student uses a logical and relevant framework. |
-| Case math | Whether the student performs calculations correctly and interprets them properly. |
-| Business judgement | Whether the student makes reasonable assumptions and prioritises relevant drivers. |
-| Creativity | Whether the student considers non-obvious but plausible ideas. |
-| Final recommendation | Whether the student gives a clear, justified, and actionable recommendation. |
-| Overall | General performance across the full interaction. |
+There are two main tables:
 
+1. `runs`: final graph outputs and serialized state
+2. `agent_state_traces`: step-level state transitions for traced nodes
 
-## 11. Final Feedback Generation
+The agentic graph currently traces at least:
 
-At the end of the interview, the system generates feedback for the student. The feedback should be specific, actionable, and connected to the transcript.
+- interviewer steps
+- judge steps
 
-A good feedback report should include:
+Each trace captures:
 
-- a short overall assessment;
-- scores by rubric dimension;
-- concrete strengths;
-- concrete weaknesses;
-- examples from the student's answers;
-- recommendations for improvement;
-- possible next practice focus.
+- node name
+- actor
+- step index
+- scenario reference
+- before/after values for key state fields
+- a computed summary of changed fields
 
-For example, instead of saying:
-
-> Your structure was weak.
-
-The feedback should say:
-
-> You correctly identified revenue and costs as the two main profitability drivers, but you did not break revenue into price and volume. In future profitability cases, start by building a complete issue tree before moving into calculations.
-
-This makes the feedback more useful for learning.
+This makes the system inspectable beyond final scores.
 
 
-## 12. Why the System Is Agentic
+## 12. Dashboard and Human Evaluation
 
-The sistem is agentic because the agents have different responsibilities, maintain state, and coordinate their own flow (decided by them), to achieve a common goal (interviewing and evaluating the student). The agents are not just tools that follow instructions, but active participants in the process.
+The Flask app in `src/main/web/app.py` provides a lightweight workbench over the SQLite database.
 
-## 13. Baseline vs Agentic System
+Main views:
 
-| Aspect | Baseline System | Agentic System |
-|---|---|---|
-| Number of agents | One | Two specialised agents |
-| Interview management | Baseline agent | Interviewer agent |
-| Evaluation | Same baseline agent | Judge agent |
-| Feedback | Same baseline agent | Judge agent, supported by transcript and RAG |
-| Adaptiveness | Limited | Higher, because the judge can guide follow-ups |
-| Complexity | Lower | Higher |
-| Purpose | Reference system | Proposed architecture |
+- `/`: run list
+- `/compare`: side-by-side run comparison
+- `/traces`: trace run index
+- `/runs/<run_id>`: final run detail
+- `/runs/<run_id>/trace`: step-by-step trace detail
 
+The dashboard also supports human evaluation storage through a `human_evaluations` table. Human evaluators can score rubric dimensions and dialog-quality dimensions, add rationales and evidence, and compare:
 
-## 14. Expected Benefits
+- expected scores from the scenario
+- model scores from the graph
+- human scores entered in the dashboard
 
-The expected benefits of the agentic system are:
-
-- more targeted follow-up questions;
-- better evidence collection during the interview;
-- more consistent use of the rubric;
-- more grounded feedback through RAG;
-- clearer separation between interviewing and evaluation;
-- better simulation of a real consulting case interview.
-
-However, the agentic system also introduces additional complexity. It requires coordination between agents, careful state management, and clear stopping criteria for deciding when enough evidence has been collected.
+The store layer computes comparison rows and error metrics such as exact match rate, off-by-one rate, and mean absolute error.
 
 
-## 15. Summary
+## 13. Evaluation Outputs
 
-The system compares a simple baseline agent with a more specialised agentic architecture for consulting case interview simulation. The baseline agent manages the entire process alone, while the agentic system separates the interview and evaluation responsibilities between an interviewer agent and a judge agent.
+The active program produces three main evaluation outputs:
 
-The interviewer agent interacts with the student and asks adaptive questions. The judge agent evaluates the transcript, applies the rubric, checks whether enough evidence has been collected, and uses RAG-based consulting case knowledge to support the final feedback.
+1. `case_performance`: structured scoring for case-solving dimensions
+2. `quality_dialog`: structured scoring for communication and interaction dimensions
+3. final written feedback appended to the transcript
 
-This architecture is designed to test whether agent coordination improves the quality of automated consulting case interview assessment and feedback.
+The current case-performance fields are:
+
+- `case_opening`
+- `case_structure`
+- `case_math_answer`
+- `case_creative_answer`
+- `final_recommendation`
+- `overall_structure`
+- `overall_problem_solving`
+- `overall_communication`
+
+The current dialog-quality fields are:
+
+- `clarity_and_concision`
+- `responsiveness_and_adaptation`
+- `groundedness`
+- `confidence_calibration`
+- `multi_turn_coherence`
+
+
+## 14. What Is Active vs Experimental
+
+Active MVP:
+
+- `src/main/studio/`
+- `src/main/web/`
+- `src/scenarios/`
+- `src/synthetic-dataset/`
+- `src/database/`
+
+Experimental but separate:
+
+- `src/interviewer_ft/`: fine-tuning pipeline and inference utilities for interviewer experiments
+
+Not part of the active architecture:
+
+- `archive/`: legacy prototypes and research artifacts
+
+
+## 15. Current Architectural Position
+
+The current program is best understood as an evaluation and experimentation platform rather than a finished tutoring product.
+
+Its real architectural strengths today are:
+
+- direct baseline vs agentic comparison on the same scenario assets;
+- explicit shared state in LangGraph;
+- dual retrieval grounding;
+- persisted runs and state traces;
+- human-in-the-loop evaluation through the dashboard.
+
+Its main current limitation is that the “candidate” is still simulated. The system is therefore strongest for controlled research and architecture comparison, and is not yet a deployed end-user interview coach with a live conversational UI.

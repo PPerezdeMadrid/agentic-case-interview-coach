@@ -4,6 +4,9 @@
 
 # Copy of the database
 03-mvp/database
+
+# Persisted RAG vector store (regenerate with rag_case_guide.py)
+src/database/vectorstore/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
