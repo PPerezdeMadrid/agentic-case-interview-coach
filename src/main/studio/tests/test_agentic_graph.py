@@ -266,6 +266,23 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertIn("Current goal: Decide what evidence is still missing before evaluating the candidate.", retrieval_query)
         self.assertEqual(context, ["Clarify the objective first."])
 
+    def test_profitability_query_includes_source_navigation_guide(self) -> None:
+        retrieval_query = agentic.build_profitability_retrieval_query(
+            "Profits are down in one region. Should we close stores or renegotiate labor costs?",
+            [
+                "Candidate: I would split the issue into revenue, fixed costs, and variable costs.",
+                "Candidate: Then I would compare segment margin by store and region.",
+            ],
+            evaluation_target="case_performance",
+            focus_areas=["test whether the candidate isolates the loss-making segment"],
+        )
+
+        self.assertIn("Source coverage:", retrieval_query)
+        self.assertIn("cost-volume-profit analysis", retrieval_query)
+        self.assertIn("segmented income reporting", retrieval_query)
+        self.assertIn("variance analysis", retrieval_query)
+        self.assertIn("Write the retrieval intent for this exact situation", retrieval_query)
+
     def test_graph_end_to_end(self) -> None:
         # Checks the full graph run, including final feedback and SQLite persistence.
         state = make_state()

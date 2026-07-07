@@ -16,9 +16,7 @@ This split exists because the two knowledge sources play different roles:
 
 - `src/main/studio/rag/knowledge_base.py`: lexical chunk-based retrieval for case-declared sources
 - `src/main/studio/rag/rag_case_guide.py`: persistent Chroma-based retrieval for the guide PDF
-- `src/main/studio/rag/case_guide_context.py`: logic for mapping graph state to PDF sections and retrieval queries
-
-Compatibility wrappers still exist in `src/main/studio/`, but they only reexport from `rag/`.
+- `src/main/studio/rag/case_guide_context.py`: logic for turning graph state into a natural-language retrieval query for the guide PDF
 
 ## Profitability retrieval
 
@@ -29,8 +27,15 @@ The profitability layer:
 - chunks content locally
 - scores chunks lexically
 - rebuilds in memory on each run
+- builds retrieval queries with a short natural-language description of what the profitability source covers, loaded from `src/database/rag_sources/profitability_source_navigation.json`
 
 It is used where the graph needs methodology grounded in case-specific support material.
+
+Current source note:
+
+- the profitability RAG may use `src/database/Principles-of-Managerial-Accounting-profitability.pdf`
+- this source is documented as licensed under `CC BY 4.0`
+- in practice, only the textbook text should be indexed; third-party or separately licensed embedded assets should be excluded where relevant
 
 ## Guide PDF retrieval
 
@@ -62,8 +67,4 @@ For the guide PDF, retrieval is driven by:
 - `focus_areas`
 - the latest candidate turn when available
 
-The section-routing logic lives in `rag/case_guide_context.py`.
-
-## Related doc
-
-Detailed notes for the guide PDF implementation and the `rag/` refactor are in `../RAG_GUIDE_PDF.md`.
+The guide-query construction logic lives in `rag/case_guide_context.py`.

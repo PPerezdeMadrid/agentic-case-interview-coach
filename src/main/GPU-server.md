@@ -126,12 +126,11 @@ From your Mac, create a tunnel if needed:
 ssh -N -L 8008:NODE_HOSTNAME:8008 ppdm1@hypatia.st-andrews.ac.uk
 ```
 
-Then enable it in the main project:
+If you later want to reconnect it from the main project, point your client there:
 
 ```bash
-SOCRATIC_QUESTION_MODE=finetuned
 SOCRATIC_FT_URL=http://localhost:8008
 ```
 
-With this setup, the main interviewer still controls the interview loop. The
-GPU service is only used to phrase targeted follow-up questions.
+At the moment this service is kept as a separate experimental component rather
+than an active part of the Studio interview loop.

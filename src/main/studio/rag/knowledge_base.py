@@ -13,6 +13,28 @@ TOKEN_PATTERN = re.compile(r"[a-z0-9]{2,}", re.IGNORECASE)
 DEFAULT_CHUNK_SIZE = 900
 DEFAULT_CHUNK_OVERLAP = 120
 DEFAULT_PROFITABILITY_SOURCE_FIELD = "profitability_knowledge_sources"
+RAG_SOURCE_METADATA_PATH = (
+    Path(__file__).resolve().parents[3] / "database" / "rag_sources" / "profitability_source_navigation.json"
+)
+
+
+def _load_profitability_source_navigation_guide() -> str:
+    try:
+        payload = json.loads(RAG_SOURCE_METADATA_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            f"Could not load profitability RAG metadata from {RAG_SOURCE_METADATA_PATH}."
+        ) from exc
+
+    guidance = str(payload.get("retrieval_guidance", "")).strip()
+    if not guidance:
+        raise RuntimeError(
+            f"Profitability RAG metadata in {RAG_SOURCE_METADATA_PATH} is missing 'retrieval_guidance'."
+        )
+    return guidance
+
+
+PROFITABILITY_SOURCE_NAVIGATION_GUIDE = _load_profitability_source_navigation_guide()
 
 
 def _tokenize(text: str) -> list[str]:
@@ -54,14 +76,9 @@ def _resolve_knowledge_sources(case_data: dict[str, Any]) -> list[dict[str, Any]
 
 
 def _resolve_profitability_knowledge_sources(case_data: dict[str, Any]) -> list[dict[str, Any]]:
-    for field_name in (
-        DEFAULT_PROFITABILITY_SOURCE_FIELD,
-        "profitability_rag_sources",
-        "rag_knowledge_sources",
-    ):
-        raw_sources = case_data.get(field_name, [])
-        if isinstance(raw_sources, list) and raw_sources:
-            return [source for source in raw_sources if isinstance(source, dict)]
+    raw_sources = case_data.get(DEFAULT_PROFITABILITY_SOURCE_FIELD, [])
+    if isinstance(raw_sources, list) and raw_sources:
+        return [source for source in raw_sources if isinstance(source, dict)]
     return []
 
 
@@ -402,11 +419,21 @@ def build_profitability_retrieval_query(
             break
 
     sections = [
-        "Consulting profitability case methodology",
+        "Consulting profitability case methodology grounded in managerial accounting.",
         f"Evaluation target: {evaluation_target.strip()}" if evaluation_target.strip() else "",
-        case_prompt.strip(),
-        "\n".join(relevant_lines),
-        candidate_final_recommendation,
-        ", ".join(focus_areas or []),
+        f"Case prompt: {case_prompt.strip()}" if case_prompt.strip() else "",
+        f"Recent transcript:\n{'\n'.join(relevant_lines)}" if relevant_lines else "",
+        f"Latest candidate recommendation: {candidate_final_recommendation}" if candidate_final_recommendation else "",
+        (
+            "Judge focus areas or coaching targets: " + "; ".join(focus_areas or [])
+            if focus_areas
+            else ""
+        ),
+        "Source coverage: " + PROFITABILITY_SOURCE_NAVIGATION_GUIDE,
+        (
+            "Write the retrieval intent for this exact situation using the source coverage above. "
+            "Retrieve only the parts of the textbook that are most useful for the current case, reasoning step, "
+            "or evaluation need."
+        ),
     ]
     return "\n".join(section for section in sections if section)

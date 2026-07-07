@@ -16,10 +16,10 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-SRC_ROOT = Path(__file__).resolve().parents[2]
-DATABASE_DIR = SRC_ROOT / "database"
-CASE_GUIDE_PDF_PATH = DATABASE_DIR / "ConsultingCaseGuide-PPML.pdf"
-VECTORSTORE_DIR = DATABASE_DIR / "vectorstore" / "consulting_case_guide"
+MAIN_DIR = Path(__file__).resolve().parents[2]
+SRC_ROOT = Path(__file__).resolve().parents[3]
+CASE_GUIDE_PDF_PATH = SRC_ROOT / "database" / "ConsultingCaseGuide-PPML.pdf"
+VECTORSTORE_DIR = MAIN_DIR / "database" / "vectorstore" / "consulting_case_guide"
 
 COLLECTION_NAME = "consulting_case_guide"
 EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
@@ -113,6 +113,7 @@ def retrieve_case_guide_context(
     if not query.strip():
         return []
 
+    print(f"RAG being used, consulting {CASE_GUIDE_PDF_PATH.name} file")
     store = get_case_guide_vectorstore()
     results = store.similarity_search(query, k=top_k)
 

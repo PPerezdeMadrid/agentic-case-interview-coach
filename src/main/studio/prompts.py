@@ -18,7 +18,6 @@ def _load_prompt(filename: str) -> str:
 
 
 INTERVIEWER_SYSTEM_PROMPT = _load_prompt("interviewer_system_prompt.md")
-JUDGE_SYSTEM_PROMPT = _load_prompt("judge_system_prompt.md")
 BASELINE_SYSTEM_PROMPT = _load_prompt("baseline_system_prompt.md")
 BASELINE_FINAL_FEEDBACK_PROMPT = _load_prompt("baseline_final_feedback_prompt.md")
 BASELINE_INFORMATION_PROMPT = _load_prompt("baseline_information_prompt.md")
