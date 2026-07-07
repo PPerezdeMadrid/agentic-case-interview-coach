@@ -1,6 +1,6 @@
 # Database from Socratic LLM
 02-Dataset/eacl23_soqg
-*/.langgraph_api
+**/.langgraph_api
 
 # Copy of the database
 03-mvp/database
