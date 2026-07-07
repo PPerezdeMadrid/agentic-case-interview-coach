@@ -156,6 +156,8 @@ python3 run_all_scenarios.py --graph agentic --seed 7
 From `src/`:
 
 ```bash
+make setup
+make setup-hpc
 make run-all
 make run-all-baseline
 make run-all-agentic
@@ -163,6 +165,10 @@ make test
 make workbench
 make langgraph
 ```
+
+`make setup` creates `.venv`, installs `main/studio/requirements.txt`, and sets local execution as the default for later `make` commands.
+
+`make setup-hpc` creates the `coach` conda environment if needed, installs the same requirements there, and persists HPC execution as the default for later `make` commands by writing `src/.make.runner.mk`. After that, plain commands like `make test`, `make run-all`, or `make workbench` will use the conda environment automatically.
 
 These targets are thin wrappers around the Python runtime and local development servers.
 
