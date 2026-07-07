@@ -99,7 +99,7 @@ squeue -u $USER          # find the jobid
 scancel <jobid>          # free up the GPU
 ```
 
-## 8. Optional second service: socratic fine-tuned interviewer
+## 8. Optional second service: fine-tuned interviewer
 
 If you want to keep the main Studio LLM and the fine-tuned question generator
 separate, run `src/interviewer_ft/server.py` as its own GPU-backed service.
@@ -129,7 +129,7 @@ ssh -N -L 8008:NODE_HOSTNAME:8008 ppdm1@hypatia.st-andrews.ac.uk
 If you later want to reconnect it from the main project, point your client there:
 
 ```bash
-SOCRATIC_FT_URL=http://localhost:8008
+INTERVIEWER_FT_URL=http://localhost:8008
 ```
 
 At the moment this service is kept as a separate experimental component rather

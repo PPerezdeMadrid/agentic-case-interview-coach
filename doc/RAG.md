@@ -4,17 +4,17 @@
 
 The project now has two retrieval paths under `src/main/studio/rag/`:
 
-- a local lexical retrieval layer for profitability methodology
+- a persistent vector-store retrieval layer for profitability methodology
 - a persistent vector-store RAG layer for `ConsultingCaseGuide-PPML.pdf`
 
 This split exists because the two knowledge sources play different roles:
 
-- case-specific profitability methodology can stay lightweight and local
+- case-specific profitability methodology can use a dedicated persisted guide index
 - the shared consulting case guide benefits from persistent embeddings and semantic retrieval
 
 ## Code layout
 
-- `src/main/studio/rag/knowledge_base.py`: lexical chunk-based retrieval for case-declared sources
+- `src/main/studio/rag/rag_profitability_guide.py`: persistent Chroma-based retrieval for profitability methodology
 - `src/main/studio/rag/rag_case_guide.py`: persistent Chroma-based retrieval for the guide PDF
 - `src/main/studio/rag/case_guide_context.py`: logic for turning graph state into a natural-language retrieval query for the guide PDF
 
@@ -22,11 +22,10 @@ This split exists because the two knowledge sources play different roles:
 
 The profitability layer:
 
-- reads sources declared in case JSON
-- supports `.pdf`, `.md`, `.txt`, and `.json`
-- chunks content locally
-- scores chunks lexically
-- rebuilds in memory on each run
+- loads `src/database/Principles-of-Managerial-Accounting-profitability.pdf`
+- splits it into chunks
+- embeds it with `FastEmbedEmbeddings`
+- stores vectors in Chroma under `src/database/vectorstore/profitability_guide/`
 - builds retrieval queries with a short natural-language description of what the profitability source covers, loaded from `src/database/rag_sources/profitability_source_navigation.json`
 
 It is used where the graph needs methodology grounded in case-specific support material.

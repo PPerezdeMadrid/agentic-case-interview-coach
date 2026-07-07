@@ -5,8 +5,11 @@ import node as node_module
 from loader import load_selected_simulation_bundle
 from llm_server import openai_llm_server
 from persistence import make_persist_run_node, make_trace_node
-from rag.knowledge_base import build_profitability_retrieval_query
-from rag.rag_case_guide import retrieve_case_guide_context
+from rag.case_guide_context import retrieve_case_guide_context
+from rag.profitability_guide_context import (
+    build_profitability_retrieval_query,
+    retrieve_profitability_guide_context,
+)
 from state import AgenticGraphState
 from utils import (
     extract_case_guidance,
@@ -25,6 +28,7 @@ def _sync_node_dependencies() -> None:
     node_module.openai_llm_server = openai_llm_server
     node_module.load_selected_simulation_bundle = load_selected_simulation_bundle
     node_module.retrieve_case_guide_context = retrieve_case_guide_context
+    node_module.retrieve_profitability_guide_context = retrieve_profitability_guide_context
 
 
 def build_initial_interview_state(

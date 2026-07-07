@@ -77,7 +77,6 @@ Both graphs use the same typed state object (`AgenticGraphState`). The main fiel
 - `case_performance`
 - `quality_dialog`
 - `data_gathered`
-- `profitability_knowledge_base`
 - `retrieved_profitability_context`
 
 The transcript is the main shared evidence structure. It stores interviewer turns, candidate turns, evaluation markers, and the final feedback line.
@@ -189,7 +188,7 @@ The active retrieval layer is split into two independent paths.
 
 ### 9.1 Local Profitability Retrieval
 
-Implemented in `src/main/studio/rag/knowledge_base.py`.
+Implemented in `src/main/studio/rag/rag_profitability_guide.py`.
 
 This path:
 

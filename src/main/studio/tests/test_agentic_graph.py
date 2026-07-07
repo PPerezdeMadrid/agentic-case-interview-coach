@@ -16,6 +16,7 @@ try:
     import agentic
     import baseline
     import persistence
+    from rag import case_guide_context
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Studio test dependencies are not installed: {exc.name}") from exc
 
@@ -118,7 +119,6 @@ def make_state() -> dict:
         "thread_id": "thread_test",
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
-        "profitability_knowledge_base": {},
         "retrieved_profitability_context": [],
     }
 
@@ -216,6 +216,8 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertIn("Current judge focus areas to act on directly:", observed_prompt["content"])
         self.assertIn("- test whether the candidate can break profit into revenue and cost drivers", observed_prompt["content"])
         self.assertIn("- push for a sharper recommendation with risks and next steps", observed_prompt["content"])
+        self.assertIn("Question style reference derived from the SoQG dataset", observed_prompt["content"])
+        self.assertIn("What exactly suggests pricing is the main issue?", observed_prompt["content"])
         self.assertEqual(
             update["transcript"][-1],
             "Interviewer: How would you prioritise between revenue and cost drivers first?",
@@ -402,6 +404,10 @@ class AgenticGraphTests(unittest.TestCase):
                 agentic,
                 "retrieve_case_guide_context",
                 return_value=[],
+            ), patch.object(
+                agentic,
+                "retrieve_profitability_guide_context",
+                return_value=[],
             ):
                 mock_llm.invoke.side_effect = llm_responses
                 with patch.object(agentic, "llm_server", mock_llm):
@@ -458,10 +464,6 @@ class BaselineGraphTests(unittest.TestCase):
         mock_llm = Mock()
         state["turn_index"] = 1
         state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
-        state["case_guide_context"] = [
-            "Start by clarifying the objective and metric.",
-            "Split the problem into revenue and cost drivers.",
-        ]
 
         observed_prompt = {}
 
@@ -479,7 +481,18 @@ class BaselineGraphTests(unittest.TestCase):
             )
 
         mock_llm.invoke.side_effect = fake_invoke
-        with patch.object(baseline, "llm_server", mock_llm):
+        with patch.object(
+            baseline,
+            "get_baseline_case_guide_context",
+            return_value=[
+                "Start by clarifying the objective and metric.",
+                "Split the problem into revenue and cost drivers.",
+            ],
+        ), patch.object(
+            baseline,
+            "retrieve_profitability_guide_context",
+            return_value=[],
+        ), patch.object(baseline, "llm_server", mock_llm):
             update = baseline.baseline_node(state)
 
         self.assertIn("Consulting Case Interview Guide excerpts:", observed_prompt["content"])
@@ -489,45 +502,64 @@ class BaselineGraphTests(unittest.TestCase):
             "Interviewer: What has happened to costs over time?",
         )
 
-    def test_baseline_retrieve_context(self) -> None:
-        # Checks that retrieved guide chunks are stored as baseline case_guide_context.
+    def test_baseline_retrieves_context_inline(self) -> None:
+        # Checks that the baseline interviewer retrieves guide snippets directly during prompt construction.
         state = make_state()
+        mock_llm = Mock()
+        state["turn_index"] = 1
+        state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
 
+        mock_llm.invoke.return_value = SimpleNamespace(
+            content=json.dumps(
+                {
+                    "action": "question",
+                    "content": "What has changed in revenue versus costs?",
+                    "block_id": "",
+                    "ready_for_evaluation": False,
+                }
+            )
+        )
         with patch.object(
             baseline,
-            "retrieve_case_guide_context",
+            "get_baseline_case_guide_context",
             return_value=[
-                {"content": "Probe the objective before branching."},
-                {"content": "Check revenue versus cost drivers."},
-            ],
-        ):
-            update = baseline.retrieve_case_guide_node(state)
-
-        self.assertEqual(
-            update["case_guide_context"],
-            [
                 "Probe the objective before branching.",
                 "Check revenue versus cost drivers.",
             ],
+        ) as get_context, patch.object(
+            baseline,
+            "retrieve_profitability_guide_context",
+            return_value=[],
+        ), patch.object(baseline, "llm_server", mock_llm):
+            update = baseline.baseline_node(state)
+
+        get_context.assert_called_once_with(state)
+        self.assertEqual(
+            update["transcript"][-1],
+            "Interviewer: What has changed in revenue versus costs?",
         )
 
     def test_baseline_context_without_prompt(self) -> None:
-        # Checks that baseline retrieval can rebuild the query when case_prompt is missing.
+        # Checks that the shared baseline guide helper can rebuild the query when case_prompt is missing.
         state = {"scenario_ref": "scenario_test"}
 
-        with patch.object(baseline, "load_selected_simulation_bundle", return_value=make_runtime_bundle()):
+        with patch.object(
+            case_guide_context,
+            "load_selected_simulation_bundle",
+            return_value=make_runtime_bundle(),
+        ):
             with patch.object(
-                baseline,
+                case_guide_context,
                 "retrieve_case_guide_context",
                 return_value=[{"content": "Split revenue from cost drivers."}],
             ) as retrieve:
-                update = baseline.retrieve_case_guide_node(state)
+                context = baseline.get_baseline_case_guide_context(state)
 
         retrieve.assert_called_once_with(
             "Our profits are down. What would you look at first?",
             top_k=4,
         )
-        self.assertEqual(update["case_guide_context"], ["Split revenue from cost drivers."])
+        self.assertEqual(context, ["Split revenue from cost drivers."])
 
 
 if __name__ == "__main__":

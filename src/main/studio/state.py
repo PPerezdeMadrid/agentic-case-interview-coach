@@ -29,5 +29,4 @@ class AgenticGraphState(TypedDict):
     scenario_ref: NotRequired[str]
     rubric_data: NotRequired[dict]
     judge_round: NotRequired[int]
-    profitability_knowledge_base: NotRequired[dict]
     retrieved_profitability_context: NotRequired[list[str]]

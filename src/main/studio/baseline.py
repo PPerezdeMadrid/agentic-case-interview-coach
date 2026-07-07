@@ -10,11 +10,14 @@ from adapter import (
     get_candidate_visible_blocks,
     get_case_block_by_id,
 )
-from rag.knowledge_base import (
-    build_profitability_knowledge_base,
+from rag.case_guide_context import (
+    format_case_guide_snippets,
+    get_baseline_case_guide_context,
+)
+from rag.profitability_guide_context import (
     build_profitability_retrieval_query,
-    format_retrieved_chunks,
-    retrieve_knowledge_context,
+    format_profitability_guide_context,
+    retrieve_profitability_guide_context,
 )
 from loader import load_selected_simulation_bundle
 from llm_server import lmstudio_llm_server
@@ -26,7 +29,6 @@ from prompts import (
     DIALOG_EVAL_SYSTEM_PROMPT,
     FEEDBACK_SYSTEM_PROMPT,
 )
-from rag.rag_case_guide import retrieve_case_guide_context
 from state import AgenticGraphState
 from utils import (
     extract_case_guidance,
@@ -77,19 +79,21 @@ def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
     return [line for line in transcript if line.startswith(visible_prefixes)]
 
 
-def format_case_guide_snippets(case_guide_context: list[str]) -> str:
-    if not case_guide_context:
-        return "None."
-    return "\n".join(f"- {snippet}" for snippet in case_guide_context)
-
-
-def resolve_case_guide_query(state: AgenticGraphState) -> str:
-    case_prompt = str(state.get("case_prompt", "")).strip()
-    if case_prompt:
-        return case_prompt
-
-    bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
-    return str(extract_case_prompt(bundle["case"])).strip()
+def get_profitability_guide_context(
+    state: AgenticGraphState,
+    *,
+    evaluation_target: str,
+    top_k: int,
+) -> list[dict]:
+    query = build_profitability_retrieval_query(
+        str(state.get("case_prompt", "")),
+        state.get("transcript", []),
+        evaluation_target=evaluation_target,
+        focus_areas=state.get("focus_areas", []),
+    )
+    if not query.strip():
+        return []
+    return retrieve_profitability_guide_context(query, top_k=top_k)
 
 
 def build_initial_baseline_state(
@@ -101,7 +105,6 @@ def build_initial_baseline_state(
     bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
     scenario = bundle["scenario"]
     case_data = bundle["case"]
-    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
@@ -120,9 +123,7 @@ def build_initial_baseline_state(
         "thread_id": DEFAULT_THREAD_ID,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
-        "profitability_knowledge_base": profitability_knowledge_base,
         "retrieved_profitability_context": [],
-        "case_guide_context": [],
     }
 
 
@@ -137,7 +138,6 @@ def load_scenario_node(
     bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
     scenario = bundle["scenario"]
     case_data = bundle["case"]
-    profitability_knowledge_base = build_profitability_knowledge_base(case_data)
 
     return {
         "thread_id": thread_id,
@@ -148,21 +148,7 @@ def load_scenario_node(
         "case_data": case_data,
         "case_recommendation": extract_case_recommendation(case_data),
         "rubric_data": bundle["rubric"],
-        "profitability_knowledge_base": profitability_knowledge_base,
         "retrieved_profitability_context": [],
-        "case_guide_context": [],
-    }
-
-
-def retrieve_case_guide_node(state: AgenticGraphState) -> AgenticGraphState:
-    query = resolve_case_guide_query(state) or "consulting case interview methodology"
-    case_guide_chunks = retrieve_case_guide_context(query, top_k=4)
-    return {
-        "case_guide_context": [
-            str(chunk.get("content", "")).strip()
-            for chunk in case_guide_chunks
-            if str(chunk.get("content", "")).strip()
-        ],
     }
 
 
@@ -224,18 +210,11 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 
 def evaluate_case_performance(state: AgenticGraphState) -> dict:
     rubric_data = state.get("rubric_data", {})
-    retrieval_query = build_profitability_retrieval_query(
-        str(state.get("case_prompt", "")),
-        state.get("transcript", []),
+    case_guide_context = get_baseline_case_guide_context(state)
+    profitability_context = get_profitability_guide_context(
+        state,
         evaluation_target="case_performance",
-        focus_areas=state.get("focus_areas", []),
-    )
-    profitability_knowledge_base = state.get("profitability_knowledge_base", {})
-    profitability_context = retrieve_knowledge_context(
-        profitability_knowledge_base if isinstance(profitability_knowledge_base, dict) else {},
-        retrieval_query,
         top_k=5,
-        visibility="all",
     )
     messages = [
         SystemMessage(
@@ -249,7 +228,7 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
                 + "\n\nCase guidance:\n"
                 + str(state.get("case_guidance", "None."))
                 + "\n\nRetrieved profitability methodology context:\n"
-                + format_retrieved_chunks(profitability_context)
+                + format_profitability_guide_context(profitability_context)
                 + "\n\nCase data:\n"
                 + format_full_case_data(state.get("case_data", {}))
                 + "\n\nExpected recommendation:\n"
@@ -257,7 +236,7 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
                 + "\n\nRubric:\n"
                 + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
                 + "\n\nConsulting Case Interview Guide excerpts:\n"
-                + format_case_guide_snippets(state.get("case_guide_context", []))
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -276,6 +255,7 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
 
 def evaluate_dialog_quality(state: AgenticGraphState) -> dict:
     rubric_data = state.get("rubric_data", {})
+    case_guide_context = get_baseline_case_guide_context(state)
     messages = [
         SystemMessage(
             content=(
@@ -288,7 +268,7 @@ def evaluate_dialog_quality(state: AgenticGraphState) -> dict:
                 + "\n\nRubric:\n"
                 + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
                 + "\n\nConsulting Case Interview Guide excerpts:\n"
-                + format_case_guide_snippets(state.get("case_guide_context", []))
+                + format_case_guide_snippets(case_guide_context)
             )
         ),
     ]
@@ -323,8 +303,6 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     case_guidance = state.get("case_guidance", "")
     case_recommendation = state.get("case_recommendation", "")
     rubric_data = state.get("rubric_data", {})
-    profitability_knowledge_base = state.get("profitability_knowledge_base", {})
-    case_guide_context = state.get("case_guide_context", [])
 
     transcript = list(state.get("transcript", []))
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
@@ -341,16 +319,11 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     if turn_index >= MAX_BASELINE_TURNS:
         enough_evidence = True
     else:
-        retrieval_query = build_profitability_retrieval_query(
-            str(case_prompt),
-            transcript,
+        case_guide_context = get_baseline_case_guide_context(state)
+        profitability_context = get_profitability_guide_context(
+            state,
             evaluation_target="baseline_interviewer",
-        )
-        profitability_context = retrieve_knowledge_context(
-            profitability_knowledge_base if isinstance(profitability_knowledge_base, dict) else {},
-            retrieval_query,
             top_k=3,
-            visibility="all",
         )
         messages = [
             SystemMessage(
@@ -365,7 +338,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                     + "\n\nCase prompt:\n"
                     + (case_prompt or "None.")
                     + "\n\nRetrieved profitability methodology context:\n"
-                    + format_retrieved_chunks(profitability_context)
+                    + format_profitability_guide_context(profitability_context)
                     + "\n\nCandidate-visible case blocks:\n"
                     + format_case_blocks(visible_blocks)
                     + "\n\nHidden case guidance:\n"
@@ -450,14 +423,12 @@ def build_graph_config(thread_id: str | None = None) -> dict:
 
 builder = StateGraph(AgenticGraphState, config_schema=GraphConfig)
 builder.add_node("load_scenario", load_scenario_node)
-builder.add_node("retrieve_case_guide", retrieve_case_guide_node)
 builder.add_node("baseline", baseline_node)
 builder.add_node("candidate", candidate_node)
 builder.add_node("persist_run", make_persist_run_node("baseline"))
 
 builder.add_edge(START, "load_scenario")
-builder.add_edge(START, "retrieve_case_guide")
-builder.add_edge(["load_scenario", "retrieve_case_guide"], "baseline")
+builder.add_edge("load_scenario", "baseline")
 builder.add_conditional_edges(
     "baseline",
     route_after_baseline,
