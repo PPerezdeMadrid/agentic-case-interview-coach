@@ -17,7 +17,7 @@ from rag.knowledge_base import (
     retrieve_knowledge_context,
 )
 from loader import load_selected_simulation_bundle
-from llm_server import llm_server
+from llm_server import lmstudio_llm_server
 from persistence import make_persist_run_node, resolve_thread_id
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
@@ -42,6 +42,9 @@ from utils import (
     strip_thinking,
 )
 
+# Default server for both nodes
+llm_server = lmstudio_llm_server
+ 
 DEFAULT_THREAD_ID = "main_baseline"
 MAX_BASELINE_TURNS = 4
 

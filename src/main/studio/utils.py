@@ -150,17 +150,20 @@ def extract_case_recommendation(case_data: dict) -> str:
     return format_case_blocks(get_case_blocks_by_type(case_data, "final_recommendation"))
 
 
-def parse_interviewer_output(raw_output: str) -> tuple[str, str, str, bool]:
+def parse_interviewer_output(raw_output: str) -> tuple[str, str, str, bool] | None:
     payload = load_json_object(raw_output)
+    if not payload:
+        return None
+
     action = str(payload.get("action", "question")).strip().lower()
     content = str(payload.get("content", "")).strip()
     block_id = str(payload.get("block_id", "")).strip()
     ready_for_judge = bool(payload.get("ready_for_judge", False))
 
     if action not in {"question", "reveal"}:
-        action = "question"
+        return None
     if not content:
-        content = "Could you walk me through your approach?"
+        return None
     return action, content, block_id, ready_for_judge
 
 

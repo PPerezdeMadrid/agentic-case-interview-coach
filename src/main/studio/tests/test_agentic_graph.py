@@ -248,6 +248,67 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertTrue(update["enough_evidence"])
         self.assertIsNone(update["focus_areas"])
 
+    def test_judge_resets_turn_budget_when_more_evidence_is_needed(self) -> None:
+        # Checks that judge coaching reopens the interviewer->candidate loop.
+        state = make_state()
+        state["turn_index"] = agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+        state["transcript"] = [
+            "Interviewer: Our profits are down. What would you look at first?",
+            "Candidate: I would split revenue and costs.",
+            "Interviewer: Which side would you prioritize first?",
+            "Candidate: I would start with revenue.",
+        ]
+        mock_llm = Mock()
+        mock_llm.invoke.return_value = SimpleNamespace(
+            content=json.dumps(
+                {
+                    "enough_evidence": False,
+                    "focus_areas": ["push the candidate to quantify the revenue decline"],
+                }
+            )
+        )
+
+        with patch.object(agentic, "llm_server", mock_llm):
+            update = agentic.judge_node(state)
+
+        self.assertFalse(update["enough_evidence"])
+        self.assertEqual(update["turn_index"], 0)
+        self.assertEqual(
+            agentic.route_after_judge_agentic_02(update),
+            "interviewer",
+        )
+
+    def test_interviewer_retries_invalid_json_before_controlled_fallback(self) -> None:
+        # Checks that the interviewer retries JSON repair instead of immediately using a generic fallback.
+        state = make_state()
+        state["turn_index"] = 1
+        state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
+        mock_llm = Mock()
+        mock_llm.invoke.side_effect = [
+            SimpleNamespace(content="Let's analyze this step by step."),
+            SimpleNamespace(
+                content=json.dumps(
+                    {
+                        "action": "question",
+                        "content": "What has changed more materially: revenue or costs?",
+                        "block_id": "",
+                        "ready_for_judge": False,
+                    }
+                )
+            ),
+        ]
+
+        with patch.object(agentic, "llm_server", mock_llm):
+            update = agentic.interviewer_node(state)
+
+        self.assertEqual(mock_llm.invoke.call_count, 2)
+        repair_prompt = mock_llm.invoke.call_args_list[1].args[0][-1].content
+        self.assertIn("previous reply was invalid", repair_prompt.lower())
+        self.assertEqual(
+            update["transcript"][-1],
+            "Interviewer: What has changed more materially: revenue or costs?",
+        )
+
     def test_case_guide_context_without_prompt(self) -> None:
         # Checks that case-guide retrieval can rebuild the query when case_prompt is missing.
         state = {"scenario_ref": "scenario_test"}
