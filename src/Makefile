@@ -49,6 +49,7 @@ setup-local:
 	test -d $(VENV_DIR) || $(PYTHON) -m venv $(VENV_DIR)
 	$(VENV_PYTHON) -m pip install -r $(REQUIREMENTS_FILE)
 	printf "%s\n" "RUNNER := local" > $(RUNNER_STATE_FILE)
+	@printf "%s\n" "Setup complete. Remember to configure your .env file."
 
 # Alias por compatibilidad con lo de siempre
 setup: setup-local
