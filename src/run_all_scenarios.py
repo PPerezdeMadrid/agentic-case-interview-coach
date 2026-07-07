@@ -87,6 +87,12 @@ def parse_args() -> argparse.Namespace:
         default=0,
         help="Optional seed passed into initial state builders. Default: 0.",
     )
+    parser.add_argument(
+        "--repeat",
+        type=int,
+        default=4,
+        help="How many times to run each selected scenario. Default: 4.",
+    )
     return parser.parse_args()
 
 
@@ -133,6 +139,8 @@ def build_record(
     scenario_ref: str,
     result: dict[str, Any] | None,
     *,
+    repeat_index: int = 1,
+    repeat_count: int = 1,
     error: str = "",
 ) -> dict[str, Any]:
     transcript = result.get("transcript", []) if isinstance(result, dict) else []
@@ -140,6 +148,8 @@ def build_record(
         "graph_name": graph_name,
         "thread_id": thread_id,
         "scenario_ref": scenario_ref,
+        "repeat_index": repeat_index,
+        "repeat_count": repeat_count,
         "status": "error" if error else "ok",
         "error": error,
         "turn_index": result.get("turn_index", "") if isinstance(result, dict) else "",
@@ -186,19 +196,27 @@ def run_graph_for_scenario(
     runtime: GraphRuntime,
     scenario_path: Path,
     seed: int,
-    
     batch_id: str,
     index: int,
+    repeat_index: int,
+    repeat_count: int,
 ) -> dict[str, Any]:
     scenario_ref = str(scenario_path)
     scenario_id = scenario_path.stem
-    thread_id = f"{runtime.name}_{scenario_id}_{index:03d}_{batch_id}"
+    thread_id = f"{runtime.name}_{scenario_id}_{index:03d}_r{repeat_index:02d}_{batch_id}"
 
     state_builder = getattr(runtime.module, runtime.state_builder_name)
     state = state_builder(scenario_ref=scenario_ref, seed=seed)
     config = runtime.module.build_graph_config(thread_id)
     result = runtime.module.graph.invoke(state, config=config)
-    return build_record(runtime.name, thread_id, scenario_ref, result)
+    return build_record(
+        runtime.name,
+        thread_id,
+        scenario_ref,
+        result,
+        repeat_index=repeat_index,
+        repeat_count=repeat_count,
+    )
 
 
 def run_batch(
@@ -206,14 +224,18 @@ def run_batch(
     scenario_paths: list[Path],
     output_dir: Path,
     seed: int,
+    repeat_count: int,
 ) -> dict[str, Any]:
     batch_id = output_dir.name
     combined_records: list[dict[str, Any]] = []
+    total_runs_per_graph = len(scenario_paths) * repeat_count
     summary: dict[str, Any] = {
         "batch_id": batch_id,
         "output_dir": str(output_dir),
         "runs_db_path": str(persistence.ensure_runs_db()),
         "scenario_count": len(scenario_paths),
+        "repeat_count": repeat_count,
+        "total_runs_per_graph": total_runs_per_graph,
         "scenarios": [str(path) for path in scenario_paths],
         "graphs": {},
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -224,25 +246,44 @@ def run_batch(
         ok_count = 0
         error_count = 0
 
+        run_index = 0
         for index, scenario_path in enumerate(scenario_paths, start=1):
-            print(
-                f"[{runtime.name}] {index}/{len(scenario_paths)} {scenario_path.stem}",
-                flush=True,
-            )
-            try:
-                record = run_graph_for_scenario(runtime, scenario_path, seed, batch_id, index)
-                ok_count += 1
-            except Exception as exc:
-                error_count += 1
-                record = build_record(
-                    runtime.name,
-                    thread_id=f"{runtime.name}_{scenario_path.stem}_{index:03d}_{batch_id}",
-                    scenario_ref=str(scenario_path),
-                    result=None,
-                    error=f"{type(exc).__name__}: {exc}",
+            for repeat_index in range(1, repeat_count + 1):
+                run_index += 1
+                print(
+                    (
+                        f"[{runtime.name}] {run_index}/{total_runs_per_graph} "
+                        f"{scenario_path.stem} (repeat {repeat_index}/{repeat_count})"
+                    ),
+                    flush=True,
                 )
-            graph_records.append(record)
-            combined_records.append(record)
+                try:
+                    record = run_graph_for_scenario(
+                        runtime,
+                        scenario_path,
+                        seed,
+                        batch_id,
+                        index,
+                        repeat_index,
+                        repeat_count,
+                    )
+                    ok_count += 1
+                except Exception as exc:
+                    error_count += 1
+                    record = build_record(
+                        runtime.name,
+                        thread_id=(
+                            f"{runtime.name}_{scenario_path.stem}_{index:03d}"
+                            f"_r{repeat_index:02d}_{batch_id}"
+                        ),
+                        scenario_ref=str(scenario_path),
+                        result=None,
+                        repeat_index=repeat_index,
+                        repeat_count=repeat_count,
+                        error=f"{type(exc).__name__}: {exc}",
+                    )
+                graph_records.append(record)
+                combined_records.append(record)
 
         jsonl_path = output_dir / f"{runtime.name}_results.jsonl"
         csv_path = output_dir / f"{runtime.name}_results.csv"
@@ -287,8 +328,11 @@ def main() -> int:
     if not scenario_paths:
         raise SystemExit("No scenarios found to run.")
 
+    if args.repeat < 1:
+        raise SystemExit("--repeat must be >= 1.")
+
     output_dir = make_output_dir(args.output_dir, args.label)
-    summary = run_batch(runtimes, scenario_paths, output_dir, args.seed)
+    summary = run_batch(runtimes, scenario_paths, output_dir, args.seed, args.repeat)
 
     print("", flush=True)
     print(f"Batch finished: {summary['batch_id']}", flush=True)

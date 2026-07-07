@@ -88,7 +88,7 @@ From `src/`:
 python3 run_all_scenarios.py --graph both --limit 3
 ```
 
-This runs a small batch through both graphs and writes:
+This runs a small batch through both graphs, repeating each selected scenario 4 times by default, and writes:
 
 - one persisted run per scenario into `main/artifacts/runs.sqlite`
 - one batch snapshot into `main/artifacts/batch_runs/<timestamp>/`
@@ -125,6 +125,12 @@ Run specific scenarios:
 python3 run_all_scenarios.py --graph both \
   --scenario scenario_01_01 \
   --scenario scenario_01_02
+```
+
+Control how many times each scenario is repeated:
+
+```bash
+python3 run_all_scenarios.py --graph both --scenario scenario_01_01 --repeat 4
 ```
 
 Write outputs to a custom folder:
