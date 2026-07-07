@@ -1,25 +1,69 @@
 # Agentic Case Interview Coach
 
-This project explores the use of agentic AI to support consulting case interview practice.
+This repository contains the active dissertation MVP for AI-supported consulting case interview practice.
 
-The system is designed as a multi-agent architecture where an Interviewer Agent conducts a case interview, a Judge Agent evaluates the candidate's reasoning using a structured rubric, and a Feedback Agent generates personalised coaching based on the interview transcript and case knowledge.
+The current system compares two LangGraph runtimes:
 
-The project focuses on reducing the dependency on large labelled datasets by using consulting casebooks, retrieval-augmented generation, and structured evaluation criteria. The goal is not to replace human coaching, but to provide an accessible tool that can help students practise case interviews and receive more consistent feedback.
+- `baseline`: a simpler interview loop with fixed evaluation flow
+- `agentic`: a more adaptive graph with interviewer decisions, judge checkpoints, retrieval, and final coaching feedback
 
-## Main Features
+Both runtimes simulate a case interview from structured scenario data, persist run artifacts, and can be reviewed in a small local workbench.
 
-- Case interview simulation through an LLM-based interviewer
-- Follow-up questioning based on the candidate's answers
-- Rubric-based evaluation of the interview transcript
-- Retrieval-augmented feedback using consulting frameworks and casebook material
-- Multi-agent orchestration using LangGraph
+## What The MVP Does Today
 
-## Repository Structure
+- Runs synthetic consulting case interviews end to end
+- Uses separate model roles for interviewer, candidate, judge, and feedback
+- Evaluates runs against a structured rubric
+- Adds retrieval-backed methodology context from case-guide and profitability knowledge sources
+- Persists run outputs to SQLite for later inspection
+- Exposes a local Flask workbench to browse runs and add human evaluation
 
-- `src/main`: active MVP implementation
-- `src/scenarios`: interview scenarios and rubric configuration
-- `src/synthetic-dataset`: synthetic case material used by the active MVP
-- `src/database`: structured case database in JSON
-- `src/schemas`: shared JSON schemas
-- `doc/`: project documentation and diagrams
-- `archive/`: legacy code and research material kept out of the active project structure
+## Active Project Layout
+
+```text
+src/
+├── main/
+│   ├── studio/        # LangGraph runtimes, prompts, retrieval, persistence, tests
+│   ├── web/           # local workbench for run inspection and human scoring
+│   ├── artifacts/     # generated SQLite DB and batch exports
+│   ├── database/      # structured case data used by the active MVP
+│   └── GPU-server.md  # optional remote serving notes
+├── scenarios/         # scenario configs and shared rubric assets
+├── synthetic-dataset/ # synthetic case content used by the runtime
+├── schemas/           # shared JSON schemas
+└── run_all_scenarios.py
+```
+
+Other top-level folders:
+
+- `archive/`: legacy experiments and research material
+- `doc/`: supporting documentation and diagrams
+
+## Runtime Notes
+
+- `src/main/studio/baseline.py` uses the LM Studio compatible server by default.
+- `src/main/studio/agentic.py` delegates most nodes to `src/main/studio/node.py`.
+- The interviewer JSON decision step in `node.py` uses `openai_llm_server`.
+- Environment variables for both providers are loaded from the repository `.env` when present.
+
+## Quick Start
+
+Install the Python dependencies used by `src/main/studio/` and `src/main/web/`, then from `src/` run:
+
+```bash
+python3 run_all_scenarios.py --graph both --limit 3
+```
+
+This writes persisted runs to `src/main/artifacts/runs.sqlite` and batch exports to `src/main/artifacts/batch_runs/`.
+
+To inspect runs locally:
+
+```bash
+cd src
+make workbench
+```
+
+## Documentation
+
+- `src/README.md`: detailed runtime, batch, workbench, and test instructions
+- `src/main/GPU-server.md`: optional remote model serving setup
