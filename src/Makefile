@@ -13,6 +13,8 @@ CONDA_RUN := $(CONDA) run -n $(CONDA_ENV) --no-capture-output
 WORKBENCH_PORT ?= 5020
 REQUIREMENTS_FILE ?= main/studio/requirements.txt
 RUNNER_STATE_FILE ?= .make.runner.mk
+# CLI de LangGraph (no viene en requirements.txt). El extra [inmem] habilita 'langgraph dev'.
+LANGGRAPH_CLI ?= langgraph-cli[inmem]
 
 -include $(RUNNER_STATE_FILE)
 
@@ -47,7 +49,9 @@ help:
 # --- Setup: local (venv) ---
 setup-local:
 	test -d $(VENV_DIR) || $(PYTHON) -m venv $(VENV_DIR)
+	$(VENV_PYTHON) -m pip install --upgrade pip
 	$(VENV_PYTHON) -m pip install -r $(REQUIREMENTS_FILE)
+	$(VENV_PYTHON) -m pip install "$(LANGGRAPH_CLI)"
 	printf "%s\n" "RUNNER := local" > $(RUNNER_STATE_FILE)
 	@printf "%s\n" "Setup complete. Remember to configure your .env file."
 
@@ -57,14 +61,15 @@ setup: setup-local
 # --- Setup: HPC (conda) ---
 env-hpc:
 	@$(CONDA) env list | grep -qE "^$(CONDA_ENV)[[:space:]]" || \
-		$(CONDA) create -n $(CONDA_ENV) python=$(PYTHON_VERSION) -y
+		$(CONDA) create -n $(CONDA_ENV) python=$(PYTHON_VERSION) pip -y
 
 setup-hpc: env-hpc
 	$(CONDA_RUN) python -m ensurepip --upgrade || true
 	$(CONDA_RUN) python -m pip install --upgrade pip
 	$(CONDA_RUN) python -m pip install -r $(REQUIREMENTS_FILE)
+	$(CONDA_RUN) python -m pip install "$(LANGGRAPH_CLI)"
 	printf "%s\n" "RUNNER := hpc" > $(RUNNER_STATE_FILE)
-	printf "%s\n" "RUNNER := hpc" > $(RUNNER_STATE_FILE)
+	@printf "%s\n" "Setup complete. Remember to configure your .env file."
 
 # --- Run targets (usan RUNNER: local por defecto, hpc opcional) ---
 langgraph:
