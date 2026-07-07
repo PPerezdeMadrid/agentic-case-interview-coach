@@ -21,6 +21,7 @@ def build_profitability_retrieval_query(
     focus_areas: list[str] | None = None,
 ) -> str:
     relevant_lines = [line.strip() for line in transcript[-8:] if isinstance(line, str) and line.strip()]
+    recent_transcript = "\n".join(relevant_lines)
     candidate_final_recommendation = ""
     for line in reversed(transcript):
         if isinstance(line, str) and line.startswith("Candidate:"):
@@ -34,7 +35,7 @@ def build_profitability_retrieval_query(
         "Consulting profitability case methodology grounded in managerial accounting.",
         f"Evaluation target: {evaluation_target.strip()}" if evaluation_target.strip() else "",
         f"Case prompt: {case_prompt.strip()}" if case_prompt.strip() else "",
-        f"Recent transcript:\n{'\n'.join(relevant_lines)}" if relevant_lines else "",
+        f"Recent transcript:\n{recent_transcript}" if recent_transcript else "",
         f"Latest candidate recommendation: {candidate_final_recommendation}" if candidate_final_recommendation else "",
         (
             "Judge focus areas or coaching targets: " + "; ".join(normalized_focus_areas)
