@@ -59,7 +59,10 @@ env-hpc:
 		$(CONDA) create -n $(CONDA_ENV) python=$(PYTHON_VERSION) -y
 
 setup-hpc: env-hpc
+	$(CONDA_RUN) python -m ensurepip --upgrade || true
+	$(CONDA_RUN) python -m pip install --upgrade pip
 	$(CONDA_RUN) python -m pip install -r $(REQUIREMENTS_FILE)
+	printf "%s\n" "RUNNER := hpc" > $(RUNNER_STATE_FILE)
 	printf "%s\n" "RUNNER := hpc" > $(RUNNER_STATE_FILE)
 
 # --- Run targets (usan RUNNER: local por defecto, hpc opcional) ---
