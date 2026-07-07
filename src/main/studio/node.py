@@ -166,7 +166,7 @@ def _invoke_interviewer_move(
         case_guidance,
         focus_areas,
     )
-    response = openai_llm_server.invoke(messages)
+    response = llm_server.invoke(messages)
     print("Calling OpenAI Server...")
     parsed = parse_interviewer_output(response.content)
     if parsed is not None:
@@ -184,7 +184,7 @@ def _invoke_interviewer_move(
                 )
             )
         ]
-        response = openai_llm_server.invoke(repair_messages)
+        response = llm_server.invoke(repair_messages)
         print("Calling OpenAI Server...")
         raw_output = str(response.content).strip()
         parsed = parse_interviewer_output(raw_output)
