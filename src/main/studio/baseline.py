@@ -21,7 +21,7 @@ from rag.profitability_guide_context import (
 )
 from loader import load_selected_simulation_bundle
 from llm_server import lmstudio_llm_server
-from persistence import make_persist_run_node, resolve_thread_id
+from persistence import make_persist_run_node, make_trace_node, resolve_thread_id
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
@@ -437,8 +437,8 @@ def build_graph_config(thread_id: str | None = None) -> dict:
 
 builder = StateGraph(AgenticGraphState, config_schema=GraphConfig)
 builder.add_node("load_scenario", load_scenario_node)
-builder.add_node("baseline", baseline_node)
-builder.add_node("candidate", candidate_node)
+builder.add_node("baseline", make_trace_node("baseline", "baseline", "interviewer", baseline_node))
+builder.add_node("candidate", make_trace_node("baseline", "candidate", "candidate", candidate_node))
 builder.add_node("persist_run", make_persist_run_node("baseline"))
 
 builder.add_edge(START, "load_scenario")

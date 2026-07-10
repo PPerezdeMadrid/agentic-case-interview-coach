@@ -210,7 +210,7 @@ class AgenticGraphTests(unittest.TestCase):
             )
 
         mock_llm.invoke.side_effect = fake_invoke
-        with patch.object(agentic, "llm_server", mock_llm):
+        with patch.object(agentic, "llm_server", mock_llm), patch.object(agentic, "openai_llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
         self.assertIn("Current judge focus areas to act on directly:", observed_prompt["content"])
@@ -300,7 +300,7 @@ class AgenticGraphTests(unittest.TestCase):
             ),
         ]
 
-        with patch.object(agentic, "llm_server", mock_llm):
+        with patch.object(agentic, "llm_server", mock_llm), patch.object(agentic, "openai_llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
         self.assertEqual(mock_llm.invoke.call_count, 2)
@@ -412,7 +412,9 @@ class AgenticGraphTests(unittest.TestCase):
                 return_value=[],
             ):
                 mock_llm.invoke.side_effect = llm_responses
-                with patch.object(agentic, "llm_server", mock_llm):
+                with patch.object(agentic, "llm_server", mock_llm), patch.object(
+                    agentic, "openai_llm_server", mock_llm
+                ):
                     with patch.object(persistence, "ARTIFACTS_DIR", artifacts_dir):
                         with patch.object(persistence, "RUNS_DB_PATH", db_path):
                             result = agentic.graph.invoke(

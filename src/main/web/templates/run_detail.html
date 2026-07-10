@@ -109,6 +109,60 @@
   </div>
 </section>
 
+<section class="two-col">
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Transcript</p>
+        <h2>Conversation</h2>
+      </div>
+    </div>
+    <ol class="transcript-chat">
+      {% for line in run.transcript %}
+      {% if not line.startswith('Eval Case Performance: ') and not line.startswith('Eval Dialog Quality: ') and not line.startswith('Give Feedback: ') %}
+      {% set role = "system" %}
+      {% set label = "System" %}
+      {% set content = line %}
+      {% if line.startswith('Interviewer reveal: ') %}
+        {% set role = "reveal" %}
+        {% set label = "Interviewer reveal" %}
+        {% set content = line.removeprefix('Interviewer reveal: ') %}
+      {% elif line.startswith('Interviewer: ') %}
+        {% set role = "interviewer" %}
+        {% set label = "Interviewer" %}
+        {% set content = line.removeprefix('Interviewer: ') %}
+      {% elif line.startswith('Candidate: ') %}
+        {% set role = "candidate" %}
+        {% set label = "Candidate" %}
+        {% set content = line.removeprefix('Candidate: ') %}
+      {% elif line.startswith('Judge: ') %}
+        {% set role = "judge" %}
+        {% set label = "Judge" %}
+        {% set content = line.removeprefix('Judge: ') %}
+      {% endif %}
+      <li class="chat-message chat-message-{{ role }}">
+        <div class="chat-bubble">
+          <span class="chat-label">{{ label }}</span>
+          <p>{{ content }}</p>
+        </div>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ol>
+  </article>
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Final Feedback</p>
+        <h2>Automatic Summary</h2>
+      </div>
+    </div>
+    <div class="markdown-block">
+      <pre>{{ run.final_feedback or 'No final feedback stored.' }}</pre>
+    </div>
+  </article>
+</section>
+
 <section class="panel">
   <div class="panel-heading">
     <div>
@@ -192,59 +246,5 @@
       {% endif %}
     </div>
   </form>
-</section>
-
-<section class="two-col">
-  <article class="panel">
-    <div class="panel-heading">
-      <div>
-        <p class="eyebrow">Transcript</p>
-        <h2>Conversation</h2>
-      </div>
-    </div>
-    <ol class="transcript-chat">
-      {% for line in run.transcript %}
-      {% if not line.startswith('Eval Case Performance: ') and not line.startswith('Eval Dialog Quality: ') and not line.startswith('Give Feedback: ') %}
-      {% set role = "system" %}
-      {% set label = "System" %}
-      {% set content = line %}
-      {% if line.startswith('Interviewer reveal: ') %}
-        {% set role = "reveal" %}
-        {% set label = "Interviewer reveal" %}
-        {% set content = line.removeprefix('Interviewer reveal: ') %}
-      {% elif line.startswith('Interviewer: ') %}
-        {% set role = "interviewer" %}
-        {% set label = "Interviewer" %}
-        {% set content = line.removeprefix('Interviewer: ') %}
-      {% elif line.startswith('Candidate: ') %}
-        {% set role = "candidate" %}
-        {% set label = "Candidate" %}
-        {% set content = line.removeprefix('Candidate: ') %}
-      {% elif line.startswith('Judge: ') %}
-        {% set role = "judge" %}
-        {% set label = "Judge" %}
-        {% set content = line.removeprefix('Judge: ') %}
-      {% endif %}
-      <li class="chat-message chat-message-{{ role }}">
-        <div class="chat-bubble">
-          <span class="chat-label">{{ label }}</span>
-          <p>{{ content }}</p>
-        </div>
-      </li>
-      {% endif %}
-      {% endfor %}
-    </ol>
-  </article>
-  <article class="panel">
-    <div class="panel-heading">
-      <div>
-        <p class="eyebrow">Final Feedback</p>
-        <h2>Automatic Summary</h2>
-      </div>
-    </div>
-    <div class="markdown-block">
-      <pre>{{ run.final_feedback or 'No final feedback stored.' }}</pre>
-    </div>
-  </article>
 </section>
 {% endblock %}
