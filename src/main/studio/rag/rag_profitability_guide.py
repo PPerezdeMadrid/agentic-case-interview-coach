@@ -127,6 +127,7 @@ def retrieve_profitability_guide_context(
             "content": document.page_content.strip(),
             "source": PROFITABILITY_GUIDE_PDF_PATH.name,
             "page": document.metadata.get("page"),
+            "chunk_id": document.id,
         }
         for document in results
         if document.page_content.strip()

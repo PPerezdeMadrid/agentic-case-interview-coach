@@ -227,6 +227,7 @@ def _snapshot_trace_relevant_state(state: dict[str, Any]) -> dict[str, Any]:
         "retrieved_profitability_context": state.get("retrieved_profitability_context", []),
         "case_performance": state.get("case_performance", {}),
         "quality_dialog": state.get("quality_dialog", {}),
+        "rag_query_log": state.get("rag_query_log", []),
     }
 
 

@@ -84,7 +84,7 @@ def get_profitability_guide_context(
     *,
     evaluation_target: str,
     top_k: int,
-) -> list[dict]:
+) -> tuple[list[dict], dict]:
     query = build_profitability_retrieval_query(
         str(state.get("case_prompt", "")),
         state.get("transcript", []),
@@ -92,8 +92,16 @@ def get_profitability_guide_context(
         focus_areas=state.get("focus_areas", []),
     )
     if not query.strip():
-        return []
-    return retrieve_profitability_guide_context(query, top_k=top_k)
+        return [], {}
+    chunks = retrieve_profitability_guide_context(query, top_k=top_k)
+    log_entry = {
+        "node": evaluation_target,
+        "source": "profitability_guide",
+        "query": query,
+        "top_k": top_k,
+        "chunk_ids": [chunk.get("chunk_id") for chunk in chunks],
+    }
+    return chunks, log_entry
 
 
 def build_initial_baseline_state(
@@ -124,6 +132,7 @@ def build_initial_baseline_state(
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
         "retrieved_profitability_context": [],
+        "rag_query_log": [],
     }
 
 
@@ -149,6 +158,7 @@ def load_scenario_node(
         "case_recommendation": extract_case_recommendation(case_data),
         "rubric_data": bundle["rubric"],
         "retrieved_profitability_context": [],
+        "rag_query_log": [],
     }
 
 
@@ -210,8 +220,8 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 
 def evaluate_case_performance(state: AgenticGraphState) -> dict:
     rubric_data = state.get("rubric_data", {})
-    case_guide_context = get_baseline_case_guide_context(state)
-    profitability_context = get_profitability_guide_context(
+    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
+    profitability_context, profitability_log = get_profitability_guide_context(
         state,
         evaluation_target="case_performance",
         top_k=5,
@@ -250,12 +260,13 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
             for chunk in profitability_context
             if str(chunk.get("content", "")).strip()
         ],
+        "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
     }
 
 
-def evaluate_dialog_quality(state: AgenticGraphState) -> dict:
+def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict]:
     rubric_data = state.get("rubric_data", {})
-    case_guide_context = get_baseline_case_guide_context(state)
+    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
     messages = [
         SystemMessage(
             content=(
@@ -274,7 +285,7 @@ def evaluate_dialog_quality(state: AgenticGraphState) -> dict:
     ]
     response = llm_server.invoke(messages)
     payload = load_json_object(response.content)
-    return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS)
+    return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS), case_guide_log
 
 
 def generate_final_feedback(transcript: list[str], case_performance: dict, quality_dialog: dict) -> str:
@@ -319,8 +330,8 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     if turn_index >= MAX_BASELINE_TURNS:
         enough_evidence = True
     else:
-        case_guide_context = get_baseline_case_guide_context(state)
-        profitability_context = get_profitability_guide_context(
+        case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
+        profitability_context, profitability_log = get_profitability_guide_context(
             state,
             evaluation_target="baseline_interviewer",
             top_k=3,
@@ -378,6 +389,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                     for chunk in profitability_context
                     if str(chunk.get("content", "")).strip()
                 ],
+                "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
             }
 
     final_state: AgenticGraphState = {
@@ -388,7 +400,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     }
     case_performance_payload = evaluate_case_performance(final_state)
     case_performance = case_performance_payload["case_performance"]
-    quality_dialog = evaluate_dialog_quality(final_state)
+    quality_dialog, dialog_guide_log = evaluate_dialog_quality(final_state)
     latest_feedback = generate_final_feedback(transcript, case_performance, quality_dialog)
     return {
         "turn_index": turn_index,
@@ -402,6 +414,8 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         "case_performance": case_performance,
         "quality_dialog": quality_dialog,
         "retrieved_profitability_context": case_performance_payload["retrieved_profitability_context"],
+        "rag_query_log": case_performance_payload["rag_query_log"]
+        + ([dialog_guide_log] if dialog_guide_log else []),
     }
 
 

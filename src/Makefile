@@ -1,7 +1,7 @@
 # --- Local (venv) configuration ---
 PYTHON ?= python3
 VENV_DIR ?= .venv
-VENV_PYTHON := $(VENV_DIR)/bin/python
+VENV_PYTHON := $(abspath $(VENV_DIR))/bin/python
 
 # --- HPC (conda) configuration ---
 CONDA ?= $(if $(CONDA_EXE),$(CONDA_EXE),conda)
@@ -13,13 +13,13 @@ CONDA_RUN := $(CONDA) run -n $(CONDA_ENV) --no-capture-output
 WORKBENCH_PORT ?= 5020
 REQUIREMENTS_FILE ?= main/studio/requirements.txt
 RUNNER_STATE_FILE ?= .make.runner.mk
-# CLI de LangGraph (no viene en requirements.txt). El extra [inmem] habilita 'langgraph dev'.
+# LangGraph CLI (it does not come from requirements.txt). The [inmem] extra enables 'langgraph dev'.
 LANGGRAPH_CLI ?= langgraph-cli[inmem]
 
 -include $(RUNNER_STATE_FILE)
 
-# Selecciona el intérprete para los targets de ejecución.
-# Por defecto usa el venv local. setup-hpc persiste RUNNER=hpc en RUNNER_STATE_FILE.
+# Selects the interpreter for run targets.
+# By default it uses the local venv. setup-hpc persists RUNNER=hpc in RUNNER_STATE_FILE.
 RUNNER ?= local
 ifeq ($(RUNNER),hpc)
 	RUN := $(CONDA_RUN)
@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -43,6 +43,8 @@ help:
 	@printf "%s\n" "  make run-all      Run baseline and agentic across all scenarios"
 	@printf "%s\n" "  make run-all-baseline  Run baseline across all scenarios"
 	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios"
+	@printf "%s\n" "  make experiment CASE=<case_id> N=<repeat> [GRAPH=agentic|baseline|both] [LABEL=...]"
+	@printf "%s\n" "                    Run every scenario of a case N times each"
 	@printf "%s\n" ""
 	@printf "%s\n" "make setup-hpc persists RUNNER=hpc for later commands in $(RUNNER_STATE_FILE)"
 
@@ -55,7 +57,7 @@ setup-local:
 	printf "%s\n" "RUNNER := local" > $(RUNNER_STATE_FILE)
 	@printf "%s\n" "Setup complete. Remember to configure your .env file."
 
-# Alias por compatibilidad con lo de siempre
+# Alias for backward compatibility
 setup: setup-local
 
 # --- Setup: HPC (conda) ---
@@ -71,7 +73,7 @@ setup-hpc: env-hpc
 	printf "%s\n" "RUNNER := hpc" > $(RUNNER_STATE_FILE)
 	@printf "%s\n" "Setup complete. Remember to configure your .env file."
 
-# --- Run targets (usan RUNNER: local por defecto, hpc opcional) ---
+# --- Run targets (use RUNNER: local by default, hpc optional) ---
 langgraph:
 	cd main/studio && $(RUN) langgraph dev --no-browser
 
@@ -92,3 +94,16 @@ run-all-baseline:
 
 run-all-agentic:
 	$(PY) run_all_scenarios.py --graph agentic
+
+# --- Experiment: run every scenario of one case N times each ---
+# Usage: make experiment CASE=01-energy-company N=10 [GRAPH=agentic] [LABEL=exp1]
+GRAPH ?= agentic
+N ?= 4
+LABEL ?=
+
+experiment:
+	@if [ -z "$(CASE)" ]; then \
+		printf "%s\n" "Usage: make experiment CASE=<case_id> N=<repeat_count> [GRAPH=agentic|baseline|both] [LABEL=...]"; \
+		exit 1; \
+	fi
+	$(PY) run_all_scenarios.py --graph $(GRAPH) --case $(CASE) --repeat $(N) --label "$(LABEL)"

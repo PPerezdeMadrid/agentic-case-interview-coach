@@ -72,6 +72,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--case",
+        default="",
+        help=(
+            "Optional case_id. Runs every synthetic scenario belonging to that case "
+            "(ignored if --scenario is also given)."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         default="",
         help="Optional output directory. Default: src/main/artifacts/batch_runs/<timestamp>/",
@@ -96,10 +104,22 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def list_scenario_paths(selected_refs: list[str]) -> list[Path]:
+def list_scenario_paths(selected_refs: list[str], case_id: str = "") -> list[Path]:
     if selected_refs:
         return [Path(loader._find_scenario_path(ref)).resolve() for ref in selected_refs]
-    return [path.resolve() for path in loader._list_scenario_paths()]
+
+    all_paths = [path.resolve() for path in loader._list_scenario_paths()]
+    if not case_id:
+        return all_paths
+
+    matched = [
+        path
+        for path in all_paths
+        if str(loader.load_scenario(path).get("case_id", "")).strip() == case_id
+    ]
+    if not matched:
+        raise SystemExit(f"No scenarios found for case_id '{case_id}'.")
+    return matched
 
 
 def make_output_dir(raw_output_dir: str, label: str) -> Path:
@@ -320,7 +340,7 @@ def resolve_runtimes(graph_selection: str) -> list[GraphRuntime]:
 def main() -> int:
     args = parse_args()
     runtimes = resolve_runtimes(args.graph)
-    scenario_paths = list_scenario_paths(args.scenario)
+    scenario_paths = list_scenario_paths(args.scenario, args.case)
 
     if args.limit > 0:
         scenario_paths = scenario_paths[: args.limit]

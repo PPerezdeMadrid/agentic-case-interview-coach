@@ -97,12 +97,24 @@ def get_baseline_case_guide_context(
     state: AgenticGraphState,
     *,
     top_k: int = DEFAULT_TOP_K,
-) -> list[str]:
-    """Retrieve guide snippets for the baseline graph with a simple prompt query"""
+) -> tuple[list[str], dict]:
+    """Retrieve guide snippets for the baseline graph with a simple prompt query.
+
+    Returns (snippets, rag_query_log_entry) so callers can persist the retrieval
+    query and retrieved chunk ids alongside the rest of the graph state.
+    """
     query = resolve_case_guide_query(state) or "consulting case interview methodology"
     case_guide_chunks = retrieve_case_guide_context(query, top_k=top_k)
-    return [
+    snippets = [
         str(chunk.get("content", "")).strip()
         for chunk in case_guide_chunks
         if str(chunk.get("content", "")).strip()
     ]
+    log_entry = {
+        "node": "baseline",
+        "source": "case_guide",
+        "query": query,
+        "top_k": top_k,
+        "chunk_ids": [chunk.get("chunk_id") for chunk in case_guide_chunks],
+    }
+    return snippets, log_entry

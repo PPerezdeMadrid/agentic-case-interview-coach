@@ -92,19 +92,33 @@ def format_focus_areas_for_prompt(focus_areas: list[str]) -> str:
     return "\n".join(f"- {focus_area}" for focus_area in normalized_focus_areas)
 
 
-def get_case_guide_context(state: AgenticGraphState, node_name: str, *, top_k: int = 4) -> list[str]:
-    """Retrieve guide snippets tailored to a specific evaluation node."""
+def get_case_guide_context(
+    state: AgenticGraphState, node_name: str, *, top_k: int = 4
+) -> tuple[list[str], dict]:
+    """Retrieve guide snippets tailored to a specific evaluation node.
+
+    Returns (snippets, rag_query_log_entry) so callers can persist the retrieval
+    query and retrieved chunk ids alongside the rest of the graph state.
+    """
     case_prompt = resolve_case_guide_query(state)
     query = build_case_guide_query(state, case_prompt, node_name)
     if not query.strip():
-        return []
+        return [], {}
 
     case_guide_chunks = retrieve_case_guide_context(query, top_k=top_k)
-    return [
+    snippets = [
         str(chunk.get("content", "")).strip()
         for chunk in case_guide_chunks
         if str(chunk.get("content", "")).strip()
     ]
+    log_entry = {
+        "node": node_name,
+        "source": "case_guide",
+        "query": query,
+        "top_k": top_k,
+        "chunk_ids": [chunk.get("chunk_id") for chunk in case_guide_chunks],
+    }
+    return snippets, log_entry
 
 
 def get_profitability_guide_context(
@@ -112,8 +126,11 @@ def get_profitability_guide_context(
     *,
     evaluation_target: str,
     top_k: int = 5,
-) -> list[dict]:
-    """Retrieve profitability-guide snippets tailored to the current situation."""
+) -> tuple[list[dict], dict]:
+    """Retrieve profitability-guide snippets tailored to the current situation.
+
+    Returns (chunks, rag_query_log_entry), mirroring get_case_guide_context.
+    """
     query = build_profitability_retrieval_query(
         str(state.get("case_prompt", "")),
         state.get("transcript", []),
@@ -121,8 +138,16 @@ def get_profitability_guide_context(
         focus_areas=state.get("focus_areas", []),
     )
     if not query.strip():
-        return []
-    return retrieve_profitability_guide_context(query, top_k=top_k)
+        return [], {}
+    chunks = retrieve_profitability_guide_context(query, top_k=top_k)
+    log_entry = {
+        "node": evaluation_target,
+        "source": "profitability_guide",
+        "query": query,
+        "top_k": top_k,
+        "chunk_ids": [chunk.get("chunk_id") for chunk in chunks],
+    }
+    return chunks, log_entry
 
 
 def _build_interviewer_messages(
@@ -229,6 +254,7 @@ def build_initial_interview_state(
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
         "retrieved_profitability_context": [],
+        "rag_query_log": [],
     }
 
 
@@ -255,6 +281,7 @@ def load_scenario_node(
         "case_recommendation": extract_case_recommendation(case_data),
         "rubric_data": bundle["rubric"],
         "retrieved_profitability_context": [],
+        "rag_query_log": [],
     }
 
 
@@ -353,7 +380,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     judge_round = state.get("judge_round", 0)
     transcript = state.get("transcript", [])
     rubric_data = state.get("rubric_data", {})
-    case_guide_context = get_case_guide_context(state, "judge")
+    case_guide_context, case_guide_log = get_case_guide_context(state, "judge")
 
     messages = [
         SystemMessage(
@@ -396,6 +423,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
         "judge_round": judge_round + 1,
         "enough_evidence": enough_evidence,
         "focus_areas": None if enough_evidence else new_focus_areas,
+        "rag_query_log": [case_guide_log] if case_guide_log else [],
     }
     if not enough_evidence:
         # Reset the interviewer-turn budget so judge coaching leads to another
@@ -407,8 +435,8 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
 def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
     """Score case-performance dimensions using transcript and rubric evidence."""
     rubric_data = state.get("rubric_data", {})
-    case_guide_context = get_case_guide_context(state, "eval_case_performance")
-    profitability_context = get_profitability_guide_context(
+    case_guide_context, case_guide_log = get_case_guide_context(state, "eval_case_performance")
+    profitability_context, profitability_log = get_profitability_guide_context(
         state,
         evaluation_target="case_performance",
         top_k=5,
@@ -450,13 +478,14 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
             for chunk in profitability_context
             if str(chunk.get("content", "")).strip()
         ],
+        "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
     }
 
 
 def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
     """Score interaction-quality dimensions from the transcript."""
     rubric_data = state.get("rubric_data", {})
-    case_guide_context = get_case_guide_context(state, "eval_dialog_quality")
+    case_guide_context, case_guide_log = get_case_guide_context(state, "eval_dialog_quality")
     messages = [
         SystemMessage(
             content=(
@@ -480,12 +509,13 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
     quality_dialog = normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS)
     return {
         "quality_dialog": quality_dialog,
+        "rag_query_log": [case_guide_log] if case_guide_log else [],
     }
 
 
 def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
     """Write final user-facing feedback from the evaluation outputs."""
-    case_guide_context = get_case_guide_context(state, "give_feedback")
+    case_guide_context, case_guide_log = get_case_guide_context(state, "give_feedback")
     messages = [
         SystemMessage(
             content=(
@@ -515,6 +545,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
     ]
     return {
         "transcript": transcript,
+        "rag_query_log": [case_guide_log] if case_guide_log else [],
     }
 
 

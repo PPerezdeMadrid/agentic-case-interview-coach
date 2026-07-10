@@ -133,6 +133,12 @@ Control how many times each scenario is repeated:
 python3 run_all_scenarios.py --graph both --scenario scenario_01_01 --repeat 4
 ```
 
+Run every scenario belonging to one case (ignored if `--scenario` is also given):
+
+```bash
+python3 run_all_scenarios.py --graph agentic --case 01-energy-company --repeat 10
+```
+
 Write outputs to a custom folder:
 
 ```bash
@@ -161,6 +167,7 @@ make setup-hpc
 make run-all
 make run-all-baseline
 make run-all-agentic
+make experiment CASE=01-energy-company N=10
 make test
 make workbench
 make langgraph
@@ -169,6 +176,15 @@ make langgraph
 `make setup` creates `.venv`, installs `main/studio/requirements.txt`, and sets local execution as the default for later `make` commands.
 
 `make setup-hpc` creates the `coach` conda environment if needed, installs the same requirements there, and persists HPC execution as the default for later `make` commands by writing `src/.make.runner.mk`. After that, plain commands like `make test`, `make run-all`, or `make workbench` will use the conda environment automatically.
+
+`make experiment CASE=<case_id> N=<repeat_count>` runs every scenario belonging to one case, N times each, and is a thin wrapper around `run_all_scenarios.py --case ... --repeat ...`. `CASE` is required (the command exits with a usage message if it's missing); `N` defaults to `4`. Optional overrides:
+
+```bash
+make experiment CASE=01-energy-company N=10 GRAPH=baseline LABEL=retrieval_ablation
+```
+
+- `GRAPH` selects `agentic` (default), `baseline`, or `both`
+- `LABEL` is appended to the generated batch output folder name
 
 These targets are thin wrappers around the Python runtime and local development servers.
 

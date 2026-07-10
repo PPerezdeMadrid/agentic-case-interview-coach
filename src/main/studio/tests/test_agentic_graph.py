@@ -319,15 +319,17 @@ class AgenticGraphTests(unittest.TestCase):
             with patch.object(
                 agentic,
                 "retrieve_case_guide_context",
-                return_value=[{"content": "Clarify the objective first."}],
+                return_value=[{"content": "Clarify the objective first.", "chunk_id": "guide::chunk_1"}],
             ) as retrieve:
-                context = agentic.get_case_guide_context(state, "judge")
+                context, log_entry = agentic.get_case_guide_context(state, "judge")
 
         retrieve.assert_called_once()
         retrieval_query = retrieve.call_args.args[0]
         self.assertIn("Case prompt: Our profits are down. What would you look at first?", retrieval_query)
         self.assertIn("Current goal: Decide what evidence is still missing before evaluating the candidate.", retrieval_query)
         self.assertEqual(context, ["Clarify the objective first."])
+        self.assertEqual(log_entry["query"], retrieval_query)
+        self.assertEqual(log_entry["chunk_ids"], ["guide::chunk_1"])
 
     def test_profitability_query_includes_source_navigation_guide(self) -> None:
         retrieval_query = agentic.build_profitability_retrieval_query(
@@ -431,10 +433,15 @@ class AgenticGraphTests(unittest.TestCase):
                 result["retrieved_profitability_context"],
                 [],
             )
+            self.assertTrue(result["rag_query_log"])
+            self.assertEqual(
+                {entry["node"] for entry in result["rag_query_log"]},
+                {"judge", "eval_case_performance", "case_performance", "eval_dialog_quality", "give_feedback"},
+            )
 
             with sqlite3.connect(db_path) as connection:
                 row = connection.execute(
-                    "SELECT thread_id, final_feedback, transcript_json FROM runs"
+                    "SELECT thread_id, final_feedback, transcript_json, state_json FROM runs"
                 ).fetchone()
                 trace_rows = connection.execute(
                     """
@@ -451,6 +458,8 @@ class AgenticGraphTests(unittest.TestCase):
                 "Clear structure. Push harder on cost drill-downs next time.",
             )
             self.assertIn("Give Feedback", row[2])
+            persisted_state = json.loads(row[3])
+            self.assertTrue(persisted_state["rag_query_log"])
             self.assertGreaterEqual(len(trace_rows), 2)
             self.assertEqual(trace_rows[0][0], "interviewer")
             self.assertIn('"turn_index"', trace_rows[0][2])
@@ -484,10 +493,13 @@ class BaselineGraphTests(unittest.TestCase):
         with patch.object(
             baseline,
             "get_baseline_case_guide_context",
-            return_value=[
-                "Start by clarifying the objective and metric.",
-                "Split the problem into revenue and cost drivers.",
-            ],
+            return_value=(
+                [
+                    "Start by clarifying the objective and metric.",
+                    "Split the problem into revenue and cost drivers.",
+                ],
+                {},
+            ),
         ), patch.object(
             baseline,
             "retrieve_profitability_guide_context",
@@ -522,10 +534,13 @@ class BaselineGraphTests(unittest.TestCase):
         with patch.object(
             baseline,
             "get_baseline_case_guide_context",
-            return_value=[
-                "Probe the objective before branching.",
-                "Check revenue versus cost drivers.",
-            ],
+            return_value=(
+                [
+                    "Probe the objective before branching.",
+                    "Check revenue versus cost drivers.",
+                ],
+                {},
+            ),
         ) as get_context, patch.object(
             baseline,
             "retrieve_profitability_guide_context",
@@ -551,15 +566,16 @@ class BaselineGraphTests(unittest.TestCase):
             with patch.object(
                 case_guide_context,
                 "retrieve_case_guide_context",
-                return_value=[{"content": "Split revenue from cost drivers."}],
+                return_value=[{"content": "Split revenue from cost drivers.", "chunk_id": "guide::chunk_9"}],
             ) as retrieve:
-                context = baseline.get_baseline_case_guide_context(state)
+                context, log_entry = baseline.get_baseline_case_guide_context(state)
 
         retrieve.assert_called_once_with(
             "Our profits are down. What would you look at first?",
             top_k=4,
         )
         self.assertEqual(context, ["Split revenue from cost drivers."])
+        self.assertEqual(log_entry["chunk_ids"], ["guide::chunk_9"])
 
 
 if __name__ == "__main__":

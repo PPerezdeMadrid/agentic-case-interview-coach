@@ -117,6 +117,7 @@ def retrieve_case_guide_context(query: str, *,top_k: int = DEFAULT_TOP_K,) -> li
             "content": document.page_content.strip(),
             "source": CASE_GUIDE_PDF_PATH.name,
             "page": document.metadata.get("page"),
+            "chunk_id": document.id,
         }
         for document in results
         if document.page_content.strip()

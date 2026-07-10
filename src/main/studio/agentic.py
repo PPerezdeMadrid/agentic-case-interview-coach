@@ -84,7 +84,9 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
     return node_module.give_feedback_node(state)
 
 
-def get_case_guide_context(state: AgenticGraphState, node_name: str, *, top_k: int = 4) -> list[str]:
+def get_case_guide_context(
+    state: AgenticGraphState, node_name: str, *, top_k: int = 4
+) -> tuple[list[str], dict]:
     _sync_node_dependencies()
     return node_module.get_case_guide_context(state, node_name, top_k=top_k)
 
