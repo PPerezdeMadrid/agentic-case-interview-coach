@@ -393,14 +393,16 @@ def build_three_way_score_comparison(
 
 
 def build_annotation_sections(comparison_rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    """
+    Group every comparison row by section so a human can score each dimension,
+    whether or not the golden set already provides a reference score.
+    """
     sections: dict[str, list[dict[str, Any]]] = {
         CASE_PERFORMANCE_SECTION: [],
         DIALOG_QUALITY_SECTION: [],
     }
 
     for row in comparison_rows:
-        if row.get("expected_score") not in {"", None}:
-            continue
         section_name = str(row.get("section", "")).strip()
         if section_name in sections:
             sections[section_name].append(row)

@@ -366,7 +366,8 @@ class DashboardStoreTests(unittest.TestCase):
         self.assertEqual(payload["human_scores"]["rubric"]["case_structure"]["score"], 4)
         self.assertEqual(payload["metrics"]["model_vs_human_mae"], 1.0)
         self.assertEqual(payload["metrics"]["exact_match_rate"], 0.0)
-        self.assertEqual(payload["annotation_sections"]["rubric"], [])
+        self.assertEqual(len(payload["annotation_sections"]["rubric"]), 1)
+        self.assertEqual(payload["annotation_sections"]["rubric"][0]["dimension"], "case_structure")
 
     def test_load_run_traces_builds_timeline_payload(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

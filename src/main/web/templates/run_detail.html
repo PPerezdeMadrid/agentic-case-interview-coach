@@ -54,13 +54,13 @@
     </div>
   </div>
   <div class="metric-grid">
-    <div class="metric-card"><span>Model vs Human MAE</span><strong>{{ run.metrics.model_vs_human_mae if run.metrics.model_vs_human_mae is not none else 'n/a' }}</strong></div>
-    <div class="metric-card"><span>Exact Match Rate</span><strong>{{ run.metrics.exact_match_rate if run.metrics.exact_match_rate is not none else 'n/a' }}{% if run.metrics.exact_match_rate is not none %}%{% endif %}</strong></div>
-    <div class="metric-card"><span>Off-by-One Rate</span><strong>{{ run.metrics.off_by_one_rate if run.metrics.off_by_one_rate is not none else 'n/a' }}{% if run.metrics.off_by_one_rate is not none %}%{% endif %}</strong></div>
-    <div class="metric-card"><span>Bias / Signed Error</span><strong>{{ run.metrics.signed_error if run.metrics.signed_error is not none else 'n/a' }}</strong></div>
+    <div class="metric-card"><span>Model vs Human MAE</span><strong>{{ run.metrics.model_vs_human_mae if run.metrics.model_vs_human_mae is not none else '–' }}</strong></div>
+    <div class="metric-card"><span>Exact Match Rate</span><strong>{{ run.metrics.exact_match_rate if run.metrics.exact_match_rate is not none else '–' }}{% if run.metrics.exact_match_rate is not none %}%{% endif %}</strong></div>
+    <div class="metric-card"><span>Off-by-One Rate</span><strong>{{ run.metrics.off_by_one_rate if run.metrics.off_by_one_rate is not none else '–' }}{% if run.metrics.off_by_one_rate is not none %}%{% endif %}</strong></div>
+    <div class="metric-card"><span>Bias / Signed Error</span><strong>{{ run.metrics.signed_error if run.metrics.signed_error is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Overestimated Dimensions</span><strong>{{ run.metrics.overestimation_count }}</strong></div>
     <div class="metric-card"><span>Underestimated Dimensions</span><strong>{{ run.metrics.underestimation_count }}</strong></div>
-    <div class="metric-card"><span>Expected vs Human MAE</span><strong>{{ run.metrics.expected_vs_human_mae if run.metrics.expected_vs_human_mae is not none else 'n/a' }}</strong></div>
+    <div class="metric-card"><span>Reference vs Human MAE</span><strong>{{ run.metrics.expected_vs_human_mae if run.metrics.expected_vs_human_mae is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Comparable Dimensions</span><strong>{{ run.metrics.comparable_dimensions }}</strong></div>
   </div>
 </section>
@@ -69,7 +69,7 @@
   <div class="panel-heading">
     <div>
       <p class="eyebrow">Score Comparison</p>
-      <h2>Expected vs Model vs Human</h2>
+      <h2>Reference vs Model vs Human</h2>
       <p class="lede">The comparison table uses human scores as the primary reference for evaluation quality.</p>
     </div>
   </div>
@@ -79,14 +79,14 @@
         <tr>
           <th>Section</th>
           <th>Dimension</th>
-          <th>Expected</th>
+          <th>Reference</th>
           <th>Model</th>
           <th>Human</th>
-          <th>Expected vs Model</th>
+          <th>Reference vs Model</th>
           <th>Model vs Human Error</th>
-          <th>Expected vs Human Error</th>
+          <th>Reference vs Human Error</th>
           <th>Model vs Human Status</th>
-          <th>Expected vs Human Status</th>
+          <th>Reference vs Human Status</th>
         </tr>
       </thead>
       <tbody>
@@ -114,7 +114,7 @@
     <div>
       <p class="eyebrow">Human Evaluation</p>
       <h2>Post-Run Annotation</h2>
-      <p class="lede">Only dimensions missing from the candidate profile appear here. Saving again updates the existing annotation.</p>
+      <p class="lede">Score every dimension below to populate the Model vs Human and Reference vs Human metrics above. Reference score is shown for context only. Saving again updates the existing annotation.</p>
     </div>
   </div>
   <form class="human-form" method="post" action="{{ url_for('save_human_evaluation_page', run_id=run.run_id) }}">
@@ -139,7 +139,7 @@
           <thead>
             <tr>
               <th>Dimension</th>
-              <th>Expected Score</th>
+              <th>Reference Score</th>
               <th>Model Score</th>
               <th>Human Score</th>
               <th>Human Rationale</th>
@@ -177,7 +177,7 @@
     {% endfor %}
 
     {% if not run.annotation_sections['rubric'] and not run.annotation_sections['case_interaction_quality'] %}
-    <p class="helper">No extra dimensions require human annotation for this run.</p>
+    <p class="helper">No dimensions found for this run yet.</p>
     {% endif %}
 
     <label class="notes-field">
