@@ -1,7 +1,7 @@
 import json
 from typing import Literal
 
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
 from typing_extensions import TypedDict
@@ -44,14 +44,15 @@ from utils import (
     strip_thinking,
 )
 
-# Baseline uses a single model (the GPU Llama server) across all roles, unlike the
-# role-differentiated agentic graph.
+# Baseline uses a single model (Llama-3.1-70B via OpenRouter) across all roles, unlike
+# the role-differentiated agentic graph.
 candidate_llm = judge_llm_server
 judge_llm = judge_llm_server
 interviewer_llm = judge_llm_server
 
 DEFAULT_THREAD_ID = "main_baseline"
 MAX_BASELINE_TURNS = 4
+MAX_BASELINE_JSON_RETRIES = 3
 
 CASE_PERFORMANCE_FIELDS = [
     "case_opening",
@@ -165,20 +166,58 @@ def load_scenario_node(
     }
 
 
-def parse_baseline_output(raw_output: str) -> tuple[str, str, str, bool]:
+def parse_baseline_output(raw_output: str) -> tuple[str, str, str, bool] | None:
     payload = load_json_object(raw_output)
+    if not payload:
+        return None
+
     action = str(payload.get("action", "question")).strip().lower()
     content = str(payload.get("content", "")).strip()
     block_id = str(payload.get("block_id", "")).strip()
     ready_for_evaluation = bool(payload.get("ready_for_evaluation", False))
 
     if action not in {"question", "reveal", "evaluate"}:
-        action = "question"
+        return None
     if action == "evaluate":
         return action, "", "", True
     if not content:
-        content = "Could you walk me through your approach?"
+        return None
     return action, content, block_id, ready_for_evaluation
+
+
+def _invoke_baseline_move(messages: list[SystemMessage]) -> tuple[str, str, str, bool]:
+    """Call the baseline interviewer with JSON-repair retries, mirroring node.py's interviewer."""
+    response = interviewer_llm.invoke(messages)
+    print("Calling Baseline Interviewer Server...")
+    parsed = parse_baseline_output(response.content)
+    if parsed is not None:
+        return parsed
+
+    raw_output = str(response.content).strip()
+    for _ in range(MAX_BASELINE_JSON_RETRIES - 1):
+        repair_messages = messages + [
+            HumanMessage(
+                content=(
+                    "Your previous reply was invalid for the required schema.\n"
+                    "Return exactly one valid JSON object with keys action, content, block_id, ready_for_evaluation.\n"
+                    "Do not add markdown, code fences, analysis, or any extra text.\n\n"
+                    f"Previous invalid reply:\n{raw_output or '[empty response]'}"
+                )
+            )
+        ]
+        response = interviewer_llm.invoke(repair_messages)
+        print("Calling Baseline Interviewer Server...")
+        raw_output = str(response.content).strip()
+        parsed = parse_baseline_output(raw_output)
+        if parsed is not None:
+            return parsed
+
+    return (
+        "question",
+        "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
+        "",
+        False,
+    )
 
 
 def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
@@ -368,8 +407,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                 )
             ),
         ]
-        response = interviewer_llm.invoke(messages)
-        action, content, revealed_block_id, enough_evidence = parse_baseline_output(response.content)
+        action, content, revealed_block_id, enough_evidence = _invoke_baseline_move(messages)
 
         if action == "reveal" and revealed_block_id:
             revealed_block = get_case_block_by_id(case_data, revealed_block_id)
@@ -379,7 +417,6 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                     content = revealed_content
             else:
                 action = "question"
-                content = "Could you walk me through your approach?"
 
         if not enough_evidence:
             transcript_label = "Interviewer reveal" if action == "reveal" else "Interviewer"

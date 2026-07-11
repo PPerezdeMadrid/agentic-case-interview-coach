@@ -24,7 +24,13 @@ model_mistral12B = "mistralai/Mistral-Nemo-Instruct-2407"
 model_llama70B = "meta-llama/Llama-3.3-70B-Instruct"
 model_llama8B = "meta-llama/Llama-3.1-8B-Instruct"
 
-# Local LM Studio model 
+_openrouter_base_url = _normalize_base_url(
+    os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api")
+)
+_openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "")
+_openrouter_temperature = float(os.getenv("OPENROUTER_TEMPERATURE", "0.2"))
+
+# Local LM Studio model - used for final candidate feedback
 lmstudio_llm_server = ChatOpenAI(
     model=os.getenv("LMSTUDIO_MODEL", "deepseek-r1-distill-llama-8b"),
     base_url=_normalize_base_url(os.getenv("LMSTUDIO_BASE_URL", "http://localhost:8081")),
@@ -32,6 +38,7 @@ lmstudio_llm_server = ChatOpenAI(
     temperature=float(os.getenv("LMSTUDIO_TEMPERATURE", "0.14")),
     disable_streaming=True,
 )
+feedback_llm_server = lmstudio_llm_server
 
 
 # OpenAI model
@@ -45,31 +52,46 @@ openai_llm_server = ChatOpenAI(
 )
 
 
-# OpenRouter QWEN Interviewer model
+# OpenRouter Qwen Interviewer model
 interviewer_llm_server = ChatOpenAI(
-    model=os.getenv(
-        "OPENROUTER_MODEL", "deepseek/deepseek-chat"),
-    base_url=_normalize_base_url(
-        os.getenv("OPENROUTER_BASE_URL","https://openrouter.ai/api")
-    ),
-    api_key=os.getenv( "OPENROUTER_API_KEY",""),
-    temperature=float(os.getenv("OPENROUTER_TEMPERATURE","0.2")))
+    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen-2.5-7b-instruct"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
+    temperature=_openrouter_temperature,
+)
 
-# GPU Mistral Candidate model 
+# OpenRouter Mistral Candidate model
 candidate_llm_server = ChatOpenAI(
-    model=model_mistral12B,
-    base_url="http://localhost:18401/v1",
-    api_key="EMPTY",
-    temperature=float(os.getenv("TEMPERATURE","0.0"))
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-nemo"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
+    temperature=_openrouter_temperature,
 )
 
-# GPU Llama Judge model
+# OpenRouter Llama 70B Judge model
 judge_llm_server = ChatOpenAI(
-    model=model_llama70B,
-    base_url="http://localhost:18402/v1",
-    api_key="EMPTY",
-    temperature=float(os.getenv("TEMPERATURE","0.0")),
+    model=os.getenv("OPENROUTER_MODEL_JUDGE", "meta-llama/llama-3.1-70b-instruct"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
+    temperature=_openrouter_temperature,
 )
+
+# --- Alternative: GPU-hosted models on the university HPC cluster. ---
+# Not used by default now that candidate/judge run on OpenRouter, kept here
+# in case the project reverts to self-hosted inference.
+# candidate_llm_server_gpu = ChatOpenAI(
+#     model=model_mistral12B,
+#     base_url="http://localhost:18401/v1",
+#     api_key="EMPTY",
+#     temperature=float(os.getenv("TEMPERATURE", "0.0")),
+# )
+#
+# judge_llm_server_gpu = ChatOpenAI(
+#     model=model_llama70B,
+#     base_url="http://localhost:18402/v1",
+#     api_key="EMPTY",
+#     temperature=float(os.getenv("TEMPERATURE", "0.0")),
+# )
 
 # Backward-compatible default used by baseline and older call sites.
 llm_server = lmstudio_llm_server

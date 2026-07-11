@@ -27,6 +27,8 @@ def _sync_node_dependencies() -> None:
     """Keep extracted node implementations aligned with this module's public patch points."""
     node_module.candidate_llm = candidate_llm
     node_module.judge_llm = judge_llm
+    node_module.interviewer_llm = interviewer_llm
+    node_module.feedback_llm = feedback_llm
     node_module.openai_llm_server = openai_llm_server
     node_module.load_selected_simulation_bundle = load_selected_simulation_bundle
     node_module.retrieve_case_guide_context = retrieve_case_guide_context
@@ -116,6 +118,8 @@ def build_graph_config(thread_id: str | None = None) -> dict:
 
 candidate_llm = node_module.candidate_llm
 judge_llm = node_module.judge_llm
+interviewer_llm = node_module.interviewer_llm
+feedback_llm = node_module.feedback_llm
 DEFAULT_THREAD_ID = node_module.DEFAULT_THREAD_ID
 MAX_JUDGE_ROUNDS = node_module.MAX_JUDGE_ROUNDS
 CASE_PERFORMANCE_FIELDS = node_module.CASE_PERFORMANCE_FIELDS

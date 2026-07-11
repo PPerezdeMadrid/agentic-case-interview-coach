@@ -59,30 +59,26 @@ class APIConnectionTests(unittest.TestCase):
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
         self.assertTrue(ok, f"OpenAI connection failed: {detail}")
 
-    def test_openrouter_connection(self):
+    def test_interviewer_openrouter_connection(self):
         if not os.getenv("OPENROUTER_API_KEY"):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.interviewer_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (interviewer/Qwen) failed: {detail}")
 
-    def test_candidate_gpu_connection(self):
+    def test_candidate_openrouter_connection(self):
+        if not os.getenv("OPENROUTER_API_KEY"):
+            self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.candidate_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        if not ok:
-            self.skipTest(
-                f"GPU Mistral candidate server (localhost:18401) unreachable "
-                f"— expected unless server.bash is running on the HPC allocation: {detail}"
-            )
+        self.assertTrue(ok, f"OpenRouter connection (candidate/Mistral) failed: {detail}")
 
-    def test_judge_gpu_connection(self):
+    def test_judge_openrouter_connection(self):
+        if not os.getenv("OPENROUTER_API_KEY"):
+            self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.judge_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        if not ok:
-            self.skipTest(
-                f"GPU Llama judge server (localhost:18402) unreachable "
-                f"— expected unless server.bash is running on the HPC allocation: {detail}"
-            )
+        self.assertTrue(ok, f"OpenRouter connection (judge/Llama-70B) failed: {detail}")
 
 
 if __name__ == "__main__":

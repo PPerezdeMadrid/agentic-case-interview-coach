@@ -12,7 +12,14 @@ from loader import (
     DEFAULT_MAX_JUDGE_ROUNDS,
     load_selected_simulation_bundle,
 )
-from llm_server import openai_llm_server, lmstudio_llm_server, candidate_llm_server, judge_llm_server, interviewer_llm_server
+from llm_server import (
+    candidate_llm_server,
+    feedback_llm_server,
+    interviewer_llm_server,
+    judge_llm_server,
+    lmstudio_llm_server,
+    openai_llm_server,
+)
 from persistence import resolve_thread_id
 from prompts import (
     CASE_GUIDE_NAVIGATION_PROMPT,
@@ -51,10 +58,11 @@ from utils import (
     strip_thinking,
 )
 
-# Shared default server for the graph today.
+# Per-role servers: interviewer/candidate/judge on OpenRouter, feedback on local LM Studio.
 candidate_llm = candidate_llm_server
-judge_llm = candidate_llm_server
-interviewer_llm = candidate_llm_server
+judge_llm = judge_llm_server
+interviewer_llm = interviewer_llm_server
+feedback_llm = feedback_llm_server
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
 MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = 4
@@ -193,8 +201,8 @@ def _invoke_interviewer_move(
         case_guidance,
         focus_areas,
     )
-    response = openai_llm_server.invoke(messages)
-    print("Calling OpenAI Server...")
+    response = interviewer_llm.invoke(messages)
+    print("Calling Interviewer Server...")
     parsed = parse_interviewer_output(response.content)
     if parsed is not None:
         return parsed
@@ -211,8 +219,8 @@ def _invoke_interviewer_move(
                 )
             )
         ]
-        response = openai_llm_server.invoke(repair_messages)
-        print("Calling OpenAI Server...")
+        response = interviewer_llm.invoke(repair_messages)
+        print("Calling Interviewer Server...")
         raw_output = str(response.content).strip()
         parsed = parse_interviewer_output(raw_output)
         if parsed is not None:
@@ -535,7 +543,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
+    response = feedback_llm.invoke(messages)
     latest_feedback = strip_thinking(response.content).strip()
     if not latest_feedback:
         latest_feedback = "Final feedback generated from case performance and dialog quality."
@@ -577,6 +585,7 @@ __all__ = [
     "candidate_node",
     "eval_case_performance_node",
     "eval_dialog_quality_node",
+    "feedback_llm",
     "format_focus_areas_for_prompt",
     "get_candidate_visible_transcript",
     "get_case_guide_context",
