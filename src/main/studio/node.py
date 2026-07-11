@@ -52,9 +52,9 @@ from utils import (
 )
 
 # Shared default server for the graph today.
-candidate_llm = lmstudio_llm_server
-judge_llm = lmstudio_llm_server
-interviewer_llm = openai_llm_server
+candidate_llm = candidate_llm_server
+judge_llm = candidate_llm_server
+interviewer_llm = candidate_llm_server
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
 MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = 4

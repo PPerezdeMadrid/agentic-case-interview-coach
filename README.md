@@ -114,7 +114,7 @@ flowchart LR
 
 ## Quick Start
 
-Install the dependencies from [src/main/studio/requirements.txt](src/main/studio/requirements.txt) and run commands from `src/`.
+Install the dependencies from [src/requirements.txt](src/requirements.txt) and run commands from `src/`.
 
 Example:
 

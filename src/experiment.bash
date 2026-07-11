@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=langgraph-agents
+#SBATCH --job-name=langgraph-agents-experiment
 #SBATCH --account=compsci
 #SBATCH --partition=gpu.A100
-#SBATCH --gres=gpu:3
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=128G
 #SBATCH --time=12:00:00
@@ -10,7 +10,7 @@
 #SBATCH --error=logs/%x_%j.err
 
 
-echo "Starting LangGraph multi-agent system"
+echo "Starting LangGraph multi-agent system (Mistral-only experiment)"
 
 source /software/conda/$USER/conda/etc/profile.d/conda.sh
 conda activate coach
@@ -27,7 +27,7 @@ mkdir -p logs
 echo "GPU information:"
 nvidia-smi
 
-# Start Candidate model (Mistral)
+# Start Candidate model (Mistral) — the only model used in this experiment
 
 echo "Starting Mistral Candidate server..."
 
@@ -41,22 +41,7 @@ vllm serve mistralai/Mistral-Nemo-Instruct-2407 \
 
 MISTRAL_PID=$!
 
-# Start Judge model (Llama)
-
-echo "Starting Llama Judge server..."
-
-CUDA_VISIBLE_DEVICES=1,2 \
-vllm serve meta-llama/Llama-3.3-70B-Instruct \
-    --host 127.0.0.1 \
-    --port 18402 \
-    --tensor-parallel-size 2 \
-    --gpu-memory-utilization 0.90 \
-    --max-model-len 32000 \
-    > logs/llama70b.log 2>&1 &
-
-LLAMA_PID=$!
-
-echo "Waiting for model servers..."
+echo "Waiting for model server..."
 
 wait_for_server() {
     local name="$1" port="$2" max_wait="${3:-1200}" interval="${4:-10}"
@@ -73,8 +58,7 @@ wait_for_server() {
     echo "$name server on port $port is up (${elapsed}s)"
 }
 
-wait_for_server "Mistral candidate" 18401 || { kill "$MISTRAL_PID" "$LLAMA_PID" 2>/dev/null; exit 1; }
-wait_for_server "Llama judge" 18402 || { kill "$MISTRAL_PID" "$LLAMA_PID" 2>/dev/null; exit 1; }
+wait_for_server "Mistral candidate" 18401 || { kill "$MISTRAL_PID" 2>/dev/null; exit 1; }
 
 echo "Checking model server API connections..."
 
@@ -84,17 +68,16 @@ if [ $? -ne 0 ]; then
     echo "WARNING: API connection check failed — see logs/api_connection_check.log (continuing anyway)"
 fi
 
-# Run all scenarios (baseline + agentic, 3 repeats each)
+# Run all scenarios (baseline + agentic, 1 repeat each)
 
 echo "Running run_all_scenarios.py..."
 
-python run_all_scenarios.py --graph both --repeat 3 \
-    > logs/run_all_scenarios.log 2>&1
+python run_all_scenarios.py --graph both --repeat 1 \
+    > logs/run_all_scenarios_experiment.log 2>&1
 
 
 # Cleanup
 
-echo "Stopping model servers..."
+echo "Stopping model server..."
 
-kill $LLAMA_PID
 kill $MISTRAL_PID

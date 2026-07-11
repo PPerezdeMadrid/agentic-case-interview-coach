@@ -58,7 +58,7 @@ The `agentic` graph adds adaptive interviewer behavior and staged judge interven
 - A chat-completions-compatible LLM endpoint
 - Installed Python dependencies for `main/studio/` and `main/web/`
 
-Install the main runtime dependencies from `src/main/studio/requirements.txt`. The web app uses Flask, so make sure it is available in the same environment if you want to run the dashboard.
+Install the main runtime dependencies from `src/requirements.txt`. The web app uses Flask, so make sure it is available in the same environment if you want to run the dashboard.
 
 ## Environment Variables
 
@@ -173,7 +173,7 @@ make workbench
 make langgraph
 ```
 
-`make setup` creates `.venv`, installs `main/studio/requirements.txt`, and sets local execution as the default for later `make` commands.
+`make setup` creates `.venv`, installs `requirements.txt`, and sets local execution as the default for later `make` commands.
 
 `make setup-hpc` creates the `coach` conda environment if needed, installs the same requirements there, and persists HPC execution as the default for later `make` commands by writing `src/.make.runner.mk`. After that, plain commands like `make test`, `make run-all`, or `make workbench` will use the conda environment automatically.
 

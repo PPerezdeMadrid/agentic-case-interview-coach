@@ -11,7 +11,7 @@ CONDA_RUN := $(CONDA) run -n $(CONDA_ENV) --no-capture-output
 
 # --- Shared configuration ---
 WORKBENCH_PORT ?= 5020
-REQUIREMENTS_FILE ?= main/studio/requirements.txt
+REQUIREMENTS_FILE ?= requirements.txt
 RUNNER_STATE_FILE ?= .make.runner.mk
 # LangGraph CLI (it does not come from requirements.txt). The [inmem] extra enables 'langgraph dev'.
 LANGGRAPH_CLI ?= langgraph-cli[inmem]
