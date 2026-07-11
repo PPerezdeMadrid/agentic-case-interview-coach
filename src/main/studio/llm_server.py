@@ -46,7 +46,7 @@ openai_llm_server = ChatOpenAI(
 
 
 # OpenRouter QWEN Interviewer model
-QWEN_llm_server = ChatOpenAI(
+interviewer_llm_server = ChatOpenAI(
     model=os.getenv(
         "OPENROUTER_MODEL", "deepseek/deepseek-chat"),
     base_url=_normalize_base_url(

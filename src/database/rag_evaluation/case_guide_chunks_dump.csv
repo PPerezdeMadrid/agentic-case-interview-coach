@@ -1,0 +1,793 @@
+chunk_id,page,content
+ConsultingCaseGuide-PPML::chunk_1,1,"Consulting Case Interview Guide
+Theory, Frameworks and Evaluation
+Paloma P´ erez de Madrid Laguna
+School of Computer Science
+University of St Andrews
+July 2026"
+ConsultingCaseGuide-PPML::chunk_2,2,"Contents
+1 Introduction 3
+1.1 Purpose of the Guide . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.2 What Is a Consulting Case Interview . . . . . . . . . . . . . . . . 3
+1.3 What Case Interviews Evaluate . . . . . . . . . . . . . . . . . . . 4
+2 Core Problem-Solving Principles 6
+2.1 Structured Thinking . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.2 MECE Thinking . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.3 Hypothesis-Driven Reasoning . . . . . . . . . . . . . . . . . . . . 7
+2.4 Prioritisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.5 Top-Down Communication . . . . . . . . . . . . . . . . . . . . . 7
+2.6 Decision-Making Under Uncertainty . . . . . . . . . . . . . . . . 7
+3 Case Interview Process 9
+3.1 Understanding the Prompt . . . . . . . . . . . . . . . . . . . . . 9"
+ConsultingCaseGuide-PPML::chunk_3,2,"3 Case Interview Process 9
+3.1 Understanding the Prompt . . . . . . . . . . . . . . . . . . . . . 9
+3.2 Clarifying the Objective . . . . . . . . . . . . . . . . . . . . . . . 9
+3.3 Restating the Problem . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.4 Building an Initial Structure . . . . . . . . . . . . . . . . . . . . . 10
+3.5 Driving the Analysis . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.6 Synthesising Along the Way . . . . . . . . . . . . . . . . . . . . . 10
+3.7 Giving a Final Recommendation . . . . . . . . . . . . . . . . . . 11
+4 Main Case Types 12
+4.1 Profitability Cases . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+4.2 Market Entry Cases . . . . . . . . . . . . . . . . . . . . . . . . . 12
+4.3 Growth Strategy Cases . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.4 Pricing Cases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13"
+ConsultingCaseGuide-PPML::chunk_4,2,"4.4 Pricing Cases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.5 Operations Cases . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.6 Mergers and Acquisitions Cases . . . . . . . . . . . . . . . . . . . 13
+4.7 Market Sizing Cases . . . . . . . . . . . . . . . . . . . . . . . . . 14
+5 Quantitative Reasoning 15
+5.1 Mental Maths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+5.2 Percentages and Margins . . . . . . . . . . . . . . . . . . . . . . . 15
+1"
+ConsultingCaseGuide-PPML::chunk_5,3,"5.3 Break-Even Analysis . . . . . . . . . . . . . . . . . . . . . . . . . 16
+5.4 Market Sizing Estimation . . . . . . . . . . . . . . . . . . . . . . 16
+5.5 Interpreting Numerical Results . . . . . . . . . . . . . . . . . . . 16
+5.6 Common Quantitative Mistakes . . . . . . . . . . . . . . . . . . . 17
+6 Data Interpretation 18
+6.1 Reading Tables and Charts . . . . . . . . . . . . . . . . . . . . . 18
+6.2 Identifying Trends . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+6.3 Comparing Segments . . . . . . . . . . . . . . . . . . . . . . . . . 19
+6.4 Extracting Business Insights . . . . . . . . . . . . . . . . . . . . . 19
+6.5 Linking Data to Recommendations . . . . . . . . . . . . . . . . . 20
+7 Communication in Case Interviews 21
+7.1 Driving the Conversation . . . . . . . . . . . . . . . . . . . . . . 21
+7.2 Explaining Assumptions . . . . . . . . . . . . . . . . . . . . . . . 21"
+ConsultingCaseGuide-PPML::chunk_6,3,"7.2 Explaining Assumptions . . . . . . . . . . . . . . . . . . . . . . . 21
+7.3 Being Concise . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+7.4 Handling Hints . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+7.5 Managing Uncertainty . . . . . . . . . . . . . . . . . . . . . . . . 22
+7.6 Executive-Style Communication . . . . . . . . . . . . . . . . . . . 22
+8 Final Recommendation 24
+8.1 Recommendation Structure . . . . . . . . . . . . . . . . . . . . . 24
+8.2 Supporting Evidence . . . . . . . . . . . . . . . . . . . . . . . . . 24
+8.3 Risks and Limitations . . . . . . . . . . . . . . . . . . . . . . . . 25
+8.4 Next Steps . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+8.5 Common Weak Recommendations . . . . . . . . . . . . . . . . . 25
+9 Glossary 26
+2"
+ConsultingCaseGuide-PPML::chunk_7,4,"Chapter 1
+Introduction
+1.1 Purpose of the Guide
+This guide pulls together the main ideas behind how consulting case interviews
+are run and judged. It draws on publicly available casebooks, prep materials,
+and business writing on the subject, organizing them into something easier to
+reference than scattered notes across a dozen sources.
+It’s meant for two audiences at once: people preparing for interviews, and AI
+systems that need to understand what ”doing well” in a case interview actually
+looks like. Knowing how candidates get evaluated is, in itself, useful preparation
+— it shifts the focus from memorizing answers to understanding what’s being
+watched for.
+None of what follows is original theory. It’s a synthesis, arranged for practice
+and reference rather than as a scholarly contribution.
+1.2 What Is a Consulting Case Interview"
+ConsultingCaseGuide-PPML::chunk_8,4,"and reference rather than as a scholarly contribution.
+1.2 What Is a Consulting Case Interview
+A case interview drops a candidate into a business situation and asks them to
+act as the consultant advising on it. That typically means figuring out what the
+client actually wants, structuring the problem, asking for the right information,
+doing some rough math, and finishing with a recommendation the candidate
+can defend [9, 13].
+It’s tempting to think of this as a knowledge test, but that’s not quite right.
+Interviewers are watching how someone thinks and communicates under pressure
+— whether the reasoning holds together, whether the analysis is sharp, whether
+the person can explain themselves clearly, and whether they adjust when new
+facts come in [9, 13].
+Frameworks help here, but only as scaffolding. Treating something like prof-"
+ConsultingCaseGuide-PPML::chunk_9,4,"facts come in [9, 13].
+Frameworks help here, but only as scaffolding. Treating something like prof-
+itability analysis or a market-entry checklist as a script to recite is usually a
+mistake; the better candidates bend the tool to fit the case in front of them [10].
+3"
+ConsultingCaseGuide-PPML::chunk_10,5,"That’s also why reading about cases only gets you so far. Practicing out
+loud, walking through the logic verbally, sharpening mental math, and getting
+feedback from someone else all matter more than most people expect going in
+— the interview itself is a conversation, not a written exam [9, 7].
+1.3 What Case Interviews Evaluate
+It’s easy to assume the goal is landing on the ”right” answer, but that’s rarely the
+point. What firms actually want to see is how a candidate handles an unfamiliar
+problem — how they organize information, form and test assumptions, and
+communicate where they land. Because most business problems don’t have one
+clean answer, several conclusions can be reasonable as long as the logic behind
+them holds up [9, 2].
+So interviewers watch the thinking more than they compare the final number
+to an answer key. Across the conversation, they’re picking up on how fast"
+ConsultingCaseGuide-PPML::chunk_11,5,"to an answer key. Across the conversation, they’re picking up on how fast
+someone zeroes in on what matters, whether they chase the right drivers instead
+of getting lost in side issues, how they decide what to analyze first, and whether
+they can pivot when the facts shift [2, 5].
+Creativity matters too, though not in the sense of throwing out unusual ideas
+for their own sake. The stronger candidates notice a risk or an opportunity that
+isn’t obvious at first glance, while still keeping their feet on the ground —
+creativity paired with discipline, not creativity instead of it.
+Most candidates lean on recognizable frameworks — Porter’s Five Forces,
+the Three Cs, the Four Ps, profitability trees, market-entry structures — be-
+cause they give a problem some initial shape. But an experienced interviewer
+isn’t grading whether someone recited a framework correctly. What matters is"
+ConsultingCaseGuide-PPML::chunk_12,5,"isn’t grading whether someone recited a framework correctly. What matters is
+whether the candidate adapted it to the actual situation. The framework is a
+means, not the thing being scored; it’s a window into how organized someone’s
+thinking is and how well they can break a messy problem into pieces [10, 2].
+Scorecards vary somewhat by firm, but most converge on a handful of com-
+petencies:
+•Problem structuring: taking a vague business problem and breaking it
+into logical, non-overlapping, prioritized pieces.
+•Analytical reasoning: spotting the drivers that actually matter, read-
+ing both numbers and qualitative signals, and testing hypotheses against
+evidence.
+•Quantitative skills: getting the math right, understanding what a num-
+ber implies for the business, and doing it without a calculator.
+•Business judgement: a feel for trade-offs, customers, competition, prof-"
+ConsultingCaseGuide-PPML::chunk_13,5,"•Business judgement: a feel for trade-offs, customers, competition, prof-
+itability, and strategic decisions.
+•Communication: explaining things clearly, keeping the discussion mov-
+ing logically, tying findings together, and closing with a tight recommen-
+dation.
+4"
+ConsultingCaseGuide-PPML::chunk_14,6,"•Interpersonal skills: staying composed, taking hints and feedback well,
+and working with the interviewer rather than against them.
+Firms increasingly score these dimensions separately rather than forming
+one blended impression, which means strengths and weaknesses show up in-
+dividually rather than getting averaged out. A candidate who’s solid across
+structure, analysis, communication, math, and judgement tends to be viewed
+more favorably than someone who’s brilliant in one area and shaky everywhere
+else [5, 8].
+5"
+ConsultingCaseGuide-PPML::chunk_15,7,"Chapter 2
+Core Problem-Solving
+Principles
+2.1 Structured Thinking
+Structured thinking means taking something vague and turning it into a set
+of smaller, answerable questions. This matters in a case interview because the
+candidate almost never gets the full picture upfront. So the first move isn’t to
+start solving — it’s to understand the goal, spot the central issue, and sketch a
+path through the analysis.
+Most candidates who do this well start by naming the objective out loud,
+summarizing the situation in their own words, and previewing how they plan to
+break things down. That gives the interviewer something to follow and makes
+it easy to test assumptions as they come up. Ellet frames case analysis this way
+too: identify the central issue, organize the evidence, and reach a conclusion
+the evidence actually supports [4]. That’s essentially what’s being evaluated in"
+ConsultingCaseGuide-PPML::chunk_16,7,"the evidence actually supports [4]. That’s essentially what’s being evaluated in
+a case interview — not just the answer, but the path to it.
+2.2 MECE Thinking
+MECE — mutually exclusive, collectively exhaustive — just means splitting a
+problem into buckets that don’t overlap and that, together, cover the ground
+that matters. In a profitability case, for instance, revenue and cost are a natural
+split; revenue then breaks into price and volume, cost into fixed and variable.
+The point isn’t building a flawless taxonomy — it’s avoiding confusion. Over-
+lapping categories risk double-counting the same issue; gaps risk missing some-
+thing that turns out to matter. And MECE is a habit of mind more than a
+rulebook — in a live interview it still has to bend to whatever the case actually
+looks like.
+6"
+ConsultingCaseGuide-PPML::chunk_17,8,"2.3 Hypothesis-Driven Reasoning
+This is the practice of forming an early guess about what’s going on and then
+checking it against evidence, rather than treating every possible cause as equally
+worth exploring. It makes the analysis move faster and keeps it anchored to the
+business question.
+Say profits are falling — a candidate might guess revenue is the culprit rather
+than costs. The next step isn’t to assume that’s true; it’s to ask for the data that
+would confirm or kill the hypothesis. This lines up with Ellet’s point that case
+analysis should build toward a position backed by evidence, not just describe
+facts in sequence [4].
+2.4 Prioritisation
+Prioritization is about deciding which issues are actually likely to move the final
+recommendation. Cases usually hand candidates more information than they"
+ConsultingCaseGuide-PPML::chunk_18,8,"recommendation. Cases usually hand candidates more information than they
+can dig into fully, so trying to give everything equal attention is a losing strategy.
+The better move is picking the two or three drivers most likely to matter and
+saying why.
+This shows up clearly in quantitative work. Numbers only help if they’re tied
+to a real question — Ellet points out that data can eat up time and attention
+without adding much understanding if the candidate isn’t clear on what they’re
+trying to learn [4]. Good prioritization in a case interview means calculating to
+answer something specific, not calculating because it feels productive.
+2.5 Top-Down Communication
+This means leading with the answer, then backing it up with the reasoning
+and evidence behind it — the opposite of narrating events in the order they
+happened. It matters in consulting because senior audiences want the bottom"
+ConsultingCaseGuide-PPML::chunk_19,8,"happened. It matters in consulting because senior audiences want the bottom
+line first and the details on request. The Pyramid Principle captures this:
+conclusion up top, supporting arguments underneath, data at the base [11].
+In an interview, this style makes a candidate sound in control of the material.
+Rather than dumping everything discovered along the way, the stronger move
+is to pause periodically, say what’s been learned, and explain what it means for
+the case. It also makes life easier for the interviewer, since the logic stays visible
+instead of buried in a pile of findings.
+2.6 Decision-Making Under Uncertainty
+Cases rarely hand over complete information. There’s often no perfect data set,
+no unlimited time, and no single right answer — so interviewers want to see
+whether a candidate can still land on a reasonable recommendation. That takes
+7"
+ConsultingCaseGuide-PPML::chunk_20,9,"clear assumptions, careful use of whatever evidence exists, and honesty about
+the risks.
+A good recommendation doesn’t pretend the uncertainty away. It states
+the conclusion, lays out the evidence behind it, flags the biggest risks, and
+suggests what to do next. Ellet makes a similar point — cases usually don’t
+have an objective right answer, just the position best supported by the evidence
+available [4]. Uncertainty isn’t a flaw in the exercise; it’s part of what’s being
+tested.
+8"
+ConsultingCaseGuide-PPML::chunk_21,10,"Chapter 3
+Case Interview Process
+Every firm runs its interviews a little differently, but the underlying shape is
+fairly consistent: the interviewer lays out a problem, the candidate asks ques-
+tions to understand it, builds a structure, works through the analysis, and closes
+with a recommendation. The goal isn’t hitting a predetermined answer — it’s
+showing a logical, organized way of tackling something unfamiliar [13, 12].
+The stages below are presented in order for clarity, but in practice candidates
+move back and forth between them as the conversation develops.
+3.1 Understanding the Prompt
+The opening minutes get underestimated more than any other part of the inter-
+view. A lot of candidates start reaching for a framework before they’ve actually
+absorbed the problem, which tends to mean solving the wrong question well."
+ConsultingCaseGuide-PPML::chunk_22,10,"absorbed the problem, which tends to mean solving the wrong question well.
+The only job here is to understand the situation: who the client is, what’s
+going on, and what they’re trying to achieve. It helps to write down only what
+matters rather than transcribing everything — dates, numbers, geography, and
+explicit constraints tend to resurface later, so those are worth capturing.
+Taking sparse, targeted notes also keeps the candidate engaged with the
+interviewer instead of buried in a notepad.
+3.2 Clarifying the Objective
+Once the prompt is on the table, it’s worth asking a few clarifying questions
+before diving into analysis — not to extract every possible detail, but to pin
+down what success actually looks like for the client.
+That usually covers the time horizon, the market in question, which products
+are involved, or the precise objective. ”Grow revenue,” ”improve profitability,”"
+ConsultingCaseGuide-PPML::chunk_23,10,"are involved, or the precise objective. ”Grow revenue,” ”improve profitability,”
+and ”gain market share” sound similar but can lead to very different analyses.
+Some candidates hold back on questions, worried it makes them look unpre-
+pared. In practice, firms expect the opposite — asking before assuming is the
+9"
+ConsultingCaseGuide-PPML::chunk_24,11,"norm, not a red flag.
+3.3 Restating the Problem
+Before starting the analysis, it helps to summarize the case in your own words.
+This confirms both sides are on the same page and gives one last chance to catch
+a misunderstanding before it compounds.
+It also helps organize your own thinking heading into the structure-building
+phase. Rather than repeating the prompt verbatim, the candidate should say
+plainly who the client is, what they’re up against, and what they’re trying to
+accomplish.
+This step usually takes under a minute, but it sets up a much smoother
+transition into the analytical part of the conversation.
+3.4 Building an Initial Structure
+Once the problem is clear, most candidates spend a minute or two sketching a
+structure — often silently, on paper, before presenting it out loud.
+The structure isn’t meant to predict the answer; it’s meant to organize the"
+ConsultingCaseGuide-PPML::chunk_25,11,"The structure isn’t meant to predict the answer; it’s meant to organize the
+investigation. A good one splits the problem into pieces that can be examined
+on their own while still covering the whole question. Different candidates will
+land on different structures for the same case, and that’s fine, as long as each
+one holds together and fits the situation.
+Interviewers generally care more about whether the logic makes sense than
+whether it matches a textbook framework.
+3.5 Driving the Analysis
+With the structure in place, the interview turns more conversational. The can-
+didate works through each branch, asks for data, and reacts to whatever the
+interviewer provides.
+This is where hypotheses keep evolving — the candidate should be constantly
+weighing which analysis is worth doing next rather than working through every"
+ConsultingCaseGuide-PPML::chunk_26,11,"weighing which analysis is worth doing next rather than working through every
+branch with equal effort. Business judgement carries a lot of weight here, since
+there’s rarely enough time to chase down every possible explanation.
+3.6 Synthesising Along the Way
+A frequent misstep is running several analyses back to back without stopping
+to say what any of them mean. Stronger candidates pause periodically to sum-
+marize what they’ve learned and how it shifts their read on the problem.
+10"
+ConsultingCaseGuide-PPML::chunk_27,12,"These check-ins keep both sides oriented and show that the candidate is
+connecting the dots rather than treating each calculation as its own island.
+They also tend to set up the next analytical step naturally.
+3.7 Giving a Final Recommendation
+The interview typically wraps with a recommendation — one that answers the
+original question directly, not a recap of everything discussed along the way.
+A solid recommendation has four parts: the recommendation itself, the evi-
+dence behind it, the key risks or assumptions, and one or two next steps worth
+considering before acting on it.
+Interviewers care more about the reasoning behind the recommendation than
+whether it matches some official answer. A well-supported conclusion beats a
+”correct” one with weak justification almost every time.
+11"
+ConsultingCaseGuide-PPML::chunk_28,13,"Chapter 4
+Main Case Types
+No two cases are identical, but most fall into a handful of recurring business
+problems. Each one centers on a different kind of managerial decision and calls
+for a slightly different analytical angle. Interviewers aren’t checking whether a
+candidate has memorized the right framework for each type — they’re checking
+whether the candidate can recognize what kind of problem they’re looking at
+and adjust accordingly. The categories below show up repeatedly in interview
+prep because they mirror the kinds of engagements strategy firms actually run
+[6,?].
+4.1 Profitability Cases
+Probably the most common case type. The client’s profits are down, or below
+expectations, and the candidate needs to figure out why and what to do about
+it.
+A natural starting point is splitting profit into revenue and cost — revenue"
+ConsultingCaseGuide-PPML::chunk_29,13,"it.
+A natural starting point is splitting profit into revenue and cost — revenue
+into price, volume, and mix; cost into fixed and variable. But this shouldn’t turn
+into a checklist run on autopilot. Depending on the case, the real story might be
+external (competition) or internal (inefficiency), and the analysis should follow
+wherever the evidence points.
+The real goal isn’t spotting where profit moved — it’s understanding why,
+and what management can realistically do about it.
+4.2 Market Entry Cases
+These ask whether a new market is worth entering — a new country, a new
+product category, a different customer segment.
+The candidate typically needs to assess two things: how attractive the mar-
+ket is, and how well-positioned the company is to compete in it. That means
+thinking through demand, competitive intensity, entry barriers, regulation, and"
+ConsultingCaseGuide-PPML::chunk_30,13,"thinking through demand, competitive intensity, entry barriers, regulation, and
+what it would actually take to build a sustainable position there.
+12"
+ConsultingCaseGuide-PPML::chunk_31,14,"If the market looks attractive, the conversation often shifts to how to enter
+— organically, through partnership, or by acquisition.
+4.3 Growth Strategy Cases
+Growth cases assume the business is doing reasonably well and is looking for
+more — as opposed to profitability cases, where something’s usually broken.
+Options might include new customers, more spend from existing ones, new
+products, new markets, or new business models entirely. The candidate’s job is
+comparing these paths and prioritizing whichever fits the client’s actual situation
+best.
+The weight here falls more on strategic judgment than on financial modeling.
+4.4 Pricing Cases
+These ask for a recommended price, or an assessment of what changing an
+existing price would do. Since price touches both revenue and demand simulta-
+neously, the trade-offs tend to be central to the discussion."
+ConsultingCaseGuide-PPML::chunk_32,14,"neously, the trade-offs tend to be central to the discussion.
+Relevant factors include production cost, what customers are actually willing
+to pay, competitor pricing, and how the product is positioned. A higher price
+can sometimes boost profit even as volume drops; a lower one can sometimes
+be the right call to build share.
+The expectation is a clear explanation of the trade-offs, not a single formula
+applied mechanically.
+4.5 Operations Cases
+These focus on making a company’s internal processes work better — lower
+costs, higher output, better quality, without hurting the customer experience.
+Manufacturing efficiency, supply chain, inventory, capacity planning — these
+all fall in this bucket. The work usually involves finding bottlenecks, understand-
+ing how steps in a process depend on each other, and proposing changes that
+are actually executable."
+ConsultingCaseGuide-PPML::chunk_33,14,"ing how steps in a process depend on each other, and proposing changes that
+are actually executable.
+Compared to strategy cases, this is much more about execution than long-
+term positioning.
+4.6 Mergers and Acquisitions Cases
+These look at whether one company should buy or merge with another. Beyond
+the financials, strategic fit, operational synergies, and integration risk all matter.
+A deal worth doing should create value neither company could generate alone
+— through cost savings, revenue synergies, new market access, or some com-
+13"
+ConsultingCaseGuide-PPML::chunk_34,15,"bination. Good recommendations acknowledge that these deals are genuinely
+uncertain, and that projected synergies often don’t fully materialize.
+4.7 Market Sizing Cases
+These test estimation under almost no data — the point isn’t nailing an exact
+number, it’s showing clear, internally consistent reasoning.
+Most candidates break the estimate into a chain of smaller assumptions.
+Some start from the total population and narrow down; others build up from
+individual consumption. Either direction works.
+What interviewers actually care about is whether the assumptions are rea-
+sonable and hang together — not whether the final figure lands close to some
+”correct” number.
+14"
+ConsultingCaseGuide-PPML::chunk_35,16,"Chapter 5
+Quantitative Reasoning
+Most consulting cases involve some kind of number crunching, even if it’s minor.
+Sometimes it’s just a percentage or a rough market estimate; other times it
+means going through a P&L or comparing two investment options side by side.
+None of the maths itself is particularly hard — what’s actually being tested
+is whether the candidate can use a number to support a decision, rather than
+treating the calculation as the end goal in itself [14].
+Because of that, it’s worth thinking of quantitative reasoning less as ”doing
+sums correctly” and more as a way of thinking out loud: get the number right,
+show your working as you go, and then say what it actually means for the client.
+5.1 Mental Maths
+During most case interviews you are not allowed to use a calculator. For that
+reason, interviewers expect candidates to do relatively simple calculations men-"
+ConsultingCaseGuide-PPML::chunk_36,16,"reason, interviewers expect candidates to do relatively simple calculations men-
+tally, on paper, while narrating what they’re doing. The goal isn’t to be excep-
+tionally fast — it’s to stay accurate and keep the logic visible.
+The numbers themselves tend to be manageable: multiplications, percent-
+ages, ratios, that sort of thing. Complicated formulas rarely show up. If a
+candidate makes a small arithmetic slip but catches it and fixes it calmly, that
+usually lands better than someone who never checks their own work at all.
+It also helps to get comfortable rounding.£48,700 is close enough to£50,000
+for most purposes in a live case, and the time saved is usually worth the small
+loss in precision.
+5.2 Percentages and Margins
+Percentages come up constantly because they let you compare things of very
+different sizes — a£2m company and a£200m one can both talk about ”15%"
+ConsultingCaseGuide-PPML::chunk_37,16,"different sizes — a£2m company and a£200m one can both talk about ”15%
+growth” and mean something comparable. Revenue growth, margins, market
+15"
+ConsultingCaseGuide-PPML::chunk_38,17,"share, cost cuts — almost everything ends up expressed this way at some point
+in a case.
+One mix-up worth watching for: margin and markup aren’t the same thing,
+even though people use them almost interchangeably in conversation. A 25%
+margin and a 25% markup on cost produce two different prices, and getting this
+wrong mid-case can throw off everything that follows.
+Interviewers don’t usually expect a formula sheet memorised. What they’re
+checking is whether you understand what the number is actually measuring.
+5.3 Break-Even Analysis
+Break-even shows up a lot when a case involves a new product, an investment
+decision, or a pricing change. The question it answers is simple enough — how
+much do you need to sell before revenue covers cost — but the calculation itself
+is rarely the interesting part.
+What tends to matter more is whether the break-even volume is actually"
+ConsultingCaseGuide-PPML::chunk_39,17,"is rarely the interesting part.
+What tends to matter more is whether the break-even volume is actually
+realistic. A number that looks fine on paper can fall apart once you factor
+in how much demand uncertainty there is, or whether the operation can even
+produce that much to begin with.
+So it’s worth saying both things out loud: here’s the number, and here’s
+whether I think it’s achievable given everything else we know about this market.
+5.4 Market Sizing Estimation
+Market sizing questions are probably what most people picture when they think
+”case interview maths” — estimate the number of coffee cups sold per year in
+a city, that kind of thing, where no exact figure exists to check against.
+There’s no single correct answer here, so the interviewer is really watching
+whether the estimate is built logically. Breaking it into a chain of smaller,"
+ConsultingCaseGuide-PPML::chunk_40,17,"whether the estimate is built logically. Breaking it into a chain of smaller,
+defensible assumptions tends to work much better than trying to guess the final
+number directly.
+A quick sanity check at the end is worth the ten seconds it takes. If the
+number comes out wildly off from what feels plausible day-to-day, one of the
+assumptions along the way was probably wrong.
+5.5 Interpreting Numerical Results
+Getting the number is only half the job — the other half is explaining why it
+matters.
+Say profits are down 15%. That’s a fact, not a conclusion. The real question
+is what’s behind it: fewer customers, higher costs, a one-off event that won’t
+repeat next quarter? Same logic applies to something like a£500m market
+estimate — the number only becomes useful once it’s held up against what the
+client can realistically capture and whether it’s worth pursuing at all.
+16"
+ConsultingCaseGuide-PPML::chunk_41,18,"Candidates who explain what a number implies tend to be remembered more
+than ones who just get to the correct figure and stop there.
+5.6 Common Quantitative Mistakes
+Most errors here aren’t really about difficult maths — they come from moving
+too fast or losing track of an assumption made a few minutes earlier in the case.
+Typical ones: mixing up revenue and profit, forgetting to shift a percentage
+into decimal form before multiplying, or dropping a zero somewhere in the mil-
+lions. Some candidates also spend a while doing a detailed calculation without
+ever explaining why it’s relevant to the question at hand — which leaves the
+interviewer wondering what the point of it was.
+A decent habit is pausing after each calculation and asking, plainly:what
+does this actually tell us about the client’s problem?If there’s no clear answer,
+it’s worth holding off before moving on.
+17"
+ConsultingCaseGuide-PPML::chunk_42,19,"Chapter 6
+Data Interpretation
+Say a candidate is looking at a chart showing revenue climbing from£10m to
+£15m over three years. Reading that number out loud isn’t analysis — it’s just
+reading. The interview only gets interesting once the candidate says what that
+jump means: is it price, volume, a new market opening up, or something that
+won’t repeat? That gap — between describing a chart and actually using it —
+is what this chapter is about [14].
+Most cases hand over one or two exhibits: a graph, a couple of tables,
+sometimes both at once needing to be read against each other. None of it tends
+to be complicated on its own. What separates a strong answer from a weak one
+is whether the candidate connects the numbers back to the question actually
+being asked, rather than treating the exhibit as a box to tick off.
+6.1 Reading Tables and Charts"
+ConsultingCaseGuide-PPML::chunk_43,19,"being asked, rather than treating the exhibit as a box to tick off.
+6.1 Reading Tables and Charts
+Before drawing any conclusions, it helps to spend a few seconds just orienting
+yourself on the page: what are the axes, what are the units, and what time pe-
+riod or segment is being shown. This sounds obvious, but a surprising number
+of candidates start interpreting a chart before checking whether it’s showing ab-
+solute numbers or percentages, or whether the values are annual or cumulative.
+Tables are usually a bit more demanding than charts because several things
+can be true at once. A table with revenue by region and by product line, for
+example, might hide an important pattern that only shows up once you look at
+a specific cell rather than a row or column total.
+A quick habit that helps here: name out loud what you’re looking at before"
+ConsultingCaseGuide-PPML::chunk_44,19,"A quick habit that helps here: name out loud what you’re looking at before
+saying what it means. It sounds slow, but it avoids the classic mistake of jumping
+straight to a conclusion based on a number that was misread.
+18"
+ConsultingCaseGuide-PPML::chunk_45,20,"6.2 Identifying Trends
+Once the data is understood, the next step is usually to look for a pattern — is
+something going up, down, staying flat, or moving in a way that doesn’t match
+what would be expected. Trends are more useful than single data points because
+they hint at a cause, even before that cause has been confirmed.
+That said, not every trend is meaningful. A small dip over one quarter
+might just be seasonal, while three consecutive years of decline is a different
+story. Candidates are expected to have some sense of which changes are worth
+investigating further and which ones are probably noise.
+It also helps to ask whether a trend is consistent across the whole business or
+only in part of it. If overall revenue is flat but one segment is falling while another
+is growing, that’s a very different situation than a uniform decline everywhere.
+6.3 Comparing Segments"
+ConsultingCaseGuide-PPML::chunk_46,20,"is growing, that’s a very different situation than a uniform decline everywhere.
+6.3 Comparing Segments
+Cases often provide data broken down by region, product, customer type or time
+period, and comparing across these segments is usually where the real insight
+shows up. A company’s overall numbers might look fine while one particular
+segment is quietly dragging performance down — or, less often, one segment is
+performing so well that it’s masking problems elsewhere.
+A reasonable approach is to check whether the differences between segments
+are large enough to matter, and then ask why they might exist. Is one region
+facing more competition? Is one product line older and losing relevance? The
+comparison itself is only the starting point; the explanation behind it is what
+the interviewer is actually interested in.
+Candidates sometimes stop at ”Segment A is bigger than Segment B” with-"
+ConsultingCaseGuide-PPML::chunk_47,20,"the interviewer is actually interested in.
+Candidates sometimes stop at ”Segment A is bigger than Segment B” with-
+out going any further. That’s a fine first observation, but on its own it doesn’t
+move the case forward.
+6.4 Extracting Business Insights
+Turning a number into an insight means being able to answer the question ”so
+what?” Interviewers occasionally ask this directly, but even when they don’t,
+it’s the question a candidate should be asking themselves after every calculation
+or chart.
+For instance, if a graph shows that customer acquisition cost has doubled
+in two years, the insight isn’t the number itself — it’s what’s driving it (maybe
+more competitive bidding for ads, maybe a shift toward a more expensive chan-
+nel) and what it implies for the client’s growth plans.
+A useful test is whether the insight could be repeated to someone who hasn’t"
+ConsultingCaseGuide-PPML::chunk_48,20,"A useful test is whether the insight could be repeated to someone who hasn’t
+seen the chart and still make sense. If explaining it requires pointing back at
+the data every time, it probably hasn’t been distilled enough yet.
+19"
+ConsultingCaseGuide-PPML::chunk_49,21,"6.5 Linking Data to Recommendations
+None of the analysis above matters much if it doesn’t eventually connect to the
+recommendation. It’s fairly common for candidates to do solid data work in
+the middle of a case and then, at the end, give a recommendation that doesn’t
+obviously follow from any of it.
+A good way to avoid this is to keep a mental (or written) list of the two
+or three findings that actually shaped the conclusion, and to reference them
+explicitly when giving the final answer — something like ”given that Segment
+A accounts for most of the decline, and that its main driver appears to be pricing
+rather than volume, I’d recommend...”. That kind of sentence makes the link
+between evidence and recommendation obvious rather than assumed.
+Interviewers tend to notice when a recommendation could have been given"
+ConsultingCaseGuide-PPML::chunk_50,21,"Interviewers tend to notice when a recommendation could have been given
+without any of the analysis that preceded it. That’s usually a sign the data
+wasn’t really used to inform the answer.
+20"
+ConsultingCaseGuide-PPML::chunk_51,22,"Chapter 7
+Communication in Case
+Interviews
+You can have the right structure and the right numbers and still lose the inter-
+viewer halfway through, simply because they can’t follow what you’re doing or
+why. That’s really what communication is doing in a case interview — it’s the
+thing that lets the reasoning actually get evaluated, rather than just existing in
+your head.
+None of this means talking in a polished, rehearsed way. If anything, that
+tends to work against candidates. It’s closer to just being clear about what
+you’re doing, why, and what a given finding changes — leading with the point
+and then backing it up, which is more or less the logic behind the Pyramid
+Principle [11].
+7.1 Driving the Conversation
+Candidates are generally expected to carry some of the momentum themselves
+rather than waiting to be told what to do next. That doesn’t mean steamrolling"
+ConsultingCaseGuide-PPML::chunk_52,22,"rather than waiting to be told what to do next. That doesn’t mean steamrolling
+the interviewer with a fixed plan — it means proposing the next step and saying
+why it makes sense.
+Something like: ”Since the drop seems to be coming from revenue rather than
+costs, I’d like to check whether that’s a price issue or a volume issue.” That one
+sentence does a lot — it shows the candidate is using what’s already been found
+to decide what to look at next, instead of just waiting for the interviewer to
+point the way.
+7.2 Explaining Assumptions
+Assumptions come up constantly, especially in market sizing or whenever the
+case doesn’t hand over complete data. Nobody expects every assumption to be
+21"
+ConsultingCaseGuide-PPML::chunk_53,23,"exactly right — what matters is that it’s reasonable, and that the candidate
+says where it came from.
+Pulling a number out of thin air and moving on is one of the more obvious
+signs of a weak answer. Saying ”I’ll assume roughly 60% of households in
+this segment own a car, based on typical urban penetration rates” gives the
+interviewer something to push back on if it’s off — and that’s the point. An
+assumption you can defend is worth far more than one you just hope goes
+unquestioned.
+7.3 Being Concise
+Time is short in a case interview, so there’s a real cost to over-explaining.
+Enough detail to follow the logic is necessary; more than that just buries the
+point.
+Leading with the conclusion and then giving the reasoning behind it — the
+same Pyramid Principle idea again [11] — tends to make candidates sound more
+organised almost automatically, and it cuts down on the kind of repetition that"
+ConsultingCaseGuide-PPML::chunk_54,23,"organised almost automatically, and it cuts down on the kind of repetition that
+creeps in when someone’s thinking out loud without a clear destination.
+7.4 Handling Hints
+Interviewers drop hints fairly often, usually when a candidate is stuck or drifting
+off course. It’s easy to read this as a bad sign, but it isn’t — it’s just part of
+how the conversation works.
+What actually matters is the reaction. Taking the hint, adjusting course, and
+moving on is the right instinct. Digging in and defending the original approach
+anyway, even after being nudged, tends to read as a lack of coachability more
+than confidence.
+7.5 Managing Uncertainty
+Case interviews are designed to include ambiguity. Candidates may not have
+all the information they want, and sometimes the data provided is incomplete.
+This is normal. The interviewer wants to see whether the candidate can remain"
+ConsultingCaseGuide-PPML::chunk_55,23,"This is normal. The interviewer wants to see whether the candidate can remain
+calm and make reasonable progress despite uncertainty.
+A good candidate should be comfortable saying what they know, what they
+do not know, and what assumption they would use to continue. This is usually
+better than pretending to be completely certain.
+7.6 Executive-Style Communication
+By the end of the case, the tone should start to resemble how a consultant would
+actually talk to a client — recommendation first, two or three reasons behind
+22"
+ConsultingCaseGuide-PPML::chunk_56,24,"it, then whatever risks or next steps are worth flagging.
+This doesn’t need to sound formal or rehearsed. The bar is just clarity:
+someone hearing the answer for the first time should be able to follow why it
+follows from everything discussed before it.
+23"
+ConsultingCaseGuide-PPML::chunk_57,25,"Chapter 8
+Final Recommendation
+Every case eventually funnels down to one moment: the candidate has to stop
+analyzing and actually say what they think the client should do. This is where
+a lot of otherwise strong interviews fall apart — not because the analysis was
+wrong, but because the wrap-up doesn’t do justice to it.
+8.1 Recommendation Structure
+The classic structure works because it forces discipline: say the answer, then the
+reasons, then the caveats, then what comes next. Skipping straight to reasons
+without stating the recommendation first is a common habit, and it usually just
+delays the moment the interviewer actually gets an answer.
+A recommendation doesn’t need more than two or three supporting points.
+Cosentino’s guide to case preparation makes a similar observation about how
+these interviews get evaluated — the framework or structure a candidate builds"
+ConsultingCaseGuide-PPML::chunk_58,25,"these interviews get evaluated — the framework or structure a candidate builds
+along the way matters less on its own than whether it eventually produces a
+clear, defensible answer [3]. Piling on five or six reasons usually dilutes the
+strongest one or two rather than reinforcing the case.
+8.2 Supporting Evidence
+Every reason given should trace back to something established earlier in the
+case — a number calculated, a trend spotted, an assumption tested. Recom-
+mendations that reference vague, general business logic instead of the specifics
+of the conversation tend to sound like a template rather than an answer to this
+particular problem.
+It’s worth being selective here rather than exhaustive. If the case revealed
+six relevant findings, picking the two that carry the most weight and stating
+them clearly beats listing all six with equal emphasis. The goal is to show that"
+ConsultingCaseGuide-PPML::chunk_59,25,"them clearly beats listing all six with equal emphasis. The goal is to show that
+the recommendation is grounded in the actual analysis, not to prove that every
+minute of the interview was productive.
+24"
+ConsultingCaseGuide-PPML::chunk_60,26,"8.3 Risks and Limitations
+A recommendation that ignores its own weak points tends to come across as
+naive rather than confident. Naming one or two real risks — a competitor
+reaction, an execution challenge, an assumption that could turn out to be wrong
+— signals that the candidate has actually thought the decision through rather
+than just followed the data to a tidy conclusion.
+This isn’t about hedging every statement into meaninglessness. It’s closer
+to how Bain frames case interviews for candidates: interviewers are looking for
+people who can reach a clear point of view while staying alert to whether that
+view might need to change as new information comes in [1]. A recommenda-
+tion with one honestly stated risk is more convincing than one that pretends
+everything is settled.
+8.4 Next Steps
+Ending on a recommendation with no path forward can feel abrupt, almost"
+ConsultingCaseGuide-PPML::chunk_61,26,"everything is settled.
+8.4 Next Steps
+Ending on a recommendation with no path forward can feel abrupt, almost
+like the case just stopped rather than concluded. A next step doesn’t need to
+be elaborate — something like validating a key assumption with real customer
+data, or running a small pilot before a full rollout, is usually enough to show
+the candidate is thinking beyond the interview room.
+The next step should follow logically from the risks just mentioned. If the
+biggest risk is that customer demand is uncertain, the natural next step is
+testing that demand before committing further resources — not some unrelated
+suggestion tacked on for the sake of ending with one.
+8.5 Common Weak Recommendations
+The most frequent failure mode is a recommendation that could have been
+given without any of the case discussion — generic advice like ”expand into"
+ConsultingCaseGuide-PPML::chunk_62,26,"given without any of the case discussion — generic advice like ”expand into
+new markets” or ”cut costs” that isn’t actually tied to what was found along
+the way. If the ending doesn’t reference anything specific from the conversation,
+it probably wasn’t built from the analysis in the first place.
+The opposite failure also happens: recommendations that try to summarize
+everything discussed instead of committing to an answer. A recap is not a
+recommendation. The interviewer already sat through the analysis — what
+they’re waiting for at the end is a decision.
+25"
+ConsultingCaseGuide-PPML::chunk_63,27,"Chapter 9
+Glossary
+Break-even analysisCalculation of how much must be sold before revenue
+covers total cost; used to test whether a target volume is realistic.
+Business judgementA feel for trade-offs, customers, competition, and prof-
+itability that guides which issues are worth pursuing.
+Fixed costA cost that does not vary with the volume produced or sold.
+F rameworkA structured approach (e.g. Porter’s Five Forces, the Three Cs,
+the Four Ps) used to give a problem initial shape, adapted rather than
+recited.
+Hypothesis-driven reasoningForming an early guess about the cause of a
+problem and testing it against evidence rather than exploring every pos-
+sibility equally.
+MarginProfit expressed as a percentage of price; distinct from markup, which
+is expressed as a percentage of cost.
+Market sizingEstimating the size of a market under limited data, judged on"
+ConsultingCaseGuide-PPML::chunk_64,27,"is expressed as a percentage of cost.
+Market sizingEstimating the size of a market under limited data, judged on
+the logic of the assumptions rather than the final figure.
+MarkupThe amount added to cost to reach price, expressed as a percentage
+of cost.
+MECEMutually Exclusive, Collectively Exhaustive; splitting a problem into
+non-overlapping buckets that together cover the ground that matters.
+PrioritisationDeciding which issues are most likely to move the final recom-
+mendation and focusing effort there.
+Profitability treeA structure that splits profit into revenue and cost, then
+into their component drivers (price, volume, mix; fixed, variable).
+26"
+ConsultingCaseGuide-PPML::chunk_65,28,"Pyramid PrincipleA communication approach that leads with the conclu-
+sion, followed by supporting arguments and then data.
+Structured thinkingTurning a vague problem into a set of smaller, answer-
+able questions before attempting to solve it.
+SynthesisPausing to state what the analysis so far means for the problem,
+rather than listing findings in isolation.
+T op-down communicationPresenting the answer first and the supporting
+reasoning afterwards.
+V ariable costA cost that changes in proportion to the volume produced or
+sold.
+Note on AI Use
+Parts of this document were drafted with the help of AI tools, used to support
+the writing and rephrasing of some sections. The author reviewed and edited
+all content and is responsible for the final version.
+27"
+ConsultingCaseGuide-PPML::chunk_66,29,"Bibliography
+[1] Bain & Company. Preparing for the case interview.
+https://www.bain.com/careers/hiring-process/case-interview/, 2026.
+Accessed: 5 July 2026.
+[2] CaseCoach. Case interview: The free preparation guide.
+https://casecoach.com/b/case-interview-preparation/, 2026. Accessed:
+2026-07-05.
+[3] Marc P. Cosentino.Case in Point: Complete Case Interview Preparation.
+Burgee Press, Santa Barbara, CA, 11th edition, 2021.
+[4] William Ellet.The Case Study Handbook: A Student’s Guide. Harvard
+Business Review Press, Boston, MA, revised edition, 2018.
+[5] Hacking the Case Interview. Case interview checklist and rubric: 50-point
+guide. https://www.hackingthecaseinterview.com/pages/case-interview-
+checklist-rubric, 2026. Accessed: 2026-07-05.
+[6] Harvard Business School. Case interviewing guide, 2025. Career & Profes-
+sional Development Office."
+ConsultingCaseGuide-PPML::chunk_67,29,"[6] Harvard Business School. Case interviewing guide, 2025. Career & Profes-
+sional Development Office.
+[7] Management Consulted. The consulting interview bible.
+https://managementconsulted.com/app/uploads/2014/10/The-
+Consulting-Interview-Bible-2015-0928-2.pdf, 2015. Accessed: 2026-07-05.
+[8] Management Consulted. Case interview scoring guide.
+https://assets.managementconsulted.com/app/uploads/2025/07/08225708/Management-
+Consulted-Case-Interview-Scoring-Guide-2025.pdf, 2025. Accessed:
+2026-07-05.
+[9] Management Consulted. Case interview: Complete prep guide.
+https://managementconsulted.com/case-interview/, 2026. Accessed: 2026-
+07-05.
+[10] Management Consulted. Case interview frameworks: Ultimate guide.
+https://managementconsulted.com/case-interview-frameworks/, 2026. Ac-
+cessed: 2026-07-05.
+28"
+ConsultingCaseGuide-PPML::chunk_68,30,"[11] Barbara Minto.The Pyramid Principle: Logic in Writing and Thinking.
+Pearson Education, London, 3rd edition, 2009.
+[12] PrepLounge. Case interview guide. https://www.preplounge.com/en/blog/consulting/interview/case-
+interview, 2026. Accessed: 5 July 2026.
+[13] Princeton University Center for Career Development. Case interview prepa-
+ration. https://careerdevelopment.princeton.edu/guides/interviews/case-
+interview-preparation, n.d. Accessed: 2026-07-05.
+[14] The Wharton School, University of Pennsylvania. Quantitative skills for
+business decision making, 2025. Teaching Resources.
+29"

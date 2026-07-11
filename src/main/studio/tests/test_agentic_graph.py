@@ -143,7 +143,7 @@ class AgenticGraphTests(unittest.TestCase):
         state = make_state()
         mock_llm = Mock()
 
-        with patch.object(agentic, "llm_server", mock_llm):
+        with patch.object(agentic, "openai_llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
         mock_llm.invoke.assert_not_called()
@@ -171,7 +171,7 @@ class AgenticGraphTests(unittest.TestCase):
             return SimpleNamespace(content="<think>scratchpad</think>I'd split revenue and costs first.")
 
         mock_llm.invoke.side_effect = fake_invoke
-        with patch.object(agentic, "llm_server", mock_llm):
+        with patch.object(agentic, "candidate_llm", mock_llm):
             update = agentic.candidate_node(state)
 
         self.assertIn("Interviewer: Start with the objective.", observed_prompt["content"])
@@ -210,7 +210,7 @@ class AgenticGraphTests(unittest.TestCase):
             )
 
         mock_llm.invoke.side_effect = fake_invoke
-        with patch.object(agentic, "llm_server", mock_llm), patch.object(agentic, "openai_llm_server", mock_llm):
+        with patch.object(agentic, "openai_llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
         self.assertIn("Current judge focus areas to act on directly:", observed_prompt["content"])
@@ -243,7 +243,7 @@ class AgenticGraphTests(unittest.TestCase):
                     }
                 )
             )
-            with patch.object(agentic, "llm_server", mock_llm):
+            with patch.object(agentic, "judge_llm", mock_llm):
                 update = agentic.judge_node(state)
 
         self.assertEqual(update["judge_round"], agentic.MAX_JUDGE_ROUNDS)
@@ -270,7 +270,7 @@ class AgenticGraphTests(unittest.TestCase):
             )
         )
 
-        with patch.object(agentic, "llm_server", mock_llm):
+        with patch.object(agentic, "judge_llm", mock_llm):
             update = agentic.judge_node(state)
 
         self.assertFalse(update["enough_evidence"])
@@ -300,7 +300,7 @@ class AgenticGraphTests(unittest.TestCase):
             ),
         ]
 
-        with patch.object(agentic, "llm_server", mock_llm), patch.object(agentic, "openai_llm_server", mock_llm):
+        with patch.object(agentic, "openai_llm_server", mock_llm):
             update = agentic.interviewer_node(state)
 
         self.assertEqual(mock_llm.invoke.call_count, 2)
@@ -412,9 +412,9 @@ class AgenticGraphTests(unittest.TestCase):
                 return_value=[],
             ):
                 mock_llm.invoke.side_effect = llm_responses
-                with patch.object(agentic, "llm_server", mock_llm), patch.object(
-                    agentic, "openai_llm_server", mock_llm
-                ):
+                with patch.object(agentic, "candidate_llm", mock_llm), patch.object(
+                    agentic, "judge_llm", mock_llm
+                ), patch.object(agentic, "openai_llm_server", mock_llm):
                     with patch.object(persistence, "ARTIFACTS_DIR", artifacts_dir):
                         with patch.object(persistence, "RUNS_DB_PATH", db_path):
                             result = agentic.graph.invoke(
@@ -506,7 +506,7 @@ class BaselineGraphTests(unittest.TestCase):
             baseline,
             "retrieve_profitability_guide_context",
             return_value=[],
-        ), patch.object(baseline, "llm_server", mock_llm):
+        ), patch.object(baseline, "interviewer_llm", mock_llm):
             update = baseline.baseline_node(state)
 
         self.assertIn("Consulting Case Interview Guide excerpts:", observed_prompt["content"])
@@ -547,7 +547,7 @@ class BaselineGraphTests(unittest.TestCase):
             baseline,
             "retrieve_profitability_guide_context",
             return_value=[],
-        ), patch.object(baseline, "llm_server", mock_llm):
+        ), patch.object(baseline, "interviewer_llm", mock_llm):
             update = baseline.baseline_node(state)
 
         get_context.assert_called_once_with(state)

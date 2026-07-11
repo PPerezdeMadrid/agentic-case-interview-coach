@@ -20,7 +20,7 @@ from rag.profitability_guide_context import (
     retrieve_profitability_guide_context,
 )
 from loader import load_selected_simulation_bundle
-from llm_server import lmstudio_llm_server
+from llm_server import judge_llm_server
 from persistence import make_persist_run_node, make_trace_node, resolve_thread_id
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
@@ -44,9 +44,12 @@ from utils import (
     strip_thinking,
 )
 
-# Default server for both nodes
-llm_server = lmstudio_llm_server
- 
+# Baseline uses a single model (the GPU Llama server) across all roles, unlike the
+# role-differentiated agentic graph.
+candidate_llm = judge_llm_server
+judge_llm = judge_llm_server
+interviewer_llm = judge_llm_server
+
 DEFAULT_THREAD_ID = "main_baseline"
 MAX_BASELINE_TURNS = 4
 
@@ -202,7 +205,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
     ]
 
-    response = llm_server.invoke(messages)
+    response = candidate_llm.invoke(messages)
     payload = load_json_object(response.content)
     answer = str(payload.get("answer", "")).strip()
     updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
@@ -250,7 +253,7 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     payload = load_json_object(response.content)
     case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
     return {
@@ -283,7 +286,7 @@ def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict]:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     payload = load_json_object(response.content)
     return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS), case_guide_log
 
@@ -302,7 +305,7 @@ def generate_final_feedback(transcript: list[str], case_performance: dict, quali
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     latest_feedback = strip_thinking(response.content).strip()
     return latest_feedback or "Final feedback generated from case performance and dialog quality."
 
@@ -365,7 +368,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                 )
             ),
         ]
-        response = llm_server.invoke(messages)
+        response = interviewer_llm.invoke(messages)
         action, content, revealed_block_id, enough_evidence = parse_baseline_output(response.content)
 
         if action == "reveal" and revealed_block_id:

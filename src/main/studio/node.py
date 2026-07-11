@@ -12,7 +12,7 @@ from loader import (
     DEFAULT_MAX_JUDGE_ROUNDS,
     load_selected_simulation_bundle,
 )
-from llm_server import openai_llm_server, lmstudio_llm_server
+from llm_server import openai_llm_server, lmstudio_llm_server, candidate_llm_server, judge_llm_server, interviewer_llm_server
 from persistence import resolve_thread_id
 from prompts import (
     CASE_GUIDE_NAVIGATION_PROMPT,
@@ -52,7 +52,9 @@ from utils import (
 )
 
 # Shared default server for the graph today.
-llm_server = lmstudio_llm_server
+candidate_llm = lmstudio_llm_server
+judge_llm = lmstudio_llm_server
+interviewer_llm = openai_llm_server
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
 MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = 4
@@ -358,7 +360,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
     ]
 
-    response = llm_server.invoke(messages)
+    response = candidate_llm.invoke(messages)
     payload = load_json_object(response.content)
     answer = str(payload.get("answer", "")).strip()
     updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
@@ -409,7 +411,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     payload = load_json_object(response.content)
 
     enough_evidence = bool(payload.get("enough_evidence", False))
@@ -467,7 +469,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     payload = load_json_object(response.content)
     case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
 
@@ -504,7 +506,7 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     payload = load_json_object(response.content)
     quality_dialog = normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS)
     return {
@@ -533,7 +535,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = llm_server.invoke(messages)
+    response = judge_llm.invoke(messages)
     latest_feedback = strip_thinking(response.content).strip()
     if not latest_feedback:
         latest_feedback = "Final feedback generated from case performance and dialog quality."
@@ -571,6 +573,7 @@ __all__ = [
     "MAX_JUDGE_ROUNDS",
     "QUALITY_DIALOG_FIELDS",
     "build_initial_interview_state",
+    "candidate_llm",
     "candidate_node",
     "eval_case_performance_node",
     "eval_dialog_quality_node",
@@ -579,9 +582,10 @@ __all__ = [
     "get_case_guide_context",
     "get_profitability_guide_context",
     "give_feedback_node",
+    "interviewer_llm",
     "interviewer_node",
+    "judge_llm",
     "judge_node",
-    "llm_server",
     "load_scenario_node",
     "openai_llm_server",
     "resolve_case_guide_query",
