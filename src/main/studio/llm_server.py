@@ -19,6 +19,10 @@ def _normalize_base_url(raw_base_url: str) -> str:
         base_url = f"{base_url}/v1"
     return base_url
 
+model_mistral7B = "mistralai/Mistral-7B-Instruct-v0.3"
+model_mistral12B = "mistralai/Mistral-Nemo-Instruct-2407"
+model_llama70B = "meta-llama/Llama-3.3-70B-Instruct"
+model_llama8B = "meta-llama/Llama-3.1-8B-Instruct"
 
 # Local LM Studio model 
 lmstudio_llm_server = ChatOpenAI(
@@ -38,6 +42,33 @@ openai_llm_server = ChatOpenAI(
     temperature=float(os.getenv("OPENAI_TEMPERATURE", "0")),
     disable_streaming=True,
     model_kwargs={"response_format": {"type": "json_object"}},
+)
+
+
+# OpenRouter QWEN Interviewer model
+QWEN_llm_server = ChatOpenAI(
+    model=os.getenv(
+        "OPENROUTER_MODEL", "deepseek/deepseek-chat"),
+    base_url=_normalize_base_url(
+        os.getenv("OPENROUTER_BASE_URL","https://openrouter.ai/api")
+    ),
+    api_key=os.getenv( "OPENROUTER_API_KEY",""),
+    temperature=float(os.getenv("OPENROUTER_TEMPERATURE","0.2")))
+
+# GPU Mistral Candidate model 
+candidate_llm_server = ChatOpenAI(
+    model=model_mistral12B,
+    base_url="http://localhost:18401/v1",
+    api_key="EMPTY",
+    temperature=float(os.getenv("TEMPERATURE","0.0"))
+)
+
+# GPU Llama Judge model
+judge_llm_server = ChatOpenAI(
+    model=model_llama70B,
+    base_url="http://localhost:18402/v1",
+    api_key="EMPTY",
+    temperature=float(os.getenv("TEMPERATURE","0.0")),
 )
 
 # Backward-compatible default used by baseline and older call sites.
