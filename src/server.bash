@@ -1,10 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=langgraph-agents
+#SBATCH --account=compsci
 #SBATCH --partition=gpu.A100
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:3
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=128G
-#SBATCH --time=04:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 
@@ -12,7 +13,14 @@
 echo "Starting LangGraph multi-agent system"
 
 source ~/miniconda3/etc/profile.d/conda.sh
-conda activate langgraph
+conda activate coach
+
+# Prevent ~/.local user site-packages (e.g. a pip install --user'd vllm on
+# system Python 3.9) from shadowing the packages installed in this conda env
+export PYTHONNOUSERSITE=1
+
+# Model weights are large; keep them off the backed-up home directory
+export HF_HOME=/sharedscratch/$USER/huggingface
 
 mkdir -p logs
 
@@ -52,11 +60,12 @@ echo "Waiting for model servers..."
 
 sleep 90
 
-# Run LangGraph
+# Run all scenarios (baseline + agentic, 3 repeats each)
 
-echo "Running LangGraph..."
+echo "Running run_all_scenarios.py..."
 
-make langgraph
+python run_all_scenarios.py --graph both --repeat 3 \
+    > logs/run_all_scenarios.log 2>&1
 
 
 # Cleanup
