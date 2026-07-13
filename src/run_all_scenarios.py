@@ -140,6 +140,23 @@ def extract_final_feedback(transcript: list[str]) -> str:
     return ""
 
 
+def summarize_llm_usage(llm_usage: list[dict[str, Any]]) -> dict[str, Any]:
+    prompt_tokens = 0
+    completion_tokens = 0
+    total_tokens = 0
+    for entry in llm_usage:
+        usage = entry.get("usage", {}) if isinstance(entry, dict) else {}
+        prompt_tokens += usage.get("prompt_tokens") or 0
+        completion_tokens += usage.get("completion_tokens") or 0
+        total_tokens += usage.get("total_tokens") or 0
+    return {
+        "llm_call_count": len(llm_usage),
+        "total_prompt_tokens": prompt_tokens,
+        "total_completion_tokens": completion_tokens,
+        "total_tokens": total_tokens,
+    }
+
+
 def flatten_scores(payload: dict[str, Any]) -> dict[str, Any]:
     flattened: dict[str, Any] = {}
     if not isinstance(payload, dict):
@@ -180,9 +197,11 @@ def build_record(
         "focus_areas": result.get("focus_areas", []) if isinstance(result, dict) else [],
         "case_performance": result.get("case_performance", {}) if isinstance(result, dict) else {},
         "quality_dialog": result.get("quality_dialog", {}) if isinstance(result, dict) else {},
+        "llm_usage": result.get("llm_usage", []) if isinstance(result, dict) else [],
     }
     record.update(flatten_scores(record["case_performance"]))
     record.update(flatten_scores(record["quality_dialog"]))
+    record.update(summarize_llm_usage(record["llm_usage"]))
     return record
 
 

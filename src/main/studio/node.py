@@ -46,10 +46,12 @@ from utils import (
     extract_case_guidance,
     extract_case_prompt,
     extract_case_recommendation,
+    extract_token_usage,
     format_candidate_persona,
     format_case_blocks,
     format_full_case_data,
     format_rubric,
+    invoke_json_llm,
     load_json_object,
     normalize_string_list,
     normalize_eval_payload,
@@ -193,7 +195,7 @@ def _invoke_interviewer_move(
     visible_blocks: list[dict],
     case_guidance: str,
     focus_areas: list[str],
-) -> tuple[str, str, str, bool]:
+) -> tuple[str, str, str, bool, list[dict]]:
     messages = _build_interviewer_messages(
         case_prompt,
         transcript,
@@ -201,11 +203,13 @@ def _invoke_interviewer_move(
         case_guidance,
         focus_areas,
     )
+    usage_log: list[dict] = []
     response = interviewer_llm.invoke(messages)
+    usage_log.append(extract_token_usage(response, node="interviewer", model=interviewer_llm.model_name))
     print("Calling Interviewer Server...")
     parsed = parse_interviewer_output(response.content)
     if parsed is not None:
-        return parsed
+        return (*parsed, usage_log)
 
     raw_output = str(response.content).strip()
     for _ in range(MAX_INTERVIEWER_JSON_RETRIES - 1):
@@ -220,17 +224,21 @@ def _invoke_interviewer_move(
             )
         ]
         response = interviewer_llm.invoke(repair_messages)
+        usage_log.append(
+            extract_token_usage(response, node="interviewer_repair", model=interviewer_llm.model_name)
+        )
         print("Calling Interviewer Server...")
         raw_output = str(response.content).strip()
         parsed = parse_interviewer_output(raw_output)
         if parsed is not None:
-            return parsed
+            return (*parsed, usage_log)
 
     return (
         "question",
         "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
         "",
         False,
+        usage_log,
     )
 
 
@@ -315,7 +323,7 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
 
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
 
-    interviewer_action, content, revealed_block_id, ready_for_judge = _invoke_interviewer_move(
+    interviewer_action, content, revealed_block_id, ready_for_judge, usage_log = _invoke_interviewer_move(
         case_prompt,
         transcript,
         visible_blocks,
@@ -340,6 +348,7 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
         "enough_evidence": ready_for_judge or next_turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
         "turn_index": next_turn_index,
         "transcript": transcript,
+        "llm_usage": usage_log,
     }
 
 
@@ -369,6 +378,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     ]
 
     response = candidate_llm.invoke(messages)
+    usage_entry = extract_token_usage(response, node="candidate", model=candidate_llm.model_name)
     payload = load_json_object(response.content)
     answer = str(payload.get("answer", "")).strip()
     updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
@@ -382,6 +392,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     return {
         "transcript": transcript,
         "data_gathered": updated_data_gathered,
+        "llm_usage": [usage_entry],
     }
 
 
@@ -419,8 +430,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
-    payload = load_json_object(response.content)
+    payload, usage_log = invoke_json_llm(judge_llm, messages, node="judge")
 
     enough_evidence = bool(payload.get("enough_evidence", False))
     new_focus_areas = normalize_focus_areas(payload.get("focus_areas", []))
@@ -434,6 +444,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
         "enough_evidence": enough_evidence,
         "focus_areas": None if enough_evidence else new_focus_areas,
         "rag_query_log": [case_guide_log] if case_guide_log else [],
+        "llm_usage": usage_log,
     }
     if not enough_evidence:
         # Reset the interviewer-turn budget so judge coaching leads to another
@@ -477,8 +488,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
-    payload = load_json_object(response.content)
+    payload, usage_log = invoke_json_llm(judge_llm, messages, node="eval_case_performance")
     case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
 
     return {
@@ -489,6 +499,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
             if str(chunk.get("content", "")).strip()
         ],
         "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
+        "llm_usage": usage_log,
     }
 
 
@@ -514,12 +525,12 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
-    payload = load_json_object(response.content)
+    payload, usage_log = invoke_json_llm(judge_llm, messages, node="eval_dialog_quality")
     quality_dialog = normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS)
     return {
         "quality_dialog": quality_dialog,
         "rag_query_log": [case_guide_log] if case_guide_log else [],
+        "llm_usage": usage_log,
     }
 
 
@@ -544,6 +555,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
     ]
     response = feedback_llm.invoke(messages)
+    usage_entry = extract_token_usage(response, node="give_feedback", model=feedback_llm.model_name)
     latest_feedback = strip_thinking(response.content).strip()
     if not latest_feedback:
         latest_feedback = "Final feedback generated from case performance and dialog quality."
@@ -556,6 +568,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
     return {
         "transcript": transcript,
         "rag_query_log": [case_guide_log] if case_guide_log else [],
+        "llm_usage": [usage_entry],
     }
 
 

@@ -18,6 +18,12 @@ from dashboard_store import (
     load_run_traces,
     save_human_evaluation,
 )
+from experiment_store import (
+    build_overview,
+    list_batches,
+    load_batch,
+    load_scenario_detail,
+)
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -120,6 +126,38 @@ def trace_index():
     ensure_dashboard_db()
     trace_runs = list_trace_runs(limit=100)
     return render_template("trace_index.html", trace_runs=trace_runs)
+
+
+@app.get("/experiment")
+def experiment_index():
+    batches = list_batches()
+    if not batches:
+        return render_template("experiment.html", batches=[], batch=None, overview=None)
+
+    requested_dir = str(request.args.get("batch", "")).strip()
+    dir_name = requested_dir if any(b["dir_name"] == requested_dir for b in batches) else batches[0]["dir_name"]
+
+    try:
+        overview = build_overview(dir_name)
+    except FileNotFoundError:
+        abort(404, f"Batch '{dir_name}' not found.")
+
+    return render_template("experiment.html", batches=batches, batch=dir_name, overview=overview)
+
+
+@app.get("/experiment/<dir_name>/<slug>")
+def experiment_scenario(dir_name: str, slug: str):
+    try:
+        batch = load_batch(dir_name)
+    except FileNotFoundError:
+        abort(404, f"Batch '{dir_name}' not found.")
+
+    try:
+        scenario = load_scenario_detail(batch["records"], slug)
+    except FileNotFoundError:
+        abort(404, f"Scenario '{slug}' not found in batch '{dir_name}'.")
+
+    return render_template("experiment_scenario.html", dir_name=dir_name, scenario=scenario)
 
 
 @app.get("/runs/<run_id>")

@@ -19,10 +19,12 @@ def _normalize_base_url(raw_base_url: str) -> str:
         base_url = f"{base_url}/v1"
     return base_url
 
+"""
 model_mistral7B = "mistralai/Mistral-7B-Instruct-v0.3"
 model_mistral12B = "mistralai/Mistral-Nemo-Instruct-2407"
 model_llama70B = "meta-llama/Llama-3.3-70B-Instruct"
 model_llama8B = "meta-llama/Llama-3.1-8B-Instruct"
+"""
 
 _openrouter_base_url = _normalize_base_url(
     os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api")
@@ -38,7 +40,6 @@ lmstudio_llm_server = ChatOpenAI(
     temperature=float(os.getenv("LMSTUDIO_TEMPERATURE", "0.14")),
     disable_streaming=True,
 )
-feedback_llm_server = lmstudio_llm_server
 
 
 # OpenAI model
@@ -76,9 +77,11 @@ judge_llm_server = ChatOpenAI(
     temperature=_openrouter_temperature,
 )
 
-# --- Alternative: GPU-hosted models on the university HPC cluster. ---
-# Not used by default now that candidate/judge run on OpenRouter, kept here
-# in case the project reverts to self-hosted inference.
+feedback_llm_server = lmstudio_llm_server
+
+
+# Alternative: GPU-hosted models on the university HPC cluster. 
+#
 # candidate_llm_server_gpu = ChatOpenAI(
 #     model=model_mistral12B,
 #     base_url="http://localhost:18401/v1",

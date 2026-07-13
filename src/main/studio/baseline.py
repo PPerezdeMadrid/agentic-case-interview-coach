@@ -34,10 +34,12 @@ from utils import (
     extract_case_guidance,
     extract_case_prompt,
     extract_case_recommendation,
+    extract_token_usage,
     format_candidate_persona,
     format_case_blocks,
     format_full_case_data,
     format_rubric,
+    invoke_json_llm,
     load_json_object,
     normalize_eval_payload,
     normalize_string_list,
@@ -185,13 +187,17 @@ def parse_baseline_output(raw_output: str) -> tuple[str, str, str, bool] | None:
     return action, content, block_id, ready_for_evaluation
 
 
-def _invoke_baseline_move(messages: list[SystemMessage]) -> tuple[str, str, str, bool]:
+def _invoke_baseline_move(messages: list[SystemMessage]) -> tuple[str, str, str, bool, list[dict]]:
     """Call the baseline interviewer with JSON-repair retries, mirroring node.py's interviewer."""
+    usage_log: list[dict] = []
     response = interviewer_llm.invoke(messages)
+    usage_log.append(
+        extract_token_usage(response, node="baseline_interviewer", model=interviewer_llm.model_name)
+    )
     print("Calling Baseline Interviewer Server...")
     parsed = parse_baseline_output(response.content)
     if parsed is not None:
-        return parsed
+        return (*parsed, usage_log)
 
     raw_output = str(response.content).strip()
     for _ in range(MAX_BASELINE_JSON_RETRIES - 1):
@@ -206,17 +212,21 @@ def _invoke_baseline_move(messages: list[SystemMessage]) -> tuple[str, str, str,
             )
         ]
         response = interviewer_llm.invoke(repair_messages)
+        usage_log.append(
+            extract_token_usage(response, node="baseline_interviewer_repair", model=interviewer_llm.model_name)
+        )
         print("Calling Baseline Interviewer Server...")
         raw_output = str(response.content).strip()
         parsed = parse_baseline_output(raw_output)
         if parsed is not None:
-            return parsed
+            return (*parsed, usage_log)
 
     return (
         "question",
         "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
         "",
         False,
+        usage_log,
     )
 
 
@@ -245,6 +255,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     ]
 
     response = candidate_llm.invoke(messages)
+    usage_entry = extract_token_usage(response, node="baseline_candidate", model=candidate_llm.model_name)
     payload = load_json_object(response.content)
     answer = str(payload.get("answer", "")).strip()
     updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
@@ -257,6 +268,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     return {
         "transcript": transcript,
         "data_gathered": updated_data_gathered,
+        "llm_usage": [usage_entry],
     }
 
 
@@ -292,8 +304,7 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
-    payload = load_json_object(response.content)
+    payload, usage_log = invoke_json_llm(judge_llm, messages, node="baseline_eval_case_performance")
     case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
     return {
         "case_performance": case_performance,
@@ -303,10 +314,11 @@ def evaluate_case_performance(state: AgenticGraphState) -> dict:
             if str(chunk.get("content", "")).strip()
         ],
         "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
+        "llm_usage": usage_log,
     }
 
 
-def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict]:
+def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict, dict]:
     rubric_data = state.get("rubric_data", {})
     case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
     messages = [
@@ -325,12 +337,13 @@ def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict]:
             )
         ),
     ]
-    response = judge_llm.invoke(messages)
-    payload = load_json_object(response.content)
-    return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS), case_guide_log
+    payload, usage_log = invoke_json_llm(judge_llm, messages, node="baseline_eval_dialog_quality")
+    return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS), case_guide_log, usage_log
 
 
-def generate_final_feedback(transcript: list[str], case_performance: dict, quality_dialog: dict) -> str:
+def generate_final_feedback(
+    transcript: list[str], case_performance: dict, quality_dialog: dict
+) -> tuple[str, dict]:
     messages = [
         SystemMessage(
             content=(
@@ -345,8 +358,12 @@ def generate_final_feedback(transcript: list[str], case_performance: dict, quali
         ),
     ]
     response = judge_llm.invoke(messages)
+    usage_entry = extract_token_usage(response, node="baseline_give_feedback", model=judge_llm.model_name)
     latest_feedback = strip_thinking(response.content).strip()
-    return latest_feedback or "Final feedback generated from case performance and dialog quality."
+    return (
+        latest_feedback or "Final feedback generated from case performance and dialog quality.",
+        usage_entry,
+    )
 
 
 def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
@@ -369,6 +386,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         }
 
     turn_index = int(state.get("turn_index", 0))
+    move_usage_log: list[dict] = []
     if turn_index >= MAX_BASELINE_TURNS:
         enough_evidence = True
     else:
@@ -407,7 +425,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                 )
             ),
         ]
-        action, content, revealed_block_id, enough_evidence = _invoke_baseline_move(messages)
+        action, content, revealed_block_id, enough_evidence, move_usage_log = _invoke_baseline_move(messages)
 
         if action == "reveal" and revealed_block_id:
             revealed_block = get_case_block_by_id(case_data, revealed_block_id)
@@ -430,6 +448,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                     if str(chunk.get("content", "")).strip()
                 ],
                 "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
+                "llm_usage": move_usage_log,
             }
 
     final_state: AgenticGraphState = {
@@ -440,8 +459,8 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     }
     case_performance_payload = evaluate_case_performance(final_state)
     case_performance = case_performance_payload["case_performance"]
-    quality_dialog, dialog_guide_log = evaluate_dialog_quality(final_state)
-    latest_feedback = generate_final_feedback(transcript, case_performance, quality_dialog)
+    quality_dialog, dialog_guide_log, dialog_usage_log = evaluate_dialog_quality(final_state)
+    latest_feedback, feedback_usage_entry = generate_final_feedback(transcript, case_performance, quality_dialog)
     return {
         "turn_index": turn_index,
         "transcript": transcript
@@ -456,6 +475,10 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         "retrieved_profitability_context": case_performance_payload["retrieved_profitability_context"],
         "rag_query_log": case_performance_payload["rag_query_log"]
         + ([dialog_guide_log] if dialog_guide_log else []),
+        "llm_usage": move_usage_log
+        + case_performance_payload["llm_usage"]
+        + dialog_usage_log
+        + [feedback_usage_entry],
     }
 
 

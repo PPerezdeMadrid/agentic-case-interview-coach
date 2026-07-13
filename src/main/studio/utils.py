@@ -1,6 +1,8 @@
 import json
 import re
 
+from langchain_core.messages import HumanMessage
+
 from adapter import (
     get_case_blocks_by_type,
     get_hidden_guidance_blocks,
@@ -24,12 +26,59 @@ def strip_code_fences(text: str) -> str:
     return cleaned
 
 
+def _find_fenced_json(text: str) -> str | None:
+    """Locate a ```/```json fenced block anywhere in the text, not only ones
+    wrapping the entire response (models often add a sentence before/after)."""
+    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL | re.IGNORECASE)
+    return match.group(1) if match else None
+
+
+def _find_balanced_json(text: str) -> str | None:
+    """Extract the first brace-balanced {...} object, scanning past any
+    conversational preamble the model wrote before the JSON started."""
+    start = text.find("{")
+    if start == -1:
+        return None
+
+    depth = 0
+    in_string = False
+    escape = False
+    for index in range(start, len(text)):
+        char = text[index]
+        if in_string:
+            if escape:
+                escape = False
+            elif char == "\\":
+                escape = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start : index + 1]
+    return None
+
+
 def load_json_object(text: str) -> dict:
-    try:
-        payload = json.loads(strip_code_fences(strip_thinking(text)))
-        return payload if isinstance(payload, dict) else {}
-    except (json.JSONDecodeError, TypeError, ValueError):
-        return {}
+    """Parse the JSON object an LLM was asked to return, tolerating the
+    conversational preamble/postamble ("Here is the JSON object...", trailing
+    notes) and code fences models sometimes add around the payload."""
+    cleaned = strip_thinking(text)
+    for candidate in (strip_code_fences(cleaned), _find_fenced_json(cleaned), _find_balanced_json(cleaned)):
+        if not candidate:
+            continue
+        try:
+            payload = json.loads(candidate)
+        except (json.JSONDecodeError, TypeError, ValueError):
+            continue
+        if isinstance(payload, dict):
+            return payload
+    return {}
 
 
 def normalize_string_list(values: object) -> list[str]:
@@ -206,3 +255,69 @@ def normalize_eval_payload(payload: dict, fields: list[str]) -> dict:
             "rationale": str(item.get("rationale", "")).strip() or "No rationale provided.",
         }
     return normalized
+
+
+def extract_token_usage(response: object, *, node: str, model: str = "") -> dict:
+    """Read prompt/completion/total token counts off a ChatOpenAI response.
+
+    Works for both OpenRouter and LM Studio since both go through the same
+    OpenAI-compatible `usage` payload in the raw response.
+    """
+    metadata = getattr(response, "response_metadata", None)
+    metadata = metadata if isinstance(metadata, dict) else {}
+    token_usage = metadata.get("token_usage")
+    token_usage = token_usage if isinstance(token_usage, dict) else {}
+    usage_metadata = getattr(response, "usage_metadata", None)
+    usage_metadata = usage_metadata if isinstance(usage_metadata, dict) else {}
+    model_name = metadata.get("model_name")
+    if not isinstance(model_name, str) or not model_name:
+        model_name = model if isinstance(model, str) else ""
+    return {
+        "node": node,
+        "model": model_name,
+        "usage": {
+            "prompt_tokens": token_usage.get("prompt_tokens", usage_metadata.get("input_tokens")),
+            "completion_tokens": token_usage.get("completion_tokens", usage_metadata.get("output_tokens")),
+            "total_tokens": token_usage.get("total_tokens", usage_metadata.get("total_tokens")),
+        },
+    }
+
+
+def invoke_json_llm(llm, messages: list, *, node: str, retries: int = 3) -> tuple[dict, list[dict]]:
+    """Invoke an LLM expected to reply with a JSON object, retrying with an
+    explicit repair instruction when the reply doesn't parse (e.g. the model
+    wrapped it in a preamble/fence `load_json_object` still can't salvage).
+
+    Returns (payload, usage_log). `payload` is only `{}` if every attempt
+    failed to produce parseable JSON, so downstream `not_tested` defaults
+    reflect a genuine judge coverage gap rather than a parsing failure.
+    """
+    usage_log: list[dict] = []
+    model_name = getattr(llm, "model_name", "")
+
+    response = llm.invoke(messages)
+    usage_log.append(extract_token_usage(response, node=node, model=model_name))
+    payload = load_json_object(response.content)
+    if payload:
+        return payload, usage_log
+
+    raw_output = str(response.content).strip()
+    for _ in range(max(retries, 1) - 1):
+        repair_messages = messages + [
+            HumanMessage(
+                content=(
+                    "Your previous reply was not valid JSON for the required schema.\n"
+                    "Return exactly one JSON object as instructed. Do not add markdown, "
+                    "code fences, analysis, or any extra text before or after it.\n\n"
+                    f"Previous invalid reply:\n{raw_output or '[empty response]'}"
+                )
+            ),
+        ]
+        response = llm.invoke(repair_messages)
+        usage_log.append(extract_token_usage(response, node=f"{node}_repair", model=model_name))
+        raw_output = str(response.content).strip()
+        payload = load_json_object(raw_output)
+        if payload:
+            return payload, usage_log
+
+    return {}, usage_log

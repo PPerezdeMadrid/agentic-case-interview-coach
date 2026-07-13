@@ -18,6 +18,14 @@ def append_rag_query_log(existing: list[dict], new_entries: list[dict] | None) -
     return existing + list(new_entries)
 
 
+def append_llm_usage(existing: list[dict], new_entries: list[dict] | None) -> list[dict]:
+    """Concatenate per-call token usage entries across nodes, same pattern as
+    append_rag_query_log so concurrent eval nodes don't clobber each other."""
+    if not new_entries:
+        return existing
+    return existing + list(new_entries)
+
+
 class AgenticGraphState(TypedDict):
     case_prompt: str
     candidate_profile: dict
@@ -39,3 +47,4 @@ class AgenticGraphState(TypedDict):
     judge_round: NotRequired[int]
     retrieved_profitability_context: NotRequired[list[str]]
     rag_query_log: NotRequired[Annotated[list[dict], append_rag_query_log]]
+    llm_usage: NotRequired[Annotated[list[dict], append_llm_usage]]

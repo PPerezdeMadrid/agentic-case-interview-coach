@@ -522,6 +522,130 @@ pre {
   margin-bottom: 12px;
 }
 
+.repeat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 24px;
+}
+
+.repeat-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+  overflow: hidden;
+}
+
+.repeat-card__header {
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--line);
+  background: rgba(180, 210, 174, 0.25);
+}
+
+.repeat-card__header h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+}
+
+.mini-chat {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.mini-message {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  background: #fbfcfa;
+  font-size: 0.85rem;
+}
+
+.mini-message--candidate {
+  background: #dfe9dc;
+  border-color: #9db494;
+}
+
+.mini-message--repeat {
+  border: 2px dashed var(--accent);
+}
+
+.mini-message__repeat-tag {
+  color: var(--accent);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.mini-message--judge,
+.mini-message--reveal {
+  background: #eef2eb;
+  border-style: dashed;
+}
+
+.mini-message__role {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: var(--accent-strong);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mini-message p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.feedback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+
+.feedback-card {
+  border: 1px solid #c7b275;
+  border-radius: var(--radius);
+  background: #f5f1e3;
+  padding: 14px 16px;
+}
+
+.feedback-card h4 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+}
+
+.feedback-card pre {
+  font-size: 0.82rem;
+}
+
+.hist-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.hist-bar-track {
+  flex: 1;
+  background: var(--line);
+  border-radius: 2px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.hist-bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
 @media (max-width: 860px) {
   .site-header__inner,
   .panel-heading,

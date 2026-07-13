@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %} AI Consulting Interview dashboard{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260627a') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260713a') }}">
   </head>
   <body>
     <header class="site-header">
@@ -14,6 +14,7 @@
           <a href="{{ url_for('index') }}">Runs</a>
           <a href="{{ url_for('trace_index') }}">Traces</a>
           <a href="{{ url_for('compare_runs') }}">Compare</a>
+          <a href="{{ url_for('experiment_index') }}">Experiment</a>
         </nav>
       </div>
     </header>

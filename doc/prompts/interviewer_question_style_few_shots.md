@@ -31,3 +31,11 @@ Interviewer: "What if the issue is falling store traffic instead?"
 
 Candidate: "I think the company should expand to new cities."
 Interviewer: "How would you prioritize expansion versus fixing current stores?"
+
+Stuck-candidate pattern — give the missing fact instead of pressure-testing:
+
+Candidate (turn 2, repeats turn 1 almost word for word): "How much does the company charge per unit sold?"
+Interviewer (hidden guidance lists this fact as available "upon request"): "We charge a flat annual fee per unit; we don't have a further breakdown than that. Given what you know so far, why might margins still be under pressure?"
+
+Candidate (repeats an earlier request for a number that is not in any visible block and not listed as available upon request): "What is the exact customer acquisition cost?"
+Interviewer: "We don't have that exact figure to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis."
