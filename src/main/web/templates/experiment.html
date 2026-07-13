@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% macro pct(value) -%}
+  {{ value if value is not none else '–' }}{{ '%' if value is not none else '' }}
+{%- endmacro %}
+
+{% macro num(value) -%}
+  {{ value if value is not none else '–' }}
+{%- endmacro %}
+
+{% macro rate_status(value) -%}
+  {%- if value is none -%}status-not-tested
+  {%- elif value >= 70 -%}status-exact-match
+  {%- elif value >= 20 -%}status-off-by-1
+  {%- else -%}status-different
+  {%- endif -%}
+{%- endmacro %}
+
+{% block title %}Experiment | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Batch Experiment</p>
+      <h1>Experiment Overview</h1>
+      <p class="lede">Aggregate metrics across a full batch run (all scenarios &times; repeats, baseline vs agentic), plus per-scenario drill-down to compare repeats and feedback.</p>
+    </div>
+  </div>
+  {% if batches %}
+  <form class="form-grid" method="get" action="{{ url_for('experiment_index') }}">
+    <label>
+      <span>Batch</span>
+      <select name="batch" onchange="this.form.submit()">
+        {% for b in batches %}
+        <option value="{{ b.dir_name }}" {% if b.dir_name == batch %}selected{% endif %}>
+          {{ b.batch_id }} &bull; {{ b.scenario_count }} scenarios &times; {{ b.repeat_count }} repeats
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <noscript><button class="button" type="submit">Load batch</button></noscript>
+  </form>
+  {% else %}
+  <div class="prompt-box">
+    <p class="helper">No batch runs found under <code>artifacts/batch_runs/</code>. Run <code>make run-all N=&lt;repeat&gt;</code> or <code>make experiment CASE=... N=...</code> to generate one.</p>
+  </div>
+  {% endif %}
+</section>
+
+{% if overview %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ overview.summary.batch_id }}</p>
+      <h2>Batch Summary</h2>
+    </div>
+    <div class="chip-row">
+      <span class="chip">{{ overview.summary.scenario_count }} scenarios</span>
+      <span class="chip">{{ overview.summary.repeat_count }} repeats each</span>
+      <span class="chip">created {{ overview.summary.created_at }}</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          {% for g in overview.graph_metrics %}
+          <th>{{ g.graph_name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Runs</td>{% for g in overview.graph_metrics %}<td>{{ g.n_runs }}</td>{% endfor %}</tr>
+        <tr><td>Errors</td>{% for g in overview.graph_metrics %}<td>{{ g.errors }} ({{ pct(g.error_rate) }})</td>{% endfor %}</tr>
+        <tr><td>Avg turn index at stop</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_turn_index) }}</td>{% endfor %}</tr>
+        <tr><td>Avg judge rounds</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_judge_round) }}</td>{% endfor %}</tr>
+        <tr><td>Avg transcript length (messages)</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_message_count) }}</td>{% endfor %}</tr>
+        <tr>
+          <td>Avg verbatim-repeated candidate lines / run</td>
+          {% for g in overview.graph_metrics %}<td>{{ num(g.avg_candidate_repeats) }}</td>{% endfor %}
+        </tr>
+        <tr>
+          <td>Runs with &ge;1 repeated candidate line</td>
+          {% for g in overview.graph_metrics %}<td>{{ pct(g.degenerate_run_rate) }}</td>{% endfor %}
+        </tr>
+        <tr>
+          <td>Scenarios where all repeats produced identical candidate text</td>
+          {% for g in overview.graph_metrics %}<td>{{ pct(g.identical_candidate_scenario_rate) }}</td>{% endfor %}
+        </tr>
+        <tr>
+          <td>Final feedback text mentions repetition/looping</td>
+          {% for g in overview.graph_metrics %}<td>{{ pct(g.feedback_mentions_repetition_rate) }}</td>{% endfor %}
+        </tr>
+        <tr><td>Judge-scored dimension values collected</td>{% for g in overview.graph_metrics %}<td>{{ g.tested_score_count }}</td>{% endfor %}</tr>
+        <tr><td>Mean score among tested dimensions</td>{% for g in overview.graph_metrics %}<td>{{ num(g.mean_tested_score) }}</td>{% endfor %}</tr>
+        <tr><td>Avg LLM calls / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_llm_calls) }}</td>{% endfor %}</tr>
+        <tr><td>Avg prompt tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_prompt_tokens) }}</td>{% endfor %}</tr>
+        <tr><td>Avg completion tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_completion_tokens) }}</td>{% endfor %}</tr>
+        <tr><td>Avg total tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_total_tokens) }}</td>{% endfor %}</tr>
+        <tr><td>Total tokens across batch</td>{% for g in overview.graph_metrics %}<td>{{ num(g.sum_total_tokens) }}</td>{% endfor %}</tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design (<code>OPENROUTER_TEMPERATURE=0</code>), so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Score distribution (tested values only)</p>
+      <h2>Histogram by graph</h2>
+    </div>
+  </div>
+  <div class="two-col">
+    {% for g in overview.graph_metrics %}
+    <div class="subsection">
+      <h3>{{ g.graph_name }} ({{ g.tested_score_count }} tested values)</h3>
+      {% if g.score_histogram %}
+      {% set max_count = g.score_histogram.values() | max %}
+      {% for score, count in g.score_histogram.items() %}
+      <div class="hist-bar-row">
+        <span>{{ score }}</span>
+        <div class="hist-bar-track"><div class="hist-bar-fill" style="width: {{ (count / max_count * 100) if max_count else 0 }}%"></div></div>
+        <span>{{ count }}</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="helper">No tested (numeric) scores for this graph.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Eval Case Performance &amp; Eval Dialog Quality</p>
+      <h2>Per-dimension: tested rate &amp; mean score</h2>
+      <p class="lede">
+        For each dimension, the judge either returns a numeric score (1&ndash;4) or <code>not_tested</code> when it decides the transcript doesn't give it enough to go on.
+        <strong>Tested %</strong> is the share of the {{ overview.graph_metrics[0].n_runs if overview.graph_metrics else '?' }} runs per graph that got a real number instead of <code>not_tested</code>.
+        <strong>Mean score</strong> is the plain average of only those numeric scores &mdash; it says nothing about the runs that came back <code>not_tested</code>, so with a handful of tested runs (see the counts in parentheses) treat it as anecdotal, not a reliable comparison.
+      </p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Section</th>
+          <th>Dimension</th>
+          {% for g in overview.graph_metrics %}
+          <th>{{ g.graph_name }} &mdash; tested %</th>
+          <th>{{ g.graph_name }} &mdash; mean score</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in overview.dimension_rows %}
+        <tr>
+          <td>{{ row.section_label }}</td>
+          <td>{{ row.dimension }}</td>
+          {% for g in overview.graph_metrics %}
+          {% set cell = row.graphs.get(g.graph_name) %}
+          <td>{% if cell %}<span class="status {{ rate_status(cell.tested_rate) }}">{{ pct(cell.tested_rate) }}</span> <span class="helper">({{ cell.n_tested }}/{{ cell.n_total }})</span>{% else %}&ndash;{% endif %}</td>
+          <td>{{ num(cell.mean_score) if cell else '–' }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="helper" style="padding: 0 24px 24px;">If <strong>baseline</strong> shows 0% tested on every single dimension while <strong>agentic</strong> doesn't, that's a structural difference between the two graphs' evaluation nodes, not noise &mdash; see the explanation below the scenario table.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ overview.scenarios | length }} scenarios in this batch</p>
+      <h2>Drill into a scenario</h2>
+      <p class="lede">Open a scenario to see all repeat conversations side by side (per graph) and compare their final feedback.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Graphs</th>
+          <th>Runs</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in overview.scenarios %}
+        <tr>
+          <td>{{ s.slug }}</td>
+          <td>{{ s.graph_names | join(', ') }}</td>
+          <td>{{ s.n_runs }}</td>
+          <td><a class="button" href="{{ url_for('experiment_scenario', dir_name=batch, slug=s.slug) }}">Open</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Scenario {{ scenario.slug }} | Experiment{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Scenario Detail</p>
+      <h1>{{ scenario.slug }}</h1>
+      <p class="lede">{{ scenario.scenario_ref }}</p>
+    </div>
+    <a class="button" href="{{ url_for('experiment_index', batch=dir_name) }}">Back to overview</a>
+  </div>
+  <div class="prompt-box">
+    <strong>Case Prompt (opening line)</strong>
+    <p>{{ scenario.case_prompt or 'No opening line found in transcript.' }}</p>
+  </div>
+</section>
+
+{% for g in scenario.graphs %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Graph: {{ g.graph_name }}</p>
+      <h2>{{ g.repeats | length }} repeat conversations</h2>
+      <p class="lede">Same scenario, same graph, independent repeats &mdash; compare how much the candidate's answers actually vary.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip">candidate text identical across repeats: {{ 'yes' if g.identical_candidate_across_repeats else 'no' }}</span>
+      <span class="chip">final feedback identical across repeats: {{ 'yes' if g.identical_feedback_across_repeats else 'no' }}</span>
+    </div>
+  </div>
+
+  <div class="repeat-grid">
+    {% for r in g.repeats %}
+    <div class="repeat-card">
+      <div class="repeat-card__header">
+        <h3>Repeat {{ r.repeat_index }}</h3>
+        <div class="chip-row">
+          <span class="chip">{{ r.message_count }} msgs</span>
+          <span class="chip">turn {{ r.turn_index }}</span>
+          <span class="chip">judge round {{ r.judge_round }}</span>
+          {% if r.candidate_repeat_count > 0 %}
+          <span class="chip">{{ r.candidate_repeat_count }} repeated line(s)</span>
+          {% endif %}
+          {% if r.total_tokens %}
+          <span class="chip">{{ r.llm_call_count }} LLM calls &bull; {{ r.total_tokens }} tokens ({{ r.total_prompt_tokens }} in / {{ r.total_completion_tokens }} out)</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="mini-chat">
+        {% for m in r.messages %}
+        <div class="mini-message mini-message--{{ m.role }}{{ ' mini-message--repeat' if m.is_repeat else '' }}">
+          <span class="mini-message__role"><span>{{ m.label }}</span>{% if m.is_repeat %}<span class="mini-message__repeat-tag">same as earlier turn</span>{% endif %}</span>
+          <p>{{ m.content }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ g.graph_name }}</p>
+      <h2>Final feedback &mdash; {{ g.repeats | length }} repeats compared</h2>
+    </div>
+  </div>
+  <div class="feedback-grid">
+    {% for r in g.repeats %}
+    <div class="feedback-card">
+      <h4>Repeat {{ r.repeat_index }}</h4>
+      <pre>{{ r.final_feedback or 'No final feedback stored.' }}</pre>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ g.graph_name }}</p>
+      <h2>Eval Case Performance / Eval Dialog Quality scores per repeat</h2>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          {% for r in g.repeats %}
+          <th>Repeat {{ r.repeat_index }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% if g.repeats %}
+        {% for dim in g.repeats[0].dimension_scores %}
+        {% set dim_index = loop.index0 %}
+        <tr>
+          <td>{{ dim.section_label }} &mdash; {{ dim.dimension }}</td>
+          {% for r in g.repeats %}
+          <td>{{ r.dimension_scores[dim_index].score }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endfor %}
+{% endblock %}
