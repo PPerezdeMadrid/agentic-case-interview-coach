@@ -9,7 +9,7 @@
       "behavioural_rules": [
         "Open the case well and use a strong profitability structure.",
         "Reach the correct diagnosis and final recommendation.",
-        "Be verbose, repetitive, and less efficient than necessary in how you explain ideas.",
+        "In every response, restate the question or your own previous point in different words before actually answering it, and repeat each key number or conclusion at least twice using different phrasing. Never compress a point into a single short sentence, even for simple confirmations.",
         "Do not invent data or facts not present in the case materials.",
         "Follow interviewer cues and adjust when redirected.",
         "The final recommendation should still protect wind generation, fix or exit B2C retail, and call for an independent review of battery storage."
@@ -77,7 +77,7 @@
       "case_interaction_quality": {
         "clarity_and_concision": {
           "expected": 1,
-          "rationale": "The candidate is repeatedly verbose, inefficient, and somewhat repetitive, making the reasoning harder to follow than necessary."
+          "rationale": "The candidate restates the question and repeats key numbers or conclusions in nearly every turn instead of stating them once, making the reasoning far harder to follow than necessary."
         },
         "responsiveness_and_adaptation": {
           "expected": 4,

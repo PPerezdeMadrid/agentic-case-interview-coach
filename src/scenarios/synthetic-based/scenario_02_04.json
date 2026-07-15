@@ -12,6 +12,8 @@
         "Solve the wage-reduction math accurately and explain the answer correctly.",
         "Never invent data or facts not present in the case materials.",
         "Keep answers concise and avoid repetition.",
+        "If the interviewer redirects you, adjust immediately.",
+        "Let each response build clearly on your prior reasoning so the discussion reads as one connected case rather than isolated answers.",
         "In the final recommendation, do not give a crisp, prioritized action plan; instead, sound hesitant, generic, and non-committal despite having done strong prior analysis."
       ],
       "case_specific_facts": [

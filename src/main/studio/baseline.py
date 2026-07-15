@@ -1,7 +1,6 @@
-import json
 from typing import Literal
 
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
 from typing_extensions import TypedDict
@@ -15,7 +14,7 @@ from rag.case_guide_context import (
     get_baseline_case_guide_context,
 )
 from rag.profitability_guide_context import (
-    build_profitability_retrieval_query,
+    PROFITABILITY_SOURCE_NAVIGATION_GUIDE,
     format_profitability_guide_context,
     retrieve_profitability_guide_context,
 )
@@ -25,11 +24,8 @@ from persistence import make_persist_run_node, make_trace_node, resolve_thread_i
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
-    CASE_EVAL_SYSTEM_PROMPT,
-    DIALOG_EVAL_SYSTEM_PROMPT,
-    FEEDBACK_SYSTEM_PROMPT,
 )
-from state import AgenticGraphState
+from state import AgenticGraphState, BaselineTurnOutput, ProfitabilityRagScoutingDecision
 from utils import (
     extract_case_guidance,
     extract_case_prompt,
@@ -85,20 +81,62 @@ def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
     return [line for line in transcript if line.startswith(visible_prefixes)]
 
 
+def _candidate_transcript_messages(visible_transcript: list[str]) -> list:
+    """Replay the visible transcript as real conversation turns so the candidate
+    sees its own prior answers as assistant turns instead of as text described
+    inside the system prompt.
+    """
+    messages: list = []
+    for line in visible_transcript:
+        if line.startswith("Candidate:"):
+            messages.append(AIMessage(content=line[len("Candidate:"):].strip()))
+        elif line.startswith("Interviewer reveal:"):
+            messages.append(HumanMessage(content="[revealed fact] " + line[len("Interviewer reveal:"):].strip()))
+        else:
+            messages.append(HumanMessage(content=line[len("Interviewer:"):].strip()))
+    return messages
+
+
 def get_profitability_guide_context(
     state: AgenticGraphState,
     *,
     evaluation_target: str,
     top_k: int,
-) -> tuple[list[dict], dict]:
-    query = build_profitability_retrieval_query(
-        str(state.get("case_prompt", "")),
-        state.get("transcript", []),
-        evaluation_target=evaluation_target,
-        focus_areas=state.get("focus_areas", []),
+    base_prompt: str,
+    situation: str,
+) -> tuple[list[dict], dict, list[dict]]:
+    """Let this step decide -- with its own prompt and its own (single) model --
+    whether it needs an excerpt from the profitability textbook right now, and
+    what to ask it. Mirrors node.py's eval_case_performance_node scouting, but
+    as a standalone helper since baseline's case_guide retrieval stays the
+    deliberately simple comparison arm (see get_baseline_case_guide_context).
+
+    Returns (chunks, rag_query_log_entry, scouting_usage_log).
+    """
+    scouting_messages = [
+        SystemMessage(
+            content=(
+                base_prompt
+                + "\n\n"
+                + situation
+                + "\n\nAvailable support source -- Profitability methodology textbook: "
+                + PROFITABILITY_SOURCE_NAVIGATION_GUIDE
+                + "\n\nBefore continuing, decide whether an excerpt from this textbook would help "
+                + "you right now. If yes, write one short, specific question for it. If not, leave "
+                + "profitability_query empty."
+            )
+        )
+    ]
+    payload, usage_log = invoke_json_llm(
+        judge_llm,
+        scouting_messages,
+        node=f"{evaluation_target}_profitability_scout",
+        schema=ProfitabilityRagScoutingDecision,
     )
-    if not query.strip():
-        return [], {}
+    query = str(payload.get("profitability_query", "")).strip()
+    if not query:
+        return [], {}, usage_log
+
     chunks = retrieve_profitability_guide_context(query, top_k=top_k)
     log_entry = {
         "node": evaluation_target,
@@ -107,7 +145,7 @@ def get_profitability_guide_context(
         "top_k": top_k,
         "chunk_ids": [chunk.get("chunk_id") for chunk in chunks],
     }
-    return chunks, log_entry
+    return chunks, log_entry, usage_log
 
 
 def build_initial_baseline_state(
@@ -131,8 +169,8 @@ def build_initial_baseline_state(
         "enough_evidence": False,
         "focus_areas": [],
         "case_recommendation": extract_case_recommendation(case_data),
-        "case_performance": {},
-        "quality_dialog": {},
+        "case_performance": None,
+        "quality_dialog": None,
         "data_gathered": [],
         "thread_id": DEFAULT_THREAD_ID,
         "rubric_data": bundle["rubric"],
@@ -168,86 +206,119 @@ def load_scenario_node(
     }
 
 
-def parse_baseline_output(raw_output: str) -> tuple[str, str, str, bool] | None:
-    payload = load_json_object(raw_output)
+def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> dict | None:
+    """Parse the baseline's single unified per-turn payload.
+
+    Unlike the agentic graph, baseline gets no separate judge/eval/feedback
+    turns: this same schema is used on every call, and when action is
+    "evaluate" it must also carry the full case_performance/quality_dialog/
+    feedback content in that one response. `require_evaluate` is set once the
+    turn budget is exhausted, so a model that ignores the instruction to
+    evaluate now is treated as an invalid reply and retried rather than
+    silently continuing the interview past its turn budget.
+    """
     if not payload:
         return None
 
     action = str(payload.get("action", "question")).strip().lower()
-    content = str(payload.get("content", "")).strip()
-    block_id = str(payload.get("block_id", "")).strip()
-    ready_for_evaluation = bool(payload.get("ready_for_evaluation", False))
+    reasoning = str(payload.get("reasoning", "")).strip()
 
     if action not in {"question", "reveal", "evaluate"}:
         return None
+    if require_evaluate and action != "evaluate":
+        return None
+
     if action == "evaluate":
-        return action, "", "", True
+        case_performance_raw = payload.get("case_performance")
+        quality_dialog_raw = payload.get("quality_dialog")
+        feedback = str(payload.get("feedback") or "").strip()
+        if not isinstance(case_performance_raw, dict) or not isinstance(quality_dialog_raw, dict):
+            return None
+        if not feedback:
+            return None
+        return {
+            "action": "evaluate",
+            "content": "",
+            "block_id": "",
+            "ready_for_evaluation": True,
+            "reasoning": reasoning,
+            "case_performance": normalize_eval_payload(case_performance_raw, CASE_PERFORMANCE_FIELDS),
+            "quality_dialog": normalize_eval_payload(quality_dialog_raw, QUALITY_DIALOG_FIELDS),
+            "feedback": feedback,
+        }
+
+    content = str(payload.get("content", "")).strip()
     if not content:
         return None
-    return action, content, block_id, ready_for_evaluation
+    return {
+        "action": action,
+        "content": content,
+        "block_id": str(payload.get("block_id", "")).strip(),
+        "ready_for_evaluation": bool(payload.get("ready_for_evaluation", False)),
+        "reasoning": reasoning,
+        "case_performance": None,
+        "quality_dialog": None,
+        "feedback": None,
+    }
 
 
-def _invoke_baseline_move(messages: list[SystemMessage]) -> tuple[str, str, str, bool, list[dict]]:
-    """Call the baseline interviewer with JSON-repair retries, mirroring node.py's interviewer."""
-    usage_log: list[dict] = []
-    response = interviewer_llm.invoke(messages)
-    usage_log.append(
-        extract_token_usage(response, node="baseline_interviewer", model=interviewer_llm.model_name)
+def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bool) -> tuple[dict, list[dict]]:
+    """Call the baseline's single combined model for this turn, with JSON-repair
+    retries via invoke_json_llm, mirroring node.py's interviewer/eval nodes."""
+
+    def on_exhausted(_raw_output: str) -> dict:
+        if force_evaluation:
+            return {
+                "reasoning": "",
+                "action": "evaluate",
+                "content": "",
+                "block_id": "",
+                "ready_for_evaluation": True,
+                "case_performance": {},
+                "quality_dialog": {},
+                "feedback": "Final feedback generated from case performance and dialog quality.",
+            }
+        return {
+            "reasoning": "",
+            "action": "question",
+            "content": "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
+            "block_id": "",
+            "ready_for_evaluation": False,
+        }
+
+    payload, usage_log = invoke_json_llm(
+        interviewer_llm,
+        messages,
+        node="baseline_move",
+        schema=BaselineTurnOutput,
+        accept=lambda candidate: parse_baseline_output(candidate, require_evaluate=force_evaluation) is not None,
+        on_exhausted=on_exhausted,
+        retries=MAX_BASELINE_JSON_RETRIES,
     )
-    print("Calling Baseline Interviewer Server...")
-    parsed = parse_baseline_output(response.content)
-    if parsed is not None:
-        return (*parsed, usage_log)
-
-    raw_output = str(response.content).strip()
-    for _ in range(MAX_BASELINE_JSON_RETRIES - 1):
-        repair_messages = messages + [
-            HumanMessage(
-                content=(
-                    "Your previous reply was invalid for the required schema.\n"
-                    "Return exactly one valid JSON object with keys action, content, block_id, ready_for_evaluation.\n"
-                    "Do not add markdown, code fences, analysis, or any extra text.\n\n"
-                    f"Previous invalid reply:\n{raw_output or '[empty response]'}"
-                )
-            )
-        ]
-        response = interviewer_llm.invoke(repair_messages)
-        usage_log.append(
-            extract_token_usage(response, node="baseline_interviewer_repair", model=interviewer_llm.model_name)
-        )
-        print("Calling Baseline Interviewer Server...")
-        raw_output = str(response.content).strip()
-        parsed = parse_baseline_output(raw_output)
-        if parsed is not None:
-            return (*parsed, usage_log)
-
-    return (
-        "question",
-        "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
-        "",
-        False,
-        usage_log,
-    )
+    parsed = parse_baseline_output(payload, require_evaluate=force_evaluation)
+    if parsed is None:
+        parsed = parse_baseline_output(on_exhausted(""), require_evaluate=force_evaluation)
+    return parsed, usage_log
 
 
 def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
-    case_prompt = state.get("case_prompt", "")
     candidate_profile = state.get("candidate_profile", {})
     transcript = state.get("transcript", [])
     data_gathered = normalize_string_list(state.get("data_gathered", []))
     visible_transcript = get_candidate_visible_transcript(transcript)
 
     messages = [
+        SystemMessage(content=CANDIDATE_SYSTEM_PROMPT),
         SystemMessage(
             content=(
-                CANDIDATE_SYSTEM_PROMPT
-                + "\n\nCase prompt:\n"
-                + (case_prompt or "None.")
-                + "\n\nSynthetic candidate scenario to follow:\n"
+                "Synthetic candidate scenario to follow:\n"
                 + format_candidate_persona(candidate_profile if isinstance(candidate_profile, dict) else {})
-                + "\n\nThis is the only conversation you can see:\n"
-                + ("\n".join(visible_transcript) if visible_transcript else "No previous messages.")
-                + "\n\nCurrent factual data_gathered list:\n"
+            )
+        ),
+        *_candidate_transcript_messages(visible_transcript),
+        HumanMessage(
+            content=(
+                "Current factual data_gathered list:\n"
                 + ("\n".join(data_gathered) if data_gathered else "None yet.")
                 + "\n\nUpdate data_gathered so it contains the factual case information you have learned so far."
             )
@@ -272,103 +343,8 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
     }
 
 
-def evaluate_case_performance(state: AgenticGraphState) -> dict:
-    rubric_data = state.get("rubric_data", {})
-    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
-    profitability_context, profitability_log = get_profitability_guide_context(
-        state,
-        evaluation_target="case_performance",
-        top_k=5,
-    )
-    messages = [
-        SystemMessage(
-            content=(
-                CASE_EVAL_SYSTEM_PROMPT
-                + "\n\nReturn a JSON object with these fields: "
-                + ", ".join(CASE_PERFORMANCE_FIELDS)
-                + ". Each field must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
-                + "\n\nTranscript:\n"
-                + "\n".join(state.get("transcript", []))
-                + "\n\nCase guidance:\n"
-                + str(state.get("case_guidance", "None."))
-                + "\n\nRetrieved profitability methodology context:\n"
-                + format_profitability_guide_context(profitability_context)
-                + "\n\nCase data:\n"
-                + format_full_case_data(state.get("case_data", {}))
-                + "\n\nExpected recommendation:\n"
-                + str(state.get("case_recommendation", "None."))
-                + "\n\nRubric:\n"
-                + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
-                + format_case_guide_snippets(case_guide_context)
-            )
-        ),
-    ]
-    payload, usage_log = invoke_json_llm(judge_llm, messages, node="baseline_eval_case_performance")
-    case_performance = normalize_eval_payload(payload, CASE_PERFORMANCE_FIELDS)
-    return {
-        "case_performance": case_performance,
-        "retrieved_profitability_context": [
-            str(chunk.get("content", "")).strip()
-            for chunk in profitability_context
-            if str(chunk.get("content", "")).strip()
-        ],
-        "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
-        "llm_usage": usage_log,
-    }
-
-
-def evaluate_dialog_quality(state: AgenticGraphState) -> tuple[dict, dict, dict]:
-    rubric_data = state.get("rubric_data", {})
-    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
-    messages = [
-        SystemMessage(
-            content=(
-                DIALOG_EVAL_SYSTEM_PROMPT
-                + "\n\nReturn a JSON object with these fields: "
-                + ", ".join(QUALITY_DIALOG_FIELDS)
-                + ". Each field must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
-                + "\n\nTranscript:\n"
-                + "\n".join(state.get("transcript", []))
-                + "\n\nRubric:\n"
-                + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
-                + format_case_guide_snippets(case_guide_context)
-            )
-        ),
-    ]
-    payload, usage_log = invoke_json_llm(judge_llm, messages, node="baseline_eval_dialog_quality")
-    return normalize_eval_payload(payload, QUALITY_DIALOG_FIELDS), case_guide_log, usage_log
-
-
-def generate_final_feedback(
-    transcript: list[str], case_performance: dict, quality_dialog: dict
-) -> tuple[str, dict]:
-    messages = [
-        SystemMessage(
-            content=(
-                FEEDBACK_SYSTEM_PROMPT
-                + "\n\nTranscript:\n"
-                + "\n".join(transcript)
-                + "\n\nCase performance:\n"
-                + json.dumps(case_performance, ensure_ascii=True, indent=2)
-                + "\n\nDialog quality:\n"
-                + json.dumps(quality_dialog, ensure_ascii=True, indent=2)
-            )
-        ),
-    ]
-    response = judge_llm.invoke(messages)
-    usage_entry = extract_token_usage(response, node="baseline_give_feedback", model=judge_llm.model_name)
-    latest_feedback = strip_thinking(response.content).strip()
-    return (
-        latest_feedback or "Final feedback generated from case performance and dialog quality.",
-        usage_entry,
-    )
-
-
 def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     case_prompt = state.get("case_prompt", "")
-    candidate_profile = state.get("candidate_profile", {})
     case_data = state.get("case_data", {})
     case_guidance = state.get("case_guidance", "")
     case_recommendation = state.get("case_recommendation", "")
@@ -383,102 +359,118 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
             "turn_index": 1,
             "transcript": transcript + [f"Interviewer: {opening}"],
             "enough_evidence": False,
+            "case_performance": None,
+            "quality_dialog": None,
         }
 
     turn_index = int(state.get("turn_index", 0))
-    move_usage_log: list[dict] = []
-    if turn_index >= MAX_BASELINE_TURNS:
-        enough_evidence = True
-    else:
-        case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
-        profitability_context, profitability_log = get_profitability_guide_context(
-            state,
-            evaluation_target="baseline_interviewer",
-            top_k=3,
-        )
-        messages = [
-            SystemMessage(
-                content=(
-                    BASELINE_GRAPH_SYSTEM_PROMPT
-                    + "\n\nCurrent interviewer turn: "
-                    + str(turn_index)
-                    + "\nMaximum interviewer turns before forced evaluation: "
-                    + str(MAX_BASELINE_TURNS)
-                    + "\n\nPublic transcript:\n"
-                    + ("\n".join(transcript) if transcript else "No previous messages.")
-                    + "\n\nCase prompt:\n"
-                    + (case_prompt or "None.")
-                    + "\n\nRetrieved profitability methodology context:\n"
-                    + format_profitability_guide_context(profitability_context)
-                    + "\n\nCandidate-visible case blocks:\n"
-                    + format_case_blocks(visible_blocks)
-                    + "\n\nHidden case guidance:\n"
-                    + (case_guidance or "None.")
-                    + "\n\nCase data:\n"
-                    + format_full_case_data(case_data if isinstance(case_data, dict) else {})
-                    + "\n\nExpected recommendation:\n"
-                    + (case_recommendation or "None.")
-                    + "\n\nRubric:\n"
-                    + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
-                    + "\n\nConsulting Case Interview Guide excerpts:\n"
-                    + format_case_guide_snippets(case_guide_context)
-                )
-            ),
-        ]
-        action, content, revealed_block_id, enough_evidence, move_usage_log = _invoke_baseline_move(messages)
+    is_final_turn = turn_index >= MAX_BASELINE_TURNS - 1
+    force_evaluation = turn_index >= MAX_BASELINE_TURNS
 
-        if action == "reveal" and revealed_block_id:
-            revealed_block = get_case_block_by_id(case_data, revealed_block_id)
-            if isinstance(revealed_block, dict) and revealed_block.get("visible_to_candidate") is True:
-                revealed_content = str(revealed_block.get("content", "")).strip()
-                if revealed_content:
-                    content = revealed_content
-            else:
-                action = "question"
+    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
+    situation = (
+        "Current interviewer turn: "
+        + str(turn_index)
+        + "\nMaximum interviewer turns before forced evaluation: "
+        + str(MAX_BASELINE_TURNS)
+        + "\nFinal turn before forced evaluation: "
+        + ("yes" if is_final_turn else "no")
+        + "\nTurn budget exhausted, must evaluate now: "
+        + ("yes" if force_evaluation else "no")
+        + "\n\nPublic transcript:\n"
+        + ("\n".join(transcript) if transcript else "No previous messages.")
+        + "\n\nCase prompt:\n"
+        + (case_prompt or "None.")
+        + "\n\nCandidate-visible case blocks:\n"
+        + format_case_blocks(visible_blocks)
+        + "\n\nHidden case guidance:\n"
+        + (case_guidance or "None.")
+        + "\n\nCase data:\n"
+        + format_full_case_data(case_data if isinstance(case_data, dict) else {})
+        + "\n\nExpected recommendation:\n"
+        + (case_recommendation or "None.")
+        + "\n\nRubric:\n"
+        + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
+        + "\n\nWhen action is \"evaluate\", case_performance must contain exactly these fields: "
+        + ", ".join(CASE_PERFORMANCE_FIELDS)
+        + ". quality_dialog must contain exactly these fields: "
+        + ", ".join(QUALITY_DIALOG_FIELDS)
+        + ". Each field in both objects must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
+    )
+    profitability_context, profitability_log, profitability_rag_usage = get_profitability_guide_context(
+        state,
+        evaluation_target="baseline",
+        top_k=3,
+        base_prompt=BASELINE_GRAPH_SYSTEM_PROMPT,
+        situation=situation,
+    )
+    messages = [
+        SystemMessage(
+            content=(
+                BASELINE_GRAPH_SYSTEM_PROMPT
+                + "\n\n"
+                + situation
+                + "\n\nRetrieved profitability methodology context:\n"
+                + format_profitability_guide_context(profitability_context)
+                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + format_case_guide_snippets(case_guide_context)
+            )
+        ),
+    ]
 
-        if not enough_evidence:
-            transcript_label = "Interviewer reveal" if action == "reveal" else "Interviewer"
-            return {
-                "turn_index": turn_index + 1,
-                "transcript": transcript + [f"{transcript_label}: {content}"],
-                "enough_evidence": False,
-                "retrieved_profitability_context": [
-                    str(chunk.get("content", "")).strip()
-                    for chunk in profitability_context
-                    if str(chunk.get("content", "")).strip()
-                ],
-                "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
-                "llm_usage": move_usage_log,
-            }
+    move, move_usage_log = _invoke_baseline_move(messages, force_evaluation=force_evaluation)
+    action = move["action"]
+    content = move["content"]
+    revealed_block_id = move["block_id"]
+    ready_for_evaluation = move["ready_for_evaluation"]
+    reasoning = move["reasoning"]
 
-    final_state: AgenticGraphState = {
-        **state,
-        "turn_index": turn_index,
-        "transcript": transcript,
-        "enough_evidence": True,
-    }
-    case_performance_payload = evaluate_case_performance(final_state)
-    case_performance = case_performance_payload["case_performance"]
-    quality_dialog, dialog_guide_log, dialog_usage_log = evaluate_dialog_quality(final_state)
-    latest_feedback, feedback_usage_entry = generate_final_feedback(transcript, case_performance, quality_dialog)
+    if action == "reveal" and revealed_block_id:
+        revealed_block = get_case_block_by_id(case_data, revealed_block_id)
+        if isinstance(revealed_block, dict) and revealed_block.get("visible_to_candidate") is True:
+            revealed_content = str(revealed_block.get("content", "")).strip()
+            if revealed_content:
+                content = revealed_content
+        else:
+            action = "question"
+
+    if not ready_for_evaluation:
+        transcript_label = "Interviewer reveal" if action == "reveal" else "Interviewer"
+        return {
+            "turn_index": turn_index + 1,
+            "transcript": transcript + [f"{transcript_label}: {content}"],
+            "enough_evidence": False,
+            "interviewer_reasoning": reasoning,
+            "case_performance": None,
+            "quality_dialog": None,
+            "retrieved_profitability_context": [
+                str(chunk.get("content", "")).strip()
+                for chunk in profitability_context
+                if str(chunk.get("content", "")).strip()
+            ],
+            "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
+            "llm_usage": profitability_rag_usage + move_usage_log,
+        }
+
     return {
         "turn_index": turn_index,
         "transcript": transcript
         + [
             "Eval Case Performance: structured case-performance assessment completed.",
             "Eval Dialog Quality: structured interaction-quality assessment completed.",
-            f"Give Feedback: {latest_feedback}",
+            f"Give Feedback: {move['feedback']}",
         ],
         "enough_evidence": True,
-        "case_performance": case_performance,
-        "quality_dialog": quality_dialog,
-        "retrieved_profitability_context": case_performance_payload["retrieved_profitability_context"],
-        "rag_query_log": case_performance_payload["rag_query_log"]
-        + ([dialog_guide_log] if dialog_guide_log else []),
-        "llm_usage": move_usage_log
-        + case_performance_payload["llm_usage"]
-        + dialog_usage_log
-        + [feedback_usage_entry],
+        "interviewer_reasoning": reasoning,
+        "case_performance": move["case_performance"],
+        "quality_dialog": move["quality_dialog"],
+        "retrieved_profitability_context": [
+            str(chunk.get("content", "")).strip()
+            for chunk in profitability_context
+            if str(chunk.get("content", "")).strip()
+        ],
+        "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
+        "llm_usage": profitability_rag_usage + move_usage_log,
     }
 
 

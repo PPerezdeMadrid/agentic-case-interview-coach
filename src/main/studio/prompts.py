@@ -21,22 +21,23 @@ def _compose_prompt(*filenames: str) -> str:
     return "\n\n".join(_load_prompt(filename) for filename in filenames)
 
 
-INTERVIEWER_SYSTEM_PROMPT = _compose_prompt(
-    "interviewer_system_prompt.md",
-    "interviewer_question_style_few_shots.md",
-)
-BASELINE_SYSTEM_PROMPT = _load_prompt("baseline_system_prompt.md")
-BASELINE_FINAL_FEEDBACK_PROMPT = _load_prompt("baseline_final_feedback_prompt.md")
-BASELINE_INFORMATION_PROMPT = _load_prompt("baseline_information_prompt.md")
 CANDIDATE_SYSTEM_PROMPT = _load_prompt("candidate_system_prompt.md")
-DEFAULT_QUESTION_FALLBACK = _load_prompt("default_question_fallback.md")
 INTERVIEWER_GRAPH_SYSTEM_PROMPT = _compose_prompt(
     "interviewer_graph_system_prompt.md",
     "interviewer_question_style_few_shots.md",
 )
-BASELINE_GRAPH_SYSTEM_PROMPT = _load_prompt("baseline_graph_system_prompt.md")
 JUDGE_GRAPH_SYSTEM_PROMPT = _load_prompt("judge_graph_system_prompt.md")
 CASE_EVAL_SYSTEM_PROMPT = _load_prompt("case_eval_system_prompt.md")
 DIALOG_EVAL_SYSTEM_PROMPT = _load_prompt("dialog_eval_system_prompt.md")
 FEEDBACK_SYSTEM_PROMPT = _load_prompt("feedback_system_prompt.md")
 CASE_GUIDE_NAVIGATION_PROMPT = _load_prompt("case_guide_navigation_prompt.md")
+# Baseline is a single node that combines interviewer, judge, and grader, so its
+# system prompt is composed from the same rubric/grading personas the agentic
+# graph's eval_case_performance/eval_dialog_quality/give_feedback nodes use --
+# same grading criteria, delivered by one model in one call instead of three.
+BASELINE_GRAPH_SYSTEM_PROMPT = _compose_prompt(
+    "baseline_graph_system_prompt.md",
+    "case_eval_system_prompt.md",
+    "dialog_eval_system_prompt.md",
+    "feedback_system_prompt.md",
+)

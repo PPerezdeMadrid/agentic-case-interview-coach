@@ -12,7 +12,6 @@ from dashboard_store import (
     NOT_TESTED,
     ensure_dashboard_db,
     get_human_evaluation,
-    list_trace_runs,
     list_runs,
     load_run,
     load_run_traces,
@@ -24,6 +23,8 @@ from experiment_store import (
     load_batch,
     load_scenario_detail,
 )
+from rag_ablation import list_ablation_batches, load_ablation
+from retrieval_eval import DEFAULT_TOP_K, evaluate_retrieval
 
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -121,13 +122,6 @@ def compare_runs():
     )
 
 
-@app.get("/traces")
-def trace_index():
-    ensure_dashboard_db()
-    trace_runs = list_trace_runs(limit=100)
-    return render_template("trace_index.html", trace_runs=trace_runs)
-
-
 @app.get("/experiment")
 def experiment_index():
     batches = list_batches()
@@ -158,6 +152,49 @@ def experiment_scenario(dir_name: str, slug: str):
         abort(404, f"Scenario '{slug}' not found in batch '{dir_name}'.")
 
     return render_template("experiment_scenario.html", dir_name=dir_name, scenario=scenario)
+
+
+@app.get("/rag-evaluation")
+def rag_evaluation_index():
+    try:
+        top_k = int(str(request.args.get("k", DEFAULT_TOP_K)).strip())
+    except ValueError:
+        top_k = DEFAULT_TOP_K
+    retrieval_refresh = request.args.get("refresh") == "1"
+
+    retrieval_result = None
+    retrieval_error = None
+    try:
+        retrieval_result = evaluate_retrieval(top_k=top_k, refresh=retrieval_refresh)
+    except FileNotFoundError as exc:
+        retrieval_error = str(exc)
+
+    ablation_batches = list_ablation_batches()
+    ablation_batch = None
+    ablation_result = None
+    ablation_error = None
+    if ablation_batches:
+        requested_batch = str(request.args.get("batch", "")).strip()
+        ablation_batch = requested_batch if requested_batch in ablation_batches else ablation_batches[0]
+        ablation_refresh = request.args.get("ablation_refresh") == "1"
+        try:
+            ablation_result = load_ablation(ablation_batch, refresh=ablation_refresh)
+        except FileNotFoundError as exc:
+            ablation_error = str(exc)
+
+    if _wants_json():
+        return jsonify({"retrieval": retrieval_result, "ablation": ablation_result})
+
+    return render_template(
+        "rag_evaluation.html",
+        top_k=top_k,
+        retrieval_result=retrieval_result,
+        retrieval_error=retrieval_error,
+        ablation_batches=ablation_batches,
+        ablation_batch=ablation_batch,
+        ablation_result=ablation_result,
+        ablation_error=ablation_error,
+    )
 
 
 @app.get("/runs/<run_id>")

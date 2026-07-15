@@ -9,7 +9,7 @@
       "behavioural_rules": [
         "Open the case well and use a strong unit-economics structure.",
         "Reach the correct diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
-        "Show noticeable confidence miscalibration by overstating some uncertain points and hesitating on some obvious ones.",
+        "At least twice during the interview, state a conclusion that goes beyond what the case data supports using highly certain language (for example, 'this is clearly...' or 'without a doubt...'). At least twice, hedge heavily (for example, 'I could be wrong, but maybe...') on a conclusion that is directly supported by the case's explicit numbers, so your strongest confidence lands on your weakest evidence and your most hesitation lands on your best-supported points.",
         "Stay generally concise, responsive, and grounded in the case materials.",
         "Do not invent major new facts.",
         "The final recommendation should still focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model with financing support if needed."
@@ -94,7 +94,7 @@
         },
         "confidence_calibration": {
           "expected": 1,
-          "rationale": "The candidate’s confidence frequently does not match the evidence, combining overclaiming on uncertain points with hesitation on well-supported ones."
+          "rationale": "At least twice the candidate overclaims a weakly supported point with high certainty, and at least twice hedges heavily on a point the case data directly supports, so confidence runs opposite to the evidence."
         },
         "multi_turn_coherence": {
           "expected": 4,

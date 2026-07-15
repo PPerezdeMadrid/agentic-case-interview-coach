@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,13 @@ BATCH_RUNS_DIR = MAIN_DIR / "artifacts" / "batch_runs"
 SECTION_LABELS = {
     "case_performance": "Case Performance (Eval Case Performance)",
     "quality_dialog": "Dialog Quality (Eval Dialog Quality)",
+}
+
+# Maps SECTION_LABELS keys (as produced by the judge / stored in combined_results.jsonl)
+# to the section keys used inside a scenario JSON's candidate_profile.expected_scores.
+EXPECTED_SCORE_SECTION_MAP = {
+    "case_performance": "rubric",
+    "quality_dialog": "case_interaction_quality",
 }
 
 TRANSCRIPT_PREFIXES = {
@@ -33,7 +41,7 @@ REPETITION_KEYWORDS = ("repeat", "repetit", "same question", "same phrase", "loo
 
 
 def _mean(values: list[float]) -> float | None:
-    values = [v for v in values if v is not None]
+    values = [v for v in values if isinstance(v, (int, float)) and not isinstance(v, bool)]
     if not values:
         return None
     return round(sum(values) / len(values), 2)
@@ -272,6 +280,40 @@ def _extract_case_prompt(transcript: list[str]) -> str:
     return ""
 
 
+@lru_cache(maxsize=None)
+def _load_scenario_json(scenario_ref: str) -> dict[str, Any]:
+    if not scenario_ref:
+        return {}
+    path = Path(scenario_ref)
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def load_reference_scores(scenario_ref: str) -> dict[str, dict[str, Any]]:
+    """Load the scenario's own (author-defined) expected scores, keyed like SECTION_LABELS."""
+    scenario = _load_scenario_json(scenario_ref)
+    candidate_profile = scenario.get("candidate_profile", {}) if isinstance(scenario, dict) else {}
+    expected_scores = candidate_profile.get("expected_scores", {}) if isinstance(candidate_profile, dict) else {}
+
+    sections: dict[str, dict[str, Any]] = {}
+    for section_key, expected_section_key in EXPECTED_SCORE_SECTION_MAP.items():
+        raw_section = expected_scores.get(expected_section_key, {}) if isinstance(expected_scores, dict) else {}
+        section: dict[str, Any] = {}
+        if isinstance(raw_section, dict):
+            for dimension, details in raw_section.items():
+                if isinstance(details, dict):
+                    section[dimension] = {
+                        "score": details.get("expected", ""),
+                        "rationale": str(details.get("rationale", "")).strip(),
+                    }
+        sections[section_key] = section
+    return sections
+
+
 def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, Any]:
     matched = [record for record in records if Path(record.get("scenario_ref") or "").stem == slug]
     if not matched:
@@ -280,6 +322,8 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
     by_graph: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in matched:
         by_graph[record.get("graph_name", "unknown")].append(record)
+
+    reference_scores = load_reference_scores(matched[0].get("scenario_ref", ""))
 
     case_prompt = ""
     graph_sections = []
@@ -325,6 +369,15 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
                 "repeats": repeats,
                 "identical_candidate_across_repeats": len(set(candidate_texts)) == 1 if candidate_texts else False,
                 "identical_feedback_across_repeats": len(set(feedback_texts)) == 1 if feedback_texts else False,
+                "reference_scores": [
+                    {
+                        "section_label": label,
+                        "dimension": dimension,
+                        "score": reference_scores.get(section_key, {}).get(dimension, {}).get("score", ""),
+                        "rationale": reference_scores.get(section_key, {}).get(dimension, {}).get("rationale", ""),
+                    }
+                    for section_key, label, dimension, _score, _rationale in iter_dimension_scores(rows[0])
+                ],
             }
         )
 

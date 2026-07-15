@@ -7,10 +7,7 @@ from llm_server import openai_llm_server
 from persistence import make_persist_run_node, make_trace_node
 from rag import case_guide_context as case_guide_context_module
 from rag.case_guide_context import retrieve_case_guide_context
-from rag.profitability_guide_context import (
-    build_profitability_retrieval_query,
-    retrieve_profitability_guide_context,
-)
+from rag.profitability_guide_context import retrieve_profitability_guide_context
 from state import AgenticGraphState
 from utils import (
     extract_case_guidance,
@@ -85,18 +82,6 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
 def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
     _sync_node_dependencies()
     return node_module.give_feedback_node(state)
-
-
-def get_case_guide_context(
-    state: AgenticGraphState, node_name: str, *, top_k: int = 4
-) -> tuple[list[str], dict]:
-    _sync_node_dependencies()
-    return node_module.get_case_guide_context(state, node_name, top_k=top_k)
-
-
-def resolve_case_guide_query(state: AgenticGraphState) -> str:
-    _sync_node_dependencies()
-    return node_module.resolve_case_guide_query(state)
 
 
 def route_after_interviewer(state: AgenticGraphState):

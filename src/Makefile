@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -45,6 +45,10 @@ help:
 	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios [N=<repeat>]"
 	@printf "%s\n" "  make experiment CASE=<case_id> N=<repeat> [GRAPH=agentic|baseline|both] [LABEL=...]"
 	@printf "%s\n" "                    Run every scenario of a case N times each"
+	@printf "%s\n" "  make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]"
+	@printf "%s\n" "                    Replay a batch's stored transcripts through the judge eval nodes"
+	@printf "%s\n" "                    with RAG disabled, and compare eval_case/eval_dialog scores against"
+	@printf "%s\n" "                    that batch's original (with-RAG) scores for the same transcript"
 	@printf "%s\n" ""
 	@printf "%s\n" "make setup-hpc persists RUNNER=hpc for later commands in $(RUNNER_STATE_FILE)"
 
@@ -107,3 +111,15 @@ experiment:
 		exit 1; \
 	fi
 	$(PY) run_all_scenarios.py --graph $(GRAPH) --case $(CASE) --repeat $(N) --label "$(LABEL)"
+
+# --- RAG ablation eval: replay a batch's transcripts through the judge with RAG disabled ---
+# Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]
+BATCH ?=
+LIMIT ?=
+
+rag-ablation:
+	@if [ -z "$(BATCH)" ]; then \
+		printf "%s\n" "Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]"; \
+		exit 1; \
+	fi
+	$(PY) rag_ablation_eval.py --batch $(BATCH) $(if $(LIMIT),--limit $(LIMIT),)

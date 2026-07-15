@@ -9,8 +9,8 @@
       "behavioural_rules": [
         "Open the case well and use a strong unit-economics structure.",
         "Reach the correct high-level diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
-        "Frequently add unsupported assumptions, invented specifics, or external facts as if they were part of the case.",
-        "Do not explicitly flag many of these additions as assumptions.",
+        "In at least half of your substantive responses, state one specific number, statistic, industry benchmark, or external detail that does not appear anywhere in the case-specific facts, and present it with the same confidence as a fact drawn from the case.",
+        "Never label these additions as assumptions, estimates, or guesses, and introduce them even when the case-specific facts already give you enough to answer.",
         "Stay concise and generally responsive to interviewer prompts.",
         "The final recommendation should still broadly focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model."
       ],
@@ -90,7 +90,7 @@
         },
         "groundedness": {
           "expected": 1,
-          "rationale": "The candidate repeatedly introduces invented facts, unsupported assumptions, or external context without clear justification."
+          "rationale": "In roughly half of the candidate's substantive turns, an invented number, benchmark, or external detail is stated as established fact rather than flagged as an assumption."
         },
         "confidence_calibration": {
           "expected": 4,

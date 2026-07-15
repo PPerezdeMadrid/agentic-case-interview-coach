@@ -37,7 +37,7 @@ lmstudio_llm_server = ChatOpenAI(
     model=os.getenv("LMSTUDIO_MODEL", "deepseek-r1-distill-llama-8b"),
     base_url=_normalize_base_url(os.getenv("LMSTUDIO_BASE_URL", "http://localhost:8081")),
     api_key=os.getenv("LMSTUDIO_API_KEY", "lm-studio"),
-    temperature=float(os.getenv("LMSTUDIO_TEMPERATURE", "0.14")),
+    temperature=float(os.getenv("LMSTUDIO_TEMPERATURE", "0.5")),
     disable_streaming=True,
 )
 
@@ -58,7 +58,7 @@ interviewer_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen-2.5-7b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=_openrouter_temperature,
+    temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.7),
 )
 
 # OpenRouter Mistral Candidate model
@@ -66,7 +66,7 @@ candidate_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-nemo"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=_openrouter_temperature,
+    temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.7),
 )
 
 # OpenRouter Llama 70B Judge model
@@ -74,7 +74,7 @@ judge_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_JUDGE", "meta-llama/llama-3.1-70b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=_openrouter_temperature,
+    temperature=os.getenv("JUDGE_TEMPERATURE", 0.3),
 )
 
 feedback_llm_server = lmstudio_llm_server

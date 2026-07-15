@@ -10,7 +10,8 @@
         "Open the case well and use a strong initial unit-economics structure.",
         "Give answers that sound locally sensible and stay broadly within the case.",
         "Answer the creative prompt well enough at the turn level and give the right broad recommendation.",
-        "Allow the reasoning across turns to become fragmented, with weak links between earlier and later points.",
+        "Treat every response as self-contained: never explicitly reference, build on, or connect back to conclusions or numbers you stated in an earlier turn, even when a natural connection exists, and never restate a running synthesis of the case so far.",
+        "Do this without becoming obviously rambling or repetitive within a single turn; the flaw is the lack of connection across turns, not verbosity within one turn.",
         "Stay generally responsive and grounded in the case materials.",
         "The final recommendation should still broadly focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model."
       ],
@@ -98,7 +99,7 @@
         },
         "multi_turn_coherence": {
           "expected": 1,
-          "rationale": "The candidate’s answers do not build consistently on earlier reasoning, so the interview feels fragmented rather than logically cumulative."
+          "rationale": "The candidate never explicitly connects a turn's reasoning back to conclusions or numbers from earlier turns, so the interview feels like a series of self-contained answers rather than one cumulative case."
         }
       }
     }

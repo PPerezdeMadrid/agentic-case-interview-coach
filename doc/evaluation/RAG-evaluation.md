@@ -27,21 +27,27 @@ A golden evaluation dataset must be created with the filename: **`retrieve_golde
 - `source_chunk_ids`: Comma-separated list of chunk IDs that contain the relevant information (enables precise evaluation of what was retrieved)
 
 
-## 2. Generation Evaluation
+## 2. RAG Ablation Evaluation
 
-**Objective:** Assess the quality, accuracy, and completeness of generated responses produced by the LLM component.
+**Objective:** Measure how much RAG actually changes the judge's grading, rather than scoring generation quality against a golden set in isolation.
 
-### Metrics
+Instead of grading a standalone "query -> expected answer" pair (there is no such ground truth for interview transcripts), this evaluation takes one experiment batch (produced by `make experiment` / `make run-all`, see `doc/evaluation/Dialog-evaluation.md`) and replays its stored transcripts through the same judge nodes that already scored them -- `eval_case_performance` and `eval_dialog_quality` -- with every RAG retrieval call disabled. The scouting call that decides *whether* to consult a source still runs; only the content it would retrieve is removed, mirroring "the source is unavailable" rather than "the model never knew a source existed."
 
-- **Semantic Similarity**: Measures the semantic alignment between the expected answer and the LLM-generated answer using cosine similarity. Evaluates whether the response conveys the same meaning regardless of word choice.
+### What's compared
 
-- **Factual Correctness**: Determines whether the generated answer matches the ground truth information. Evaluated using LLM-as-a-Judge methodology to assess factual accuracy.
+For each dimension in `case_performance` (Eval Case Performance) and `quality_dialog` (Eval Dialog Quality):
 
-- **Answer Completeness**: Assesses whether the generated answer covers all key points and required information from the expected answer. Also evaluated using LLM-as-a-Judge methodology to ensure comprehensive coverage.
+- **With-RAG score**: the score already stored in the batch from the original run.
+- **Without-RAG score**: the score recomputed on the exact same transcript with retrieval disabled.
+- **Delta**: without-RAG score minus with-RAG score, aggregated as mean delta (keeps direction) and mean |delta| (ignores direction) per dimension, plus how many comparable records actually landed on a different score.
 
-### Evaluation Method
+### Running it
 
-Generation metrics leverage **LLM-as-a-Judge** evaluation, where a language model serves as an evaluator to assess response quality against predefined criteria, enabling scalable and consistent evaluation across large datasets.
+```
+make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]
+```
+
+This writes `rag_ablation_results.json` / `.csv` into that batch's own directory under `src/main/artifacts/batch_runs/<batch_dir_name>/`. The workbench's **RAG Evaluation** page (RAG Ablation section) reads that cached file (it does not recompute live, since each ablated record costs a real judge call) -- rerun the command and reload the page to refresh.
 
 
 ## 3. Aggregation & Visualization
@@ -103,8 +109,8 @@ These categories are derived from the Principles of Managerial Accounting:
 
 ## Implementation Workflow
 
-1. **Create Golden Datasets**: Prepare `retrieve_golden_set.csv` and generation evaluation datasets with all required columns and categories
+1. **Create Golden Datasets**: Prepare the retrieval golden-set CSVs (`generation_golden_set_case_guide.csv`, `generation_golden_set_profitability.csv`) with all required columns and categories
 2. **Configure Metrics**: Set up evaluation pipelines for each dimension following the specifications above
-3. **Run Evaluations**: Execute retrieval, generation, and aggregation evaluations
-4. **Visualize Results**: Display metrics in the workbench dashboard segmented by category and source
+3. **Run Evaluations**: Retrieval eval recomputes live from the workbench page; for RAG ablation, run `make rag-ablation BATCH=<batch_dir_name>` against an existing experiment batch
+4. **Visualize Results**: Display metrics on the workbench's single RAG Evaluation page (retrieval quality segmented by category/source; RAG ablation segmented by dimension)
 5. **Iterate & Improve**: Use insights from evaluation results to refine the RAG system

@@ -257,9 +257,9 @@ The Flask app in `src/main/web/app.py` provides a lightweight workbench over the
 
 Main views:
 
-- `/`: run list
+- `/`: run list (also surfaces per-run trace counts and a link into `/compare`)
 - `/compare`: side-by-side run comparison
-- `/traces`: trace run index
+- `/rag-evaluation`: retrieval quality metrics and RAG ablation results, in one page
 - `/runs/<run_id>`: final run detail
 - `/runs/<run_id>/trace`: step-by-step trace detail
 

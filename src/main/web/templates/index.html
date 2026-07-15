@@ -44,7 +44,13 @@
           <td>{{ run.created_at }}</td>
           <td>{{ 'yes' if run.has_human_evaluation else 'no' }}</td>
           <td>{{ run.metrics.model_vs_human_mae if run.metrics.model_vs_human_mae is not none else '–' }}</td>
-          <td><a href="{{ url_for('get_run_trace', run_id=run.run_id) }}">Open trace</a></td>
+          <td>
+            {% if run.has_traces %}
+            <a href="{{ url_for('get_run_trace', run_id=run.run_id) }}">Open trace ({{ run.trace_count }})</a>
+            {% else %}
+            <span class="helper">No traces</span>
+            {% endif %}
+          </td>
           <td><a href="{{ url_for('compare_runs', run_a=run.run_id) }}">Use as A</a></td>
         </tr>
         {% else %}

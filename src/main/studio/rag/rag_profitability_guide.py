@@ -15,7 +15,7 @@ MAIN_DIR = Path(__file__).resolve().parents[2]
 SRC_ROOT = Path(__file__).resolve().parents[3]
 PROFITABILITY_GUIDE_PDF_PATH = SRC_ROOT / "database" / "Principles-of-Managerial-Accounting-profitability.pdf"
 VECTORSTORE_DIR = MAIN_DIR / "database" / "vectorstore" / "profitability_guide"
-RAG_SOURCE_METADATA_PATH = SRC_ROOT / "database" / "rag_sources" / "profitability_source_navigation.json"
+RAG_SOURCE_METADATA_PATH = SRC_ROOT / "database" / "profitability_source_navigation.json"
 
 COLLECTION_NAME = "profitability_guide"
 EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
@@ -144,42 +144,6 @@ def format_profitability_guide_context(chunks: list[dict[str, Any]]) -> str:
         page_label = f"p.{int(page) + 1}" if isinstance(page, int) else "p.?"
         lines.append(f"- [{chunk.get('source', 'profitability guide')} {page_label}] {chunk.get('content', '')}")
     return "\n".join(lines)
-
-
-def build_profitability_retrieval_query(
-    case_prompt: str,
-    transcript: list[str],
-    *,
-    evaluation_target: str = "",
-    focus_areas: list[str] | None = None,
-) -> str:
-    relevant_lines = [line.strip() for line in transcript[-8:] if isinstance(line, str) and line.strip()]
-    recent_transcript = "\n".join(relevant_lines)
-    candidate_final_recommendation = ""
-    for line in reversed(transcript):
-        if isinstance(line, str) and line.startswith("Candidate:"):
-            candidate_final_recommendation = line.strip()
-            break
-
-    sections = [
-        "Consulting profitability case methodology grounded in managerial accounting.",
-        f"Evaluation target: {evaluation_target.strip()}" if evaluation_target.strip() else "",
-        f"Case prompt: {case_prompt.strip()}" if case_prompt.strip() else "",
-        f"Recent transcript:\n{recent_transcript}" if recent_transcript else "",
-        f"Latest candidate recommendation: {candidate_final_recommendation}" if candidate_final_recommendation else "",
-        (
-            "Judge focus areas or coaching targets: " + "; ".join(focus_areas or [])
-            if focus_areas
-            else ""
-        ),
-        "Source coverage: " + PROFITABILITY_SOURCE_NAVIGATION_GUIDE,
-        (
-            "Write the retrieval intent for this exact situation using the source coverage above. "
-            "Retrieve only the parts of the textbook that are most useful for the current case, reasoning step, "
-            "or evaluation need."
-        ),
-    ]
-    return "\n".join(section for section in sections if section)
 
 
 if __name__ == "__main__":

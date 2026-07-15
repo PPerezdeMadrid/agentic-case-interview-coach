@@ -564,52 +564,6 @@ def _build_run_payload(run_row: sqlite3.Row) -> dict[str, Any]:
     }
 
 
-def list_trace_runs(limit: int = 100) -> list[dict[str, Any]]:
-    ensure_dashboard_db()
-
-    with get_db_connection() as connection:
-        if not _table_exists(connection, "agent_state_traces"):
-            return []
-
-        rows = connection.execute(
-            """
-            SELECT
-                runs.run_id,
-                runs.graph_name,
-                runs.scenario_ref,
-                runs.created_at,
-                COUNT(agent_state_traces.trace_id) AS trace_count,
-                MAX(agent_state_traces.step_index) AS max_step_index,
-                MAX(agent_state_traces.created_at) AS last_trace_at
-            FROM runs
-            LEFT JOIN agent_state_traces
-                ON runs.run_id = agent_state_traces.run_id
-            GROUP BY
-                runs.run_id,
-                runs.graph_name,
-                runs.scenario_ref,
-                runs.created_at
-            ORDER BY runs.created_at DESC
-            LIMIT ?
-            """,
-            (limit,),
-        ).fetchall()
-
-    return [
-        {
-            "run_id": row["run_id"],
-            "graph_name": row["graph_name"],
-            "scenario_ref": row["scenario_ref"] or "",
-            "created_at": row["created_at"],
-            "trace_count": int(row["trace_count"] or 0),
-            "max_step_index": int(row["max_step_index"] or 0),
-            "last_trace_at": row["last_trace_at"] or "",
-            "has_traces": bool(row["trace_count"]),
-        }
-        for row in rows
-    ]
-
-
 def load_run_traces(run_id: str) -> dict[str, Any]:
     run_payload = load_run(run_id)
 
@@ -739,9 +693,35 @@ def list_runs(limit: int = 100) -> list[dict[str, Any]]:
             (limit,),
         ).fetchall()
 
+        trace_counts: dict[str, dict[str, Any]] = {}
+        if _table_exists(connection, "agent_state_traces"):
+            trace_rows = connection.execute(
+                """
+                SELECT
+                    run_id,
+                    COUNT(trace_id) AS trace_count,
+                    MAX(step_index) AS max_step_index,
+                    MAX(created_at) AS last_trace_at
+                FROM agent_state_traces
+                GROUP BY run_id
+                """
+            ).fetchall()
+            trace_counts = {
+                row["run_id"]: {
+                    "trace_count": int(row["trace_count"] or 0),
+                    "max_step_index": int(row["max_step_index"] or 0),
+                    "last_trace_at": row["last_trace_at"] or "",
+                }
+                for row in trace_rows
+            }
+
     items = []
     for row in rows:
         payload = _build_run_payload(row)
+        trace_info = trace_counts.get(
+            payload["run_id"],
+            {"trace_count": 0, "max_step_index": 0, "last_trace_at": ""},
+        )
         items.append(
             {
                 "run_id": payload["run_id"],
@@ -751,6 +731,10 @@ def list_runs(limit: int = 100) -> list[dict[str, Any]]:
                 "case_prompt": payload["case_prompt"],
                 "metrics": payload["metrics"],
                 "has_human_evaluation": payload["human_evaluation"] is not None,
+                "trace_count": trace_info["trace_count"],
+                "max_step_index": trace_info["max_step_index"],
+                "last_trace_at": trace_info["last_trace_at"],
+                "has_traces": trace_info["trace_count"] > 0,
             }
         )
     return items

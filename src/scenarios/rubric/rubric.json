@@ -98,6 +98,61 @@
         "4": "Strong communicator overall, but could improve executive presence, audience awareness, or composure under challenge.",
         "5": "Provides concise, well-spoken responses, demonstrates confidence, works through difficulty positively, and would be trusted to be clear and complete."
       }
+    },
+    "clarity_and_concision": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate states conclusions, numbers, and next steps once and moves the case forward, rather than repeating them across turns.",
+      "criteria": {
+        "1": "Restates the question or repeats key numbers, conclusions, or the same idea in nearly every turn instead of stating them once.",
+        "2": "Repeats a key number or conclusion in about half of turns, or answers run long with restated context before the new point.",
+        "3": "Mostly states points once, but repeats a key number or conclusion at least once when it was not asked for.",
+        "4": "States each conclusion, number, and next step once and moves the case forward, with at most one minor repetition across the whole transcript.",
+        "5": "Every turn adds new content; no number, conclusion, or restated question is repeated across the transcript."
+      }
+    },
+    "responsiveness_and_adaptation": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate answers the question actually asked, incorporates new information, and adjusts direction when redirected.",
+      "criteria": {
+        "1": "Answers a different question than the one asked, ignores new information provided by the interviewer, or continues the prior line of reasoning after being redirected.",
+        "2": "Eventually addresses the prompt but needs the interviewer to repeat or clarify it, or is slow to incorporate new data.",
+        "3": "Responds to prompts and incorporates new information, but the adjustment after a redirection takes more than one turn.",
+        "4": "Responds directly to each prompt and incorporates new information within the same turn it is given, with a minor lag after redirection.",
+        "5": "Responds directly to every prompt, incorporates new information as soon as it is given, and adjusts the line of analysis within the same turn whenever redirected."
+      }
+    },
+    "groundedness": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate's claims are tied to facts, numbers, or data actually provided in the case rather than invented.",
+      "criteria": {
+        "1": "States facts, numbers, or company details that were not provided in the case and treats them as given.",
+        "2": "Mostly uses case facts but introduces at least one unsupported assumption as though it were confirmed information.",
+        "3": "Uses case facts and flags assumptions as assumptions, but occasionally blurs the line between given data and inference.",
+        "4": "Ties nearly every claim to a fact or number from the case and clearly labels assumptions as assumptions.",
+        "5": "Every claim is traceable to a fact, number, or data point given in the case, and every assumption is explicitly flagged as an assumption before being used."
+      }
+    },
+    "confidence_calibration": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate's expressed confidence in a conclusion matches the strength of the supporting evidence.",
+      "criteria": {
+        "1": "States conclusions as certain despite thin or contradictory evidence, or hedges heavily on conclusions that the case data clearly supports.",
+        "2": "Confidence matches evidence in some turns but overclaims or underclaims in others without correction.",
+        "3": "Generally matches confidence to evidence, but at least one conclusion is delivered with more certainty than the data supports.",
+        "4": "Matches confidence to evidence in nearly every turn and self-corrects the rare instance where it does not.",
+        "5": "Every conclusion is delivered with a level of confidence that matches the strength of the supporting evidence, with no overclaiming or unnecessary hedging."
+      }
+    },
+    "multi_turn_coherence": {
+      "applies_to": ["atomic_response", "conversation"],
+      "description": "Assesses whether the candidate's reasoning across turns builds on itself into a single connected thread rather than a series of disconnected answers.",
+      "criteria": {
+        "1": "Later turns contradict or ignore earlier conclusions, or each turn reads as unrelated to the ones before it.",
+        "2": "Some turns connect to earlier reasoning, but the thread is broken at least twice by contradictions or unexplained direction changes.",
+        "3": "Reasoning mostly builds turn over turn, but the connection to an earlier point is missing or unclear at least once.",
+        "4": "Reasoning builds turn over turn with at most one unclear transition across the transcript.",
+        "5": "Every turn explicitly builds on or references the relevant prior conclusion, forming one connected line of reasoning from opening to recommendation."
+      }
     }
   }
 }

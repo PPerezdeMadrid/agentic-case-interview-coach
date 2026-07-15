@@ -465,12 +465,13 @@ class WorkbenchAppTests(unittest.TestCase):
         self.assertEqual(payload["run_id"], "run_001")
         self.assertIsNone(payload["human_evaluation"])
 
-    def test_trace_index_page_lists_runs(self) -> None:
-        response = self.client.get("/traces")
+    def test_runs_page_includes_trace_summary(self) -> None:
+        response = self.client.get("/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Trace Explorer", response.get_data(as_text=True))
-        self.assertIn("run_001", response.get_data(as_text=True))
+        body = response.get_data(as_text=True)
+        self.assertIn("run_001", body)
+        self.assertIn("Open trace (2)", body)
 
     def test_get_run_trace_json_returns_trace_payload(self) -> None:
         response = self.client.get("/runs/run_001/trace?format=json")

@@ -1,7 +1,9 @@
 import json
 import re
+from typing import Callable
 
 from langchain_core.messages import HumanMessage
+from pydantic import BaseModel
 
 from adapter import (
     get_case_blocks_by_type,
@@ -122,10 +124,19 @@ def format_full_case_data(case_data: dict) -> str:
         return "None."
 
 
-def format_rubric(rubric_data: dict) -> str:
+def format_rubric(rubric_data: dict, fields: list[str] | None = None) -> str:
     dimensions = rubric_data.get("dimensions", [])
     if not isinstance(dimensions, list) or not dimensions:
         return "No rubric dimensions available."
+
+    if fields is not None:
+        dimensions = [
+            dimension
+            for dimension in dimensions
+            if isinstance(dimension, dict) and dimension.get("dimension_id") in fields
+        ]
+        if not dimensions:
+            return "No rubric dimensions available."
 
     formatted_dimensions = []
     for dimension in dimensions:
@@ -199,8 +210,7 @@ def extract_case_recommendation(case_data: dict) -> str:
     return format_case_blocks(get_case_blocks_by_type(case_data, "final_recommendation"))
 
 
-def parse_interviewer_output(raw_output: str) -> tuple[str, str, str, bool] | None:
-    payload = load_json_object(raw_output)
+def parse_interviewer_output(payload: dict) -> tuple[str, str, str, bool, str] | None:
     if not payload:
         return None
 
@@ -208,12 +218,13 @@ def parse_interviewer_output(raw_output: str) -> tuple[str, str, str, bool] | No
     content = str(payload.get("content", "")).strip()
     block_id = str(payload.get("block_id", "")).strip()
     ready_for_judge = bool(payload.get("ready_for_judge", False))
+    reasoning = str(payload.get("reasoning", "")).strip()
 
     if action not in {"question", "reveal"}:
         return None
     if not content:
         return None
-    return action, content, block_id, ready_for_judge
+    return action, content, block_id, ready_for_judge, reasoning
 
 
 def normalize_focus_areas(raw_focus_areas: object) -> list[str]:
@@ -283,22 +294,76 @@ def extract_token_usage(response: object, *, node: str, model: str = "") -> dict
     }
 
 
-def invoke_json_llm(llm, messages: list, *, node: str, retries: int = 3) -> tuple[dict, list[dict]]:
+def _json_schema_response_format(schema: type[BaseModel]) -> dict:
+    """Build an OpenAI/OpenRouter `response_format: json_schema` payload from a
+    Pydantic model. Requires `extra="forbid"` on the model so every generated
+    object schema has `additionalProperties: false`, as strict mode expects."""
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": schema.__name__,
+            "strict": True,
+            "schema": schema.model_json_schema(),
+        },
+    }
+
+
+def invoke_json_llm(
+    llm,
+    messages: list,
+    *,
+    node: str,
+    schema: type[BaseModel] | None = None,
+    accept: Callable[[dict], bool] | None = None,
+    on_exhausted: Callable[[str], dict] | None = None,
+    retries: int = 3,
+) -> tuple[dict, list[dict]]:
     """Invoke an LLM expected to reply with a JSON object, retrying with an
     explicit repair instruction when the reply doesn't parse (e.g. the model
     wrapped it in a preamble/fence `load_json_object` still can't salvage).
 
+    `schema`, when given, is sent as a `response_format: json_schema` hint on
+    the first attempt. This is best-effort: OpenRouter's open-weight models
+    advertise support inconsistently across upstream providers, so a rejected
+    request falls back to an unconstrained call, and every reply (constrained
+    or not) still goes through `load_json_object` and `accept` rather than
+    being trusted outright.
+
+    `accept` decides whether a parsed payload is good enough to return; it
+    defaults to "non-empty dict", but callers with extra structural
+    requirements (e.g. the interviewer's action/content fields) can pass a
+    stricter check so retries keep going until a usable payload appears.
+
+    `on_exhausted`, when given, receives the last raw response text once
+    retries run out and can turn it into a usable payload instead of `{}`
+    (e.g. the candidate treats un-JSON-ed prose as a perfectly good answer).
+
     Returns (payload, usage_log). `payload` is only `{}` if every attempt
-    failed to produce parseable JSON, so downstream `not_tested` defaults
-    reflect a genuine judge coverage gap rather than a parsing failure.
+    failed to produce an accepted payload and `on_exhausted` was not given
+    or also came up empty, so downstream `not_tested` defaults reflect a
+    genuine coverage gap rather than a parsing failure.
     """
     usage_log: list[dict] = []
     model_name = getattr(llm, "model_name", "")
+    is_acceptable = accept or (lambda payload: bool(payload))
 
-    response = llm.invoke(messages)
+    structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
+
+    def _invoke(target_llm, invoke_messages: list):
+        if target_llm is llm:
+            return llm.invoke(invoke_messages)
+        try:
+            return target_llm.invoke(invoke_messages)
+        except Exception:
+            # Some OpenRouter-routed providers advertise structured_outputs
+            # support but reject this particular schema/request - fall back
+            # to an unconstrained call rather than losing the turn.
+            return llm.invoke(invoke_messages)
+
+    response = _invoke(structured_llm, messages)
     usage_log.append(extract_token_usage(response, node=node, model=model_name))
     payload = load_json_object(response.content)
-    if payload:
+    if is_acceptable(payload):
         return payload, usage_log
 
     raw_output = str(response.content).strip()
@@ -313,11 +378,13 @@ def invoke_json_llm(llm, messages: list, *, node: str, retries: int = 3) -> tupl
                 )
             ),
         ]
-        response = llm.invoke(repair_messages)
+        response = _invoke(llm, repair_messages)
         usage_log.append(extract_token_usage(response, node=f"{node}_repair", model=model_name))
         raw_output = str(response.content).strip()
         payload = load_json_object(raw_output)
-        if payload:
+        if is_acceptable(payload):
             return payload, usage_log
 
+    if on_exhausted is not None:
+        return on_exhausted(raw_output), usage_log
     return {}, usage_log

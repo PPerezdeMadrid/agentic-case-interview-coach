@@ -12,6 +12,9 @@
         "Answer the creative question with practical, case-specific initiatives tied to near-term economics and cash burn.",
         "Never invent data or facts not present in the case materials.",
         "If the interviewer redirects you, adjust immediately.",
+        "Keep answers concise and avoid repetition.",
+        "Express conclusions with confidence that matches the strength of the evidence, without overclaiming or hedging unnecessarily.",
+        "Let each response build clearly on your prior reasoning so the discussion reads as one connected case rather than isolated answers.",
         "The final recommendation should focus on larger customers, fix pricing and hardware recovery, and prioritize the software-only model with financing support if needed."
       ],
       "case_specific_facts": [

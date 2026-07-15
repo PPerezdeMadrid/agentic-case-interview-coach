@@ -91,6 +91,7 @@
       <thead>
         <tr>
           <th>Dimension</th>
+          <th>Reference</th>
           {% for r in g.repeats %}
           <th>Repeat {{ r.repeat_index }}</th>
           {% endfor %}
@@ -102,6 +103,7 @@
         {% set dim_index = loop.index0 %}
         <tr>
           <td>{{ dim.section_label }} &mdash; {{ dim.dimension }}</td>
+          <td title="{{ g.reference_scores[dim_index].rationale }}">{{ g.reference_scores[dim_index].score }}</td>
           {% for r in g.repeats %}
           <td>{{ r.dimension_scores[dim_index].score }}</td>
           {% endfor %}

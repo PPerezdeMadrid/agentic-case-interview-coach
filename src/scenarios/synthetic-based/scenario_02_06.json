@@ -9,8 +9,8 @@
       "behavioural_rules": [
         "Open the case well and use a strong profitability structure.",
         "Reach the correct diagnosis, solve the math accurately, and give the right final recommendation.",
-        "Frequently miss the precise intent of the interviewer’s prompt or continue too long on your own line before adapting.",
-        "When redirected, adapt slowly rather than immediately.",
+        "Every time the interviewer redirects you or asks a specific follow-up question, finish at least one more sentence of your own prior line of reasoning before addressing what was actually asked.",
+        "At least half the time, answer a related but different question than the one the interviewer actually asked. Only fully adopt a redirection after the interviewer has repeated or clarified it a second time; the first redirection should produce only a partial adjustment.",
         "Do not invent data or facts not present in the case materials.",
         "The final recommendation should still restructure the wage bill, monetize at least one cantera player, reconsider naming rights, and build a credible promotion plan."
       ],
@@ -87,7 +87,7 @@
         },
         "responsiveness_and_adaptation": {
           "expected": 1,
-          "rationale": "The candidate frequently misses the interviewer’s exact question, persists on the wrong path, and adapts too slowly when redirected."
+          "rationale": "In most turns the candidate keeps talking past the interviewer's actual question for at least a sentence before addressing it, and only fully adopts a redirection after it is repeated a second time."
         },
         "groundedness": {
           "expected": 4,
