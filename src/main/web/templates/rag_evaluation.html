@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% macro pct(value) -%}
+  {{ (value * 100) | round(1) if value is not none else '–' }}{{ '%' if value is not none else '' }}
+{%- endmacro %}
+
+{% macro num(value) -%}
+  {{ value if value is not none else '–' }}
+{%- endmacro %}
+
+{% macro rate_status(value) -%}
+  {%- if value is none -%}status-not-tested
+  {%- elif value >= 0.7 -%}status-exact-match
+  {%- elif value >= 0.2 -%}status-off-by-1
+  {%- else -%}status-different
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro score(value) -%}
+  {{ value if value is not none else '–' }}
+{%- endmacro %}
+
+{% macro delta_status(value) -%}
+  {%- if value is none -%}status-not-tested
+  {%- elif value == 0 -%}status-exact-match
+  {%- elif value|abs <= 1 -%}status-off-by-1
+  {%- else -%}status-different
+  {%- endif -%}
+{%- endmacro %}
+
+{% block title %}RAG Evaluation | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">RAG Evaluation</p>
+      <h1>Retrieval Quality &amp; Ablation</h1>
+      <p class="lede">Everything about how well retrieval-augmented generation is working, in one place: live retrieval metrics against the golden sets, and how much RAG actually moves the judge's grading.</p>
+    </div>
+    <div class="chip-row">
+      <a class="chip chip-link" href="#retrieval-quality">Retrieval Quality</a>
+      <a class="chip chip-link" href="#rag-ablation">RAG Ablation</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="retrieval-quality">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Live</p>
+      <h2>Retrieval Quality</h2>
+      <p class="lede">
+        Precision@K, Recall@K, Hit Rate, and MRR for every query in the generation
+        golden sets, run live against the case-guide and profitability-guide vector
+        stores.
+      </p>
+    </div>
+    {% if retrieval_result %}
+    <div class="chip-row">
+      <span class="chip">{{ retrieval_result.rows | length }} queries evaluated</span>
+      <span class="chip">K = {{ retrieval_result.top_k }}</span>
+    </div>
+    {% endif %}
+  </div>
+  <form class="form-grid" method="get" action="{{ url_for('rag_evaluation_index') }}">
+    <label>
+      <span>Top K</span>
+      <input type="number" name="k" min="1" max="20" value="{{ top_k }}">
+    </label>
+    {% if ablation_batch %}<input type="hidden" name="batch" value="{{ ablation_batch }}">{% endif %}
+    <div class="form-actions" style="padding: 0;">
+      <button class="button" type="submit">Run</button>
+      <a class="button" href="{{ url_for('rag_evaluation_index', k=top_k, refresh=1, batch=ablation_batch) }}">Recompute (bypass cache)</a>
+    </div>
+  </form>
+  <p class="helper" style="padding: 0 24px 24px;">
+    Ground truth comes from the <code>source_chunk_ids</code> column already annotated in
+    <code>generation_golden_set_case_guide.csv</code> and
+    <code>generation_golden_set_profitability.csv</code> &mdash; exact chunk IDs per query, not a
+    page-number approximation. (<code>retrieve_golden_set.csv</code> only has
+    <code>source_document</code>/<code>source_page</code>, and for the profitability guide those
+    page numbers are the textbook's own printed pagination, offset ~16&ndash;18 pages from the
+    PDF's real page index by front matter, so a page-based match would be unreliable for that
+    document.)
+  </p>
+
+  {% if retrieval_error %}
+  <div class="prompt-box">
+    <p class="helper">{{ retrieval_error }} Check that <code>src/database/rag_evaluation/retrieve_golden_set.csv</code> exists and has rows.</p>
+  </div>
+  {% elif retrieval_result and retrieval_result.overall %}
+  <div class="metric-grid">
+    <div class="metric-card"><span>Precision@K</span><strong>{{ pct(retrieval_result.overall.precision_at_k) }}</strong></div>
+    <div class="metric-card"><span>Recall@K</span><strong>{{ pct(retrieval_result.overall.recall_at_k) }}</strong></div>
+    <div class="metric-card"><span>Hit Rate</span><strong>{{ pct(retrieval_result.overall.hit_rate) }}</strong></div>
+    <div class="metric-card"><span>MRR</span><strong>{{ num(retrieval_result.overall.mrr) }}</strong></div>
+    <div class="metric-card"><span>Queries</span><strong>{{ retrieval_result.overall.n_queries }}</strong></div>
+    <div class="metric-card"><span>Queries w/ 0 relevant chunks in store</span><strong>{{ retrieval_result.overall.zero_relevant_in_store }}</strong></div>
+  </div>
+
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Breakdown</p>
+      <h3>By category</h3>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Queries</th>
+          <th>Precision@K</th>
+          <th>Recall@K</th>
+          <th>Hit Rate</th>
+          <th>MRR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in retrieval_result.by_category %}
+        <tr>
+          <td>{{ row.category }}</td>
+          <td>{{ row.n_queries }}</td>
+          <td><span class="status {{ rate_status(row.precision_at_k) }}">{{ pct(row.precision_at_k) }}</span></td>
+          <td><span class="status {{ rate_status(row.recall_at_k) }}">{{ pct(row.recall_at_k) }}</span></td>
+          <td><span class="status {{ rate_status(row.hit_rate) }}">{{ pct(row.hit_rate) }}</span></td>
+          <td>{{ num(row.mrr) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Breakdown</p>
+      <h3>By source document</h3>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Queries</th>
+          <th>Precision@K</th>
+          <th>Recall@K</th>
+          <th>Hit Rate</th>
+          <th>MRR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in retrieval_result.by_source %}
+        <tr>
+          <td>{{ row.source_label }}</td>
+          <td>{{ row.n_queries }}</td>
+          <td><span class="status {{ rate_status(row.precision_at_k) }}">{{ pct(row.precision_at_k) }}</span></td>
+          <td><span class="status {{ rate_status(row.recall_at_k) }}">{{ pct(row.recall_at_k) }}</span></td>
+          <td><span class="status {{ rate_status(row.hit_rate) }}">{{ pct(row.hit_rate) }}</span></td>
+          <td>{{ num(row.mrr) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ retrieval_result.rows | length }} queries</p>
+      <h3>Per-query detail</h3>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Query ID</th>
+          <th>Category</th>
+          <th>Source</th>
+          <th>Ground-truth chunks</th>
+          <th>Precision@K</th>
+          <th>Recall@K</th>
+          <th>Hit</th>
+          <th>1st relevant rank</th>
+          <th>Retrieved chunks</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in retrieval_result.rows %}
+        <tr>
+          <td>{{ row.query_id }}<div class="helper">{{ row.query }}</div></td>
+          <td>{{ row.category }}</td>
+          <td>{{ row.source_label }}</td>
+          <td>{{ row.n_relevant_total }}</td>
+          <td><span class="status {{ rate_status(row.precision_at_k) }}">{{ pct(row.precision_at_k) }}</span></td>
+          <td><span class="status {{ rate_status(row.recall_at_k) }}">{{ pct(row.recall_at_k) }}</span></td>
+          <td><span class="status {{ 'status-exact-match' if row.hit else 'status-different' }}">{{ 'yes' if row.hit else 'no' }}</span></td>
+          <td>{{ row.first_relevant_rank if row.first_relevant_rank is not none else '–' }}</td>
+          <td>
+            {% for chunk in row.retrieved %}
+            <span class="chip {{ 'status-exact-match' if chunk.relevant else 'status-different' }}" style="border-color: currentColor;">{{ chunk.chunk_id.split('::')[-1] }}</span>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="prompt-box">
+    <p class="helper">No rows evaluated. Check that <code>src/database/rag_evaluation/retrieve_golden_set.csv</code> exists and has rows.</p>
+  </div>
+  {% endif %}
+</section>
+
+<section class="panel" id="rag-ablation">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Cached</p>
+      <h2>RAG Ablation: with vs. without RAG</h2>
+      <p class="lede">
+        For a chosen experiment batch, <code>eval_case_performance</code> and
+        <code>eval_dialog_quality</code> are replayed against the exact same stored
+        transcript, but with every RAG retrieval call disabled (the guide/textbook
+        lookup still happens, it just always comes back empty). Compare the resulting
+        scores against the batch's original (with-RAG) scores for that same transcript
+        to see how much RAG actually moves the judge's grading.
+      </p>
+    </div>
+    {% if ablation_result %}
+    <div class="chip-row">
+      <span class="chip">{{ ablation_result.n_records }} records evaluated</span>
+      {% if ablation_result.computed_at %}<span class="chip">computed {{ ablation_result.computed_at }}</span>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if ablation_batches %}
+  <form class="form-grid" method="get" action="{{ url_for('rag_evaluation_index') }}">
+    <label>
+      <span>Batch</span>
+      <select name="batch" onchange="this.form.submit()">
+        {% for b in ablation_batches %}
+        <option value="{{ b }}" {% if b == ablation_batch %}selected{% endif %}>{{ b }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <input type="hidden" name="k" value="{{ top_k }}">
+    <noscript><button class="button" type="submit">Load batch</button></noscript>
+  </form>
+  {% else %}
+  <div class="prompt-box">
+    <p class="helper">
+      No batches with ablation results found under <code>artifacts/batch_runs/</code>.
+      Run <code>make rag-ablation BATCH=&lt;dir_name&gt;</code> against an existing
+      experiment batch (see the <a href="{{ url_for('experiment_index') }}">Experiment</a>
+      page for available batch names) first.
+    </p>
+  </div>
+  {% endif %}
+
+  <p class="helper" style="padding: 0 24px 24px;">
+    This section does not recompute live &mdash; it reads the cached output of
+    <code>rag_ablation_eval.py</code>. To (re)compute a batch, from <code>src/</code> run
+    <code>python rag_ablation_eval.py --batch &lt;dir_name&gt;</code> (or
+    <code>make rag-ablation BATCH=&lt;dir_name&gt;</code>), then reload this page.
+  </p>
+
+  {% if ablation_error %}
+  <div class="prompt-box">
+    <p class="helper">{{ ablation_error }}</p>
+  </div>
+  {% elif ablation_result %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Overall</p>
+      <h3>Score delta by dimension (without RAG &minus; with RAG)</h3>
+      <p class="lede">
+        <strong>Mean delta</strong> keeps the sign (positive = scored higher without RAG);
+        <strong>mean |delta|</strong> ignores direction, so it answers "how much do the two
+        conditions disagree" regardless of which way. <strong>Differ</strong> counts, among
+        the comparable records (both sides had a numeric score), how many actually landed on
+        a different score.
+      </p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Graph</th>
+          <th>Section</th>
+          <th>Dimension</th>
+          <th>Mean with RAG</th>
+          <th>Mean without RAG</th>
+          <th>Mean delta</th>
+          <th>Mean |delta|</th>
+          <th>Differ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in ablation_result.aggregate_by_dimension %}
+        <tr>
+          <td>{{ row.graph_name }}</td>
+          <td>{{ row.section_label }}</td>
+          <td>{{ row.dimension }}</td>
+          <td>{{ score(row.mean_with_rag) }}</td>
+          <td>{{ score(row.mean_without_rag) }}</td>
+          <td><span class="status {{ delta_status(row.mean_delta) }}">{{ score(row.mean_delta) }}</span></td>
+          <td>{{ score(row.mean_abs_delta) }}</td>
+          <td>{{ row.n_differ }}/{{ row.n_comparable }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ ablation_result.detail_rows | length }} dimension comparisons</p>
+      <h3>Per-record detail</h3>
+      <p class="lede">Sorted by |delta| descending, so the biggest with/without-RAG disagreements surface first.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Graph</th>
+          <th>Scenario</th>
+          <th>Repeat</th>
+          <th>Section</th>
+          <th>Dimension</th>
+          <th>With RAG</th>
+          <th>Without RAG</th>
+          <th>Delta</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in ablation_result.detail_rows %}
+        <tr>
+          <td>{{ row.graph_name }}</td>
+          <td>{{ row.scenario_ref.split('/')[-1] if row.scenario_ref else '' }}<div class="helper">{{ row.thread_id }}</div></td>
+          <td>{{ row.repeat_index }}</td>
+          <td>{{ row.section_label }}</td>
+          <td>{{ row.dimension }}</td>
+          <td>
+            {{ score(row.with_rag_score) }}
+            <div class="helper">{{ row.with_rag_rationale }}</div>
+          </td>
+          <td>
+            {{ score(row.without_rag_score) }}
+            <div class="helper">{{ row.without_rag_rationale }}</div>
+          </td>
+          <td><span class="status {{ delta_status(row.delta) }}">{{ score(row.delta) }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
