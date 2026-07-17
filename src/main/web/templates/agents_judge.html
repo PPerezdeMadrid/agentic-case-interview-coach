@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% macro pct(value) -%}
+  {{ (value * 100) | round(1) if value is not none else '–' }}{{ '%' if value is not none else '' }}
+{%- endmacro %}
+
+{% macro bool_label(value) -%}
+  {{ 'True' if value else 'False' }}
+{%- endmacro %}
+
+{% macro row_status(correct) -%}
+  {{ 'status-exact-match' if correct else 'status-different' }}
+{%- endmacro %}
+
+{% macro cell_status(is_diagonal) -%}
+  {{ 'status-exact-match' if is_diagonal else 'status-different' }}
+{%- endmacro %}
+
+{% block title %}Agents · Judge | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Agents &middot; Judge &middot; Cached</p>
+      <h1>Judge: <code>enough_evidence</code> accuracy</h1>
+      <p class="lede">
+        Runs each row of a hand-labeled golden set through the real judge LLM,
+        using the exact rendered prompt <code>judge_node</code> would send
+        (system prompt + transcript + case guidance/data/recommendation +
+        rubric), and compares its <code>enough_evidence</code> answer against
+        the golden set's <code>expected_enough_evidence</code> label.
+      </p>
+    </div>
+    {% if result %}
+    <div class="chip-row">
+      <span class="chip">{{ result.n_scored }}/{{ result.n_total }} scored</span>
+      <span class="chip">accuracy {{ pct(result.accuracy) }}</span>
+      {% if result.model %}<span class="chip">{{ result.model }}</span>{% endif %}
+      {% if result.computed_at %}<span class="chip">computed {{ result.computed_at }}</span>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if golden_sets|length > 1 %}
+  <form class="form-grid" method="get" action="{{ url_for('agents_judge') }}">
+    <label>
+      <span>Golden set</span>
+      <select name="golden_set" onchange="this.form.submit()">
+        {% for g in golden_sets %}
+        <option value="{{ g }}" {% if g == golden_set %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <noscript><button class="button" type="submit">Load</button></noscript>
+  </form>
+  {% endif %}
+
+  <p class="helper" style="padding: 0 24px 24px;">
+    This page does not recompute live &mdash; each row costs one real judge LLM
+    call, so it only reads the cached output of <code>run_judge_golden_set.py</code>.
+    To (re)compute, from <code>src/</code> run
+    <code>python main/studio/node_eval/judge_eval/run_judge_golden_set.py</code> (or
+    <code>make judge-eval</code>), then reload this page.
+    {% if golden_set %}
+    <a href="{{ url_for('agents_judge', golden_set=golden_set, refresh=1) }}">Reload cache</a>
+    {% endif %}
+  </p>
+
+  {% if not golden_sets %}
+  <div class="prompt-box">
+    <p class="helper">
+      No judge golden-set results found under
+      <code>database/node_eval/judge_eval/</code>. Build a golden-set CSV (see
+      <code>main/studio/node_eval/judge_eval/build_judge_golden_set_worldcup.py</code>),
+      then run <code>make judge-eval</code> (or
+      <code>python main/studio/node_eval/judge_eval/run_judge_golden_set.py</code> from
+      <code>src/</code>) first.
+    </p>
+  </div>
+  {% elif error %}
+  <div class="prompt-box">
+    <p class="helper">{{ error }}</p>
+  </div>
+  {% elif result %}
+  <div class="metric-grid">
+    <div class="metric-card"><span>Accuracy</span><strong>{{ pct(result.accuracy) }}</strong></div>
+    <div class="metric-card"><span>Correct</span><strong>{{ result.n_correct }}/{{ result.n_scored }}</strong></div>
+    <div class="metric-card"><span>Precision</span><strong>{{ pct(result.precision) }}</strong></div>
+    <div class="metric-card"><span>Recall</span><strong>{{ pct(result.recall) }}</strong></div>
+    <div class="metric-card"><span>Errored calls</span><strong>{{ result.n_errors }}</strong></div>
+  </div>
+
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Confusion matrix</p>
+      <h3>Predicted vs. expected</h3>
+      <p class="lede">
+        False positive = judge said <code>enough_evidence: true</code> too
+        early; false negative = judge kept asking for more evidence when the
+        transcript already had enough.
+      </p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Predicted True</th>
+          <th>Predicted False</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Expected True</td>
+          <td><span class="status {{ cell_status(true) }}">TP {{ result.confusion.true_positive }}</span></td>
+          <td><span class="status {{ cell_status(false) }}">FN {{ result.confusion.false_negative }}</span></td>
+        </tr>
+        <tr>
+          <td>Expected False</td>
+          <td><span class="status {{ cell_status(false) }}">FP {{ result.confusion.false_positive }}</span></td>
+          <td><span class="status {{ cell_status(true) }}">TN {{ result.confusion.true_negative }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {% if categories %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ categories|length }} categories</p>
+      <h3>Pass / fail by category</h3>
+      <p class="lede">
+        Same records as above, grouped by the golden set's <code>category</code>
+        column and sorted worst-accuracy-first, so a systematic judge failure
+        (e.g. every <code>MATH_SKIPPED</code> row wrong) is visible at a glance
+        instead of buried in the per-conversation table. The radar plots the
+        same numbers spatially &mdash; each spoke is one category (numbered to
+        match the <code>#</code> column below, worst at the top going
+        clockwise), and the dent toward the center is where the judge is
+        systematically wrong.
+      </p>
+    </div>
+  </div>
+
+  {% if radar %}
+  <div class="radar-wrap">
+    <svg class="radar-chart" id="judge-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+      {% for ring in radar.rings %}
+      <polygon class="radar-grid-ring{{ ' radar-grid-ring--mid' if ring.frac == 0.5 else '' }}" points="{{ ring.points }}"></polygon>
+      {% endfor %}
+      {% for axis in radar.axes %}
+      <line class="radar-spoke" x1="{{ radar.cx }}" y1="{{ radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
+      <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.index }}</text>
+      {% endfor %}
+      <polygon class="radar-category-shape" points="{{ radar.polygon_points }}"></polygon>
+      {% for axis in radar.axes %}
+      <circle class="radar-vertex" cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="5" style="fill: {{ axis.color }};"></circle>
+      <circle
+        class="radar-hit"
+        cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="12"
+        data-label="#{{ axis.index }} {{ axis.category }}"
+        data-pct="{{ pct(axis.accuracy) }}"
+      ></circle>
+      {% endfor %}
+    </svg>
+    <div class="radar-tooltip" id="judge-radar-tooltip" role="tooltip" hidden></div>
+    <div class="radar-legend">
+      <div class="radar-legend-item"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> &ge;90% accurate</div>
+      <div class="radar-legend-item"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> 50&ndash;89% accurate</div>
+      <div class="radar-legend-item"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> &lt;50% accurate &mdash; systematic failure</div>
+    </div>
+    <p class="helper radar-caption">Hover a dot for the category name. Center = 0% accuracy on that category, outer ring = 100%.</p>
+  </div>
+  <script>
+    (function () {
+      var svg = document.getElementById('judge-radar');
+      var tooltip = document.getElementById('judge-radar-tooltip');
+      if (!svg || !tooltip) return;
+      var wrap = svg.closest('.radar-wrap');
+
+      function pointFor(evt) {
+        var target = evt.target.closest ? evt.target.closest('.radar-hit') : null;
+        return target && target.dataset ? target : null;
+      }
+
+      svg.addEventListener('pointermove', function (evt) {
+        var target = pointFor(evt);
+        if (!target) {
+          tooltip.hidden = true;
+          return;
+        }
+        var wrapRect = wrap.getBoundingClientRect();
+        tooltip.textContent = target.dataset.label + ' — ' + target.dataset.pct;
+        tooltip.style.left = (evt.clientX - wrapRect.left) + 'px';
+        tooltip.style.top = (evt.clientY - wrapRect.top) + 'px';
+        tooltip.hidden = false;
+      });
+
+      svg.addEventListener('pointerleave', function () {
+        tooltip.hidden = true;
+      });
+    })();
+  </script>
+  {% endif %}
+
+  <details class="disclosure">
+    <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
+    <div class="table-wrap disclosure-body">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Total</th>
+            <th>Correct</th>
+            <th>Wrong</th>
+            {% if categories|selectattr('errors', 'gt', 0)|list %}<th>Errors</th>{% endif %}
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr>
+            <td>{{ cat.index }}</td>
+            <td><code>{{ cat.category }}</code></td>
+            <td>{{ cat.total }}</td>
+            <td>{{ cat.correct }}</td>
+            <td>{{ cat.wrong }}</td>
+            {% if categories|selectattr('errors', 'gt', 0)|list %}<td>{{ cat.errors or '' }}</td>{% endif %}
+            <td>
+              <div class="accuracy-cell">
+                <span class="accuracy-bar">
+                  <span class="accuracy-bar-fill tier-{{ cat.tier }}" style="width: {{ (cat.accuracy * 100) if cat.accuracy is not none else 0 }}%;"></span>
+                </span>
+                <span class="accuracy-label">{{ pct(cat.accuracy) }}</span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% endif %}
+
+  <details class="disclosure">
+    <summary>Show per-conversation detail ({{ result.records|length }} conversations)</summary>
+    <div class="table-wrap disclosure-body compact-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Conversation</th>
+            <th>Category</th>
+            <th>Expected</th>
+            <th>Predicted</th>
+            <th>Result</th>
+            <th>Predicted focus areas</th>
+            <th>Prompt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result.records %}
+          <tr>
+            <td>{{ row.conversation_id }}</td>
+            <td><code>{{ row.category }}</code></td>
+            <td>{{ bool_label(row.expected_enough_evidence) }}</td>
+            <td>{{ bool_label(row.predicted_enough_evidence) }}</td>
+            <td>
+              {% if row.error %}
+              <span class="status status-not-tested">error</span>
+              <div class="helper">{{ row.error.message }}</div>
+              {% else %}
+              <span class="status {{ row_status(row.correct) }}">{{ 'correct' if row.correct else 'wrong' }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if row.predicted_focus_areas %}
+              <p class="helper compact-list">{{ row.predicted_focus_areas | join(' &bull; ') }}</p>
+              {% else %}
+              <span class="helper">&ndash;</span>
+              {% endif %}
+            </td>
+            <td>
+              <details class="trace-json">
+                <summary>Judge input</summary>
+                <pre>{{ row.judge_input }}</pre>
+              </details>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% endif %}
+</section>
+{% endblock %}

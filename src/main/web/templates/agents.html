@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Agents | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Agents</p>
+      <h1>Agent Evaluations</h1>
+      <p class="lede">
+        Per-node evaluation of the agentic graph's individual agents against
+        hand-built, theory-grounded golden sets, independent of full-interview
+        runs.
+      </p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>What it checks</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Judge</td>
+          <td>
+            Accuracy of the <code>enough_evidence</code> true/false decision
+            against a hand-labeled golden set of candidate/interviewer
+            transcripts at varying stages of case completion.
+          </td>
+          <td><a class="button" href="{{ url_for('agents_judge') }}">Open</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

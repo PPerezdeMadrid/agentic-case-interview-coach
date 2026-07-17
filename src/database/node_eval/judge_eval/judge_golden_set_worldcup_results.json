@@ -1,0 +1,675 @@
+{
+  "golden_set": "worldcup",
+  "csv_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/database/judge_evaluation/judge_golden_set_worldcup.csv",
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "computed_at": "2026-07-17T15:18:33+00:00",
+  "n_total": 70,
+  "n_scored": 70,
+  "n_errors": 0,
+  "n_correct": 56,
+  "accuracy": 0.8,
+  "confusion": {
+    "true_positive": 33,
+    "true_negative": 23,
+    "false_positive": 12,
+    "false_negative": 2
+  },
+  "precision": 0.7333,
+  "recall": 0.9429,
+  "records": [
+    {
+      "conversation_id": "WC_01",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the case's core data, such as the revenue and cost economics, to understand the impact of the expansion on profitability",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_02",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the case's core data, such as the revenue and cost economics, to understand the impact of the expansion on profitability",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including a clear synthesis of the case evidence, risks, and next steps"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_03",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the core data of the case, including the revenue and cost structure of the tournament",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_04",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to understand their synthesis of the case and proposed solution"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_05",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of revenue dilution and cost increases on the profitability of the tournament",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_06",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_07",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including specific actions to address the margin gap and associated risks"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_08",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate for a final recommendation to the Secretary General",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size the opportunity and provide a reality check"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_09",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_10",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the case's core data, specifically the revenue and cost streams, and how they are affected by the expansion",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including a clear synthesis of the case evidence, risks, and next steps"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_11",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to break down the revenue and cost streams to understand the profitability issue",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including specific actions to address the margin dilution problem"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_12",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the case's core data, such as the revenue and cost structure, to understand the reasons behind the deteriorating profitability",
+        "Raise the case's creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to evaluate their ability to synthesize information and provide a clear, actionable proposal"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_13",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_14",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_15",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_16",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_17",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
+        "Test whether the candidate can quantify the impact of the proposed recommendation on the EBITDA margin gap"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_18",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
+        "Check whether the candidate can quantify the impact of hydration-break monetization on the margin gap",
+        "Ensure the candidate provides a clear recommendation with next steps before concluding the case"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_19",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to calculate revenue per match and cost per match for both editions explicitly",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size opportunities and understand their limits",
+        "Request a final recommendation from the candidate, including a clear proposal, supporting evidence, risks, and next steps"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_20",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to calculate revenue and cost per match for both editions to understand the impact of expansion on profitability",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_21",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_22",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_23",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to engage with the case's core data, specifically the revenue and cost streams, and how they are affected by the expansion",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution and any associated risks or next steps"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_24",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to propose a specific structure to analyze the profitability problem",
+        "Raise the case's math question about the impact of expansion on revenue and cost per match",
+        "Request a final recommendation from the candidate on how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_25",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_26",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_27",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_28",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_29",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_30",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_31",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_32",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_33",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_34",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_35",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_36",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_37",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_38",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "Ask the candidate to provide a final recommendation to the Secretary General",
+        "Explore the creative question of monetizing hydration breaks in more depth to understand the candidate's ability to size opportunities and assess their impact on the margin gap"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_39",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_40",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_41",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_42",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_43",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_44",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_45",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_46",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_47",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_48",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_49",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_50",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_51",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_52",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_53",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_54",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_55",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
+        "Check whether the candidate can quantify the opportunity and its limits relative to the scale of the problem"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_56",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to calculate revenue per match and cost per match for both editions to understand the impact of expansion on profitability",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
+        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_57",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_58",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_59",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to propose a clear structure to analyze the case",
+        "Request the candidate to quantify the impact of revenue and cost changes on profitability",
+        "Check whether the candidate can identify the root cause of the profitability problem"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_60",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate for a final recommendation to the Secretary General",
+        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size the opportunity and understand its limits relative to the scale of the problem"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_61",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_62",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_63",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the potential revenue from monetizing hydration breaks and compare it to the total revenue gap",
+        "Request a clear recommendation on how to address the margin dilution issue, including specific steps and potential risks"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_64",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_65",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_66",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_67",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_68",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_69",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_70",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    }
+  ]
+}
