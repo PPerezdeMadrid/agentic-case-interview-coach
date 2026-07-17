@@ -10,12 +10,15 @@ from adapter import (
     get_case_block_by_id,
 )
 from rag.case_guide_context import (
+    CASE_GUIDE_CITATION_LABEL,
     format_case_guide_snippets,
     get_baseline_case_guide_context,
 )
 from rag.profitability_guide_context import (
+    PROFITABILITY_CITATION_LABEL,
     PROFITABILITY_SOURCE_NAVIGATION_GUIDE,
     format_profitability_guide_context,
+    format_profitability_guide_snippet,
     retrieve_profitability_guide_context,
 )
 from loader import load_selected_simulation_bundle
@@ -410,9 +413,9 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
                 BASELINE_GRAPH_SYSTEM_PROMPT
                 + "\n\n"
                 + situation
-                + "\n\nRetrieved profitability methodology context:\n"
+                + f"\n\nExcerpts from {PROFITABILITY_CITATION_LABEL}:\n"
                 + format_profitability_guide_context(profitability_context)
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
                 + format_case_guide_snippets(case_guide_context)
             )
         ),
@@ -444,7 +447,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
             "case_performance": None,
             "quality_dialog": None,
             "retrieved_profitability_context": [
-                str(chunk.get("content", "")).strip()
+                format_profitability_guide_snippet(chunk)
                 for chunk in profitability_context
                 if str(chunk.get("content", "")).strip()
             ],
@@ -465,7 +468,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         "case_performance": move["case_performance"],
         "quality_dialog": move["quality_dialog"],
         "retrieved_profitability_context": [
-            str(chunk.get("content", "")).strip()
+            format_profitability_guide_snippet(chunk)
             for chunk in profitability_context
             if str(chunk.get("content", "")).strip()
         ],

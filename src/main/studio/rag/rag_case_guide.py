@@ -6,6 +6,7 @@ just load it.
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,7 @@ MAIN_DIR = Path(__file__).resolve().parents[2]
 SRC_ROOT = Path(__file__).resolve().parents[3]
 CASE_GUIDE_PDF_PATH = SRC_ROOT / "database" / "ConsultingCaseGuide-PPML.pdf"
 VECTORSTORE_DIR = MAIN_DIR / "database" / "vectorstore" / "consulting_case_guide"
+RAG_SOURCE_METADATA_PATH = SRC_ROOT / "database" / "case_guide_source_navigation.json"
 
 COLLECTION_NAME = "consulting_case_guide"
 EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
@@ -28,6 +30,35 @@ DEFAULT_TOP_K = 4
 
 _embeddings_singleton: FastEmbedEmbeddings | None = None
 _vectorstore_singleton: Chroma | None = None
+
+
+def _load_case_guide_source_navigation() -> dict[str, str]:
+    try:
+        payload = json.loads(RAG_SOURCE_METADATA_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            f"Could not load case guide RAG metadata from {RAG_SOURCE_METADATA_PATH}."
+        ) from exc
+
+    guidance = str(payload.get("retrieval_guidance", "")).strip()
+    citation_label = str(payload.get("citation_label", "")).strip()
+    if not guidance or not citation_label:
+        raise RuntimeError(
+            f"Case guide RAG metadata in {RAG_SOURCE_METADATA_PATH} is missing "
+            "'retrieval_guidance' or 'citation_label'."
+        )
+    return {"retrieval_guidance": guidance, "citation_label": citation_label}
+
+
+_CASE_GUIDE_SOURCE_NAVIGATION = _load_case_guide_source_navigation()
+
+# Short description each node's own prompt can quote when deciding whether it needs
+# to consult this source -- not a query, just "what's in here".
+CASE_GUIDE_SOURCE_DESCRIPTION = _CASE_GUIDE_SOURCE_NAVIGATION["retrieval_guidance"]
+
+# Human-readable citation for feedback/prose to name this source by, e.g.
+# "Consulting Case Interview Guide by Paloma Pérez de Madrid".
+CASE_GUIDE_CITATION_LABEL = _CASE_GUIDE_SOURCE_NAVIGATION["citation_label"]
 
 
 def get_embeddings() -> FastEmbedEmbeddings:
@@ -116,6 +147,7 @@ def retrieve_case_guide_context(query: str, *,top_k: int = DEFAULT_TOP_K,) -> li
         {
             "content": document.page_content.strip(),
             "source": CASE_GUIDE_PDF_PATH.name,
+            "citation": CASE_GUIDE_CITATION_LABEL,
             "page": document.metadata.get("page"),
             "chunk_id": document.id,
         }
@@ -125,7 +157,7 @@ def retrieve_case_guide_context(query: str, *,top_k: int = DEFAULT_TOP_K,) -> li
 
 
 def format_case_guide_context(chunks: list[dict[str, Any]]) -> str:
-    # Just a simple bullet list of the retrieved chunks, with page numbers and source file name
+    # Just a simple bullet list of the retrieved chunks, with page numbers and a citeable source label
     if not chunks:
         return "None."
 
@@ -133,7 +165,8 @@ def format_case_guide_context(chunks: list[dict[str, Any]]) -> str:
     for chunk in chunks:
         page = chunk.get("page")
         page_label = f"p.{int(page) + 1}" if isinstance(page, int) else "p.?"
-        lines.append(f"- [{chunk.get('source', 'case guide')} {page_label}] {chunk.get('content', '')}")
+        citation = chunk.get("citation") or chunk.get("source", "case guide")
+        lines.append(f"- [{citation}, {page_label}] {chunk.get('content', '')}")
     return "\n".join(lines)
 
 

@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -49,6 +49,10 @@ help:
 	@printf "%s\n" "                    Replay a batch's stored transcripts through the judge eval nodes"
 	@printf "%s\n" "                    with RAG disabled, and compare eval_case/eval_dialog scores against"
 	@printf "%s\n" "                    that batch's original (with-RAG) scores for the same transcript"
+	@printf "%s\n" "  make judge-eval [GOLDEN_SET=worldcup] [LIMIT=<n>]"
+	@printf "%s\n" "                    Run a judge golden-set CSV (database/judge_evaluation/) against the"
+	@printf "%s\n" "                    real judge LLM and score enough_evidence accuracy; read the result"
+	@printf "%s\n" "                    on the workbench's Agents > Judge page"
 	@printf "%s\n" ""
 	@printf "%s\n" "make setup-hpc persists RUNNER=hpc for later commands in $(RUNNER_STATE_FILE)"
 
@@ -123,3 +127,12 @@ rag-ablation:
 		exit 1; \
 	fi
 	$(PY) rag_ablation_eval.py --batch $(BATCH) $(if $(LIMIT),--limit $(LIMIT),)
+
+# --- Judge golden-set eval: score enough_evidence accuracy against the real judge LLM ---
+# Usage: make judge-eval [GOLDEN_SET=worldcup] [LIMIT=<n>]
+GOLDEN_SET ?= worldcup
+
+judge-eval:
+	$(PY) main/studio/judge_eval/run_judge_golden_set.py \
+		--csv database/judge_evaluation/judge_golden_set_$(GOLDEN_SET).csv \
+		$(if $(LIMIT),--limit $(LIMIT),)

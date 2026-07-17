@@ -27,7 +27,7 @@ _embeddings_singleton: FastEmbedEmbeddings | None = None
 _vectorstore_singleton: Chroma | None = None
 
 
-def _load_profitability_source_navigation_guide() -> str:
+def _load_profitability_source_navigation() -> dict[str, str]:
     try:
         payload = json.loads(RAG_SOURCE_METADATA_PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError, json.JSONDecodeError) as exc:
@@ -36,14 +36,21 @@ def _load_profitability_source_navigation_guide() -> str:
         ) from exc
 
     guidance = str(payload.get("retrieval_guidance", "")).strip()
-    if not guidance:
+    citation_label = str(payload.get("citation_label", "")).strip()
+    if not guidance or not citation_label:
         raise RuntimeError(
-            f"Profitability RAG metadata in {RAG_SOURCE_METADATA_PATH} is missing 'retrieval_guidance'."
+            f"Profitability RAG metadata in {RAG_SOURCE_METADATA_PATH} is missing "
+            "'retrieval_guidance' or 'citation_label'."
         )
-    return guidance
+    return {"retrieval_guidance": guidance, "citation_label": citation_label}
 
 
-PROFITABILITY_SOURCE_NAVIGATION_GUIDE = _load_profitability_source_navigation_guide()
+_PROFITABILITY_SOURCE_NAVIGATION = _load_profitability_source_navigation()
+PROFITABILITY_SOURCE_NAVIGATION_GUIDE = _PROFITABILITY_SOURCE_NAVIGATION["retrieval_guidance"]
+
+# Human-readable citation for feedback/prose to name this source by, e.g.
+# "Principles of Managerial Accounting by Dr. Patricia Goedl".
+PROFITABILITY_CITATION_LABEL = _PROFITABILITY_SOURCE_NAVIGATION["citation_label"]
 
 
 def get_embeddings() -> FastEmbedEmbeddings:
@@ -126,6 +133,7 @@ def retrieve_profitability_guide_context(
         {
             "content": document.page_content.strip(),
             "source": PROFITABILITY_GUIDE_PDF_PATH.name,
+            "citation": PROFITABILITY_CITATION_LABEL,
             "page": document.metadata.get("page"),
             "chunk_id": document.id,
         }
@@ -142,7 +150,8 @@ def format_profitability_guide_context(chunks: list[dict[str, Any]]) -> str:
     for chunk in chunks:
         page = chunk.get("page")
         page_label = f"p.{int(page) + 1}" if isinstance(page, int) else "p.?"
-        lines.append(f"- [{chunk.get('source', 'profitability guide')} {page_label}] {chunk.get('content', '')}")
+        citation = chunk.get("citation") or chunk.get("source", "profitability guide")
+        lines.append(f"- [{citation}, {page_label}] {chunk.get('content', '')}")
     return "\n".join(lines)
 
 

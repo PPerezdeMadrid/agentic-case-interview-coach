@@ -1,3 +1,4 @@
+import csv
 import json
 import sqlite3
 import sys
@@ -14,6 +15,7 @@ if str(WEB_DIR) not in sys.path:
 try:
     import app as workbench_app
     import dashboard_store
+    import judge_eval
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Workbench test dependencies are not installed: {exc.name}") from exc
 
@@ -389,6 +391,66 @@ class DashboardStoreTests(unittest.TestCase):
         )
 
 
+class JudgeEvalStoreTests(unittest.TestCase):
+    def test_list_and_load_judge_golden_set(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            judge_eval_dir = Path(temp_dir)
+            csv_path = judge_eval_dir / "judge_golden_set_demo.csv"
+            with csv_path.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(
+                    handle, fieldnames=["conversation_id", "judge_input", "expected_enough_evidence"]
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "conversation_id": "DEMO_01",
+                        "judge_input": "System prompt text.",
+                        "expected_enough_evidence": "False",
+                    }
+                )
+
+            results_payload = {
+                "golden_set": "demo",
+                "model": "meta-llama/llama-3.1-70b-instruct",
+                "computed_at": "2026-07-17T00:00:00+00:00",
+                "n_total": 1,
+                "n_scored": 1,
+                "n_errors": 0,
+                "n_correct": 1,
+                "accuracy": 1.0,
+                "confusion": {"true_positive": 0, "true_negative": 1, "false_positive": 0, "false_negative": 0},
+                "precision": None,
+                "recall": None,
+                "records": [
+                    {
+                        "conversation_id": "DEMO_01",
+                        "expected_enough_evidence": False,
+                        "predicted_enough_evidence": False,
+                        "correct": True,
+                        "predicted_focus_areas": ["clarify the objective"],
+                        "error": None,
+                    }
+                ],
+            }
+            (judge_eval_dir / "judge_golden_set_demo_results.json").write_text(json.dumps(results_payload))
+
+            with patch.object(judge_eval, "JUDGE_EVAL_DIR", judge_eval_dir):
+                judge_eval._CACHE.clear()
+                golden_sets = judge_eval.list_judge_golden_sets()
+                result = judge_eval.load_judge_eval("demo")
+
+        self.assertEqual(golden_sets, ["demo"])
+        self.assertEqual(result["accuracy"], 1.0)
+        self.assertEqual(result["records"][0]["judge_input"], "System prompt text.")
+
+    def test_load_judge_eval_raises_when_results_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.object(judge_eval, "JUDGE_EVAL_DIR", Path(temp_dir)):
+                judge_eval._CACHE.clear()
+                with self.assertRaises(FileNotFoundError):
+                    judge_eval.load_judge_eval("missing")
+
+
 class WorkbenchAppTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -481,6 +543,70 @@ class WorkbenchAppTests(unittest.TestCase):
         self.assertEqual(payload["run"]["run_id"], "run_001")
         self.assertEqual(payload["summary"]["trace_count"], 2)
         self.assertEqual(payload["traces"][0]["step_index"], 1)
+
+    def test_agents_index_lists_judge_card(self) -> None:
+        response = self.client.get("/agents")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Judge", response.data)
+
+    def test_agents_judge_page_prompts_when_no_golden_sets(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.object(judge_eval, "JUDGE_EVAL_DIR", Path(temp_dir)):
+                response = self.client.get("/agents/judge")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"No judge golden-set results found", response.data)
+
+    def test_agents_judge_page_renders_cached_results(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            judge_eval_dir = Path(temp_dir)
+            csv_path = judge_eval_dir / "judge_golden_set_demo.csv"
+            with csv_path.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(
+                    handle, fieldnames=["conversation_id", "judge_input", "expected_enough_evidence"]
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "conversation_id": "DEMO_01",
+                        "judge_input": "System prompt text.",
+                        "expected_enough_evidence": "False",
+                    }
+                )
+            results_payload = {
+                "golden_set": "demo",
+                "model": "meta-llama/llama-3.1-70b-instruct",
+                "computed_at": "2026-07-17T00:00:00+00:00",
+                "n_total": 1,
+                "n_scored": 1,
+                "n_errors": 0,
+                "n_correct": 1,
+                "accuracy": 1.0,
+                "confusion": {"true_positive": 0, "true_negative": 1, "false_positive": 0, "false_negative": 0},
+                "precision": None,
+                "recall": None,
+                "records": [
+                    {
+                        "conversation_id": "DEMO_01",
+                        "expected_enough_evidence": False,
+                        "predicted_enough_evidence": False,
+                        "correct": True,
+                        "predicted_focus_areas": ["clarify the objective"],
+                        "error": None,
+                    }
+                ],
+            }
+            (judge_eval_dir / "judge_golden_set_demo_results.json").write_text(json.dumps(results_payload))
+
+            with patch.object(judge_eval, "JUDGE_EVAL_DIR", judge_eval_dir):
+                judge_eval._CACHE.clear()
+                response = self.client.get("/agents/judge?golden_set=demo")
+
+        self.assertEqual(response.status_code, 200)
+        body = response.get_data(as_text=True)
+        self.assertIn("DEMO_01", body)
+        self.assertIn("100.0%", body)
 
     def test_human_evaluation_api_rejects_invalid_section_shape(self) -> None:
         response = self.client.post(

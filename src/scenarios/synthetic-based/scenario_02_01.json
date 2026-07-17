@@ -2,7 +2,6 @@
   "scenario_id": "scenario_02_baluarte",
   "case_id": "02-football-team",
   "candidate_profile": {
-    "id": "candidate_02_01",
     "persona_instruction": {
       "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
       "behaviour_description": "You have a weak case opening: you start too quickly without a clean recap of the situation, without clarifying the objective, and without laying out a proper initial structure, so the opening feels abrupt and underdeveloped. Immediately after that weak start, you recover and perform the rest of the interview very strongly: you structure the analysis well, diagnose the revenue shock and cost mismatch correctly, solve the math accurately, and give a crisp final recommendation.",
@@ -52,7 +51,7 @@
       "rubric": {
         "case_opening": {
           "expected": 1,
-          "rationale": "The candidate opens abruptly, without summarizing the problem, clarifying the objective, or setting an initial approach."
+          "rationale": "There is NO real opening: the candidate shows **disorganization** from the very first response, skipping the recap of the situation, skipping the clarification of the objective, and diving straight into analysis without laying out any initial approach."
         },
         "case_structure": {
           "expected": 4,

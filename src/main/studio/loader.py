@@ -61,9 +61,7 @@ def _normalize_case_block(block: dict[str, Any]) -> dict[str, Any]:
     return {
         "block_id": block.get("block_id", ""),
         "title": block.get("title", ""),
-        "source_page": block.get("source_page"),
         "visible_to_candidate": bool(block.get("visible_to_candidate", False)),
-        "image": block.get("image"),
         "content": content,
         "block_type": block_type,
     }
@@ -186,7 +184,6 @@ def adapt_scenario(raw_scenario: dict[str, Any]) -> dict[str, Any]:
         "scenario_id": scenario_id,
         "case_id": case_id,
         "rubric_id": DEFAULT_RUBRIC_ID,
-        "candidate_model": raw_scenario.get("candidate_model", {}),
         "candidate_profile": candidate_profile,
         "expected_scores": expected_scores,
         "max_judge_rounds": DEFAULT_MAX_JUDGE_ROUNDS,
@@ -226,7 +223,6 @@ def adapt_case(raw_case: dict[str, Any]) -> dict[str, Any]:
                 block for block in blocks if block["block_type"] == "final_recommendation"
             ],
         },
-        "knowledge_sources": raw_case.get("knowledge_sources", []),
         "source_path": raw_case.get("_source_path", ""),
     }
 

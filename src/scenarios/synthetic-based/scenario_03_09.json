@@ -2,7 +2,6 @@
   "scenario_id": "scenario_03_verdex",
   "case_id": "03-agriculture-company",
   "candidate_profile": {
-    "id": "candidate_03_09",
     "persona_instruction": {
       "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
       "behaviour_description": "You sound good at the turn level, but your interaction quality is poor because the conversation lacks a coherent through-line. Your answers are individually plausible, yet they do not build consistently on prior reasoning, and the discussion feels fragmented rather than cumulative.",
@@ -99,7 +98,7 @@
         },
         "multi_turn_coherence": {
           "expected": 1,
-          "rationale": "The candidate never explicitly connects a turn's reasoning back to conclusions or numbers from earlier turns, so the interview feels like a series of self-contained answers rather than one cumulative case."
+          "rationale": "There is NO through-line across turns: the candidate shows **fragmentation**, never connecting a turn's reasoning back to conclusions or numbers from earlier turns, so the interview reads as disconnected, self-contained answers rather than one cumulative case."
         }
       }
     }

@@ -1,19 +1,36 @@
 from __future__ import annotations
 
 from loader import load_selected_simulation_bundle
-from rag.rag_case_guide import retrieve_case_guide_context as _retrieve_case_guide_context
+from rag.rag_case_guide import (
+    CASE_GUIDE_CITATION_LABEL,
+    CASE_GUIDE_SOURCE_DESCRIPTION,
+    retrieve_case_guide_context as _retrieve_case_guide_context,
+)
 from state import AgenticGraphState
 from utils import extract_case_prompt
 
 DEFAULT_TOP_K = 4
 
-# Short description each node's own prompt can quote when deciding whether it needs
-# to consult this source -- not a query, just "what's in here".
-CASE_GUIDE_SOURCE_DESCRIPTION = (
-    "Consulting Case Interview Guide (PDF) -- covers case-interview methodology, "
-    "structuring frameworks, top-down communication (Pyramid Principle), evaluation "
-    "criteria, common candidate mistakes, and examples of strong candidate behaviour."
-)
+__all__ = [
+    "CASE_GUIDE_CITATION_LABEL",
+    "CASE_GUIDE_SOURCE_DESCRIPTION",
+    "DEFAULT_TOP_K",
+    "format_case_guide_snippet",
+    "format_case_guide_snippets",
+    "get_baseline_case_guide_context",
+    "resolve_case_guide_query",
+    "retrieve_case_guide_context",
+]
+
+
+def format_case_guide_snippet(chunk: dict) -> str:
+    """Format one retrieved case-guide chunk as a citeable line, e.g.
+    '[Consulting Case Interview Guide by Paloma Pérez de Madrid, p.12] ...'."""
+    page = chunk.get("page")
+    page_label = f"p.{int(page) + 1}" if isinstance(page, int) else "p.?"
+    citation = chunk.get("citation") or CASE_GUIDE_CITATION_LABEL
+    content = str(chunk.get("content", "")).strip()
+    return f"[{citation}, {page_label}] {content}"
 
 
 def format_case_guide_snippets(case_guide_context: list[str]) -> str:
@@ -54,7 +71,7 @@ def get_baseline_case_guide_context(
     query = resolve_case_guide_query(state) or "consulting case interview methodology"
     case_guide_chunks = retrieve_case_guide_context(query, top_k=top_k)
     snippets = [
-        str(chunk.get("content", "")).strip()
+        format_case_guide_snippet(chunk)
         for chunk in case_guide_chunks
         if str(chunk.get("content", "")).strip()
     ]

@@ -16,6 +16,21 @@
   {%- endif -%}
 {%- endmacro %}
 
+{% macro signed(value) -%}
+  {%- if value is none -%}&ndash;
+  {%- elif value > 0 -%}+{{ value }}
+  {%- else -%}{{ value }}
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro bias_status(value) -%}
+  {%- if value is none -%}status-not-tested
+  {%- elif value|abs <= 0.4 -%}status-exact-match
+  {%- elif value|abs <= 1.0 -%}status-off-by-1
+  {%- else -%}status-different
+  {%- endif -%}
+{%- endmacro %}
+
 {% block title %}Experiment | main dashboard{% endblock %}
 
 {% block content %}
@@ -94,8 +109,6 @@
           <td>Final feedback text mentions repetition/looping</td>
           {% for g in overview.graph_metrics %}<td>{{ pct(g.feedback_mentions_repetition_rate) }}</td>{% endfor %}
         </tr>
-        <tr><td>Judge-scored dimension values collected</td>{% for g in overview.graph_metrics %}<td>{{ g.tested_score_count }}</td>{% endfor %}</tr>
-        <tr><td>Mean score among tested dimensions</td>{% for g in overview.graph_metrics %}<td>{{ num(g.mean_tested_score) }}</td>{% endfor %}</tr>
         <tr><td>Avg LLM calls / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_llm_calls) }}</td>{% endfor %}</tr>
         <tr><td>Avg prompt tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_prompt_tokens) }}</td>{% endfor %}</tr>
         <tr><td>Avg completion tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_completion_tokens) }}</td>{% endfor %}</tr>
@@ -107,43 +120,112 @@
   <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design (<code>OPENROUTER_TEMPERATURE=0</code>), so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
 </section>
 
+{% if overview.accuracy.total_dims %}
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Score distribution (tested values only)</p>
-      <h2>Histogram by graph</h2>
+      <p class="eyebrow">Accuracy vs. reference (author-defined expected scores)</p>
+      <h2>Who scores it right?</h2>
+      <p class="lede">Each square compares a graph's judge score to the scenario's own expected score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The radar plots the same comparison as one overlaid shape per graph &mdash; a shape collapsed toward the center means that graph rarely produced a numeric score to compare at all.</p>
     </div>
   </div>
-  <div class="two-col">
-    {% for g in overview.graph_metrics %}
-    <div class="subsection">
-      <h3>{{ g.graph_name }} ({{ g.tested_score_count }} tested values)</h3>
-      {% if g.score_histogram %}
-      {% set max_count = g.score_histogram.values() | max %}
-      {% for score, count in g.score_histogram.items() %}
-      <div class="hist-bar-row">
-        <span>{{ score }}</span>
-        <div class="hist-bar-track"><div class="hist-bar-fill" style="width: {{ (count / max_count * 100) if max_count else 0 }}%"></div></div>
-        <span>{{ count }}</span>
+
+  <div class="accuracy-top">
+    {% if overview.accuracy.summary %}
+    <div class="metric-grid accuracy-scoreboard">
+      {% for s in overview.accuracy.summary %}
+      <div class="metric-card{{ ' metric-card--winner' if s.graph_name == overview.accuracy.overall_winner else '' }}">
+        <span>{{ s.graph_name }}{% if s.graph_name == overview.accuracy.overall_winner %} &bull; overall winner <span class="icon-star" aria-hidden="true"></span>{% endif %}</span>
+        <strong>{{ s.dims_won }} / {{ overview.accuracy.total_dims }}</strong>
+        <p class="helper">dimensions won &bull; MAE {{ num(s.overall_mae) }} &middot; RMSE {{ num(s.overall_rmse) }} vs reference &bull; {{ s.n_compared }} scored comparisons</p>
       </div>
       {% endfor %}
-      {% else %}
-      <p class="helper">No tested (numeric) scores for this graph.</p>
-      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if overview.radar %}
+    <div class="radar-wrap">
+      <svg class="radar-chart" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        {% for ring in overview.radar.rings %}
+        <polygon class="radar-grid-ring" points="{{ ring.points }}"></polygon>
+        {% endfor %}
+        {% for axis in overview.radar.axes %}
+        <line class="radar-spoke" x1="{{ overview.radar.cx }}" y1="{{ overview.radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
+        <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.label }}</text>
+        {% endfor %}
+        {% for s in overview.radar.series %}
+        <polygon class="radar-series" points="{{ s.points }}" style="stroke: {{ s.color }}; fill: {{ s.color }};"></polygon>
+        {% endfor %}
+      </svg>
+      <div class="radar-legend">
+        {% for s in overview.radar.series %}
+        <div class="radar-legend-item"><span class="radar-legend-swatch" style="background: {{ s.color }};"></span>{{ s.graph_name }}</div>
+        {% endfor %}
+      </div>
+      <p class="helper radar-caption">Near the outer ring = judge score close to the reference (accurate). Collapsed toward the center = far off from the reference, or no comparable score at all for that dimension.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="chip-row" style="padding: 0 24px 16px;">
+    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; accurate</span>
+    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; so-so</span>
+    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; off</span>
+    <span class="chip">&#9651; overestimates &bull; &#9661; underestimates &bull; &#9642; matches</span>
+    <span class="chip"><span class="icon-star" aria-hidden="true"></span> more accurate graph on that row</span>
+  </div>
+
+  {% set n_graphs = overview.accuracy.graph_names | length %}
+  {% set cols = 'minmax(220px, 1.4fr) repeat(' ~ n_graphs ~ ', minmax(130px, 1fr))' %}
+  <div class="heatmap">
+    <div class="heatmap-row" style="grid-template-columns: {{ cols }};">
+      <div></div>
+      {% for g in overview.accuracy.graph_names %}
+      <div class="heatmap-col-label">{{ g }}</div>
+      {% endfor %}
+    </div>
+
+    {% set ns = namespace(section='') %}
+    {% for row in overview.accuracy.rows %}
+    {% if row.section_label != ns.section %}
+    {% set ns.section = row.section_label %}
+    <div class="heatmap-section">{{ row.section_label }}</div>
+    {% endif %}
+    <div class="heatmap-row" style="grid-template-columns: {{ cols }};">
+      <div class="heatmap-dim-label">{{ row.dimension }}</div>
+      {% for g in overview.accuracy.graph_names %}
+      {% set cell = row.graphs.get(g) %}
+      <div class="heatmap-cell heatmap-{{ cell.severity if cell else 'empty' }}{{ ' is-winner' if cell and cell.is_winner else '' }}"{% if cell and cell.mae is not none %} title="MAE {{ cell.mae }} &middot; RMSE {{ cell.rmse }} ({{ cell.n_compared }} compared)"{% endif %}>
+        {% if cell and cell.is_winner %}<span class="trophy icon-star" aria-hidden="true" title="More accurate graph for this dimension"></span>{% endif %}
+        {% if cell and cell.mae is not none %}
+        <span class="mae-value">{{ cell.mae }}</span>
+        <span class="bias-tag">
+          {%- if cell.bias == 'over' %}&#9651; overestimates
+          {%- elif cell.bias == 'under' %}&#9661; underestimates
+          {%- else %}&#9642; matches
+          {%- endif %}
+        </span>
+        <span class="helper">{{ cell.n_compared }} compared</span>
+        {% else %}
+        <span class="helper">no comparable scores</span>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
 </section>
+{% endif %}
 
 <section class="panel">
   <div class="panel-heading">
     <div>
       <p class="eyebrow">Eval Case Performance &amp; Eval Dialog Quality</p>
-      <h2>Per-dimension: tested rate &amp; mean score</h2>
+      <h2>Per-dimension: deviation from reference &amp; hit rate</h2>
       <p class="lede">
-        For each dimension, the judge either returns a numeric score (1&ndash;4) or <code>not_tested</code> when it decides the transcript doesn't give it enough to go on.
-        <strong>Tested %</strong> is the share of the {{ overview.graph_metrics[0].n_runs if overview.graph_metrics else '?' }} runs per graph that got a real number instead of <code>not_tested</code>.
-        <strong>Mean score</strong> is the plain average of only those numeric scores &mdash; it says nothing about the runs that came back <code>not_tested</code>, so with a handful of tested runs (see the counts in parentheses) treat it as anecdotal, not a reliable comparison.
+        For every repeat where a graph returned a real number for this dimension (not <code>not_tested</code>) and the scenario has an author-defined expected score, this compares the two.
+        <strong>Mean deviation</strong> is the signed average of (judge score &minus; expected score): <code>+</code> means the graph overestimates on average, <code>&minus;</code> means it underestimates, close to <code>0</code> means it lands on target.
+        <strong>% exact match</strong> is the share of those comparisons where the judge's score matched the expected score exactly &mdash; treat it as anecdotal when the compared-count in parentheses is small.
       </p>
     </div>
   </div>
@@ -153,28 +235,28 @@
         <tr>
           <th>Section</th>
           <th>Dimension</th>
-          {% for g in overview.graph_metrics %}
-          <th>{{ g.graph_name }} &mdash; tested %</th>
-          <th>{{ g.graph_name }} &mdash; mean score</th>
+          {% for g in overview.accuracy.graph_names %}
+          <th>{{ g }} &mdash; mean deviation (pts)</th>
+          <th>{{ g }} &mdash; % exact match</th>
           {% endfor %}
         </tr>
       </thead>
       <tbody>
-        {% for row in overview.dimension_rows %}
+        {% for row in overview.accuracy.rows %}
         <tr>
           <td>{{ row.section_label }}</td>
           <td>{{ row.dimension }}</td>
-          {% for g in overview.graph_metrics %}
-          {% set cell = row.graphs.get(g.graph_name) %}
-          <td>{% if cell %}<span class="status {{ rate_status(cell.tested_rate) }}">{{ pct(cell.tested_rate) }}</span> <span class="helper">({{ cell.n_tested }}/{{ cell.n_total }})</span>{% else %}&ndash;{% endif %}</td>
-          <td>{{ num(cell.mean_score) if cell else '–' }}</td>
+          {% for g in overview.accuracy.graph_names %}
+          {% set cell = row.graphs.get(g) %}
+          <td>{% if cell and cell.signed_bias is not none %}<span class="status {{ bias_status(cell.signed_bias) }}">{{ signed(cell.signed_bias) }}</span>{% else %}&ndash;{% endif %}</td>
+          <td>{% if cell and cell.exact_match_rate is not none %}<span class="status {{ rate_status(cell.exact_match_rate) }}">{{ pct(cell.exact_match_rate) }}</span> <span class="helper">({{ cell.n_compared }} compared)</span>{% else %}&ndash;{% endif %}</td>
           {% endfor %}
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-  <p class="helper" style="padding: 0 24px 24px;">If <strong>baseline</strong> shows 0% tested on every single dimension while <strong>agentic</strong> doesn't, that's a structural difference between the two graphs' evaluation nodes, not noise &mdash; see the explanation below the scenario table.</p>
+  <p class="helper" style="padding: 0 24px 24px;">If <strong>baseline</strong> shows &ndash; on every single dimension while <strong>agentic</strong> doesn't, that's a structural difference between the two graphs' evaluation nodes (baseline isn't producing comparable numeric scores here), not noise.</p>
 </section>
 
 <section class="panel">

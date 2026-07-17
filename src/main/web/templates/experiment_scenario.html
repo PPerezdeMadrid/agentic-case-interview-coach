@@ -48,6 +48,7 @@
           <span class="chip">{{ r.llm_call_count }} LLM calls &bull; {{ r.total_tokens }} tokens ({{ r.total_prompt_tokens }} in / {{ r.total_completion_tokens }} out)</span>
           {% endif %}
         </div>
+        <p class="focus-areas"><strong>Judge focus areas:</strong> {{ r.focus_areas|join(', ') if r.focus_areas else ('none (enough evidence reached)' if r.enough_evidence else 'none') }}</p>
       </div>
       <div class="mini-chat">
         {% for m in r.messages %}

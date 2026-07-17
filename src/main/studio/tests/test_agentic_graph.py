@@ -17,6 +17,7 @@ try:
     import baseline
     import persistence
     from rag import case_guide_context
+    from rag.profitability_guide_context import PROFITABILITY_CITATION_LABEL
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Studio test dependencies are not installed: {exc.name}") from exc
 
@@ -62,7 +63,6 @@ def make_runtime_case() -> dict:
             "data": [reveal_block],
             "final_recommendation": [final_recommendation],
         },
-        "knowledge_sources": [],
         "profitability_knowledge_sources": [],
         "source_path": "tests/runtime_case.json",
     }
@@ -430,7 +430,10 @@ class AgenticGraphTests(unittest.TestCase):
 
         self.assertEqual(
             update["retrieved_profitability_context"],
-            ["Segment margin = segment revenue minus traceable segment costs."],
+            [
+                f"[{PROFITABILITY_CITATION_LABEL}, p.?] "
+                "Segment margin = segment revenue minus traceable segment costs."
+            ],
         )
         self.assertEqual(len(update["rag_query_log"]), 1)
         self.assertEqual(update["rag_query_log"][0]["source"], "profitability_guide")
@@ -636,7 +639,7 @@ class BaselineGraphTests(unittest.TestCase):
         ):
             update = baseline.baseline_node(state)
 
-        self.assertIn("Consulting Case Interview Guide excerpts:", observed_prompt["content"])
+        self.assertIn(f"Excerpts from the {baseline.CASE_GUIDE_CITATION_LABEL}:", observed_prompt["content"])
         self.assertIn("Start by clarifying the objective and metric.", observed_prompt["content"])
         self.assertEqual(
             update["transcript"][-1],
@@ -706,7 +709,10 @@ class BaselineGraphTests(unittest.TestCase):
             "Our profits are down. What would you look at first?",
             top_k=4,
         )
-        self.assertEqual(context, ["Split revenue from cost drivers."])
+        self.assertEqual(
+            context,
+            [f"[{case_guide_context.CASE_GUIDE_CITATION_LABEL}, p.?] Split revenue from cost drivers."],
+        )
         self.assertEqual(log_entry["chunk_ids"], ["guide::chunk_9"])
 
 

@@ -31,13 +31,17 @@ from prompts import (
     JUDGE_GRAPH_SYSTEM_PROMPT,
 )
 from rag.case_guide_context import (
+    CASE_GUIDE_CITATION_LABEL,
     CASE_GUIDE_SOURCE_DESCRIPTION,
+    format_case_guide_snippet,
     format_case_guide_snippets,
     retrieve_case_guide_context,
 )
 from rag.profitability_guide_context import (
+    PROFITABILITY_CITATION_LABEL,
     PROFITABILITY_SOURCE_NAVIGATION_GUIDE,
     format_profitability_guide_context,
+    format_profitability_guide_snippet,
     retrieve_profitability_guide_context,
 )
 from state import (
@@ -150,7 +154,7 @@ def _scout_case_guide(
         return [], {}, usage_log
 
     chunks = retrieve_case_guide_context(query, top_k=top_k)
-    snippets = [str(chunk.get("content", "")).strip() for chunk in chunks if str(chunk.get("content", "")).strip()]
+    snippets = [format_case_guide_snippet(chunk) for chunk in chunks if str(chunk.get("content", "")).strip()]
     log_entry = {
         "node": node_name,
         "source": "case_guide",
@@ -445,7 +449,7 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
                 + situation
                 + "\n\nGuide navigation rules:\n"
                 + CASE_GUIDE_NAVIGATION_PROMPT
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
                 + format_case_guide_snippets(case_guide_context)
             )
         ),
@@ -522,7 +526,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
     if case_guide_query:
         case_guide_chunks = retrieve_case_guide_context(case_guide_query, top_k=4)
         case_guide_context = [
-            str(chunk.get("content", "")).strip()
+            format_case_guide_snippet(chunk)
             for chunk in case_guide_chunks
             if str(chunk.get("content", "")).strip()
         ]
@@ -556,11 +560,11 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
                 + ". Each field must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
                 + "\n\n"
                 + situation
-                + "\n\nRetrieved profitability methodology context:\n"
+                + f"\n\nExcerpts from {PROFITABILITY_CITATION_LABEL}:\n"
                 + format_profitability_guide_context(profitability_context)
                 + "\n\nGuide navigation rules:\n"
                 + CASE_GUIDE_NAVIGATION_PROMPT
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
                 + format_case_guide_snippets(case_guide_context)
             )
         ),
@@ -573,7 +577,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
     return {
         "case_performance": case_performance,
         "retrieved_profitability_context": [
-            str(chunk.get("content", "")).strip()
+            format_profitability_guide_snippet(chunk)
             for chunk in profitability_context
             if str(chunk.get("content", "")).strip()
         ],
@@ -613,7 +617,7 @@ def eval_dialog_quality_node(state: AgenticGraphState) -> AgenticGraphState:
                 + situation
                 + "\n\nGuide navigation rules:\n"
                 + CASE_GUIDE_NAVIGATION_PROMPT
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
                 + format_case_guide_snippets(case_guide_context)
             )
         ),
@@ -650,6 +654,9 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
         node_name="give_feedback",
     )
+    # Reuse the profitability excerpts eval_case_performance already retrieved this
+    # round (state-carried, already citation-tagged) instead of re-querying here.
+    profitability_context = state.get("retrieved_profitability_context", [])
     messages = [
         SystemMessage(
             content=(
@@ -658,8 +665,10 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
                 + situation
                 + "\n\nGuide navigation rules:\n"
                 + CASE_GUIDE_NAVIGATION_PROMPT
-                + "\n\nConsulting Case Interview Guide excerpts:\n"
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
                 + format_case_guide_snippets(case_guide_context)
+                + f"\n\nExcerpts from {PROFITABILITY_CITATION_LABEL} (gathered earlier while scoring):\n"
+                + format_case_guide_snippets(profitability_context)
             )
         ),
     ]

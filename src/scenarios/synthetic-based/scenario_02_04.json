@@ -2,7 +2,6 @@
   "scenario_id": "scenario_02_baluarte",
   "case_id": "02-football-team",
   "candidate_profile": {
-    "id": "candidate_02_04",
     "persona_instruction": {
       "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
       "behaviour_description": "You perform the full case strongly until the end: you open clearly, structure the problem well, diagnose the issues accurately, and solve the math correctly. However, your final recommendation is weak: instead of giving a decisive, prioritized answer, you become vague, hedge too much, and fail to translate the analysis into a specific action plan for the club.",
@@ -67,7 +66,7 @@
         },
         "final_recommendation": {
           "expected": 1,
-          "rationale": "Despite strong prior analysis, the candidate fails to convert the diagnosis into a clear, specific, and prioritized recommendation."
+          "rationale": "There is NO decisive recommendation: despite strong prior analysis, the candidate shows **indecision** at the close, hedging, staying vague, and never converting the diagnosis into a specific, prioritized action plan."
         },
         "overall_structure": {
           "expected": 4,

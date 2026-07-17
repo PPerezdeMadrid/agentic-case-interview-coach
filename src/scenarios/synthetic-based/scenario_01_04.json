@@ -2,7 +2,6 @@
   "scenario_id": "scenario_01_solventus",
   "case_id": "01-energy-company",
   "candidate_profile": {
-    "id": "candidate_04",
     "persona_instruction": {
       "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
       "behaviour_description": "You solve the case correctly, but your communication quality is poor because your answers are rambling, repetitive, and inefficient. Even though your underlying analysis is strong, you frequently over-explain simple points and make it harder than necessary for the interviewer to follow your reasoning.",
@@ -77,7 +76,7 @@
       "case_interaction_quality": {
         "clarity_and_concision": {
           "expected": 1,
-          "rationale": "The candidate restates the question and repeats key numbers or conclusions in nearly every turn instead of stating them once, making the reasoning far harder to follow than necessary."
+          "rationale": "There is NO concision: the candidate shows constant **repetition**, restating the question before answering it and repeating each key number or conclusion at least twice in nearly every turn instead of stating it once."
         },
         "responsiveness_and_adaptation": {
           "expected": 4,

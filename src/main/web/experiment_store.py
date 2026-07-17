@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 from collections import defaultdict
 from functools import lru_cache
 from pathlib import Path
@@ -29,13 +30,10 @@ TRANSCRIPT_PREFIXES = {
     "Interviewer: ": ("interviewer", "Interviewer"),
     "Candidate: ": ("candidate", "Candidate"),
     "Judge: ": ("judge", "Judge"),
+    "Eval Case Performance: ": ("judge", "Judge · Case Performance Eval"),
+    "Eval Dialog Quality: ": ("judge", "Judge · Dialog Quality Eval"),
+    "Give Feedback: ": ("judge", "Judge · Final Feedback"),
 }
-
-SKIPPED_PREFIXES = (
-    "Eval Case Performance: ",
-    "Eval Dialog Quality: ",
-    "Give Feedback: ",
-)
 
 REPETITION_KEYWORDS = ("repeat", "repetit", "same question", "same phrase", "loop")
 
@@ -105,9 +103,6 @@ def parse_transcript(transcript: list[str]) -> list[dict[str, Any]]:
     messages: list[dict[str, Any]] = []
 
     for line in transcript:
-        if line.startswith(SKIPPED_PREFIXES):
-            continue
-
         role, label, content = "system", "System", line
         for prefix, (prefix_role, prefix_label) in TRANSCRIPT_PREFIXES.items():
             if line.startswith(prefix):
@@ -170,14 +165,6 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
         if len(candidate_texts) == 1:
             identical_repeat_scenarios[graph_name][0] += 1
 
-    all_scores_numeric: dict[str, list[float]] = defaultdict(list)
-    for record in records:
-        graph_name = record.get("graph_name", "unknown")
-        for _section_key, _label, _dimension, score, _rationale in iter_dimension_scores(record):
-            numeric = to_numeric_score(score)
-            if numeric is not None:
-                all_scores_numeric[graph_name].append(numeric)
-
     metrics = []
     for graph_name, rows in sorted(by_graph.items()):
         n_runs = len(rows)
@@ -189,10 +176,6 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
         degenerate_runs = sum(1 for count in repeat_counts if count > 0)
         feedback_mentions = sum(1 for row in rows if _mentions_repetition(row.get("final_feedback", "")))
         identical_hits, identical_total = identical_repeat_scenarios.get(graph_name, [0, 0])
-
-        score_histogram: dict[str, int] = defaultdict(int)
-        for value in all_scores_numeric.get(graph_name, []):
-            score_histogram[str(int(value)) if value == int(value) else str(value)] += 1
 
         prompt_tokens = [row.get("total_prompt_tokens") for row in rows]
         completion_tokens = [row.get("total_completion_tokens") for row in rows]
@@ -212,9 +195,6 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
                 "degenerate_run_rate": _rate(degenerate_runs, n_runs),
                 "identical_candidate_scenario_rate": _rate(identical_hits, identical_total),
                 "feedback_mentions_repetition_rate": _rate(feedback_mentions, n_runs),
-                "tested_score_count": len(all_scores_numeric.get(graph_name, [])),
-                "mean_tested_score": _mean(all_scores_numeric.get(graph_name, [])),
-                "score_histogram": dict(sorted(score_histogram.items())),
                 "avg_llm_calls": _mean(llm_call_counts),
                 "avg_prompt_tokens": _mean(prompt_tokens),
                 "avg_completion_tokens": _mean(completion_tokens),
@@ -226,28 +206,209 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
     return metrics
 
 
-def compute_dimension_stats(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    buckets: dict[tuple[str, str, str], dict[str, list[float | None]]] = defaultdict(lambda: defaultdict(list))
+# Rubric dimensions are scored 1-4, so the widest possible miss is 3 points.
+MAX_SCORE_SPAN = 3.0
+BIAS_EPSILON = 0.15
+RADAR_PALETTE = ["#2d5a27", "#a8622a", "#3a5a78", "#7a3d78", "#8a7a1f"]
+
+
+def _severity(mae: float | None) -> str:
+    if mae is None:
+        return "empty"
+    if mae <= 0.4:
+        return "good"
+    if mae <= 1.0:
+        return "fair"
+    return "poor"
+
+
+def _rmse(errors: list[float]) -> float | None:
+    """Root-mean-square error, same 1-4 point scale as MAE but more sensitive to a few large misses."""
+    if not errors:
+        return None
+    return round(math.sqrt(sum(err * err for err in errors) / len(errors)), 2)
+
+
+def _bias_label(signed_bias: float | None) -> str:
+    if signed_bias is None:
+        return ""
+    if signed_bias > BIAS_EPSILON:
+        return "over"
+    if signed_bias < -BIAS_EPSILON:
+        return "under"
+    return "match"
+
+
+def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """
+    Compare each graph's judge scores against the scenario's own author-defined
+    expected score (candidate_profile.expected_scores), pooled across every
+    repeat in the batch. This is what answers "which graph scores accurately"
+    and "who wins".
+    """
+    graph_names = sorted({record.get("graph_name", "unknown") for record in records})
+
+    all_keys: set[tuple[str, str, str]] = set()
+    pairs: dict[tuple[str, str, str], dict[str, list[tuple[float, float]]]] = defaultdict(lambda: defaultdict(list))
 
     for record in records:
         graph_name = record.get("graph_name", "unknown")
+        reference = load_reference_scores(record.get("scenario_ref", ""))
         for section_key, label, dimension, score, _rationale in iter_dimension_scores(record):
-            buckets[(section_key, label, dimension)][graph_name].append(to_numeric_score(score))
+            key = (section_key, label, dimension)
+            all_keys.add(key)
+            actual = to_numeric_score(score)
+            expected_entry = reference.get(section_key, {}).get(dimension, {})
+            expected = to_numeric_score(expected_entry.get("score")) if isinstance(expected_entry, dict) else None
+            if actual is None or expected is None:
+                continue
+            pairs[key][graph_name].append((actual, expected))
 
     rows = []
-    for (section_key, label, dimension), by_graph in sorted(buckets.items()):
-        row: dict[str, Any] = {"section": section_key, "section_label": label, "dimension": dimension, "graphs": {}}
-        for graph_name, scores in sorted(by_graph.items()):
-            tested = [score for score in scores if score is not None]
-            row["graphs"][graph_name] = {
-                "n_total": len(scores),
-                "n_tested": len(tested),
-                "tested_rate": _rate(len(tested), len(scores)),
-                "mean_score": _mean(tested),
-            }
-        rows.append(row)
+    graph_pooled_errors: dict[str, list[float]] = defaultdict(list)
+    graph_dim_wins: dict[str, int] = defaultdict(int)
 
-    return rows
+    for section_key, label, dimension in sorted(all_keys):
+        key = (section_key, label, dimension)
+        by_graph = pairs.get(key, {})
+        row_graphs: dict[str, Any] = {}
+
+        for graph_name in graph_names:
+            observations = by_graph.get(graph_name, [])
+            if not observations:
+                row_graphs[graph_name] = {
+                    "n_compared": 0,
+                    "mae": None,
+                    "rmse": None,
+                    "signed_bias": None,
+                    "exact_match_rate": None,
+                    "accuracy_pct": None,
+                    "severity": "empty",
+                    "bias": "",
+                    "is_winner": False,
+                }
+                continue
+
+            abs_errors = [abs(a - e) for a, e in observations]
+            signed_errors = [a - e for a, e in observations]
+            mae = _mean(abs_errors)
+            exact = sum(1 for err in abs_errors if err == 0)
+            accuracy_pct = round(max(0.0, min(100.0, 100 * (1 - mae / MAX_SCORE_SPAN))), 1) if mae is not None else None
+
+            row_graphs[graph_name] = {
+                "n_compared": len(observations),
+                "mae": mae,
+                "rmse": _rmse(abs_errors),
+                "signed_bias": _mean(signed_errors),
+                "exact_match_rate": _rate(exact, len(observations)),
+                "accuracy_pct": accuracy_pct,
+                "severity": _severity(mae),
+                "bias": _bias_label(_mean(signed_errors)),
+                "is_winner": False,
+            }
+            graph_pooled_errors[graph_name].extend(abs_errors)
+
+        candidates = [(g, row_graphs[g]["mae"]) for g in graph_names if row_graphs[g]["mae"] is not None]
+        if candidates:
+            best_mae = min(mae for _, mae in candidates)
+            winners = [g for g, mae in candidates if mae == best_mae]
+            if len(winners) == 1:
+                row_graphs[winners[0]]["is_winner"] = True
+                graph_dim_wins[winners[0]] += 1
+
+        rows.append({"section": section_key, "section_label": label, "dimension": dimension, "graphs": row_graphs})
+
+    summary = []
+    for graph_name in graph_names:
+        errors = graph_pooled_errors.get(graph_name, [])
+        overall_mae = _mean(errors)
+        summary.append(
+            {
+                "graph_name": graph_name,
+                "dims_won": graph_dim_wins.get(graph_name, 0),
+                "overall_mae": overall_mae,
+                "overall_rmse": _rmse(errors),
+                "n_compared": len(errors),
+                "accuracy_pct": round(max(0.0, min(100.0, 100 * (1 - overall_mae / MAX_SCORE_SPAN))), 1)
+                if overall_mae is not None
+                else None,
+            }
+        )
+
+    overall_winner = None
+    ranked = sorted(
+        (s for s in summary if s["overall_mae"] is not None),
+        key=lambda s: (-s["dims_won"], s["overall_mae"]),
+    )
+    if ranked:
+        overall_winner = ranked[0]["graph_name"]
+
+    return {
+        "rows": rows,
+        "summary": summary,
+        "graph_names": graph_names,
+        "total_dims": len(rows),
+        "overall_winner": overall_winner,
+    }
+
+
+def build_radar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str]) -> dict[str, Any] | None:
+    """Precompute SVG polygon geometry for an accuracy radar chart (one axis per rubric dimension)."""
+    rows = [row for row in accuracy_rows if any(row["graphs"].get(g, {}).get("n_compared") for g in graph_names)]
+    if not rows or not graph_names:
+        return None
+
+    n = len(rows)
+    cx, cy, radius = 200.0, 200.0, 150.0
+    start_angle = -math.pi / 2
+
+    def point_at(angle: float, frac: float) -> dict[str, float]:
+        return {
+            "x": round(cx + radius * frac * math.cos(angle), 1),
+            "y": round(cy + radius * frac * math.sin(angle), 1),
+        }
+
+    axes = []
+    for i, row in enumerate(rows):
+        angle = start_angle + i * (2 * math.pi / n)
+        label_pos = point_at(angle, 1.16)
+        anchor = "middle"
+        if label_pos["x"] > cx + 10:
+            anchor = "start"
+        elif label_pos["x"] < cx - 10:
+            anchor = "end"
+        axes.append(
+            {
+                "label": row["dimension"],
+                "angle": angle,
+                "spoke": point_at(angle, 1.0),
+                "label_pos": label_pos,
+                "anchor": anchor,
+            }
+        )
+
+    rings = []
+    for frac in (0.25, 0.5, 0.75, 1.0):
+        points = " ".join(f"{point_at(axis['angle'], frac)['x']},{point_at(axis['angle'], frac)['y']}" for axis in axes)
+        rings.append({"frac": frac, "points": points})
+
+    series = []
+    for idx, graph_name in enumerate(graph_names):
+        points = []
+        for i, row in enumerate(rows):
+            cell = row["graphs"].get(graph_name, {})
+            frac = (cell.get("accuracy_pct") or 0) / 100
+            point = point_at(axes[i]["angle"], frac)
+            points.append(f"{point['x']},{point['y']}")
+        series.append(
+            {
+                "graph_name": graph_name,
+                "color": RADAR_PALETTE[idx % len(RADAR_PALETTE)],
+                "points": " ".join(points),
+            }
+        )
+
+    return {"cx": cx, "cy": cy, "radius": radius, "axes": axes, "rings": rings, "series": series}
 
 
 def list_scenarios(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -352,6 +513,8 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
                     "candidate_repeat_count": count_candidate_repeats(transcript),
                     "turn_index": row.get("turn_index"),
                     "judge_round": row.get("judge_round"),
+                    "enough_evidence": row.get("enough_evidence"),
+                    "focus_areas": row.get("focus_areas") or [],
                     "llm_call_count": row.get("llm_call_count"),
                     "total_prompt_tokens": row.get("total_prompt_tokens"),
                     "total_completion_tokens": row.get("total_completion_tokens"),
@@ -392,10 +555,12 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
 def build_overview(dir_name: str) -> dict[str, Any]:
     batch = load_batch(dir_name)
     records = batch["records"]
+    accuracy = compute_accuracy_stats(records)
     return {
         "dir_name": dir_name,
         "summary": batch["summary"],
         "graph_metrics": compute_graph_metrics(records),
-        "dimension_rows": compute_dimension_stats(records),
         "scenarios": list_scenarios(records),
+        "accuracy": accuracy,
+        "radar": build_radar_chart(accuracy["rows"], accuracy["graph_names"]),
     }

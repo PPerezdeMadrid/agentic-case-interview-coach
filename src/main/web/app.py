@@ -23,6 +23,7 @@ from experiment_store import (
     load_batch,
     load_scenario_detail,
 )
+from judge_eval import build_category_radar, category_breakdown, list_judge_golden_sets, load_judge_eval
 from rag_ablation import list_ablation_batches, load_ablation
 from retrieval_eval import DEFAULT_TOP_K, evaluate_retrieval
 
@@ -194,6 +195,44 @@ def rag_evaluation_index():
         ablation_batch=ablation_batch,
         ablation_result=ablation_result,
         ablation_error=ablation_error,
+    )
+
+
+@app.get("/agents")
+def agents_index():
+    return render_template("agents.html")
+
+
+@app.get("/agents/judge")
+def agents_judge():
+    golden_sets = list_judge_golden_sets()
+    golden_set = None
+    result = None
+    error = None
+    categories = None
+    radar = None
+    if golden_sets:
+        requested = str(request.args.get("golden_set", "")).strip()
+        golden_set = requested if requested in golden_sets else golden_sets[0]
+        refresh = request.args.get("refresh") == "1"
+        try:
+            result = load_judge_eval(golden_set, refresh=refresh)
+            categories = category_breakdown(result["records"])
+            radar = build_category_radar(categories)
+        except FileNotFoundError as exc:
+            error = str(exc)
+
+    if _wants_json():
+        return jsonify({**result, "category_breakdown": categories} if result else result)
+
+    return render_template(
+        "agents_judge.html",
+        golden_sets=golden_sets,
+        golden_set=golden_set,
+        result=result,
+        error=error,
+        categories=categories,
+        radar=radar,
     )
 
 

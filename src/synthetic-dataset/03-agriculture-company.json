@@ -5,8 +5,6 @@
       "block_type": "prompt",
       "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
       "visible_to_candidate": true,
-      "image": null,
-      "source_page": 1,
       "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability."
     },
     {
@@ -14,8 +12,6 @@
       "block_type": "guidance",
       "title": "Interviewer Guidance - Prompt #1",
       "visible_to_candidate": false,
-      "image": null,
-      "source_page": 1,
       "content": "Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin."
     },
     {
@@ -23,8 +19,6 @@
       "block_type": "data",
       "title": "Data - Unit Economics",
       "visible_to_candidate": false,
-      "image": null,
-      "source_page": 1,
       "content": "Servicing economics:\n- Current gross margin: approximately 18%, very low for a business positioned as AI software.\n- The product requires physical field sensors, technician installation, maintenance visits, and replacement sensors, which is what makes it expensive to serve despite being sold as software.\n\nAcquisition economics:\n- Customer acquisition cost payback: 38 months, which is long relative to the company's 14-month runway.\n- Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller olive and vineyard groups in places like Candeleda and inland Castilla-La Mancha.\n\nSegment profitability:\n- Customer base: 340 agricultural cooperatives, growing at 60% ARR per year for the past two years.\n- Large cooperatives are materially more profitable than small ones because fixed onboarding and installation costs are spread across more hectares.\n- Small cooperatives are loss-making on a per-account basis.\n\nFinancial position and path forward:\n- Remaining runway: approximately 14 months.\n- A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital the company may not currently have."
     },
     {
@@ -32,8 +26,6 @@
       "block_type": "expected_analysis",
       "title": "Expected Analysis - Root Cause",
       "visible_to_candidate": false,
-      "image": null,
-      "source_page": 1,
       "content": "Key insight (lead with this): Verdex AI has a structural unit-economics problem, not a growth problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale, so faster growth makes losses worse rather than better.\n\nSupporting evidence:\n- An 18% gross margin is far below what a software business should look like, and the gap is explained by physical sensors, installation, and maintenance, not by the AI itself.\n- Low pricing, high service costs, and a 38-month CAC payback mean growth destroys cash instead of creating operating leverage, since the company spends cash upfront on hardware and acquisition well before recovering value through recurring revenue.\n- The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue, while larger cooperatives spread those same fixed costs over more hectares and are meaningfully more profitable.\n- With only 14 months of runway against a 38-month payback, the company cannot simply grow through the problem; the underlying unit economics have to change first.\n\nWhat this means for the client: the priority is not more growth, it is better growth. Fixing which customers are served and how they are served matters more, in the short run, than adding new logos."
     },
     {
@@ -41,8 +33,6 @@
       "block_type": "creative",
       "title": "Creative Question - Near-Term Unit Economics Fixes",
       "visible_to_candidate": true,
-      "image": null,
-      "source_page": 1,
       "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?"
     },
     {
@@ -50,8 +40,6 @@
       "block_type": "guidance",
       "title": "Interviewer Guidance - Creative Question",
       "visible_to_candidate": false,
-      "image": null,
-      "source_page": 1,
       "content": "A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves."
     },
     {
@@ -59,8 +47,6 @@
       "block_type": "final_recommendation",
       "title": "Final Recommendation",
       "visible_to_candidate": true,
-      "image": null,
-      "source_page": 1,
       "content": "Based on your analysis, what recommendation would you give the founders?"
     },
     {
@@ -68,8 +54,6 @@
       "block_type": "final_recommendation",
       "title": "Final Recommendation - Expected Answer",
       "visible_to_candidate": false,
-      "image": null,
-      "source_page": 1,
       "content": "Recommendation: Stop or sharply limit acquisition of small, unprofitable cooperatives, focus commercial effort on larger accounts with better unit economics, and restructure pricing so hardware and installation costs are recovered explicitly, while prioritizing the software-only satellite model as the structural fix.\n\nSupporting evidence:\n- With small cooperatives loss-making on a per-account basis, continuing to sell to them adds ARR while making the cash position worse, so segmentation has to come before further growth.\n- Large cooperatives are already more profitable because fixed onboarding and installation costs spread over more hectares, so shifting sales effort there improves the blend without needing new product work.\n- Separating hardware and installation fees from the recurring contract directly targets the 18% gross margin, which is the root cause identified in the analysis, rather than treating it as a pricing afterthought.\n- The satellite, software-only model would remove sensor costs entirely, which is the only lever that fixes the structural margin problem rather than just improving it at the margin.\n\nRisks and limitations:\n- Price increases or unbundled fees may slow growth further in the short term, which could be difficult optics for a company that has led with a 60% growth story.\n- Pausing small-cooperative acquisition may hurt top-line growth narratives even as it improves survival odds.\n- The satellite model still requires 9 months of development and capital the company may not have on hand, so it depends on financing or a partner coming through.\n\nNext steps:\n- Act within 6 months on pricing and segmentation, since the 14-month runway and 38-month CAC payback leave little room for a slower rollout.\n- Secure bridge financing or a strategic partner specifically to fund the 9-month satellite development gap.\n- Track gross margin and CAC payback by segment monthly so the founders can see whether the changes are working before the runway runs out."
     }
   ]
