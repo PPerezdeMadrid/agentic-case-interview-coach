@@ -50,7 +50,7 @@ help:
 	@printf "%s\n" "                    with RAG disabled, and compare eval_case/eval_dialog scores against"
 	@printf "%s\n" "                    that batch's original (with-RAG) scores for the same transcript"
 	@printf "%s\n" "  make judge-eval [GOLDEN_SET=worldcup] [LIMIT=<n>]"
-	@printf "%s\n" "                    Run a judge golden-set CSV (database/judge_evaluation/) against the"
+	@printf "%s\n" "                    Run a judge golden-set CSV (database/node_eval/judge_eval/) against the"
 	@printf "%s\n" "                    real judge LLM and score enough_evidence accuracy; read the result"
 	@printf "%s\n" "                    on the workbench's Agents > Judge page"
 	@printf "%s\n" ""
@@ -133,6 +133,6 @@ rag-ablation:
 GOLDEN_SET ?= worldcup
 
 judge-eval:
-	$(PY) main/studio/judge_eval/run_judge_golden_set.py \
-		--csv database/judge_evaluation/judge_golden_set_$(GOLDEN_SET).csv \
+	$(PY) main/studio/node_eval/judge_eval/run_judge_golden_set.py \
+		--csv database/node_eval/judge_eval/judge_golden_set_$(GOLDEN_SET).csv \
 		$(if $(LIMIT),--limit $(LIMIT),)

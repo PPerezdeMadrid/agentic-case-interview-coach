@@ -23,7 +23,7 @@ from experiment_store import (
     load_batch,
     load_scenario_detail,
 )
-from judge_eval import build_category_radar, category_breakdown, list_judge_golden_sets, load_judge_eval
+from node_eval.judge_eval import build_category_radar, category_breakdown, list_judge_golden_sets, load_judge_eval
 from rag_ablation import list_ablation_batches, load_ablation
 from retrieval_eval import DEFAULT_TOP_K, evaluate_retrieval
 

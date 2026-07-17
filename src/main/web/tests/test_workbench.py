@@ -15,7 +15,7 @@ if str(WEB_DIR) not in sys.path:
 try:
     import app as workbench_app
     import dashboard_store
-    import judge_eval
+    from node_eval import judge_eval
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Workbench test dependencies are not installed: {exc.name}") from exc
 
