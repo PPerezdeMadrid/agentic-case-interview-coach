@@ -205,10 +205,21 @@
   </script>
   {% endif %}
 
-  <details class="disclosure">
+  <details class="disclosure" id="judge-category-details">
     <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
+    <div class="form-grid disclosure-body" style="padding-bottom: 0;">
+      <label>
+        <span>Filter by category</span>
+        <select id="judge-category-filter">
+          <option value="">All categories ({{ categories|length }})</option>
+          {% for cat in categories %}
+          <option value="{{ cat.category }}">{{ cat.category }} ({{ cat.total }})</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="table-wrap disclosure-body">
-      <table>
+      <table id="judge-category-table">
         <thead>
           <tr>
             <th>#</th>
@@ -222,7 +233,7 @@
         </thead>
         <tbody>
           {% for cat in categories %}
-          <tr>
+          <tr data-category="{{ cat.category }}">
             <td>{{ cat.index }}</td>
             <td><code>{{ cat.category }}</code></td>
             <td>{{ cat.total }}</td>
@@ -245,10 +256,10 @@
   </details>
   {% endif %}
 
-  <details class="disclosure">
+  <details class="disclosure" id="judge-conversation-details">
     <summary>Show per-conversation detail ({{ result.records|length }} conversations)</summary>
     <div class="table-wrap disclosure-body compact-table">
-      <table>
+      <table id="judge-conversation-table">
         <thead>
           <tr>
             <th>Conversation</th>
@@ -262,7 +273,7 @@
         </thead>
         <tbody>
           {% for row in result.records %}
-          <tr>
+          <tr data-category="{{ row.category }}">
             <td>{{ row.conversation_id }}</td>
             <td><code>{{ row.category }}</code></td>
             <td>{{ bool_label(row.expected_enough_evidence) }}</td>
@@ -294,6 +305,33 @@
       </table>
     </div>
   </details>
+
+  {% if categories %}
+  <script>
+    (function () {
+      var select = document.getElementById('judge-category-filter');
+      if (!select) return;
+      var categoryRows = document.querySelectorAll('#judge-category-table tbody tr[data-category]');
+      var conversationRows = document.querySelectorAll('#judge-conversation-table tbody tr[data-category]');
+      var conversationDetails = document.getElementById('judge-conversation-details');
+
+      function applyFilter() {
+        var value = select.value;
+        categoryRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        conversationRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        if (value && conversationDetails) {
+          conversationDetails.open = true;
+        }
+      }
+
+      select.addEventListener('change', applyFilter);
+    })();
+  </script>
+  {% endif %}
   {% endif %}
 </section>
 {% endblock %}
