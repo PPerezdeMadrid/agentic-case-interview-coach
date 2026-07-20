@@ -37,6 +37,7 @@ CASE_GUIDE_NAVIGATION_PROMPT = _load_prompt("case_guide_navigation_prompt.md")
 # same grading criteria, delivered by one model in one call instead of three.
 BASELINE_GRAPH_SYSTEM_PROMPT = _compose_prompt(
     "baseline_graph_system_prompt.md",
+    "interviewer_question_style_few_shots.md",
     "case_eval_system_prompt.md",
     "dialog_eval_system_prompt.md",
     "feedback_system_prompt.md",

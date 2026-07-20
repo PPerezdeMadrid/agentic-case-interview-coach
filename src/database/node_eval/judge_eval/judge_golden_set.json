@@ -1,5 +1,6 @@
 {
- "rubric_data": {
+  "_schema_notes": "Each item + its case_id's entry under 'cases', combined with 'rubric_data', is exactly the AgenticGraphState slice judge_node(state) reads (case_prompt, case_guidance, case_data, case_recommendation, rubric_data, transcript, judge_round). See assemble_state() in build_judge_golden_set.py for how to reconstitute it before calling judge_node/agentic.judge_node directly.",
+  "rubric_data": {
     "rubric_id": "default_consulting_rubric",
     "rubric_name": "Consulting Case Interview Rubric",
     "score_scale": {
@@ -217,54 +218,42 @@
           {
             "block_id": "solventus_energy_prompt_001",
             "title": "Prompt #1 - Solventus Energy Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is Solventus Energy, a Spanish renewable energy company operating three business units: onshore wind generation, residential electricity retail (B2C), and large-scale battery storage construction. Over the past two years, group EBITDA has fallen 34% even though total revenue has grown 18%. The CEO has brought you in to find out what is driving the profit decline and to recommend a path forward.",
             "block_type": "prompt"
           },
           {
             "block_id": "solventus_energy_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case where the diagnostic unit is the business line, not the company as a whole. Blended P&L trends can hide unit-level value destruction, so segmentation is the critical first move rather than a standard price/volume breakdown.\n\nExpected opening from a strong candidate:\n- Recaps the situation in their own words: group EBITDA down 34% over two years while revenue is up 18%, across three business lines.\n- Clarifies the objective before analyzing anything: is the CEO looking for a diagnosis only, a turnaround plan, or both, and is there a time horizon in mind?\n- Asks whether performance can be viewed by business unit rather than only at the consolidated level.\n- Lays out an initial structure before touching any numbers, e.g. 'I would like to look at profitability unit by unit before drawing conclusions about the group as a whole.'\n\nWorking hypothesis a strong candidate should form early:\n- Since revenue is growing but EBITDA is falling, the problem is unlikely to be broad-based top-line weakness. The more likely story is that one or both of the newer, revenue-growing units are unprofitable and are dragging down group EBITDA even as they add to the top line.\n\nFacts to provide upon request:\nCompany structure:\n- The company operates three business units: onshore wind generation, residential (B2C) electricity retail, and large-scale battery storage construction.\n- Revenue growth over the past two years has come entirely from the two newer units; wind generation revenue has been broadly flat.\n\nOrganizational context:\n- The CFO resigned three weeks ago.\n- Management has deep expertise in power generation but comparatively limited experience running a retail business or a large infrastructure project.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'Would it help to look at margins separately for each of the three business units?' That should be enough to unlock the segmentation insight if the candidate has not proposed it already.",
             "block_type": "guidance"
           },
           {
             "block_id": "solventus_energy_data_001",
             "title": "Data - Business Unit Economics",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Revenue and margin by business unit:\n- Wind generation: 41% EBITDA margin. Operationally healthy, no reported issues.\n- B2C retail: -8% EBITDA margin. Annual customer churn is 28%.\n- Battery storage: no revenue yet. CAPEX is running at 3x the original budget, and the project is delayed by 22 months.\n\nWhy each unit looks the way it does:\n- B2C retail entered a highly competitive residential market without a differentiated product or brand. Customer acquisition costs are high, and losing more than a quarter of the customer base every year means the company is constantly paying to replace churned customers instead of growing net share.\n- Battery storage has been slowed by permitting issues and supply chain problems, pushing the timeline out 22 months. Fixed costs and financing costs on the project keep accruing with no revenue to offset them.\n- Wind generation is not affected operationally by the other two units, but its healthy margin is effectively cross-subsidizing their losses, which masks how serious the retail and battery situations are at the consolidated level.\n\nOrganizational capability:\n- Management's strongest capability is power generation; retail and large infrastructure project execution are comparatively new and weaker competencies for the team.\n- The CFO resigned three weeks ago, which may be a signal of underlying financial pressure but is not itself a driver of the EBITDA decline.",
             "block_type": "data"
           },
           {
             "block_id": "solventus_energy_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): Solventus does not have one company-wide profitability problem. It has three different business situations bundled into a single P&L, and the healthy one is subsidizing the other two.\n\nSupporting evidence:\n- Wind generation, at a 41% EBITDA margin, is the only proven profit engine and is not the source of the decline.\n- B2C retail has structurally negative unit economics: a -8% margin combined with 28% annual churn means the company is spending heavily to acquire customers it cannot keep, destroying value with every incremental customer under the current model.\n- Battery storage is a distressed capital project, not an operating loss: zero revenue, 3x CAPEX, and a 22-month delay mean fixed and financing costs are accumulating with nothing yet to offset them.\n- Because revenue growth came entirely from the two loss-making units, the consolidated top line looks healthy even as consolidated EBITDA deteriorates. The blended view is actively hiding how severe the problem is.\n\nWhat this means for the client: the fix is not a company-wide cost program. It requires unit-specific decisions: protect wind, decide fast on retail, and separately decide whether to rescue, partner with someone, or write down battery storage.",
             "block_type": "expected_analysis"
           },
           {
             "block_id": "solventus_energy_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the CEO?",
             "block_type": "final_recommendation"
           },
           {
             "block_id": "solventus_energy_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Stop managing Solventus as one blended P&L. Separate reporting and decision-making by business unit immediately, protect and reinvest in wind generation, and make a fast, explicit call on B2C retail and battery storage rather than letting them keep drawing on wind's cash flow.\n\nSupporting evidence:\n- Wind generation's 41% EBITDA margin funds the group and should not be further diluted by cross-subsidizing the other two units.\n- B2C retail's -8% margin and 28% churn show the unit is destroying value at current scale, so it needs a fast fix (pricing, churn reduction) or an exit before losses compound further.\n- Battery storage's zero revenue, 3x CAPEX, and 22-month delay mean it is a distressed project, not a scaling business, and needs an independent review rather than the same management approach that built the wind business.\n\nRisks and limitations:\n- Exiting B2C retail may create reputational and strategic consequences beyond the immediate P&L.\n- Restructuring or writing down battery storage means acknowledging sunk-cost losses, which can be organizationally difficult, especially without a permanent CFO in place.\n- Management's strength in generation does not automatically transfer to fixing retail or infrastructure execution problems, so a capability gap may need to be addressed alongside the financial fix.\n\nNext steps:\n- Stand up unit-level P&Ls immediately so future decisions are made on segmented, not blended, data.\n- Set a short, explicit deadline for B2C retail to show improved unit economics before deciding whether to exit.\n- Launch an independent technical and financial review of the battery storage project to decide between restructuring, bringing in a specialist partner, or writing down the investment.",
             "block_type": "final_recommendation"
           }
@@ -272,9 +261,7 @@
         "opening_block": {
           "block_id": "solventus_energy_prompt_001",
           "title": "Prompt #1 - Solventus Energy Profitability Diagnosis",
-          "source_page": 1,
           "visible_to_candidate": true,
-          "image": null,
           "content": "Your client is Solventus Energy, a Spanish renewable energy company operating three business units: onshore wind generation, residential electricity retail (B2C), and large-scale battery storage construction. Over the past two years, group EBITDA has fallen 34% even though total revenue has grown 18%. The CEO has brought you in to find out what is driving the profit decline and to recommend a path forward.",
           "block_type": "prompt"
         },
@@ -282,18 +269,14 @@
           {
             "block_id": "solventus_energy_prompt_001",
             "title": "Prompt #1 - Solventus Energy Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is Solventus Energy, a Spanish renewable energy company operating three business units: onshore wind generation, residential electricity retail (B2C), and large-scale battery storage construction. Over the past two years, group EBITDA has fallen 34% even though total revenue has grown 18%. The CEO has brought you in to find out what is driving the profit decline and to recommend a path forward.",
             "block_type": "prompt"
           },
           {
             "block_id": "solventus_energy_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the CEO?",
             "block_type": "final_recommendation"
           }
@@ -302,36 +285,28 @@
           {
             "block_id": "solventus_energy_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case where the diagnostic unit is the business line, not the company as a whole. Blended P&L trends can hide unit-level value destruction, so segmentation is the critical first move rather than a standard price/volume breakdown.\n\nExpected opening from a strong candidate:\n- Recaps the situation in their own words: group EBITDA down 34% over two years while revenue is up 18%, across three business lines.\n- Clarifies the objective before analyzing anything: is the CEO looking for a diagnosis only, a turnaround plan, or both, and is there a time horizon in mind?\n- Asks whether performance can be viewed by business unit rather than only at the consolidated level.\n- Lays out an initial structure before touching any numbers, e.g. 'I would like to look at profitability unit by unit before drawing conclusions about the group as a whole.'\n\nWorking hypothesis a strong candidate should form early:\n- Since revenue is growing but EBITDA is falling, the problem is unlikely to be broad-based top-line weakness. The more likely story is that one or both of the newer, revenue-growing units are unprofitable and are dragging down group EBITDA even as they add to the top line.\n\nFacts to provide upon request:\nCompany structure:\n- The company operates three business units: onshore wind generation, residential (B2C) electricity retail, and large-scale battery storage construction.\n- Revenue growth over the past two years has come entirely from the two newer units; wind generation revenue has been broadly flat.\n\nOrganizational context:\n- The CFO resigned three weeks ago.\n- Management has deep expertise in power generation but comparatively limited experience running a retail business or a large infrastructure project.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'Would it help to look at margins separately for each of the three business units?' That should be enough to unlock the segmentation insight if the candidate has not proposed it already.",
             "block_type": "guidance"
           },
           {
             "block_id": "solventus_energy_data_001",
             "title": "Data - Business Unit Economics",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Revenue and margin by business unit:\n- Wind generation: 41% EBITDA margin. Operationally healthy, no reported issues.\n- B2C retail: -8% EBITDA margin. Annual customer churn is 28%.\n- Battery storage: no revenue yet. CAPEX is running at 3x the original budget, and the project is delayed by 22 months.\n\nWhy each unit looks the way it does:\n- B2C retail entered a highly competitive residential market without a differentiated product or brand. Customer acquisition costs are high, and losing more than a quarter of the customer base every year means the company is constantly paying to replace churned customers instead of growing net share.\n- Battery storage has been slowed by permitting issues and supply chain problems, pushing the timeline out 22 months. Fixed costs and financing costs on the project keep accruing with no revenue to offset them.\n- Wind generation is not affected operationally by the other two units, but its healthy margin is effectively cross-subsidizing their losses, which masks how serious the retail and battery situations are at the consolidated level.\n\nOrganizational capability:\n- Management's strongest capability is power generation; retail and large infrastructure project execution are comparatively new and weaker competencies for the team.\n- The CFO resigned three weeks ago, which may be a signal of underlying financial pressure but is not itself a driver of the EBITDA decline.",
             "block_type": "data"
           },
           {
             "block_id": "solventus_energy_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): Solventus does not have one company-wide profitability problem. It has three different business situations bundled into a single P&L, and the healthy one is subsidizing the other two.\n\nSupporting evidence:\n- Wind generation, at a 41% EBITDA margin, is the only proven profit engine and is not the source of the decline.\n- B2C retail has structurally negative unit economics: a -8% margin combined with 28% annual churn means the company is spending heavily to acquire customers it cannot keep, destroying value with every incremental customer under the current model.\n- Battery storage is a distressed capital project, not an operating loss: zero revenue, 3x CAPEX, and a 22-month delay mean fixed and financing costs are accumulating with nothing yet to offset them.\n- Because revenue growth came entirely from the two loss-making units, the consolidated top line looks healthy even as consolidated EBITDA deteriorates. The blended view is actively hiding how severe the problem is.\n\nWhat this means for the client: the fix is not a company-wide cost program. It requires unit-specific decisions: protect wind, decide fast on retail, and separately decide whether to rescue, partner with someone, or write down battery storage.",
             "block_type": "expected_analysis"
           },
           {
             "block_id": "solventus_energy_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Stop managing Solventus as one blended P&L. Separate reporting and decision-making by business unit immediately, protect and reinvest in wind generation, and make a fast, explicit call on B2C retail and battery storage rather than letting them keep drawing on wind's cash flow.\n\nSupporting evidence:\n- Wind generation's 41% EBITDA margin funds the group and should not be further diluted by cross-subsidizing the other two units.\n- B2C retail's -8% margin and 28% churn show the unit is destroying value at current scale, so it needs a fast fix (pricing, churn reduction) or an exit before losses compound further.\n- Battery storage's zero revenue, 3x CAPEX, and 22-month delay mean it is a distressed project, not a scaling business, and needs an independent review rather than the same management approach that built the wind business.\n\nRisks and limitations:\n- Exiting B2C retail may create reputational and strategic consequences beyond the immediate P&L.\n- Restructuring or writing down battery storage means acknowledging sunk-cost losses, which can be organizationally difficult, especially without a permanent CFO in place.\n- Management's strength in generation does not automatically transfer to fixing retail or infrastructure execution problems, so a capability gap may need to be addressed alongside the financial fix.\n\nNext steps:\n- Stand up unit-level P&Ls immediately so future decisions are made on segmented, not blended, data.\n- Set a short, explicit deadline for B2C retail to show improved unit economics before deciding whether to exit.\n- Launch an independent technical and financial review of the battery storage project to decide between restructuring, bringing in a specialist partner, or writing down the investment.",
             "block_type": "final_recommendation"
           }
@@ -341,9 +316,7 @@
             {
               "block_id": "solventus_energy_prompt_001",
               "title": "Prompt #1 - Solventus Energy Profitability Diagnosis",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Your client is Solventus Energy, a Spanish renewable energy company operating three business units: onshore wind generation, residential electricity retail (B2C), and large-scale battery storage construction. Over the past two years, group EBITDA has fallen 34% even though total revenue has grown 18%. The CEO has brought you in to find out what is driving the profit decline and to recommend a path forward.",
               "block_type": "prompt"
             }
@@ -352,9 +325,7 @@
             {
               "block_id": "solventus_energy_guidance_001",
               "title": "Interviewer Guidance - Prompt #1",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Case type: Profitability case where the diagnostic unit is the business line, not the company as a whole. Blended P&L trends can hide unit-level value destruction, so segmentation is the critical first move rather than a standard price/volume breakdown.\n\nExpected opening from a strong candidate:\n- Recaps the situation in their own words: group EBITDA down 34% over two years while revenue is up 18%, across three business lines.\n- Clarifies the objective before analyzing anything: is the CEO looking for a diagnosis only, a turnaround plan, or both, and is there a time horizon in mind?\n- Asks whether performance can be viewed by business unit rather than only at the consolidated level.\n- Lays out an initial structure before touching any numbers, e.g. 'I would like to look at profitability unit by unit before drawing conclusions about the group as a whole.'\n\nWorking hypothesis a strong candidate should form early:\n- Since revenue is growing but EBITDA is falling, the problem is unlikely to be broad-based top-line weakness. The more likely story is that one or both of the newer, revenue-growing units are unprofitable and are dragging down group EBITDA even as they add to the top line.\n\nFacts to provide upon request:\nCompany structure:\n- The company operates three business units: onshore wind generation, residential (B2C) electricity retail, and large-scale battery storage construction.\n- Revenue growth over the past two years has come entirely from the two newer units; wind generation revenue has been broadly flat.\n\nOrganizational context:\n- The CFO resigned three weeks ago.\n- Management has deep expertise in power generation but comparatively limited experience running a retail business or a large infrastructure project.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'Would it help to look at margins separately for each of the three business units?' That should be enough to unlock the segmentation insight if the candidate has not proposed it already.",
               "block_type": "guidance"
             }
@@ -363,9 +334,7 @@
             {
               "block_id": "solventus_energy_data_001",
               "title": "Data - Business Unit Economics",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Revenue and margin by business unit:\n- Wind generation: 41% EBITDA margin. Operationally healthy, no reported issues.\n- B2C retail: -8% EBITDA margin. Annual customer churn is 28%.\n- Battery storage: no revenue yet. CAPEX is running at 3x the original budget, and the project is delayed by 22 months.\n\nWhy each unit looks the way it does:\n- B2C retail entered a highly competitive residential market without a differentiated product or brand. Customer acquisition costs are high, and losing more than a quarter of the customer base every year means the company is constantly paying to replace churned customers instead of growing net share.\n- Battery storage has been slowed by permitting issues and supply chain problems, pushing the timeline out 22 months. Fixed costs and financing costs on the project keep accruing with no revenue to offset them.\n- Wind generation is not affected operationally by the other two units, but its healthy margin is effectively cross-subsidizing their losses, which masks how serious the retail and battery situations are at the consolidated level.\n\nOrganizational capability:\n- Management's strongest capability is power generation; retail and large infrastructure project execution are comparatively new and weaker competencies for the team.\n- The CFO resigned three weeks ago, which may be a signal of underlying financial pressure but is not itself a driver of the EBITDA decline.",
               "block_type": "data"
             }
@@ -376,9 +345,7 @@
             {
               "block_id": "solventus_energy_expected_analysis_001",
               "title": "Expected Analysis - Root Cause",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Key insight (lead with this): Solventus does not have one company-wide profitability problem. It has three different business situations bundled into a single P&L, and the healthy one is subsidizing the other two.\n\nSupporting evidence:\n- Wind generation, at a 41% EBITDA margin, is the only proven profit engine and is not the source of the decline.\n- B2C retail has structurally negative unit economics: a -8% margin combined with 28% annual churn means the company is spending heavily to acquire customers it cannot keep, destroying value with every incremental customer under the current model.\n- Battery storage is a distressed capital project, not an operating loss: zero revenue, 3x CAPEX, and a 22-month delay mean fixed and financing costs are accumulating with nothing yet to offset them.\n- Because revenue growth came entirely from the two loss-making units, the consolidated top line looks healthy even as consolidated EBITDA deteriorates. The blended view is actively hiding how severe the problem is.\n\nWhat this means for the client: the fix is not a company-wide cost program. It requires unit-specific decisions: protect wind, decide fast on retail, and separately decide whether to rescue, partner with someone, or write down battery storage.",
               "block_type": "expected_analysis"
             }
@@ -387,24 +354,19 @@
             {
               "block_id": "solventus_energy_final_recommendation_001",
               "title": "Final Recommendation",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Based on your analysis, what recommendation would you give the CEO?",
               "block_type": "final_recommendation"
             },
             {
               "block_id": "solventus_energy_final_recommendation_002",
               "title": "Final Recommendation - Expected Answer",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Recommendation: Stop managing Solventus as one blended P&L. Separate reporting and decision-making by business unit immediately, protect and reinvest in wind generation, and make a fast, explicit call on B2C retail and battery storage rather than letting them keep drawing on wind's cash flow.\n\nSupporting evidence:\n- Wind generation's 41% EBITDA margin funds the group and should not be further diluted by cross-subsidizing the other two units.\n- B2C retail's -8% margin and 28% churn show the unit is destroying value at current scale, so it needs a fast fix (pricing, churn reduction) or an exit before losses compound further.\n- Battery storage's zero revenue, 3x CAPEX, and 22-month delay mean it is a distressed project, not a scaling business, and needs an independent review rather than the same management approach that built the wind business.\n\nRisks and limitations:\n- Exiting B2C retail may create reputational and strategic consequences beyond the immediate P&L.\n- Restructuring or writing down battery storage means acknowledging sunk-cost losses, which can be organizationally difficult, especially without a permanent CFO in place.\n- Management's strength in generation does not automatically transfer to fixing retail or infrastructure execution problems, so a capability gap may need to be addressed alongside the financial fix.\n\nNext steps:\n- Stand up unit-level P&Ls immediately so future decisions are made on segmented, not blended, data.\n- Set a short, explicit deadline for B2C retail to show improved unit economics before deciding whether to exit.\n- Launch an independent technical and financial review of the battery storage project to decide between restructuring, bringing in a specialist partner, or writing down the investment.",
               "block_type": "final_recommendation"
             }
           ]
         },
-        "knowledge_sources": [],
         "source_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/synthetic-dataset/01-energy-company.json"
       },
       "case_recommendation": "- Final Recommendation: Based on your analysis, what recommendation would you give the CEO?\n- Final Recommendation - Expected Answer: Recommendation: Stop managing Solventus as one blended P&L. Separate reporting and decision-making by business unit immediately, protect and reinvest in wind generation, and make a fast, explicit call on B2C retail and battery storage rather than letting them keep drawing on wind's cash flow.\n\nSupporting evidence:\n- Wind generation's 41% EBITDA margin funds the group and should not be further diluted by cross-subsidizing the other two units.\n- B2C retail's -8% margin and 28% churn show the unit is destroying value at current scale, so it needs a fast fix (pricing, churn reduction) or an exit before losses compound further.\n- Battery storage's zero revenue, 3x CAPEX, and 22-month delay mean it is a distressed project, not a scaling business, and needs an independent review rather than the same management approach that built the wind business.\n\nRisks and limitations:\n- Exiting B2C retail may create reputational and strategic consequences beyond the immediate P&L.\n- Restructuring or writing down battery storage means acknowledging sunk-cost losses, which can be organizationally difficult, especially without a permanent CFO in place.\n- Management's strength in generation does not automatically transfer to fixing retail or infrastructure execution problems, so a capability gap may need to be addressed alongside the financial fix.\n\nNext steps:\n- Stand up unit-level P&Ls immediately so future decisions are made on segmented, not blended, data.\n- Set a short, explicit deadline for B2C retail to show improved unit economics before deciding whether to exit.\n- Launch an independent technical and financial review of the battery storage project to decide between restructuring, bringing in a specialist partner, or writing down the investment."
@@ -417,72 +379,56 @@
           {
             "block_id": "cf_baluarte_levante_prompt_001",
             "title": "Prompt #1 - CF Baluarte Levante Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is CF Baluarte Levante, a mid-sized Spanish football club. After being promoted to La Liga in 2019, the club took on significant debt to fund player signings and was relegated back to Segunda Division in 2023. Since relegation, profitability has deteriorated sharply. The majority owner, a US private equity fund, wants a clear diagnosis of why profitability has deteriorated and a set of concrete levers to improve performance within the next 18 months.",
             "block_type": "prompt"
           },
           {
             "block_id": "cf_baluarte_levante_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case driven by a structural relegation shock. Revenue splits by stream (broadcasting, matchday, merchandising, sponsorship, transfers); costs split by fixed (wages, contracted obligations) versus variable. The core story is revenue and cost moving out of sync after a change in league tier.\n\nExpected opening from a strong candidate:\n- Recaps the situation: promotion in 2019, relegation in 2023, and profitability deteriorating sharply since then, with the owner asking for a diagnosis and levers within 18 months.\n- Clarifies the objective before analyzing: is 'improve performance' about EBITDA, free cash flow, or both? Is the 18-month window fixed given the private equity owner's horizon?\n- Lays out a MECE structure before touching numbers: revenue streams (broadcasting, matchday, merchandising, sponsorship, transfers) versus the cost base (wages, other obligations), and immediate cash levers versus longer-term value creation.\n\nWorking hypothesis a strong candidate should form early:\n- Relegation likely caused an immediate, structural drop in broadcasting revenue, since La Liga and Segunda Division broadcasting rights differ sharply, while cost commitments, especially wages, were set for a top-division revenue base and have not adjusted down as fast.\n\nFacts to provide upon request:\nRevenue side:\n- A stadium renovation is underway, reducing hospitality revenue from palco and premium matchday sales.\n- Merchandising revenue is up 40% year-on-year, but that is far too small to offset the broadcasting decline on its own.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.\n\nCost and balance sheet side:\n- Net debt stands at EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets:\n- The club has a strong cantera (youth academy) and a loyal abonado (season-ticket holder) base.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What happened to broadcasting revenue specifically after relegation?' That should be enough to surface the roughly 52% collapse and reorient the candidate toward the two-layer story: revenue shock first, then cost mismatch.",
             "block_type": "guidance"
           },
           {
             "block_id": "cf_baluarte_levante_data_001",
             "title": "Data - Revenue and Cost Drivers",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Revenue picture:\n- Broadcasting revenue: down approximately 52% after relegation. This is the single largest driver of the overall decline.\n- Matchday revenue is down because Segunda Division attendance is lower and stadium hospitality is unavailable during the ongoing renovation.\n- Merchandising revenue: up 40% year-on-year, but far too small in absolute terms to offset the broadcasting decline.\n- Sponsorship revenue is down modestly because some contracts had La Liga clauses that reduced payments upon relegation.\n\nCost and balance sheet picture:\n- Net debt: EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets and constraints:\n- Cantera estimated market value: more than EUR25M across three players.\n- The club has a loyal abonado base, which provides some revenue stability even as broadcasting and matchday income fall.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.",
             "block_type": "data"
           },
           {
             "block_id": "cf_baluarte_levante_math_001",
             "title": "Math Question - Wage Reduction Target",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "The interviewer now provides the following numbers: before relegation, the club generated EUR100M of annual revenue and had a wage bill equal to 65% of revenue. After relegation, revenue fell by 35% to EUR65M, but the wage bill only fell by 10% because most player contracts were fixed. If the club wants to return to a 65% wage-to-revenue ratio, by how many euros does the wage bill need to be reduced from its current level?",
             "block_type": "math"
           },
           {
             "block_id": "cf_baluarte_levante_guidance_math_001",
             "title": "Interviewer Guidance - Math Question",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Setup a strong candidate should state out loud before calculating:\n- Pre-relegation wage bill = 65% of EUR100M revenue.\n- Post-relegation revenue = EUR65M, and the wage bill has only fallen 10% from its pre-relegation level.\n- Target: the wage bill back at a 65% ratio of the new EUR65M revenue base.\n\nCalculation:\n- Pre-relegation wage bill = 65% of EUR100M = EUR65M.\n- Current wage bill after a 10% reduction = EUR65M x 0.9 = EUR58.5M.\n- Target wage bill at a 65% ratio on EUR65M revenue = EUR42.25M.\n- Required further reduction = EUR58.5M - EUR42.25M = EUR16.25M.\n\nAnswer: the club needs to reduce the wage bill by a further EUR16.25M from its current level.\n\nBusiness interpretation strong candidates should offer: the calculation confirms that the core issue is a cost base still built for top-division revenue, not just a revenue problem, and EUR16.25M is the scale of restructuring needed before other levers even come into play.",
             "block_type": "guidance"
           },
           {
             "block_id": "cf_baluarte_levante_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): the profitability problem has two layers, and they need different fixes on different timelines.\n\nSupporting evidence:\n- Layer one, a structural revenue shock: relegation caused broadcasting revenue, the club's largest income stream, to collapse roughly 52%. That decline is immediate and cannot be reversed until promotion is achieved.\n- Layer two, a cost mismatch: the wage bill and broader cost structure were built for a La Liga revenue base and are now misaligned with Segunda Division economics, since wages only fell 10% against a 35% revenue drop.\n- Merchandising growth (+40%) is real but far too small in absolute terms to offset the broadcasting decline.\n- The club has blocked monetization levers, including naming rights and cantera-player sales, which could improve liquidity but involve genuine strategic and reputational tradeoffs.\n\nWhat this means for the client: the club cannot cost-cut its way fully out of a revenue shock, and it cannot wait for promotion to fix a cost base that is misaligned today. Both layers need to be addressed, on different timelines, at the same time.",
             "block_type": "expected_analysis"
           },
           {
             "block_id": "cf_baluarte_levante_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the ownership group?",
             "block_type": "final_recommendation"
           },
           {
             "block_id": "cf_baluarte_levante_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Restructure the wage bill immediately to match Segunda Division economics, use selective asset monetization to fund the transition, and treat promotion as the structural fix rather than the starting point.\n\nSupporting evidence:\n- The wage bill still reflects a 65%-of-revenue ratio built for La Liga income; restructuring it by roughly EUR16.25M is the quantified first move, since the club cannot control broadcasting revenue in the short term but can control costs.\n- Monetizing at least one cantera player (combined estimated value over EUR25M across three players) improves liquidity without fully depleting the club's long-term talent pipeline.\n- The rejected naming-rights offer is worth reassessing as a commercial lever, since it is one of the few revenue-side options not dependent on league position.\n- Broadcasting revenue, down 52%, cannot be structurally repaired without promotion, so a credible sporting plan to return to La Liga has to sit alongside the cost fix, not after it.\n\nRisks and limitations:\n- Selling too much football talent could hurt the squad's competitiveness and, with it, the promotion chances the recommendation depends on.\n- Aggressive cost cuts could weaken sporting performance and erode support among the loyal abonado base.\n- The private equity owner's 18-month horizon may conflict with the club's medium-term sporting needs, since promotion campaigns do not run on a fixed timeline.\n\nNext steps:\n- Set a target and timeline for the EUR16.25M wage restructuring and identify which contracts can be renegotiated first.\n- Decide which cantera player(s) to monetize based on sporting importance versus liquidity need, rather than selling reactively.\n- Reopen naming-rights discussions with the board, framing it explicitly as a liquidity lever rather than a reputational compromise.",
             "block_type": "final_recommendation"
           }
@@ -490,9 +436,7 @@
         "opening_block": {
           "block_id": "cf_baluarte_levante_prompt_001",
           "title": "Prompt #1 - CF Baluarte Levante Profitability Diagnosis",
-          "source_page": 1,
           "visible_to_candidate": true,
-          "image": null,
           "content": "Your client is CF Baluarte Levante, a mid-sized Spanish football club. After being promoted to La Liga in 2019, the club took on significant debt to fund player signings and was relegated back to Segunda Division in 2023. Since relegation, profitability has deteriorated sharply. The majority owner, a US private equity fund, wants a clear diagnosis of why profitability has deteriorated and a set of concrete levers to improve performance within the next 18 months.",
           "block_type": "prompt"
         },
@@ -500,27 +444,21 @@
           {
             "block_id": "cf_baluarte_levante_prompt_001",
             "title": "Prompt #1 - CF Baluarte Levante Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is CF Baluarte Levante, a mid-sized Spanish football club. After being promoted to La Liga in 2019, the club took on significant debt to fund player signings and was relegated back to Segunda Division in 2023. Since relegation, profitability has deteriorated sharply. The majority owner, a US private equity fund, wants a clear diagnosis of why profitability has deteriorated and a set of concrete levers to improve performance within the next 18 months.",
             "block_type": "prompt"
           },
           {
             "block_id": "cf_baluarte_levante_math_001",
             "title": "Math Question - Wage Reduction Target",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "The interviewer now provides the following numbers: before relegation, the club generated EUR100M of annual revenue and had a wage bill equal to 65% of revenue. After relegation, revenue fell by 35% to EUR65M, but the wage bill only fell by 10% because most player contracts were fixed. If the club wants to return to a 65% wage-to-revenue ratio, by how many euros does the wage bill need to be reduced from its current level?",
             "block_type": "math"
           },
           {
             "block_id": "cf_baluarte_levante_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the ownership group?",
             "block_type": "final_recommendation"
           }
@@ -529,45 +467,35 @@
           {
             "block_id": "cf_baluarte_levante_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case driven by a structural relegation shock. Revenue splits by stream (broadcasting, matchday, merchandising, sponsorship, transfers); costs split by fixed (wages, contracted obligations) versus variable. The core story is revenue and cost moving out of sync after a change in league tier.\n\nExpected opening from a strong candidate:\n- Recaps the situation: promotion in 2019, relegation in 2023, and profitability deteriorating sharply since then, with the owner asking for a diagnosis and levers within 18 months.\n- Clarifies the objective before analyzing: is 'improve performance' about EBITDA, free cash flow, or both? Is the 18-month window fixed given the private equity owner's horizon?\n- Lays out a MECE structure before touching numbers: revenue streams (broadcasting, matchday, merchandising, sponsorship, transfers) versus the cost base (wages, other obligations), and immediate cash levers versus longer-term value creation.\n\nWorking hypothesis a strong candidate should form early:\n- Relegation likely caused an immediate, structural drop in broadcasting revenue, since La Liga and Segunda Division broadcasting rights differ sharply, while cost commitments, especially wages, were set for a top-division revenue base and have not adjusted down as fast.\n\nFacts to provide upon request:\nRevenue side:\n- A stadium renovation is underway, reducing hospitality revenue from palco and premium matchday sales.\n- Merchandising revenue is up 40% year-on-year, but that is far too small to offset the broadcasting decline on its own.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.\n\nCost and balance sheet side:\n- Net debt stands at EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets:\n- The club has a strong cantera (youth academy) and a loyal abonado (season-ticket holder) base.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What happened to broadcasting revenue specifically after relegation?' That should be enough to surface the roughly 52% collapse and reorient the candidate toward the two-layer story: revenue shock first, then cost mismatch.",
             "block_type": "guidance"
           },
           {
             "block_id": "cf_baluarte_levante_data_001",
             "title": "Data - Revenue and Cost Drivers",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Revenue picture:\n- Broadcasting revenue: down approximately 52% after relegation. This is the single largest driver of the overall decline.\n- Matchday revenue is down because Segunda Division attendance is lower and stadium hospitality is unavailable during the ongoing renovation.\n- Merchandising revenue: up 40% year-on-year, but far too small in absolute terms to offset the broadcasting decline.\n- Sponsorship revenue is down modestly because some contracts had La Liga clauses that reduced payments upon relegation.\n\nCost and balance sheet picture:\n- Net debt: EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets and constraints:\n- Cantera estimated market value: more than EUR25M across three players.\n- The club has a loyal abonado base, which provides some revenue stability even as broadcasting and matchday income fall.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.",
             "block_type": "data"
           },
           {
             "block_id": "cf_baluarte_levante_guidance_math_001",
             "title": "Interviewer Guidance - Math Question",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Setup a strong candidate should state out loud before calculating:\n- Pre-relegation wage bill = 65% of EUR100M revenue.\n- Post-relegation revenue = EUR65M, and the wage bill has only fallen 10% from its pre-relegation level.\n- Target: the wage bill back at a 65% ratio of the new EUR65M revenue base.\n\nCalculation:\n- Pre-relegation wage bill = 65% of EUR100M = EUR65M.\n- Current wage bill after a 10% reduction = EUR65M x 0.9 = EUR58.5M.\n- Target wage bill at a 65% ratio on EUR65M revenue = EUR42.25M.\n- Required further reduction = EUR58.5M - EUR42.25M = EUR16.25M.\n\nAnswer: the club needs to reduce the wage bill by a further EUR16.25M from its current level.\n\nBusiness interpretation strong candidates should offer: the calculation confirms that the core issue is a cost base still built for top-division revenue, not just a revenue problem, and EUR16.25M is the scale of restructuring needed before other levers even come into play.",
             "block_type": "guidance"
           },
           {
             "block_id": "cf_baluarte_levante_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): the profitability problem has two layers, and they need different fixes on different timelines.\n\nSupporting evidence:\n- Layer one, a structural revenue shock: relegation caused broadcasting revenue, the club's largest income stream, to collapse roughly 52%. That decline is immediate and cannot be reversed until promotion is achieved.\n- Layer two, a cost mismatch: the wage bill and broader cost structure were built for a La Liga revenue base and are now misaligned with Segunda Division economics, since wages only fell 10% against a 35% revenue drop.\n- Merchandising growth (+40%) is real but far too small in absolute terms to offset the broadcasting decline.\n- The club has blocked monetization levers, including naming rights and cantera-player sales, which could improve liquidity but involve genuine strategic and reputational tradeoffs.\n\nWhat this means for the client: the club cannot cost-cut its way fully out of a revenue shock, and it cannot wait for promotion to fix a cost base that is misaligned today. Both layers need to be addressed, on different timelines, at the same time.",
             "block_type": "expected_analysis"
           },
           {
             "block_id": "cf_baluarte_levante_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Restructure the wage bill immediately to match Segunda Division economics, use selective asset monetization to fund the transition, and treat promotion as the structural fix rather than the starting point.\n\nSupporting evidence:\n- The wage bill still reflects a 65%-of-revenue ratio built for La Liga income; restructuring it by roughly EUR16.25M is the quantified first move, since the club cannot control broadcasting revenue in the short term but can control costs.\n- Monetizing at least one cantera player (combined estimated value over EUR25M across three players) improves liquidity without fully depleting the club's long-term talent pipeline.\n- The rejected naming-rights offer is worth reassessing as a commercial lever, since it is one of the few revenue-side options not dependent on league position.\n- Broadcasting revenue, down 52%, cannot be structurally repaired without promotion, so a credible sporting plan to return to La Liga has to sit alongside the cost fix, not after it.\n\nRisks and limitations:\n- Selling too much football talent could hurt the squad's competitiveness and, with it, the promotion chances the recommendation depends on.\n- Aggressive cost cuts could weaken sporting performance and erode support among the loyal abonado base.\n- The private equity owner's 18-month horizon may conflict with the club's medium-term sporting needs, since promotion campaigns do not run on a fixed timeline.\n\nNext steps:\n- Set a target and timeline for the EUR16.25M wage restructuring and identify which contracts can be renegotiated first.\n- Decide which cantera player(s) to monetize based on sporting importance versus liquidity need, rather than selling reactively.\n- Reopen naming-rights discussions with the board, framing it explicitly as a liquidity lever rather than a reputational compromise.",
             "block_type": "final_recommendation"
           }
@@ -577,9 +505,7 @@
             {
               "block_id": "cf_baluarte_levante_prompt_001",
               "title": "Prompt #1 - CF Baluarte Levante Profitability Diagnosis",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Your client is CF Baluarte Levante, a mid-sized Spanish football club. After being promoted to La Liga in 2019, the club took on significant debt to fund player signings and was relegated back to Segunda Division in 2023. Since relegation, profitability has deteriorated sharply. The majority owner, a US private equity fund, wants a clear diagnosis of why profitability has deteriorated and a set of concrete levers to improve performance within the next 18 months.",
               "block_type": "prompt"
             }
@@ -588,18 +514,14 @@
             {
               "block_id": "cf_baluarte_levante_guidance_001",
               "title": "Interviewer Guidance - Prompt #1",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Case type: Profitability case driven by a structural relegation shock. Revenue splits by stream (broadcasting, matchday, merchandising, sponsorship, transfers); costs split by fixed (wages, contracted obligations) versus variable. The core story is revenue and cost moving out of sync after a change in league tier.\n\nExpected opening from a strong candidate:\n- Recaps the situation: promotion in 2019, relegation in 2023, and profitability deteriorating sharply since then, with the owner asking for a diagnosis and levers within 18 months.\n- Clarifies the objective before analyzing: is 'improve performance' about EBITDA, free cash flow, or both? Is the 18-month window fixed given the private equity owner's horizon?\n- Lays out a MECE structure before touching numbers: revenue streams (broadcasting, matchday, merchandising, sponsorship, transfers) versus the cost base (wages, other obligations), and immediate cash levers versus longer-term value creation.\n\nWorking hypothesis a strong candidate should form early:\n- Relegation likely caused an immediate, structural drop in broadcasting revenue, since La Liga and Segunda Division broadcasting rights differ sharply, while cost commitments, especially wages, were set for a top-division revenue base and have not adjusted down as fast.\n\nFacts to provide upon request:\nRevenue side:\n- A stadium renovation is underway, reducing hospitality revenue from palco and premium matchday sales.\n- Merchandising revenue is up 40% year-on-year, but that is far too small to offset the broadcasting decline on its own.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.\n\nCost and balance sheet side:\n- Net debt stands at EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets:\n- The club has a strong cantera (youth academy) and a loyal abonado (season-ticket holder) base.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What happened to broadcasting revenue specifically after relegation?' That should be enough to surface the roughly 52% collapse and reorient the candidate toward the two-layer story: revenue shock first, then cost mismatch.",
               "block_type": "guidance"
             },
             {
               "block_id": "cf_baluarte_levante_guidance_math_001",
               "title": "Interviewer Guidance - Math Question",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Setup a strong candidate should state out loud before calculating:\n- Pre-relegation wage bill = 65% of EUR100M revenue.\n- Post-relegation revenue = EUR65M, and the wage bill has only fallen 10% from its pre-relegation level.\n- Target: the wage bill back at a 65% ratio of the new EUR65M revenue base.\n\nCalculation:\n- Pre-relegation wage bill = 65% of EUR100M = EUR65M.\n- Current wage bill after a 10% reduction = EUR65M x 0.9 = EUR58.5M.\n- Target wage bill at a 65% ratio on EUR65M revenue = EUR42.25M.\n- Required further reduction = EUR58.5M - EUR42.25M = EUR16.25M.\n\nAnswer: the club needs to reduce the wage bill by a further EUR16.25M from its current level.\n\nBusiness interpretation strong candidates should offer: the calculation confirms that the core issue is a cost base still built for top-division revenue, not just a revenue problem, and EUR16.25M is the scale of restructuring needed before other levers even come into play.",
               "block_type": "guidance"
             }
@@ -608,9 +530,7 @@
             {
               "block_id": "cf_baluarte_levante_data_001",
               "title": "Data - Revenue and Cost Drivers",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Revenue picture:\n- Broadcasting revenue: down approximately 52% after relegation. This is the single largest driver of the overall decline.\n- Matchday revenue is down because Segunda Division attendance is lower and stadium hospitality is unavailable during the ongoing renovation.\n- Merchandising revenue: up 40% year-on-year, but far too small in absolute terms to offset the broadcasting decline.\n- Sponsorship revenue is down modestly because some contracts had La Liga clauses that reduced payments upon relegation.\n\nCost and balance sheet picture:\n- Net debt: EUR47M.\n- Player wages were contracted for a top-division revenue base and have not been reduced sufficiently since relegation.\n\nStrategic assets and constraints:\n- Cantera estimated market value: more than EUR25M across three players.\n- The club has a loyal abonado base, which provides some revenue stability even as broadcasting and matchday income fall.\n- A stadium naming-rights offer exists but has been rejected for reputational reasons by the club president.",
               "block_type": "data"
             }
@@ -619,9 +539,7 @@
             {
               "block_id": "cf_baluarte_levante_math_001",
               "title": "Math Question - Wage Reduction Target",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "The interviewer now provides the following numbers: before relegation, the club generated EUR100M of annual revenue and had a wage bill equal to 65% of revenue. After relegation, revenue fell by 35% to EUR65M, but the wage bill only fell by 10% because most player contracts were fixed. If the club wants to return to a 65% wage-to-revenue ratio, by how many euros does the wage bill need to be reduced from its current level?",
               "block_type": "math"
             }
@@ -631,9 +549,7 @@
             {
               "block_id": "cf_baluarte_levante_expected_analysis_001",
               "title": "Expected Analysis - Root Cause",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Key insight (lead with this): the profitability problem has two layers, and they need different fixes on different timelines.\n\nSupporting evidence:\n- Layer one, a structural revenue shock: relegation caused broadcasting revenue, the club's largest income stream, to collapse roughly 52%. That decline is immediate and cannot be reversed until promotion is achieved.\n- Layer two, a cost mismatch: the wage bill and broader cost structure were built for a La Liga revenue base and are now misaligned with Segunda Division economics, since wages only fell 10% against a 35% revenue drop.\n- Merchandising growth (+40%) is real but far too small in absolute terms to offset the broadcasting decline.\n- The club has blocked monetization levers, including naming rights and cantera-player sales, which could improve liquidity but involve genuine strategic and reputational tradeoffs.\n\nWhat this means for the client: the club cannot cost-cut its way fully out of a revenue shock, and it cannot wait for promotion to fix a cost base that is misaligned today. Both layers need to be addressed, on different timelines, at the same time.",
               "block_type": "expected_analysis"
             }
@@ -642,102 +558,67 @@
             {
               "block_id": "cf_baluarte_levante_final_recommendation_001",
               "title": "Final Recommendation",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Based on your analysis, what recommendation would you give the ownership group?",
               "block_type": "final_recommendation"
             },
             {
               "block_id": "cf_baluarte_levante_final_recommendation_002",
               "title": "Final Recommendation - Expected Answer",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Recommendation: Restructure the wage bill immediately to match Segunda Division economics, use selective asset monetization to fund the transition, and treat promotion as the structural fix rather than the starting point.\n\nSupporting evidence:\n- The wage bill still reflects a 65%-of-revenue ratio built for La Liga income; restructuring it by roughly EUR16.25M is the quantified first move, since the club cannot control broadcasting revenue in the short term but can control costs.\n- Monetizing at least one cantera player (combined estimated value over EUR25M across three players) improves liquidity without fully depleting the club's long-term talent pipeline.\n- The rejected naming-rights offer is worth reassessing as a commercial lever, since it is one of the few revenue-side options not dependent on league position.\n- Broadcasting revenue, down 52%, cannot be structurally repaired without promotion, so a credible sporting plan to return to La Liga has to sit alongside the cost fix, not after it.\n\nRisks and limitations:\n- Selling too much football talent could hurt the squad's competitiveness and, with it, the promotion chances the recommendation depends on.\n- Aggressive cost cuts could weaken sporting performance and erode support among the loyal abonado base.\n- The private equity owner's 18-month horizon may conflict with the club's medium-term sporting needs, since promotion campaigns do not run on a fixed timeline.\n\nNext steps:\n- Set a target and timeline for the EUR16.25M wage restructuring and identify which contracts can be renegotiated first.\n- Decide which cantera player(s) to monetize based on sporting importance versus liquidity need, rather than selling reactively.\n- Reopen naming-rights discussions with the board, framing it explicitly as a liquidity lever rather than a reputational compromise.",
               "block_type": "final_recommendation"
             }
           ]
         },
-        "knowledge_sources": [],
         "source_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/synthetic-dataset/02-football-team.json"
       },
       "case_recommendation": "- Final Recommendation: Based on your analysis, what recommendation would you give the ownership group?\n- Final Recommendation - Expected Answer: Recommendation: Restructure the wage bill immediately to match Segunda Division economics, use selective asset monetization to fund the transition, and treat promotion as the structural fix rather than the starting point.\n\nSupporting evidence:\n- The wage bill still reflects a 65%-of-revenue ratio built for La Liga income; restructuring it by roughly EUR16.25M is the quantified first move, since the club cannot control broadcasting revenue in the short term but can control costs.\n- Monetizing at least one cantera player (combined estimated value over EUR25M across three players) improves liquidity without fully depleting the club's long-term talent pipeline.\n- The rejected naming-rights offer is worth reassessing as a commercial lever, since it is one of the few revenue-side options not dependent on league position.\n- Broadcasting revenue, down 52%, cannot be structurally repaired without promotion, so a credible sporting plan to return to La Liga has to sit alongside the cost fix, not after it.\n\nRisks and limitations:\n- Selling too much football talent could hurt the squad's competitiveness and, with it, the promotion chances the recommendation depends on.\n- Aggressive cost cuts could weaken sporting performance and erode support among the loyal abonado base.\n- The private equity owner's 18-month horizon may conflict with the club's medium-term sporting needs, since promotion campaigns do not run on a fixed timeline.\n\nNext steps:\n- Set a target and timeline for the EUR16.25M wage restructuring and identify which contracts can be renegotiated first.\n- Decide which cantera player(s) to monetize based on sporting importance versus liquidity need, rather than selling reactively.\n- Reopen naming-rights discussions with the board, framing it explicitly as a liquidity lever rather than a reputational compromise."
     },
     "03-agriculture-company": {
       "case_prompt": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
-      "case_guidance": "- Interviewer Guidance - Prompt #1: Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin.\n- Interviewer Guidance - Creative Question: A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves.",
+      "case_guidance": "- Interviewer Guidance - Prompt #1: Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin.",
       "case_data": {
         "case_content": [
           {
             "block_id": "verdex_ai_prompt_001",
             "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
             "block_type": "prompt"
           },
           {
             "block_id": "verdex_ai_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin.",
             "block_type": "guidance"
           },
           {
             "block_id": "verdex_ai_data_001",
             "title": "Data - Unit Economics",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Servicing economics:\n- Current gross margin: approximately 18%, very low for a business positioned as AI software.\n- The product requires physical field sensors, technician installation, maintenance visits, and replacement sensors, which is what makes it expensive to serve despite being sold as software.\n\nAcquisition economics:\n- Customer acquisition cost payback: 38 months, which is long relative to the company's 14-month runway.\n- Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller olive and vineyard groups in places like Candeleda and inland Castilla-La Mancha.\n\nSegment profitability:\n- Customer base: 340 agricultural cooperatives, growing at 60% ARR per year for the past two years.\n- Large cooperatives are materially more profitable than small ones because fixed onboarding and installation costs are spread across more hectares.\n- Small cooperatives are loss-making on a per-account basis.\n\nFinancial position and path forward:\n- Remaining runway: approximately 14 months.\n- A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital the company may not currently have.",
             "block_type": "data"
           },
           {
             "block_id": "verdex_ai_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): Verdex AI has a structural unit-economics problem, not a growth problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale, so faster growth makes losses worse rather than better.\n\nSupporting evidence:\n- An 18% gross margin is far below what a software business should look like, and the gap is explained by physical sensors, installation, and maintenance, not by the AI itself.\n- Low pricing, high service costs, and a 38-month CAC payback mean growth destroys cash instead of creating operating leverage, since the company spends cash upfront on hardware and acquisition well before recovering value through recurring revenue.\n- The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue, while larger cooperatives spread those same fixed costs over more hectares and are meaningfully more profitable.\n- With only 14 months of runway against a 38-month payback, the company cannot simply grow through the problem; the underlying unit economics have to change first.\n\nWhat this means for the client: the priority is not more growth, it is better growth. Fixing which customers are served and how they are served matters more, in the short run, than adding new logos.",
             "block_type": "expected_analysis"
           },
           {
-            "block_id": "verdex_ai_creative_001",
-            "title": "Creative Question - Near-Term Unit Economics Fixes",
-            "source_page": 1,
-            "visible_to_candidate": true,
-            "image": null,
-            "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?",
-            "block_type": "creative"
-          },
-          {
-            "block_id": "verdex_ai_guidance_creative_001",
-            "title": "Interviewer Guidance - Creative Question",
-            "source_page": 1,
-            "visible_to_candidate": false,
-            "image": null,
-            "content": "A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves.",
-            "block_type": "guidance"
-          },
-          {
             "block_id": "verdex_ai_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the founders?",
             "block_type": "final_recommendation"
           },
           {
             "block_id": "verdex_ai_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Stop or sharply limit acquisition of small, unprofitable cooperatives, focus commercial effort on larger accounts with better unit economics, and restructure pricing so hardware and installation costs are recovered explicitly, while prioritizing the software-only satellite model as the structural fix.\n\nSupporting evidence:\n- With small cooperatives loss-making on a per-account basis, continuing to sell to them adds ARR while making the cash position worse, so segmentation has to come before further growth.\n- Large cooperatives are already more profitable because fixed onboarding and installation costs spread over more hectares, so shifting sales effort there improves the blend without needing new product work.\n- Separating hardware and installation fees from the recurring contract directly targets the 18% gross margin, which is the root cause identified in the analysis, rather than treating it as a pricing afterthought.\n- The satellite, software-only model would remove sensor costs entirely, which is the only lever that fixes the structural margin problem rather than just improving it at the margin.\n\nRisks and limitations:\n- Price increases or unbundled fees may slow growth further in the short term, which could be difficult optics for a company that has led with a 60% growth story.\n- Pausing small-cooperative acquisition may hurt top-line growth narratives even as it improves survival odds.\n- The satellite model still requires 9 months of development and capital the company may not have on hand, so it depends on financing or a partner coming through.\n\nNext steps:\n- Act within 6 months on pricing and segmentation, since the 14-month runway and 38-month CAC payback leave little room for a slower rollout.\n- Secure bridge financing or a strategic partner specifically to fund the 9-month satellite development gap.\n- Track gross margin and CAC payback by segment monthly so the founders can see whether the changes are working before the runway runs out.",
             "block_type": "final_recommendation"
           }
@@ -745,9 +626,7 @@
         "opening_block": {
           "block_id": "verdex_ai_prompt_001",
           "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
-          "source_page": 1,
           "visible_to_candidate": true,
-          "image": null,
           "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
           "block_type": "prompt"
         },
@@ -755,27 +634,14 @@
           {
             "block_id": "verdex_ai_prompt_001",
             "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
             "block_type": "prompt"
           },
           {
-            "block_id": "verdex_ai_creative_001",
-            "title": "Creative Question - Near-Term Unit Economics Fixes",
-            "source_page": 1,
-            "visible_to_candidate": true,
-            "image": null,
-            "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?",
-            "block_type": "creative"
-          },
-          {
             "block_id": "verdex_ai_final_recommendation_001",
             "title": "Final Recommendation",
-            "source_page": 1,
             "visible_to_candidate": true,
-            "image": null,
             "content": "Based on your analysis, what recommendation would you give the founders?",
             "block_type": "final_recommendation"
           }
@@ -784,45 +650,28 @@
           {
             "block_id": "verdex_ai_guidance_001",
             "title": "Interviewer Guidance - Prompt #1",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin.",
             "block_type": "guidance"
           },
           {
             "block_id": "verdex_ai_data_001",
             "title": "Data - Unit Economics",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Servicing economics:\n- Current gross margin: approximately 18%, very low for a business positioned as AI software.\n- The product requires physical field sensors, technician installation, maintenance visits, and replacement sensors, which is what makes it expensive to serve despite being sold as software.\n\nAcquisition economics:\n- Customer acquisition cost payback: 38 months, which is long relative to the company's 14-month runway.\n- Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller olive and vineyard groups in places like Candeleda and inland Castilla-La Mancha.\n\nSegment profitability:\n- Customer base: 340 agricultural cooperatives, growing at 60% ARR per year for the past two years.\n- Large cooperatives are materially more profitable than small ones because fixed onboarding and installation costs are spread across more hectares.\n- Small cooperatives are loss-making on a per-account basis.\n\nFinancial position and path forward:\n- Remaining runway: approximately 14 months.\n- A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital the company may not currently have.",
             "block_type": "data"
           },
           {
             "block_id": "verdex_ai_expected_analysis_001",
             "title": "Expected Analysis - Root Cause",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Key insight (lead with this): Verdex AI has a structural unit-economics problem, not a growth problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale, so faster growth makes losses worse rather than better.\n\nSupporting evidence:\n- An 18% gross margin is far below what a software business should look like, and the gap is explained by physical sensors, installation, and maintenance, not by the AI itself.\n- Low pricing, high service costs, and a 38-month CAC payback mean growth destroys cash instead of creating operating leverage, since the company spends cash upfront on hardware and acquisition well before recovering value through recurring revenue.\n- The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue, while larger cooperatives spread those same fixed costs over more hectares and are meaningfully more profitable.\n- With only 14 months of runway against a 38-month payback, the company cannot simply grow through the problem; the underlying unit economics have to change first.\n\nWhat this means for the client: the priority is not more growth, it is better growth. Fixing which customers are served and how they are served matters more, in the short run, than adding new logos.",
             "block_type": "expected_analysis"
           },
           {
-            "block_id": "verdex_ai_guidance_creative_001",
-            "title": "Interviewer Guidance - Creative Question",
-            "source_page": 1,
-            "visible_to_candidate": false,
-            "image": null,
-            "content": "A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves.",
-            "block_type": "guidance"
-          },
-          {
             "block_id": "verdex_ai_final_recommendation_002",
             "title": "Final Recommendation - Expected Answer",
-            "source_page": 1,
             "visible_to_candidate": false,
-            "image": null,
             "content": "Recommendation: Stop or sharply limit acquisition of small, unprofitable cooperatives, focus commercial effort on larger accounts with better unit economics, and restructure pricing so hardware and installation costs are recovered explicitly, while prioritizing the software-only satellite model as the structural fix.\n\nSupporting evidence:\n- With small cooperatives loss-making on a per-account basis, continuing to sell to them adds ARR while making the cash position worse, so segmentation has to come before further growth.\n- Large cooperatives are already more profitable because fixed onboarding and installation costs spread over more hectares, so shifting sales effort there improves the blend without needing new product work.\n- Separating hardware and installation fees from the recurring contract directly targets the 18% gross margin, which is the root cause identified in the analysis, rather than treating it as a pricing afterthought.\n- The satellite, software-only model would remove sensor costs entirely, which is the only lever that fixes the structural margin problem rather than just improving it at the margin.\n\nRisks and limitations:\n- Price increases or unbundled fees may slow growth further in the short term, which could be difficult optics for a company that has led with a 60% growth story.\n- Pausing small-cooperative acquisition may hurt top-line growth narratives even as it improves survival odds.\n- The satellite model still requires 9 months of development and capital the company may not have on hand, so it depends on financing or a partner coming through.\n\nNext steps:\n- Act within 6 months on pricing and segmentation, since the 14-month runway and 38-month CAC payback leave little room for a slower rollout.\n- Secure bridge financing or a strategic partner specifically to fund the 9-month satellite development gap.\n- Track gross margin and CAC payback by segment monthly so the founders can see whether the changes are working before the runway runs out.",
             "block_type": "final_recommendation"
           }
@@ -832,9 +681,7 @@
             {
               "block_id": "verdex_ai_prompt_001",
               "title": "Prompt #1 - Verdex AI Profitability Diagnosis",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
               "block_type": "prompt"
             }
@@ -843,19 +690,8 @@
             {
               "block_id": "verdex_ai_guidance_001",
               "title": "Interviewer Guidance - Prompt #1",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Case type: Profitability case with a unit-economics lens, segmented by customer size. The key MECE split is not price versus volume at the company level, but acquisition economics (cost to win a customer) versus servicing economics (cost to keep serving them), further cut by cooperative size (large versus small).\n\nExpected opening from a strong candidate:\n- Recaps the situation: fast ARR growth (60% per year, 340 clients) alongside widening losses and accelerating burn.\n- Clarifies the objective before analyzing: is the founders' ask a diagnosis only, or a concrete plan to reach sustainability, and over what time horizon given the runway?\n- Lays out a structure before touching numbers: acquisition economics versus servicing economics, and whether growth is improving margins or worsening cash burn.\n\nWorking hypothesis a strong candidate should form early:\n- An AI company should have software-like margins. If margins are thin despite fast growth, the likely story is that the delivery model is more hardware- and service-heavy than the company's positioning suggests, so growth is adding cost as fast as, or faster than, revenue.\n\nFacts to provide upon request:\nCommercial model:\n- The company charges clients an annual fee per hectare monitored.\n- Revenue is recurring and growing rapidly (60% per year for the last two years).\n\nFinancial position:\n- The company has approximately 14 months of runway remaining.\n\nIf the candidate stalls or keeps repeating the same framing:\n- Ask directly: 'What does it actually take to deliver this product to a customer?' That should be enough to surface the hardware, installation, and maintenance cost drivers behind the low gross margin.",
-              "block_type": "guidance"
-            },
-            {
-              "block_id": "verdex_ai_guidance_creative_001",
-              "title": "Interviewer Guidance - Creative Question",
-              "source_page": 1,
-              "visible_to_candidate": false,
-              "image": null,
-              "content": "A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves.",
               "block_type": "guidance"
             }
           ],
@@ -863,32 +699,18 @@
             {
               "block_id": "verdex_ai_data_001",
               "title": "Data - Unit Economics",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Servicing economics:\n- Current gross margin: approximately 18%, very low for a business positioned as AI software.\n- The product requires physical field sensors, technician installation, maintenance visits, and replacement sensors, which is what makes it expensive to serve despite being sold as software.\n\nAcquisition economics:\n- Customer acquisition cost payback: 38 months, which is long relative to the company's 14-month runway.\n- Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller olive and vineyard groups in places like Candeleda and inland Castilla-La Mancha.\n\nSegment profitability:\n- Customer base: 340 agricultural cooperatives, growing at 60% ARR per year for the past two years.\n- Large cooperatives are materially more profitable than small ones because fixed onboarding and installation costs are spread across more hectares.\n- Small cooperatives are loss-making on a per-account basis.\n\nFinancial position and path forward:\n- Remaining runway: approximately 14 months.\n- A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital the company may not currently have.",
               "block_type": "data"
             }
           ],
           "math": [],
-          "creative": [
-            {
-              "block_id": "verdex_ai_creative_001",
-              "title": "Creative Question - Near-Term Unit Economics Fixes",
-              "source_page": 1,
-              "visible_to_candidate": true,
-              "image": null,
-              "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?",
-              "block_type": "creative"
-            }
-          ],
+          "creative": [],
           "expected_analysis": [
             {
               "block_id": "verdex_ai_expected_analysis_001",
               "title": "Expected Analysis - Root Cause",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Key insight (lead with this): Verdex AI has a structural unit-economics problem, not a growth problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale, so faster growth makes losses worse rather than better.\n\nSupporting evidence:\n- An 18% gross margin is far below what a software business should look like, and the gap is explained by physical sensors, installation, and maintenance, not by the AI itself.\n- Low pricing, high service costs, and a 38-month CAC payback mean growth destroys cash instead of creating operating leverage, since the company spends cash upfront on hardware and acquisition well before recovering value through recurring revenue.\n- The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue, while larger cooperatives spread those same fixed costs over more hectares and are meaningfully more profitable.\n- With only 14 months of runway against a 38-month payback, the company cannot simply grow through the problem; the underlying unit economics have to change first.\n\nWhat this means for the client: the priority is not more growth, it is better growth. Fixing which customers are served and how they are served matters more, in the short run, than adding new logos.",
               "block_type": "expected_analysis"
             }
@@ -897,24 +719,19 @@
             {
               "block_id": "verdex_ai_final_recommendation_001",
               "title": "Final Recommendation",
-              "source_page": 1,
               "visible_to_candidate": true,
-              "image": null,
               "content": "Based on your analysis, what recommendation would you give the founders?",
               "block_type": "final_recommendation"
             },
             {
               "block_id": "verdex_ai_final_recommendation_002",
               "title": "Final Recommendation - Expected Answer",
-              "source_page": 1,
               "visible_to_candidate": false,
-              "image": null,
               "content": "Recommendation: Stop or sharply limit acquisition of small, unprofitable cooperatives, focus commercial effort on larger accounts with better unit economics, and restructure pricing so hardware and installation costs are recovered explicitly, while prioritizing the software-only satellite model as the structural fix.\n\nSupporting evidence:\n- With small cooperatives loss-making on a per-account basis, continuing to sell to them adds ARR while making the cash position worse, so segmentation has to come before further growth.\n- Large cooperatives are already more profitable because fixed onboarding and installation costs spread over more hectares, so shifting sales effort there improves the blend without needing new product work.\n- Separating hardware and installation fees from the recurring contract directly targets the 18% gross margin, which is the root cause identified in the analysis, rather than treating it as a pricing afterthought.\n- The satellite, software-only model would remove sensor costs entirely, which is the only lever that fixes the structural margin problem rather than just improving it at the margin.\n\nRisks and limitations:\n- Price increases or unbundled fees may slow growth further in the short term, which could be difficult optics for a company that has led with a 60% growth story.\n- Pausing small-cooperative acquisition may hurt top-line growth narratives even as it improves survival odds.\n- The satellite model still requires 9 months of development and capital the company may not have on hand, so it depends on financing or a partner coming through.\n\nNext steps:\n- Act within 6 months on pricing and segmentation, since the 14-month runway and 38-month CAC payback leave little room for a slower rollout.\n- Secure bridge financing or a strategic partner specifically to fund the 9-month satellite development gap.\n- Track gross margin and CAC payback by segment monthly so the founders can see whether the changes are working before the runway runs out.",
               "block_type": "final_recommendation"
             }
           ]
         },
-        "knowledge_sources": [],
         "source_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/synthetic-dataset/03-agriculture-company.json"
       },
       "case_recommendation": "- Final Recommendation: Based on your analysis, what recommendation would you give the founders?\n- Final Recommendation - Expected Answer: Recommendation: Stop or sharply limit acquisition of small, unprofitable cooperatives, focus commercial effort on larger accounts with better unit economics, and restructure pricing so hardware and installation costs are recovered explicitly, while prioritizing the software-only satellite model as the structural fix.\n\nSupporting evidence:\n- With small cooperatives loss-making on a per-account basis, continuing to sell to them adds ARR while making the cash position worse, so segmentation has to come before further growth.\n- Large cooperatives are already more profitable because fixed onboarding and installation costs spread over more hectares, so shifting sales effort there improves the blend without needing new product work.\n- Separating hardware and installation fees from the recurring contract directly targets the 18% gross margin, which is the root cause identified in the analysis, rather than treating it as a pricing afterthought.\n- The satellite, software-only model would remove sensor costs entirely, which is the only lever that fixes the structural margin problem rather than just improving it at the margin.\n\nRisks and limitations:\n- Price increases or unbundled fees may slow growth further in the short term, which could be difficult optics for a company that has led with a 60% growth story.\n- Pausing small-cooperative acquisition may hurt top-line growth narratives even as it improves survival odds.\n- The satellite model still requires 9 months of development and capital the company may not have on hand, so it depends on financing or a partner coming through.\n\nNext steps:\n- Act within 6 months on pricing and segmentation, since the 14-month runway and 38-month CAC payback leave little room for a slower rollout.\n- Secure bridge financing or a strategic partner specifically to fund the 9-month satellite development gap.\n- Track gross margin and CAC payback by segment monthly so the founders can see whether the changes are working before the runway runs out."
@@ -1152,7 +969,7 @@
       "case_id": "03-agriculture-company",
       "category": "STRUCTURED_MID_ANALYSIS",
       "expected_enough_evidence": false,
-      "rationale": "Opening, the acquisition-vs-servicing structure, and the unit-economics data are all covered, but neither the creative near-term-fix question nor the final recommendation has been reached yet -- case_creative_answer and final_recommendation remain untested.",
+      "rationale": "Opening, the acquisition-vs-servicing structure, and the unit-economics data are all covered, but the final recommendation has not been reached yet -- final_recommendation remains untested.",
       "judge_round": 0,
       "transcript": [
         "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
@@ -1176,29 +993,11 @@
       ]
     },
     {
-      "id": "JUDGE_C3_04",
-      "case_id": "03-agriculture-company",
-      "category": "REQUIRED_EXHIBIT_SKIPPED",
-      "expected_enough_evidence": false,
-      "rationale": "The candidate reaches a reasonably grounded recommendation, but the interviewer never asked the case's creative near-term-initiatives question, so case_creative_answer -- one of this case's required exchanges -- has nothing to be scored against, even though the case has a dedicated creative block ready to test.",
-      "judge_round": 0,
-      "transcript": [
-        "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
-        "Candidate: Let me recap: ARR has grown 60% a year for two years, they now serve 340 cooperatives, but losses are widening and burn is accelerating. Is the founders' ask a diagnosis only, or a concrete sustainability plan, and how much runway do we have to work with?",
-        "Interviewer: Good questions - let's diagnose first. I'll tell you the runway is limited, more on that shortly.",
-        "Candidate: Since this is positioned as an AI software company, I'd expect software-like margins. If margins are thin despite fast growth, my hypothesis is the delivery model is more hardware- and service-heavy than the positioning suggests. I'd like to split this into acquisition economics versus servicing economics.",
-        "Interviewer reveal: Current gross margin is approximately 18%, very low for a company positioned as AI software, because the product needs physical field sensors, technician installation, and ongoing maintenance. Customer acquisition cost payback is 38 months. Pricing was set low to drive penetration among price-sensitive cooperatives. Large cooperatives are more profitable than small ones because fixed onboarding and installation costs are spread over more hectares; small cooperatives are loss-making per account. Remaining runway is approximately 14 months.",
-        "Candidate: That confirms it - this isn't really a software margin profile, it's hardware-and-service-heavy, and with a 38-month payback against only 14 months of runway, growth is currently burning cash rather than building operating leverage.",
-        "Interviewer: Based on your analysis, what recommendation would you give the founders?",
-        "Candidate: Stop selling to small, unprofitable cooperatives, focus on larger accounts, and unbundle hardware and installation fees from the recurring price so the company actually recovers its delivery costs. The main risk is that this could slow the growth story investors have gotten used to."
-      ]
-    },
-    {
       "id": "JUDGE_C3_05",
       "case_id": "03-agriculture-company",
       "category": "FULL_COVERAGE_WEAK",
       "expected_enough_evidence": true,
-      "rationale": "Opening, structure, data, the creative brainstorm, and a recommendation are all present, so every rubric dimension has some transcript to draw on, even though the brainstorming and recommendation stay generic and never quantify the runway/payback tradeoff.",
+      "rationale": "Opening, structure, data, and a recommendation are all present, so every rubric dimension has some transcript to draw on, even though the recommendation stays generic and never quantifies the runway/payback tradeoff.",
       "judge_round": 0,
       "transcript": [
         "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
@@ -1207,8 +1006,6 @@
         "Candidate: What does it cost to serve a customer versus what we charge them?",
         "Interviewer reveal: Current gross margin is approximately 18%. Customer acquisition cost payback is 38 months. Large cooperatives are more profitable than small ones. Remaining runway is approximately 14 months.",
         "Candidate: So margins are low because of the hardware costs, and payback takes a long time.",
-        "Interviewer: Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?",
-        "Candidate: Maybe raise prices a bit and try to sell to bigger customers.",
         "Interviewer: Based on your analysis, what recommendation would you give the founders?",
         "Candidate: Focus more on bigger customers and adjust pricing."
       ]
@@ -1218,7 +1015,7 @@
       "case_id": "03-agriculture-company",
       "category": "FULL_COVERAGE_STRONG",
       "expected_enough_evidence": true,
-      "rationale": "The transcript mirrors the case's own creative-question guidance (MECE customer mix / pricing / delivery-cost buckets) and ideal final recommendation -- opening, hypothesis-driven structure, data-grounded synthesis, the creative brainstorm, and a risk-aware recommendation are all present.",
+      "rationale": "The transcript mirrors the case's own ideal final recommendation -- opening, hypothesis-driven structure, data-grounded synthesis, and a risk-aware recommendation are all present.",
       "judge_round": 0,
       "transcript": [
         "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
@@ -1227,8 +1024,6 @@
         "Candidate: Since this is sold as AI software, I'd expect software-like margins; if they're thin despite fast growth, my hypothesis is that the delivery model is more hardware- and service-heavy than the positioning suggests. I'd like to split the analysis into acquisition economics, what it costs to win a customer, versus servicing economics, what it costs to keep serving them, and look at whether that differs by cooperative size.",
         "Interviewer reveal: Gross margin is approximately 18%, low for an \"AI software\" business, driven by physical field sensors, technician installation, and maintenance - not the AI itself. CAC payback is 38 months. Pricing was set low to drive penetration among price-sensitive cooperatives, especially smaller ones. Large cooperatives are meaningfully more profitable than small ones, since fixed onboarding and installation costs spread over more hectares; small cooperatives are loss-making per account. Runway is approximately 14 months. A software-only satellite model could remove sensor costs but needs 9 more months of development and capital.",
         "Candidate: That confirms the hypothesis - this is a structural unit-economics problem, not a growth problem. An 18% margin is far below what software should look like, and with a 38-month CAC payback against only 14 months of runway, faster growth is actually accelerating cash burn rather than building leverage. The weak economics are concentrated in small cooperatives specifically, while large ones are already healthy.",
-        "Interviewer: Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?",
-        "Candidate: I'd organize this into three buckets. On customer mix: stop acquiring small, loss-making cooperatives and shift sales effort toward larger accounts with better payback. On pricing and contract structure: unbundle hardware, installation, and maintenance into separate fees instead of bundling everything into one low recurring price, and consider minimum-acreage thresholds for smaller customers. On delivery cost: pilot a lighter-touch service model with fewer field visits, and concentrate commercial effort on denser clusters like Candeleda and Talavera de la Reina where technician routes are more efficient to run. All three respect the 6-month window without requiring large upfront investment.",
         "Interviewer: Based on your analysis, what recommendation would you give the founders?",
         "Candidate: Stop or sharply limit acquisition of small, unprofitable cooperatives, shift commercial focus to larger accounts, and restructure pricing so hardware and installation costs are recovered explicitly, while treating the software-only satellite model as the structural fix once financed. The main risks are that unbundling fees could slow the 60%-growth narrative in the short term, and that the satellite model still needs 9 more months of development and capital that may require external financing. Next steps: implement the pricing and segmentation changes within 6 months given the runway constraint, pursue bridge financing or a partner specifically for the satellite development gap, and track gross margin and CAC payback by segment monthly."
       ]
@@ -1238,7 +1033,7 @@
       "case_id": "03-agriculture-company",
       "category": "FULL_COVERAGE_WITH_REDIRECT",
       "expected_enough_evidence": true,
-      "rationale": "Needed one redirect away from a generic sales-spend framing, but the transcript still reaches full coverage -- structure, data, the creative brainstorm, and a recommendation -- so there is enough evidence to evaluate.",
+      "rationale": "Needed one redirect away from a generic sales-spend framing, but the transcript still reaches full coverage -- structure, data, and a recommendation -- so there is enough evidence to evaluate.",
       "judge_round": 0,
       "transcript": [
         "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an AI-powered crop disease detection system for olive groves and vineyard farms in Spain and Portugal. Its early traction has been especially strong in areas such as Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the last two years and the company now serves 340 agricultural cooperative clients. Despite this growth, losses have widened each quarter and burn has accelerated in the last two periods. The founders want to understand the source of the profitability problem and identify a path to financial sustainability.",
@@ -1247,8 +1042,6 @@
         "Candidate: Good redirect - let's look at delivery cost. I'd split this into acquisition economics versus servicing economics.",
         "Interviewer reveal: Gross margin is approximately 18%, driven by physical field sensors, technician installation, and maintenance. CAC payback is 38 months. Large cooperatives are more profitable than small ones. Runway is approximately 14 months.",
         "Candidate: So the low 18% margin comes from physical sensors, installation, and maintenance, not the AI itself, and with a 38-month CAC payback against 14 months of runway, growth is currently burning cash.",
-        "Interviewer: Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose?",
-        "Candidate: On customer mix, stop selling to small loss-making cooperatives and prioritize larger ones. On pricing, unbundle hardware and installation fees from the recurring contract. On delivery, concentrate technician routes in denser clusters like Candeleda to cut servicing cost per customer.",
         "Interviewer: Based on your analysis, what recommendation would you give the founders?",
         "Candidate: Limit acquisition of small cooperatives, refocus on larger accounts, unbundle hardware/installation pricing, and prioritize the satellite, software-only model as the real structural fix, while accepting it needs further financing and about 9 more months to build."
       ]

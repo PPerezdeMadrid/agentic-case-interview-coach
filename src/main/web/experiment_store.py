@@ -181,6 +181,7 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
         completion_tokens = [row.get("total_completion_tokens") for row in rows]
         total_tokens = [row.get("total_tokens") for row in rows]
         llm_call_counts = [row.get("llm_call_count") for row in rows]
+        duration_seconds = [row.get("total_duration_seconds") for row in rows]
 
         metrics.append(
             {
@@ -200,6 +201,8 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
                 "avg_completion_tokens": _mean(completion_tokens),
                 "avg_total_tokens": _mean(total_tokens),
                 "sum_total_tokens": sum(v for v in total_tokens if v is not None),
+                "avg_duration_seconds": _mean(duration_seconds),
+                "sum_duration_seconds": sum(v for v in duration_seconds if v is not None),
             }
         )
 
@@ -519,6 +522,7 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
                     "total_prompt_tokens": row.get("total_prompt_tokens"),
                     "total_completion_tokens": row.get("total_completion_tokens"),
                     "total_tokens": row.get("total_tokens"),
+                    "total_duration_seconds": row.get("total_duration_seconds"),
                     "dimension_scores": [
                         {"section_label": label, "dimension": dimension, "score": score, "rationale": rationale}
                         for _section_key, label, dimension, score, rationale in iter_dimension_scores(row)

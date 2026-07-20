@@ -1,11 +1,13 @@
 import json
 import re
+import time
 from typing import Callable
 
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from pydantic import BaseModel
 
 from adapter import (
+    get_case_block_by_id,
     get_case_blocks_by_type,
     get_hidden_guidance_blocks,
     get_opening_prompt,
@@ -96,6 +98,42 @@ def normalize_string_list(values: object) -> list[str]:
         normalized.append(value)
         seen.add(value)
     return normalized
+
+
+def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
+    visible_prefixes = ("Interviewer:", "Interviewer reveal:", "Candidate:")
+    return [line for line in transcript if line.startswith(visible_prefixes)]
+
+
+def candidate_transcript_messages(visible_transcript: list[str]) -> list:
+    """Replay the visible transcript as real conversation turns so the candidate
+    sees its own prior answers as assistant turns instead of as text described
+    inside the system prompt.
+    """
+    messages: list = []
+    for line in visible_transcript:
+        if line.startswith("Candidate:"):
+            messages.append(AIMessage(content=line[len("Candidate:"):].strip()))
+        elif line.startswith("Interviewer reveal:"):
+            messages.append(HumanMessage(content="[revealed fact] " + line[len("Interviewer reveal:"):].strip()))
+        else:
+            messages.append(HumanMessage(content=line[len("Interviewer:"):].strip()))
+    return messages
+
+
+def resolve_reveal_content(case_data: dict, action: str, block_id: str, content: str) -> tuple[str, str]:
+    """Swap in the case block's real content when the interviewer/baseline chose to
+    reveal one, falling back to a plain question if the block isn't actually
+    candidate-visible. Shared by node.interviewer_node and baseline.baseline_node."""
+    if action != "reveal" or not block_id:
+        return action, content
+
+    revealed_block = get_case_block_by_id(case_data, block_id)
+    if not isinstance(revealed_block, dict) or revealed_block.get("visible_to_candidate") is not True:
+        return "question", content
+
+    revealed_content = str(revealed_block.get("content", "")).strip()
+    return action, (revealed_content or content)
 
 
 def format_case_blocks(blocks: list[dict]) -> str:
@@ -206,6 +244,10 @@ def extract_case_guidance(case_data: dict) -> str:
     return format_case_blocks(get_hidden_guidance_blocks(case_data))
 
 
+def extract_case_data_facts(case_data: dict) -> str:
+    return format_case_blocks(get_case_blocks_by_type(case_data, "data"))
+
+
 def extract_case_recommendation(case_data: dict) -> str:
     return format_case_blocks(get_case_blocks_by_type(case_data, "final_recommendation"))
 
@@ -268,11 +310,16 @@ def normalize_eval_payload(payload: dict, fields: list[str]) -> dict:
     return normalized
 
 
-def extract_token_usage(response: object, *, node: str, model: str = "") -> dict:
+def extract_token_usage(response: object, *, node: str, model: str = "", duration_seconds: float | None = None) -> dict:
     """Read prompt/completion/total token counts off a ChatOpenAI response.
 
     Works for both OpenRouter and LM Studio since both go through the same
     OpenAI-compatible `usage` payload in the raw response.
+
+    `duration_seconds`, when given, is the wall-clock time the triggering
+    `llm.invoke()` call took -- timed by the caller since it isn't part of
+    the response payload itself (unlike token counts, no provider echoes
+    this back).
     """
     metadata = getattr(response, "response_metadata", None)
     metadata = metadata if isinstance(metadata, dict) else {}
@@ -286,6 +333,7 @@ def extract_token_usage(response: object, *, node: str, model: str = "") -> dict
     return {
         "node": node,
         "model": model_name,
+        "duration_seconds": round(duration_seconds, 3) if duration_seconds is not None else None,
         "usage": {
             "prompt_tokens": token_usage.get("prompt_tokens", usage_metadata.get("input_tokens")),
             "completion_tokens": token_usage.get("completion_tokens", usage_metadata.get("output_tokens")),
@@ -360,8 +408,9 @@ def invoke_json_llm(
             # to an unconstrained call rather than losing the turn.
             return llm.invoke(invoke_messages)
 
+    started_at = time.perf_counter()
     response = _invoke(structured_llm, messages)
-    usage_log.append(extract_token_usage(response, node=node, model=model_name))
+    usage_log.append(extract_token_usage(response, node=node, model=model_name, duration_seconds=time.perf_counter() - started_at))
     payload = load_json_object(response.content)
     if is_acceptable(payload):
         return payload, usage_log
@@ -378,8 +427,11 @@ def invoke_json_llm(
                 )
             ),
         ]
+        started_at = time.perf_counter()
         response = _invoke(llm, repair_messages)
-        usage_log.append(extract_token_usage(response, node=f"{node}_repair", model=model_name))
+        usage_log.append(
+            extract_token_usage(response, node=f"{node}_repair", model=model_name, duration_seconds=time.perf_counter() - started_at)
+        )
         raw_output = str(response.content).strip()
         payload = load_json_object(raw_output)
         if is_acceptable(payload):

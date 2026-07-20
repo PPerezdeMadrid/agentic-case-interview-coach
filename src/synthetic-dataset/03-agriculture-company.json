@@ -29,20 +29,6 @@
       "content": "Key insight (lead with this): Verdex AI has a structural unit-economics problem, not a growth problem. Although it is positioned as a software company, its delivery model is hardware-dependent and expensive to scale, so faster growth makes losses worse rather than better.\n\nSupporting evidence:\n- An 18% gross margin is far below what a software business should look like, and the gap is explained by physical sensors, installation, and maintenance, not by the AI itself.\n- Low pricing, high service costs, and a 38-month CAC payback mean growth destroys cash instead of creating operating leverage, since the company spends cash upfront on hardware and acquisition well before recovering value through recurring revenue.\n- The economics are particularly weak for small cooperatives, where onboarding and hardware costs are too high relative to revenue, while larger cooperatives spread those same fixed costs over more hectares and are meaningfully more profitable.\n- With only 14 months of runway against a 38-month payback, the company cannot simply grow through the problem; the underlying unit economics have to change first.\n\nWhat this means for the client: the priority is not more growth, it is better growth. Fixing which customers are served and how they are served matters more, in the short run, than adding new logos."
     },
     {
-      "block_id": "verdex_ai_creative_001",
-      "block_type": "creative",
-      "title": "Creative Question - Near-Term Unit Economics Fixes",
-      "visible_to_candidate": true,
-      "content": "Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?"
-    },
-    {
-      "block_id": "verdex_ai_guidance_creative_001",
-      "block_type": "guidance",
-      "title": "Interviewer Guidance - Creative Question",
-      "visible_to_candidate": false,
-      "content": "A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:\n\nCustomer mix:\n- Segment customers and stop selling to small, loss-making cooperatives.\n- Shift sales effort toward larger cooperatives with better payback economics.\n\nPricing and contract structure:\n- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.\n- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.\n\nDelivery cost:\n- Pilot a lighter-touch service model that reduces field visits and replacement costs.\n- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.\n\nWeak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves."
-    },
-    {
       "block_id": "verdex_ai_final_recommendation_001",
       "block_type": "final_recommendation",
       "title": "Final Recommendation",

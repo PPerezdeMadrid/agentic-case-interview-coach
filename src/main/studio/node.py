@@ -1,17 +1,11 @@
 import json
+import time
 from typing import Literal
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_core.runnables import RunnableConfig
+from langchain_core.messages import HumanMessage, SystemMessage
 
-from adapter import (
-    get_candidate_visible_blocks,
-    get_case_block_by_id,
-)
-from loader import (
-    DEFAULT_MAX_JUDGE_ROUNDS,
-    load_selected_simulation_bundle,
-)
+from adapter import get_candidate_visible_blocks
+from loader import DEFAULT_MAX_JUDGE_ROUNDS
 from llm_server import (
     candidate_llm_server,
     feedback_llm_server,
@@ -20,7 +14,7 @@ from llm_server import (
     lmstudio_llm_server,
     openai_llm_server,
 )
-from persistence import resolve_thread_id
+from persistence import build_initial_graph_state, load_scenario_node
 from prompts import (
     CASE_GUIDE_NAVIGATION_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
@@ -55,26 +49,27 @@ from state import (
     JudgeResponse,
 )
 from utils import (
-    extract_case_guidance,
-    extract_case_prompt,
-    extract_case_recommendation,
+    candidate_transcript_messages,
+    extract_case_data_facts,
     extract_token_usage,
     format_candidate_persona,
     format_case_blocks,
     format_full_case_data,
     format_rubric,
+    get_candidate_visible_transcript,
     invoke_json_llm,
     normalize_string_list,
     normalize_eval_payload,
     normalize_focus_areas,
     parse_interviewer_output,
+    resolve_reveal_content,
     strip_thinking,
 )
 
 # Per-role servers: interviewer/candidate/judge on OpenRouter, feedback on local LM Studio.
-candidate_llm = feedback_llm_server
+candidate_llm = candidate_llm_server
 judge_llm = judge_llm_server
-interviewer_llm = feedback_llm_server
+interviewer_llm = interviewer_llm_server
 feedback_llm = feedback_llm_server
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
@@ -86,27 +81,6 @@ MAX_INTERVIEWER_JSON_RETRIES = 3
 # response_format hint, and normalize_eval_payload all stay in sync.
 CASE_PERFORMANCE_FIELDS = list(CaseEvaluation.model_fields.keys())
 QUALITY_DIALOG_FIELDS = list(DialogEvaluation.model_fields.keys())
-
-
-def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
-    visible_prefixes = ("Interviewer:", "Interviewer reveal:", "Candidate:")
-    return [line for line in transcript if line.startswith(visible_prefixes)]
-
-
-def _candidate_transcript_messages(visible_transcript: list[str]) -> list:
-    """Replay the visible transcript as real conversation turns so the candidate
-    sees its own prior answers as assistant turns instead of as text described
-    inside the system prompt.
-    """
-    messages: list = []
-    for line in visible_transcript:
-        if line.startswith("Candidate:"):
-            messages.append(AIMessage(content=line[len("Candidate:"):].strip()))
-        elif line.startswith("Interviewer reveal:"):
-            messages.append(HumanMessage(content="[revealed fact] " + line[len("Interviewer reveal:"):].strip()))
-        else:
-            messages.append(HumanMessage(content=line[len("Interviewer:"):].strip()))
-    return messages
 
 
 def format_focus_areas_for_prompt(focus_areas: list[str]) -> str:
@@ -170,6 +144,7 @@ def _build_interviewer_messages(
     transcript: list[str],
     visible_blocks: list[dict],
     case_guidance: str,
+    case_data_facts: str,
     focus_areas: list[str],
     turn_index: int,
 ) -> list[SystemMessage]:
@@ -186,6 +161,9 @@ def _build_interviewer_messages(
                 + format_case_blocks(visible_blocks)
                 + "\n\nHidden case guidance:\n"
                 + (case_guidance or "None.")
+                + "\n\nCase data available to you (state these facts plainly when relevant; "
+                + "never invent figures beyond them):\n"
+                + (case_data_facts or "None.")
                 + "\n\nCurrent judge focus areas to act on directly:\n"
                 + format_focus_areas_for_prompt(focus_areas if isinstance(focus_areas, list) else [])
                 + f"\n\nCurrent turn index: {turn_index} (final turn before judge evaluation: "
@@ -202,6 +180,7 @@ def _invoke_interviewer_move(
     transcript: list[str],
     visible_blocks: list[dict],
     case_guidance: str,
+    case_data_facts: str,
     focus_areas: list[str],
     turn_index: int,
 ) -> tuple[str, str, str, bool, str, list[dict]]:
@@ -210,6 +189,7 @@ def _invoke_interviewer_move(
         transcript,
         visible_blocks,
         case_guidance,
+        case_data_facts,
         focus_areas,
         turn_index,
     )
@@ -242,59 +222,12 @@ def build_initial_interview_state(
     scenario_ref: str | None = None,
 ) -> AgenticGraphState:
     """Build the initial runtime state for the agentic interview graph."""
-    selected_ref = scenario_ref or case_name
-    bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
-    scenario = bundle["scenario"]
-    case_data = bundle["case"]
-
-    return {
-        "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
-        "case_prompt": extract_case_prompt(case_data),
-        "candidate_profile": scenario.get("candidate_profile", {}),
-        "turn_index": 0,
-        "transcript": [],
-        "case_guidance": extract_case_guidance(case_data),
-        "case_data": case_data,
-        "enough_evidence": False,
-        "focus_areas": [],
-        "case_recommendation": extract_case_recommendation(case_data),
-        "case_performance": None,
-        "quality_dialog": None,
-        "data_gathered": [],
-        "thread_id": DEFAULT_THREAD_ID,
-        "trace_step_index": 0,
-        "rubric_data": bundle["rubric"],
-        "judge_round": 0,
-        "retrieved_profitability_context": [],
-        "rag_query_log": [],
-    }
-
-
-def load_scenario_node(
-    state: AgenticGraphState,
-    config: RunnableConfig | None = None,
-) -> AgenticGraphState:
-    """Load scenario assets into state if they are not present yet."""
-    thread_id = resolve_thread_id(state, config)
-    if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
-        return {"thread_id": thread_id}
-
-    bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
-    scenario = bundle["scenario"]
-    case_data = bundle["case"]
-
-    return {
-        "thread_id": thread_id,
-        "scenario_ref": str(state.get("scenario_ref") or scenario.get("scenario_id", "")),
-        "case_prompt": extract_case_prompt(case_data),
-        "candidate_profile": scenario.get("candidate_profile", {}),
-        "case_guidance": extract_case_guidance(case_data),
-        "case_data": case_data,
-        "case_recommendation": extract_case_recommendation(case_data),
-        "rubric_data": bundle["rubric"],
-        "retrieved_profitability_context": [],
-        "rag_query_log": [],
-    }
+    return build_initial_graph_state(
+        case_name=case_name,
+        seed=seed,
+        scenario_ref=scenario_ref,
+        thread_id=DEFAULT_THREAD_ID,
+    )
 
 
 def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
@@ -323,24 +256,26 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
         return {"enough_evidence": True}
 
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
+    case_data_facts = extract_case_data_facts(case_data) if isinstance(case_data, dict) else ""
 
     interviewer_action, content, revealed_block_id, ready_for_judge, reasoning, usage_log = _invoke_interviewer_move(
         case_prompt,
         transcript,
         visible_blocks,
         case_guidance,
+        case_data_facts,
         focus_areas if isinstance(focus_areas, list) else [],
         turn_index,
     )
 
-    if interviewer_action == "reveal" and revealed_block_id:
-        revealed_block = get_case_block_by_id(case_data, revealed_block_id)
-        if isinstance(revealed_block, dict) and revealed_block.get("visible_to_candidate") is True:
-            revealed_content = str(revealed_block.get("content", "")).strip()
-            if revealed_content:
-                content = revealed_content
-        else:
-            interviewer_action = "question"
+    interviewer_action, content = resolve_reveal_content(case_data, interviewer_action, revealed_block_id, content)
+
+    if turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE - 1:
+        # This move is the forced final-turn wrap-up asking for the candidate's
+        # recommendation -- they have not answered yet, so evidence cannot be
+        # complete no matter what the LLM set ready_for_judge to. Trusting it here
+        # would route straight to judge and drop their answer from the transcript.
+        ready_for_judge = False
 
     transcript_label = "Interviewer reveal" if interviewer_action == "reveal" else "Interviewer"
     transcript = transcript + [f"{transcript_label}: {content}"]
@@ -369,7 +304,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
                 + format_candidate_persona(candidate_profile if isinstance(candidate_profile, dict) else {})
             )
         ),
-        *_candidate_transcript_messages(visible_transcript),
+        *candidate_transcript_messages(visible_transcript),
         HumanMessage(
             content=(
                 "Current factual data_gathered list:\n"
@@ -672,8 +607,11 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
+    started_at = time.perf_counter()
     response = feedback_llm.invoke(messages)
-    usage_entry = extract_token_usage(response, node="give_feedback", model=feedback_llm.model_name)
+    usage_entry = extract_token_usage(
+        response, node="give_feedback", model=feedback_llm.model_name, duration_seconds=time.perf_counter() - started_at
+    )
     latest_feedback = strip_thinking(response.content).strip()
     if not latest_feedback:
         latest_feedback = "Final feedback generated from case performance and dialog quality."

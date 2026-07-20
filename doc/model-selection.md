@@ -34,12 +34,19 @@ The project is being developed using computational resources provided by the Uni
 
 To ensure the system remains practical, reproducible, and cost-effective, the implementation now runs entirely on hosted/local inference instead of the HPC GPU allocation:
 
-* **Interviewer**: Qwen2.5-7B-Instruct (OpenRouter — `qwen/qwen-2.5-7b-instruct`)
-* **Candidate**: Mistral-Nemo-Instruct (OpenRouter — `mistralai/mistral-nemo`)
+* **Interviewer**: Qwen2.5-32B-Instruct (OpenRouter — `qwen/qwen-2.5-32b-instruct`)
+* **Candidate**: Mixtral-8x7B-Instruct-v0.1 (OpenRouter — `mistralai/mixtral-8x7b-instruct`)
 * **Judge**: Llama-3.1-70B-Instruct (OpenRouter — `meta-llama/llama-3.1-70b-instruct`)
 * **Feedback**: local model served via LM Studio (`LMSTUDIO_MODEL`, currently `phi-4`)
 
-This preserves architectural diversity between agent roles (transformer vs. MoE-descended vs. dense variants across three different model families) while removing the dependency on HPC job scheduling. The judge keeps a full 70B-class model since it drives scoring/calibration, matching the reference literature's model choice for that role. The GPU-hosted configuration (`localhost:18401`/`18402` via `server.bash` on the HPC cluster) is kept commented out in `llm_server.py` in case the project reverts to self-hosted inference.
+This preserves architectural diversity between agent roles (transformer vs. MoE vs. dense variants across three different model families) while removing the dependency on HPC job scheduling. The judge keeps a full 70B-class model since it drives scoring/calibration, matching the reference literature's model choice for that role.
+
+The interviewer and candidate were originally downsized further, to Qwen2.5-7B-Instruct and Mistral-Nemo-Instruct (12B), purely to fit the single-GPU HPC allocation described above. Both have since been raised back up within the same model family now that inference runs on OpenRouter rather than the HPC cluster:
+
+* The candidate move to Mixtral-8x7B-Instruct-v0.1 restores the original Gu et al. (2026) choice for that role (see above) rather than being a new selection.
+* The interviewer move to Qwen2.5-32B-Instruct is a middle-ground scale-up: large enough to give richer question generation and follow-ups than the 7B variant, while staying a different family from the Llama-3.1-70B judge to preserve architectural diversity. Nguyen et al. (2025, SimInterview) is a relevant data point here but cuts the other way — they report that a smaller model (Gemma 3) produced *more* engaging interviewer conversations than larger alternatives (OpenAI o3, Llama 4 Maverick) in their setup, so parameter count alone is not assumed to track interview quality; the upgrade here is motivated by compute headroom rather than a claim that bigger strictly means better. EZInterviewer (Li et al., 2023) similarly does not mandate a specific interviewer scale, but its retrieval-augmented mock-interview generator is consistent with keeping the interviewer role on a moderately sized, low-latency model rather than the largest available one.
+
+The GPU-hosted configuration (`localhost:18401`/`18402` via `server.bash` on the HPC cluster) is kept commented out in `llm_server.py` in case the project reverts to self-hosted inference; it still targets the smaller Mistral-Nemo/Llama-3.3-70B pair since it remains constrained by the single-GPU allocation.
 
 See `src/main/studio/llm_server.py` for the concrete `ChatOpenAI` wiring and `.env` for the `OPENROUTER_MODEL_INTERVIEWER` / `OPENROUTER_MODEL_CANDIDATE` / `OPENROUTER_MODEL_JUDGE` / `LMSTUDIO_MODEL` variables that control these role assignments.
 
@@ -59,6 +66,14 @@ See `src/main/studio/llm_server.py` for the concrete `ChatOpenAI` wiring and `.e
   title = {EZInterviewer: To improve job interview performance with mock interview generator},
   year = {2023},
   eprint = {2301.00972},
+  archivePrefix = {arXiv}
+}
+
+@misc{nguyen2025siminterview,
+  author = {Nguyen, Hung Truong Thanh and Nguyen, Tran Diem Quynh and Cao, Hoang Loc},
+  title = {SimInterview: Transforming business education through large language model-based simulated multilingual interview training system},
+  year = {2025},
+  eprint = {2508.11873},
   archivePrefix = {arXiv}
 }
 

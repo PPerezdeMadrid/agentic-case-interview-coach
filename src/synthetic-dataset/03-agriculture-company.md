@@ -73,31 +73,6 @@ The priority is not more growth, it is better growth. Fixing which customers are
 - Remaining runway: approximately 14 months.
 - A software-only satellite model could remove sensor costs, but it requires 9 more months of development and capital the company may not currently have.
 
-# Creative Question
-
-Assume the founders agree Verdex must improve economics within the next 6 months, but they do not want to fully stop growth. What are two or three practical initiatives you would propose to improve near-term unit economics and cash burn while preserving the most attractive customers?
-
-## Interviewer guidance
-
-A strong answer should organize ideas into MECE buckets rather than a flat list, for example customer mix, pricing and contract structure, and delivery cost, with each idea tied back to the runway constraint. Strong, case-specific ideas within those buckets include:
-
-Customer mix:
-
-- Segment customers and stop selling to small, loss-making cooperatives.
-- Shift sales effort toward larger cooperatives with better payback economics.
-
-Pricing and contract structure:
-
-- Introduce separate hardware, installation, or maintenance fees instead of bundling everything into one low recurring price.
-- Offer minimum-acreage thresholds or multi-year contracts for smaller customers.
-
-Delivery cost:
-
-- Pilot a lighter-touch service model that reduces field visits and replacement costs.
-- Concentrate commercial effort on denser farming clusters such as Candeleda, Talavera de la Reina, and other areas where technician routes can be served more efficiently.
-
-Weak answers will stay generic, ignore the runway constraint, present ideas as an uncategorized list, or propose ideas that require large upfront investment before cash burn improves.
-
 # Final Recommendation
 
 Based on your analysis, what recommendation would you give the founders?

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,12 @@ from experiment_store import (
     load_batch,
     load_scenario_detail,
 )
+from node_eval.baseline_eval import (
+    build_agentic_vs_baseline_comparison,
+    compute_readiness_confusion,
+    load_baseline_eval,
+)
+from node_eval.interviewer_eval import list_interviewer_golden_sets, load_interviewer_eval
 from node_eval.judge_eval import build_category_radar, category_breakdown, list_judge_golden_sets, load_judge_eval
 from rag_ablation import list_ablation_batches, load_ablation
 from retrieval_eval import DEFAULT_TOP_K, evaluate_retrieval
@@ -36,6 +43,19 @@ app = Flask(
     static_folder=str(ROOT_DIR / "static"),
 )
 app.config["SECRET_KEY"] = "main-human-eval"
+
+
+@app.template_filter("format_datetime")
+def format_datetime(value: str | None) -> str:
+    """Render an ISO-8601 timestamp (e.g. from `computed_at`) as e.g. '18 Jul 2026, 14:32 UTC'."""
+    if not value:
+        return ""
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return value
+    tz_label = parsed.strftime("%Z") or "UTC"
+    return f"{parsed.strftime('%d %b %Y, %H:%M')} {tz_label}"
 
 
 def _wants_json() -> bool:
@@ -203,6 +223,9 @@ def agents_index():
     return render_template("agents.html")
 
 
+JUDGE_BASELINE_GOLDEN_SET = "worldcup"
+
+
 @app.get("/agents/judge")
 def agents_judge():
     golden_sets = list_judge_golden_sets()
@@ -211,6 +234,11 @@ def agents_judge():
     error = None
     categories = None
     radar = None
+    baseline_result = None
+    baseline_categories = None
+    baseline_radar = None
+    baseline_confusion = None
+    baseline_error = None
     if golden_sets:
         requested = str(request.args.get("golden_set", "")).strip()
         golden_set = requested if requested in golden_sets else golden_sets[0]
@@ -222,8 +250,27 @@ def agents_judge():
         except FileNotFoundError as exc:
             error = str(exc)
 
+        # Baseline has no judge node of its own, so it's graded on this same
+        # golden set's transcripts via its own ready_for_evaluation call (see
+        # build_baseline_worldcup_golden_set.py) -- only available when that
+        # golden set name is "worldcup", the one baseline has been run against.
+        try:
+            baseline_result = load_baseline_eval(JUDGE_BASELINE_GOLDEN_SET, refresh=refresh)
+            baseline_categories = category_breakdown(baseline_result["records"])
+            baseline_radar = build_category_radar(baseline_categories)
+            baseline_confusion = compute_readiness_confusion(baseline_result["records"])
+        except FileNotFoundError as exc:
+            baseline_error = str(exc)
+
     if _wants_json():
-        return jsonify({**result, "category_breakdown": categories} if result else result)
+        return jsonify(
+            {
+                "agentic": {**result, "category_breakdown": categories} if result else result,
+                "baseline": {**baseline_result, "category_breakdown": baseline_categories, "confusion": baseline_confusion}
+                if baseline_result
+                else None,
+            }
+        )
 
     return render_template(
         "agents_judge.html",
@@ -233,6 +280,76 @@ def agents_judge():
         error=error,
         categories=categories,
         radar=radar,
+        baseline_result=baseline_result,
+        baseline_categories=baseline_categories,
+        baseline_radar=baseline_radar,
+        baseline_confusion=baseline_confusion,
+        baseline_error=baseline_error,
+    )
+
+
+@app.get("/agents/interviewer")
+def agents_interviewer():
+    golden_sets = list_interviewer_golden_sets()
+    golden_set = None
+    result = None
+    error = None
+    categories = None
+    radar = None
+    baseline_result = None
+    baseline_categories = None
+    baseline_radar = None
+    baseline_error = None
+    comparison = None
+    if golden_sets:
+        requested = str(request.args.get("golden_set", "")).strip()
+        golden_set = requested if requested in golden_sets else golden_sets[0]
+        refresh = request.args.get("refresh") == "1"
+        try:
+            result = load_interviewer_eval(golden_set, refresh=refresh)
+            categories = category_breakdown(result["records"])
+            radar = build_category_radar(categories)
+        except FileNotFoundError as exc:
+            error = str(exc)
+
+        # Baseline is graded on this exact same golden_set (see
+        # build_baseline_golden_sets.py), so pull its numbers alongside the
+        # agentic interviewer's for a side-by-side comparison on one page.
+        # turn_control is excluded: baseline shares the interviewer's
+        # TURN_CONTROL_ITEMS verbatim, so its "score" isn't an independent
+        # measurement -- show it as unevaluated ('-') instead of a number.
+        if golden_set != "turn_control":
+            try:
+                baseline_result = load_baseline_eval(golden_set, refresh=refresh)
+                baseline_categories = category_breakdown(baseline_result["records"])
+                baseline_radar = build_category_radar(baseline_categories)
+            except FileNotFoundError as exc:
+                baseline_error = str(exc)
+
+        if categories is not None or baseline_categories is not None:
+            comparison = build_agentic_vs_baseline_comparison(categories, baseline_categories)
+
+    if _wants_json():
+        return jsonify(
+            {
+                "agentic": {**result, "category_breakdown": categories} if result else result,
+                "baseline": {**baseline_result, "category_breakdown": baseline_categories} if baseline_result else None,
+            }
+        )
+
+    return render_template(
+        "agents_interviewer.html",
+        golden_sets=golden_sets,
+        golden_set=golden_set,
+        result=result,
+        error=error,
+        categories=categories,
+        radar=radar,
+        baseline_result=baseline_result,
+        baseline_categories=baseline_categories,
+        baseline_radar=baseline_radar,
+        baseline_error=baseline_error,
+        comparison=comparison,
     )
 
 

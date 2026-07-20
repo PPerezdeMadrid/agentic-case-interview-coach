@@ -1,14 +1,11 @@
+import time
 from typing import Literal
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_core.runnables import RunnableConfig
+from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from typing_extensions import TypedDict
 
-from adapter import (
-    get_candidate_visible_blocks,
-    get_case_block_by_id,
-)
+from adapter import get_candidate_visible_blocks
 from rag.case_guide_context import (
     CASE_GUIDE_CITATION_LABEL,
     format_case_guide_snippets,
@@ -21,27 +18,26 @@ from rag.profitability_guide_context import (
     format_profitability_guide_snippet,
     retrieve_profitability_guide_context,
 )
-from loader import load_selected_simulation_bundle
 from llm_server import judge_llm_server
-from persistence import make_persist_run_node, make_trace_node, resolve_thread_id
+from persistence import build_initial_graph_state, load_scenario_node, make_persist_run_node, make_trace_node
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
 )
 from state import AgenticGraphState, BaselineTurnOutput, ProfitabilityRagScoutingDecision
 from utils import (
-    extract_case_guidance,
-    extract_case_prompt,
-    extract_case_recommendation,
+    candidate_transcript_messages,
     extract_token_usage,
     format_candidate_persona,
     format_case_blocks,
     format_full_case_data,
     format_rubric,
+    get_candidate_visible_transcript,
     invoke_json_llm,
     load_json_object,
     normalize_eval_payload,
     normalize_string_list,
+    resolve_reveal_content,
     strip_thinking,
 )
 
@@ -77,27 +73,6 @@ QUALITY_DIALOG_FIELDS = [
 
 class GraphConfig(TypedDict, total=False):
     thread_id: str
-
-
-def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
-    visible_prefixes = ("Interviewer:", "Interviewer reveal:", "Candidate:")
-    return [line for line in transcript if line.startswith(visible_prefixes)]
-
-
-def _candidate_transcript_messages(visible_transcript: list[str]) -> list:
-    """Replay the visible transcript as real conversation turns so the candidate
-    sees its own prior answers as assistant turns instead of as text described
-    inside the system prompt.
-    """
-    messages: list = []
-    for line in visible_transcript:
-        if line.startswith("Candidate:"):
-            messages.append(AIMessage(content=line[len("Candidate:"):].strip()))
-        elif line.startswith("Interviewer reveal:"):
-            messages.append(HumanMessage(content="[revealed fact] " + line[len("Interviewer reveal:"):].strip()))
-        else:
-            messages.append(HumanMessage(content=line[len("Interviewer:"):].strip()))
-    return messages
 
 
 def get_profitability_guide_context(
@@ -156,57 +131,12 @@ def build_initial_baseline_state(
     seed: int | None = None,
     scenario_ref: str | None = None,
 ) -> AgenticGraphState:
-    selected_ref = scenario_ref or case_name
-    bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
-    scenario = bundle["scenario"]
-    case_data = bundle["case"]
-
-    return {
-        "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
-        "case_prompt": extract_case_prompt(case_data),
-        "candidate_profile": scenario.get("candidate_profile", {}),
-        "turn_index": 0,
-        "transcript": [],
-        "case_guidance": extract_case_guidance(case_data),
-        "case_data": case_data,
-        "enough_evidence": False,
-        "focus_areas": [],
-        "case_recommendation": extract_case_recommendation(case_data),
-        "case_performance": None,
-        "quality_dialog": None,
-        "data_gathered": [],
-        "thread_id": DEFAULT_THREAD_ID,
-        "rubric_data": bundle["rubric"],
-        "judge_round": 0,
-        "retrieved_profitability_context": [],
-        "rag_query_log": [],
-    }
-
-
-def load_scenario_node(
-    state: AgenticGraphState,
-    config: RunnableConfig | None = None,
-) -> AgenticGraphState:
-    thread_id = resolve_thread_id(state, config)
-    if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
-        return {"thread_id": thread_id}
-
-    bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
-    scenario = bundle["scenario"]
-    case_data = bundle["case"]
-
-    return {
-        "thread_id": thread_id,
-        "scenario_ref": str(state.get("scenario_ref") or scenario.get("scenario_id", "")),
-        "case_prompt": extract_case_prompt(case_data),
-        "candidate_profile": scenario.get("candidate_profile", {}),
-        "case_guidance": extract_case_guidance(case_data),
-        "case_data": case_data,
-        "case_recommendation": extract_case_recommendation(case_data),
-        "rubric_data": bundle["rubric"],
-        "retrieved_profitability_context": [],
-        "rag_query_log": [],
-    }
+    return build_initial_graph_state(
+        case_name=case_name,
+        seed=seed,
+        scenario_ref=scenario_ref,
+        thread_id=DEFAULT_THREAD_ID,
+    )
 
 
 def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> dict | None:
@@ -318,7 +248,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
                 + format_candidate_persona(candidate_profile if isinstance(candidate_profile, dict) else {})
             )
         ),
-        *_candidate_transcript_messages(visible_transcript),
+        *candidate_transcript_messages(visible_transcript),
         HumanMessage(
             content=(
                 "Current factual data_gathered list:\n"
@@ -328,8 +258,11 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
     ]
 
+    started_at = time.perf_counter()
     response = candidate_llm.invoke(messages)
-    usage_entry = extract_token_usage(response, node="baseline_candidate", model=candidate_llm.model_name)
+    usage_entry = extract_token_usage(
+        response, node="baseline_candidate", model=candidate_llm.model_name, duration_seconds=time.perf_counter() - started_at
+    )
     payload = load_json_object(response.content)
     answer = str(payload.get("answer", "")).strip()
     updated_data_gathered = normalize_string_list(payload.get("data_gathered", data_gathered))
@@ -344,6 +277,68 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
         "data_gathered": updated_data_gathered,
         "llm_usage": [usage_entry],
     }
+
+
+def _build_baseline_messages(
+    case_prompt: str,
+    case_data: dict,
+    case_guidance: str,
+    case_recommendation: str,
+    rubric_data: dict,
+    transcript: list[str],
+    visible_blocks: list[dict],
+    turn_index: int,
+    case_guide_context: list[dict],
+    profitability_context: list[dict],
+) -> list[SystemMessage]:
+    """Pure prompt-assembly for one baseline turn -- no LLM call, no RAG lookup,
+    factored out of baseline_node so a golden-set harness can call the exact
+    rendered prompt directly, same reasoning as node._build_interviewer_messages
+    (see build_interviewer_golden_sets.py)."""
+    is_final_turn = turn_index >= MAX_BASELINE_TURNS - 1
+    force_evaluation = turn_index >= MAX_BASELINE_TURNS
+    situation = (
+        "Current interviewer turn: "
+        + str(turn_index)
+        + "\nMaximum interviewer turns before forced evaluation: "
+        + str(MAX_BASELINE_TURNS)
+        + "\nFinal turn before forced evaluation: "
+        + ("yes" if is_final_turn else "no")
+        + "\nTurn budget exhausted, must evaluate now: "
+        + ("yes" if force_evaluation else "no")
+        + "\n\nPublic transcript:\n"
+        + ("\n".join(transcript) if transcript else "No previous messages.")
+        + "\n\nCase prompt:\n"
+        + (case_prompt or "None.")
+        + "\n\nCandidate-visible case blocks:\n"
+        + format_case_blocks(visible_blocks)
+        + "\n\nHidden case guidance:\n"
+        + (case_guidance or "None.")
+        + "\n\nCase data:\n"
+        + format_full_case_data(case_data if isinstance(case_data, dict) else {})
+        + "\n\nExpected recommendation:\n"
+        + (case_recommendation or "None.")
+        + "\n\nRubric:\n"
+        + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
+        + "\n\nWhen action is \"evaluate\", case_performance must contain exactly these fields: "
+        + ", ".join(CASE_PERFORMANCE_FIELDS)
+        + ". quality_dialog must contain exactly these fields: "
+        + ", ".join(QUALITY_DIALOG_FIELDS)
+        + ". Each field in both objects must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
+    )
+    return [
+        SystemMessage(
+            content=(
+                BASELINE_GRAPH_SYSTEM_PROMPT
+                + "\n\n"
+                + situation
+                + f"\n\nExcerpts from {PROFITABILITY_CITATION_LABEL}:\n"
+                + format_profitability_guide_context(profitability_context)
+                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
+                + format_case_guide_snippets(case_guide_context)
+            )
+        ),
+    ]
 
 
 def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
@@ -407,19 +402,18 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         base_prompt=BASELINE_GRAPH_SYSTEM_PROMPT,
         situation=situation,
     )
-    messages = [
-        SystemMessage(
-            content=(
-                BASELINE_GRAPH_SYSTEM_PROMPT
-                + "\n\n"
-                + situation
-                + f"\n\nExcerpts from {PROFITABILITY_CITATION_LABEL}:\n"
-                + format_profitability_guide_context(profitability_context)
-                + f"\n\nExcerpts from the {CASE_GUIDE_CITATION_LABEL}:\n"
-                + format_case_guide_snippets(case_guide_context)
-            )
-        ),
-    ]
+    messages = _build_baseline_messages(
+        case_prompt,
+        case_data,
+        case_guidance,
+        case_recommendation,
+        rubric_data,
+        transcript,
+        visible_blocks,
+        turn_index,
+        case_guide_context,
+        profitability_context,
+    )
 
     move, move_usage_log = _invoke_baseline_move(messages, force_evaluation=force_evaluation)
     action = move["action"]
@@ -428,14 +422,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     ready_for_evaluation = move["ready_for_evaluation"]
     reasoning = move["reasoning"]
 
-    if action == "reveal" and revealed_block_id:
-        revealed_block = get_case_block_by_id(case_data, revealed_block_id)
-        if isinstance(revealed_block, dict) and revealed_block.get("visible_to_candidate") is True:
-            revealed_content = str(revealed_block.get("content", "")).strip()
-            if revealed_content:
-                content = revealed_content
-        else:
-            action = "question"
+    action, content = resolve_reveal_content(case_data, action, revealed_block_id, content)
 
     if not ready_for_evaluation:
         transcript_label = "Interviewer reveal" if action == "reveal" else "Interviewer"

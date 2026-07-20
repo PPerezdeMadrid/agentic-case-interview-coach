@@ -144,16 +144,21 @@ def summarize_llm_usage(llm_usage: list[dict[str, Any]]) -> dict[str, Any]:
     prompt_tokens = 0
     completion_tokens = 0
     total_tokens = 0
+    duration_seconds = 0.0
     for entry in llm_usage:
-        usage = entry.get("usage", {}) if isinstance(entry, dict) else {}
+        if not isinstance(entry, dict):
+            continue
+        usage = entry.get("usage", {})
         prompt_tokens += usage.get("prompt_tokens") or 0
         completion_tokens += usage.get("completion_tokens") or 0
         total_tokens += usage.get("total_tokens") or 0
+        duration_seconds += entry.get("duration_seconds") or 0
     return {
         "llm_call_count": len(llm_usage),
         "total_prompt_tokens": prompt_tokens,
         "total_completion_tokens": completion_tokens,
         "total_tokens": total_tokens,
+        "total_duration_seconds": round(duration_seconds, 3),
     }
 
 

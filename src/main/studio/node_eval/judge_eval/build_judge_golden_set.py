@@ -1,61 +1,21 @@
 """Build a synthetic golden set for evaluating the judge node's `enough_evidence` decision.
 
-`judge_node` (src/main/studio/node.py) reads a fixed slice of `AgenticGraphState` --
-`case_prompt`, `case_guidance`, `case_data`, `case_recommendation`, `rubric_data`,
-`transcript`, `judge_round` -- and asks an LLM to decide whether the transcript has
-enough evidence to hand off to `eval_case_performance`/`eval_dialog_quality`, per
-`JUDGE_GRAPH_SYSTEM_PROMPT` (doc/prompts/judge_graph_system_prompt.md). No golden set
-existed yet for this decision (see doc/evaluation/Dialog-evaluation.md); this script
-builds one so a harness can feed each item straight into `judge_node`, compare the
-returned `enough_evidence` against `expected_enough_evidence`, and report accuracy.
+Each item's `case_prompt`/`case_guidance`/`case_data`/`case_recommendation`/`rubric_data`
+are derived through the same `loader`/`utils` functions the real graph uses, and
+`assemble_state(item, cases, rubric_data)` reconstitutes the exact per-call judge_node
+input. All items use judge_round=0 to target the judge LLM's own reasoning rather than
+the deterministic MAX_JUDGE_ROUNDS override.
 
-`case_prompt`/`case_guidance`/`case_data`/`case_recommendation`/`rubric_data` are
-derived through the same `loader`/`utils` functions the real graph uses (not
-hand-typed), so they are byte-for-byte what judge_node would actually receive for
-each case. Only `transcript` and `judge_round` vary per item -- exactly how they
-vary turn-to-turn in a real run -- so the golden set stores them once per case under
-"cases" and once per situation under "items" rather than repeating the full case/
-rubric blob 20 times. `assemble_state(item, cases, rubric_data)` below shows how to
-reconstitute the exact per-call input.
+Category taxonomy -- `enough_evidence` measures stage coverage, not performance quality:
 
-Every item uses judge_round=0. node.py:462-464 force-overrides enough_evidence=True
-once judge_round + 1 >= MAX_JUDGE_ROUNDS (2), discarding the LLM's own answer -- that
-cutoff behavior already has unit-test coverage (test_judge_max_rounds in
-tests/test_agentic_graph.py) and is a deterministic safety valve, not a judgment
-call. This golden set targets the judge LLM's genuine reasoning, so every item stays
-at round 0 to avoid ever exercising that override.
-
-Category taxonomy (grounded in case-interview/casebook theory, not just "did the
-candidate do well"): `enough_evidence` is about whether the transcript has covered
-enough of the case's stages to let eval_case_performance/eval_dialog_quality score
-every applicable rubric dimension -- it is NOT a proxy for performance quality. A
-weak-but-complete run and a strong-but-complete run should both read True; a
-technically-present but ungrounded "recommendation" dropped with no preceding
-structure or data should still read False.
-
-    OPENING_ONLY               False  Only the opening prompt + an unfounded first
-                                       reaction. No structure/data/recommendation.
-    STRUCTURED_MID_ANALYSIS    False  Structure declared, data revealed and being
-                                       interpreted, but no recommendation reached yet.
-    PREMATURE_RECOMMENDATION   False  A recommendation-shaped line exists, but it was
-                                       given cold, before any structure or case data
-                                       was exchanged -- ungrounded, not evidence.
-    REQUIRED_EXHIBIT_SKIPPED   False  Structure, data, and a grounded recommendation
-                                       are all present, but the case's own math/
-                                       creative exchange (a required block for that
-                                       case) was never reached -- one dimension has
-                                       nothing to score against despite the case
-                                       having a ready-made exhibit for it. Only
-                                       applies to cases with a math or creative block
-                                       (football, agriculture).
-    FULL_COVERAGE_WEAK         True   Every case-applicable stage was touched, but
-                                       execution is generic/thin throughout.
-    FULL_COVERAGE_STRONG       True   Every stage touched, closely mirroring the
-                                       case's own expected_analysis/final_recommendation.
-    FULL_COVERAGE_WITH_REDIRECT True  Every stage touched, but only after the
-                                       interviewer redirected the candidate at least
-                                       once -- still enough evidence despite the
-                                       non-linear path.
+    OPENING_ONLY                False  Opening + unfounded reaction only.
+    STRUCTURED_MID_ANALYSIS     False  Structure + data, no recommendation yet.
+    PREMATURE_RECOMMENDATION    False  Recommendation given cold, ungrounded.
+    REQUIRED_EXHIBIT_SKIPPED    False  Recommendation reached but a required math/
+                                        creative exhibit was never touched.
+    FULL_COVERAGE_WEAK          True   All stages touched, thin execution.
+    FULL_COVERAGE_STRONG        True   All stages touched, closely mirrors expected answer.
+    FULL_COVERAGE_WITH_REDIRECT True   All stages touched after an interviewer redirect.
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.node_eval.judge_eval.build_judge_golden_set
@@ -588,7 +548,7 @@ ITEMS: list[dict[str, Any]] = [
             "squad quality and, with it, promotion chances.",
         ],
     },
-    # ---------------------------------------------------------------- Case 3: Verdex AI (has a creative block)
+    # ---------------------------------------------------------------- Case 3: Verdex AI (no math/creative block)
     {
         "id": "JUDGE_C3_01",
         "case_id": "03-agriculture-company",
@@ -619,9 +579,8 @@ ITEMS: list[dict[str, Any]] = [
         "expected_enough_evidence": False,
         "rationale": (
             "Opening, the acquisition-vs-servicing structure, and the unit-economics data are "
-            "all covered, but neither the creative near-term-fix question nor the final "
-            "recommendation has been reached yet -- case_creative_answer and "
-            "final_recommendation remain untested."
+            "all covered, but the final recommendation has not been reached yet -- "
+            "final_recommendation remains untested."
         ),
         "judge_round": 0,
         "transcript": [
@@ -683,67 +642,14 @@ ITEMS: list[dict[str, Any]] = [
         ],
     },
     {
-        "id": "JUDGE_C3_04",
-        "case_id": "03-agriculture-company",
-        "category": "REQUIRED_EXHIBIT_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": (
-            "The candidate reaches a reasonably grounded recommendation, but the interviewer "
-            "never asked the case's creative near-term-initiatives question, so "
-            "case_creative_answer -- one of this case's required exchanges -- has nothing to be "
-            "scored against, even though the case has a dedicated creative block ready to test."
-        ),
-        "judge_round": 0,
-        "transcript": [
-            "Interviewer: Your client is Verdex AI, a Spanish agri-tech startup that offers an "
-            "AI-powered crop disease detection system for olive groves and vineyard farms in "
-            "Spain and Portugal. Its early traction has been especially strong in areas such as "
-            "Candeleda, Talavera de la Reina, the Sierra de Gredos corridor, and parts of "
-            "Extremadura and Alentejo. Annual recurring revenue has grown 60% per year for the "
-            "last two years and the company now serves 340 agricultural cooperative clients. "
-            "Despite this growth, losses have widened each quarter and burn has accelerated in "
-            "the last two periods. The founders want to understand the source of the "
-            "profitability problem and identify a path to financial sustainability.",
-            "Candidate: Let me recap: ARR has grown 60% a year for two years, they now serve 340 "
-            "cooperatives, but losses are widening and burn is accelerating. Is the founders' "
-            "ask a diagnosis only, or a concrete sustainability plan, and how much runway do we "
-            "have to work with?",
-            "Interviewer: Good questions - let's diagnose first. I'll tell you the runway is "
-            "limited, more on that shortly.",
-            "Candidate: Since this is positioned as an AI software company, I'd expect "
-            "software-like margins. If margins are thin despite fast growth, my hypothesis is "
-            "the delivery model is more hardware- and service-heavy than the positioning "
-            "suggests. I'd like to split this into acquisition economics versus servicing "
-            "economics.",
-            "Interviewer reveal: Current gross margin is approximately 18%, very low for a "
-            "company positioned as AI software, because the product needs physical field "
-            "sensors, technician installation, and ongoing maintenance. Customer acquisition "
-            "cost payback is 38 months. Pricing was set low to drive penetration among "
-            "price-sensitive cooperatives. Large cooperatives are more profitable than small "
-            "ones because fixed onboarding and installation costs are spread over more hectares; "
-            "small cooperatives are loss-making per account. Remaining runway is approximately "
-            "14 months.",
-            "Candidate: That confirms it - this isn't really a software margin profile, it's "
-            "hardware-and-service-heavy, and with a 38-month payback against only 14 months of "
-            "runway, growth is currently burning cash rather than building operating leverage.",
-            "Interviewer: Based on your analysis, what recommendation would you give the "
-            "founders?",
-            "Candidate: Stop selling to small, unprofitable cooperatives, focus on larger "
-            "accounts, and unbundle hardware and installation fees from the recurring price so "
-            "the company actually recovers its delivery costs. The main risk is that this could "
-            "slow the growth story investors have gotten used to.",
-        ],
-    },
-    {
         "id": "JUDGE_C3_05",
         "case_id": "03-agriculture-company",
         "category": "FULL_COVERAGE_WEAK",
         "expected_enough_evidence": True,
         "rationale": (
-            "Opening, structure, data, the creative brainstorm, and a recommendation are all "
-            "present, so every rubric dimension has some transcript to draw on, even though the "
-            "brainstorming and recommendation stay generic and never quantify the runway/"
-            "payback tradeoff."
+            "Opening, structure, data, and a recommendation are all present, so every rubric "
+            "dimension has some transcript to draw on, even though the recommendation stays "
+            "generic and never quantifies the runway/payback tradeoff."
         ),
         "judge_round": 0,
         "transcript": [
@@ -764,11 +670,6 @@ ITEMS: list[dict[str, Any]] = [
             "small ones. Remaining runway is approximately 14 months.",
             "Candidate: So margins are low because of the hardware costs, and payback takes a "
             "long time.",
-            "Interviewer: Assume the founders agree Verdex must improve economics within the "
-            "next 6 months, but they do not want to fully stop growth. What are two or three "
-            "practical initiatives you would propose to improve near-term unit economics and "
-            "cash burn while preserving the most attractive customers?",
-            "Candidate: Maybe raise prices a bit and try to sell to bigger customers.",
             "Interviewer: Based on your analysis, what recommendation would you give the "
             "founders?",
             "Candidate: Focus more on bigger customers and adjust pricing.",
@@ -780,10 +681,9 @@ ITEMS: list[dict[str, Any]] = [
         "category": "FULL_COVERAGE_STRONG",
         "expected_enough_evidence": True,
         "rationale": (
-            "The transcript mirrors the case's own creative-question guidance (MECE customer "
-            "mix / pricing / delivery-cost buckets) and ideal final recommendation -- opening, "
-            "hypothesis-driven structure, data-grounded synthesis, the creative brainstorm, and "
-            "a risk-aware recommendation are all present."
+            "The transcript mirrors the case's own ideal final recommendation -- opening, "
+            "hypothesis-driven structure, data-grounded synthesis, and a risk-aware "
+            "recommendation are all present."
         ),
         "judge_round": 0,
         "transcript": [
@@ -822,19 +722,6 @@ ITEMS: list[dict[str, Any]] = [
             "growth is actually accelerating cash burn rather than building leverage. The weak "
             "economics are concentrated in small cooperatives specifically, while large ones "
             "are already healthy.",
-            "Interviewer: Assume the founders agree Verdex must improve economics within the "
-            "next 6 months, but they do not want to fully stop growth. What are two or three "
-            "practical initiatives you would propose to improve near-term unit economics and "
-            "cash burn while preserving the most attractive customers?",
-            "Candidate: I'd organize this into three buckets. On customer mix: stop acquiring "
-            "small, loss-making cooperatives and shift sales effort toward larger accounts with "
-            "better payback. On pricing and contract structure: unbundle hardware, "
-            "installation, and maintenance into separate fees instead of bundling everything "
-            "into one low recurring price, and consider minimum-acreage thresholds for smaller "
-            "customers. On delivery cost: pilot a lighter-touch service model with fewer field "
-            "visits, and concentrate commercial effort on denser clusters like Candeleda and "
-            "Talavera de la Reina where technician routes are more efficient to run. All three "
-            "respect the 6-month window without requiring large upfront investment.",
             "Interviewer: Based on your analysis, what recommendation would you give the "
             "founders?",
             "Candidate: Stop or sharply limit acquisition of small, unprofitable cooperatives, "
@@ -856,8 +743,8 @@ ITEMS: list[dict[str, Any]] = [
         "expected_enough_evidence": True,
         "rationale": (
             "Needed one redirect away from a generic sales-spend framing, but the transcript "
-            "still reaches full coverage -- structure, data, the creative brainstorm, and a "
-            "recommendation -- so there is enough evidence to evaluate."
+            "still reaches full coverage -- structure, data, and a recommendation -- so there "
+            "is enough evidence to evaluate."
         ),
         "judge_round": 0,
         "transcript": [
@@ -882,13 +769,6 @@ ITEMS: list[dict[str, Any]] = [
             "Candidate: So the low 18% margin comes from physical sensors, installation, and "
             "maintenance, not the AI itself, and with a 38-month CAC payback against 14 months "
             "of runway, growth is currently burning cash.",
-            "Interviewer: Assume the founders agree Verdex must improve economics within the "
-            "next 6 months, but they do not want to fully stop growth. What are two or three "
-            "practical initiatives you would propose?",
-            "Candidate: On customer mix, stop selling to small loss-making cooperatives and "
-            "prioritize larger ones. On pricing, unbundle hardware and installation fees from "
-            "the recurring contract. On delivery, concentrate technician routes in denser "
-            "clusters like Candeleda to cut servicing cost per customer.",
             "Interviewer: Based on your analysis, what recommendation would you give the "
             "founders?",
             "Candidate: Limit acquisition of small cooperatives, refocus on larger accounts, "

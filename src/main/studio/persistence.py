@@ -8,6 +8,9 @@ from typing import Any
 
 from langchain_core.runnables import RunnableConfig
 
+from loader import load_selected_simulation_bundle
+from utils import extract_case_guidance, extract_case_prompt, extract_case_recommendation
+
 
 MAIN_DIR = Path(__file__).resolve().parents[1]
 ARTIFACTS_DIR = MAIN_DIR / "artifacts"
@@ -157,10 +160,81 @@ def resolve_thread_id(state: dict[str, Any] | None = None, config: Any = None) -
     return _extract_thread_id(config)
 
 
+def build_initial_graph_state(
+    *,
+    thread_id: str,
+    case_name: str | None = None,
+    seed: int | None = None,
+    scenario_ref: str | None = None,
+) -> dict[str, Any]:
+    """Build the initial runtime state shared by the agentic and baseline graphs."""
+    selected_ref = scenario_ref or case_name
+    bundle = load_selected_simulation_bundle(scenario_ref=selected_ref, seed=seed)
+    scenario = bundle["scenario"]
+    case_data = bundle["case"]
+
+    return {
+        "scenario_ref": selected_ref or str(scenario.get("scenario_id", "")),
+        "case_prompt": extract_case_prompt(case_data),
+        "candidate_profile": scenario.get("candidate_profile", {}),
+        "turn_index": 0,
+        "transcript": [],
+        "case_guidance": extract_case_guidance(case_data),
+        "case_data": case_data,
+        "enough_evidence": False,
+        "focus_areas": [],
+        "case_recommendation": extract_case_recommendation(case_data),
+        "case_performance": None,
+        "quality_dialog": None,
+        "data_gathered": [],
+        "thread_id": thread_id,
+        "trace_step_index": 0,
+        "rubric_data": bundle["rubric"],
+        "judge_round": 0,
+        "retrieved_profitability_context": [],
+        "rag_query_log": [],
+    }
+
+
+def load_scenario_node(
+    state: dict[str, Any],
+    config: RunnableConfig | None = None,
+) -> dict[str, Any]:
+    """Load scenario assets into state if they are not present yet. Shared by the
+    agentic and baseline graphs, which need identical scenario-loading behavior."""
+    thread_id = resolve_thread_id(state, config)
+    if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
+        return {"thread_id": thread_id}
+
+    bundle = load_selected_simulation_bundle(scenario_ref=state.get("scenario_ref"))
+    scenario = bundle["scenario"]
+    case_data = bundle["case"]
+
+    return {
+        "thread_id": thread_id,
+        "scenario_ref": str(state.get("scenario_ref") or scenario.get("scenario_id", "")),
+        "case_prompt": extract_case_prompt(case_data),
+        "candidate_profile": scenario.get("candidate_profile", {}),
+        "case_guidance": extract_case_guidance(case_data),
+        "case_data": case_data,
+        "case_recommendation": extract_case_recommendation(case_data),
+        "rubric_data": bundle["rubric"],
+        "retrieved_profitability_context": [],
+        "rag_query_log": [],
+    }
+
+
+def _scenario_name(value: str) -> str:
+    """Reduce a scenario_ref to a bare name, stripping any filesystem path."""
+    if "/" in value or "\\" in value:
+        return Path(value).stem
+    return value
+
+
 def _extract_scenario_ref(state: dict[str, Any], config: Any) -> str:
     state_scenario_ref = str(state.get("scenario_ref", "") or "").strip()
     if state_scenario_ref:
-        return state_scenario_ref
+        return _scenario_name(state_scenario_ref)
 
     scenario_ref = _find_first_string(
         config,
@@ -172,7 +246,7 @@ def _extract_scenario_ref(state: dict[str, Any], config: Any) -> str:
         ),
     )
     if scenario_ref:
-        return scenario_ref
+        return _scenario_name(scenario_ref)
 
     case_data = state.get("case_data", {})
     if isinstance(case_data, dict):

@@ -1,74 +1,32 @@
-"""Build a 50-row judge golden set (CSV) for the World Cup case, using the *actual*
-rendered judge prompt as input.
+"""Build a judge golden set (CSV) for the World Cup case, using the actual
+rendered judge prompt (via `judge_node` with `judge_llm` mocked) as input. Unlike
+build_judge_golden_set.py, this captures the exact SystemMessage text judge_node sends,
+not the raw state fields. All items use judge_round=0 to target the judge LLM's own
+reasoning rather than the deterministic MAX_JUDGE_ROUNDS override.
 
-Unlike build_judge_golden_set.py (which stores the raw AgenticGraphState fields
-judge_node reads, for a harness to assemble at call time), this script captures the
-exact SystemMessage text `judge_node`'s main decision call sends to `judge_llm` --
-`JUDGE_GRAPH_SYSTEM_PROMPT` + situation + guide navigation rules + case-guide
-excerpts (node.py:444-457) -- by running the real `judge_node` function with
-`judge_llm` mocked and `retrieve_case_guide_context` forced empty (no live
-vectorstore call; the scouting call always returns an empty `case_guide_query`, so
-the excerpts section renders as "None.", same as any real round where the judge
-decides it doesn't need the guide). That prompt string is what a harness should feed
-to the LLM under test, and its `enough_evidence`/`focus_areas` response is what gets
-compared against `expected_enough_evidence` below.
+Case: 04-worldcup-test (IWFC), the only case with a math block besides case 02.
 
-All 50 items use `judge_round=0` for the same reason as the JSON golden set: at
-`judge_round + 1 >= MAX_JUDGE_ROUNDS` (2), node.py:462-464 force-overrides
-`enough_evidence=True` regardless of the LLM's answer, and that deterministic
-cutoff already has unit-test coverage (test_judge_max_rounds). This golden set
-targets the judge LLM's genuine reasoning, so it never exercises that override.
+Category taxonomy -- enough_evidence measures stage coverage, not performance quality:
 
-Case: 04-worldcup-test (IWFC), the only case in synthetic-dataset/ with both a math
-block and a creative block, letting every category below apply to a single case.
-
-Category taxonomy (same "coverage, not quality" principle as the 3-case JSON golden
-set -- enough_evidence asks whether every case-applicable stage has *something* on
-the record for eval_case_performance/eval_dialog_quality to score, not whether the
-candidate performed well):
-
-    OPENING_ONLY                 False  Opening prompt + one unfounded reaction only.
-    STRUCTURED_NO_DATA            False  Opening + structure proposed, but the data
-                                         block was never revealed.
-    DATA_MID_SYNTHESIS_NO_REC     False  Data revealed and correctly interpreted, but
-                                         no math/creative/recommendation reached.
-    PREMATURE_RECOMMENDATION      False  Recommendation given cold, no structure/data.
-    MATH_SKIPPED                  False  Full run to a grounded recommendation, but
-                                         the case's math exchange was never asked.
-    CREATIVE_SKIPPED              False  Full run incl. math, but the creative
-                                         (hydration-break) exchange was never asked.
-    BOTH_EXHIBITS_SKIPPED         False  Straight from synthesis to recommendation;
-                                         neither math nor creative ever asked.
-    MATH_STARTED_NOT_FINISHED     False  Candidate begins the calculation, stalls,
-                                         never reaches usable numbers or beyond.
-    RECOMMENDATION_ASKED_NOT_ANSWERED False  Interviewer asks for the recommendation;
-                                         transcript ends before the candidate answers.
-    OFF_TOPIC_CIRCULAR_LONG       False  Many turns, but circular/generic -- never
-                                         progresses past the opening framing.
-    KEY_FACT_MISUNDERSTOOD_INCOMPLETE False  Candidate misreads the fixed-broadcasting
-                                         fact, isn't corrected, and the interview stops
-                                         before recommendation.
-    FULL_COVERAGE_STRONG          True   Every stage, closely mirroring the case's own
-                                         expected analysis and ideal recommendation.
-    FULL_COVERAGE_WEAK            True   Every stage touched, but generic/thin.
-    FULL_COVERAGE_WITH_REDIRECT   True   Every stage touched, after 1-2 interviewer
-                                         nudges off an unproductive tangent.
-    FULL_COVERAGE_VERY_SHORT_EFFICIENT True   Every stage touched, compressed into very
-                                         few turns.
-    FULL_COVERAGE_MATH_WRONG_BUT_ATTEMPTED True   Every stage touched; the math answer
-                                         itself is wrong -- a scoring problem, not a
-                                         coverage problem.
-    FULL_COVERAGE_CREATIVE_OVERSOLD_BUT_ATTEMPTED True   Every stage touched; the
-                                         creative answer oversells the lever instead of
-                                         sizing it -- again a scoring, not coverage, gap.
-    FULL_COVERAGE_HALLUCINATED_DATA True   Every stage touched; the candidate invents
-                                         an unsupported fact along the way -- a
-                                         groundedness problem, not a coverage gap.
-    FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS True   Long, non-linear path (multiple
-                                         tangents/redirects) that still reaches full
-                                         coverage.
-    FULL_COVERAGE_RECOMMENDATION_NO_RISKS True   Every stage touched; the final
-                                         recommendation itself skips risks/next steps.
+    INCOMPLETE_COVERAGE      False  Never got around to a mandatory element (an exhibit,
+                                     the quantitative section, the creative section, or it
+                                     simply didn't progress past the opening).
+    UNFINISHED_ANALYSIS      False  Analysis (structure, data synthesis, or a calculation)
+                                     was started but stalls before it's usable.
+    PREMATURE_CONCLUSION     False  Recommendation/verdict given cold, before the work.
+    NON_RESPONSIVE           False  Does not answer what was asked (wanders off-topic,
+                                     beats around the bush, ignores the question).
+    EVIDENCE_MISREAD         False  Did use the evidence, but understood/read it wrong.
+    FULL_COVERAGE_CLEAN                   True  Every stage touched, cleanly executed
+                                                 (strong or efficient/compressed).
+    FULL_COVERAGE_MESSY_PROCESS           True  Every stage touched, but the path there
+                                                 was thin, redirected, or long/iterative.
+    FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED  True  Every stage touched, but content has a
+                                                 flaw (wrong math, or a recommendation
+                                                 missing risks/next steps) -- a scoring
+                                                 gap, not a coverage gap.
+    FULL_COVERAGE_HALLUCINATED_DATA       True  Every stage touched; candidate invents an
+                                                 unsupported fact along the way.
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.node_eval.judge_eval.build_judge_golden_set_worldcup
@@ -101,11 +59,7 @@ OUTPUT_PATH = (
     / "judge_golden_set_worldcup.csv"
 )
 
-# ---------------------------------------------------------------------------
-# Reusable, fact-exact building blocks (copied verbatim from
-# src/synthetic-dataset/04-worldcup-test.json so every transcript stays
-# consistent with the case's own numbers and wording).
-# ---------------------------------------------------------------------------
+# Reusable building blocks, copied verbatim from src/synthetic-dataset/04-worldcup-test.json.
 
 OPENING = (
     "Your client is the Interconta World Football Cup Organizing Committee (IWFC), the "
@@ -138,14 +92,6 @@ MATH_Q = (
     "editions, and tell me how they've changed?"
 )
 
-CREATIVE_Q = (
-    "The Secretary General mentions that in-stadium hydration breaks - mandated by player "
-    "welfare rules in high-heat matches - currently carry no commercial value: they're a "
-    "broadcast dead zone with no ads, no branding, and no fan engagement content. She asks "
-    "whether monetizing hydration breaks could meaningfully help close the new margin gap. "
-    "What would you tell her?"
-)
-
 REC_ASK = "Based on your analysis, what recommendation would you give the Secretary General?"
 
 MATH_CORRECT = (
@@ -157,27 +103,15 @@ MATH_CORRECT = (
     "9%."
 )
 
-CREATIVE_STRONG = (
-    "I'd size it before getting excited. Hydration breaks only happen in high-heat "
-    "matches, not all 104, and each break is short, so the ad inventory is limited - think "
-    "sponsor billboards, a named hydration partner category, screen takeovers. It's "
-    "high-margin since the broadcast infrastructure already exists, but the margin gap "
-    "here is roughly EUR 340M or more in absolute EBITDA terms. Hydration breaks won't "
-    "move that needle meaningfully - I'd frame it to her as a nice incremental sponsorship "
-    "line, not a structural fix."
-)
-
 REC_STRONG = (
     "Renegotiate future broadcasting deals so value scales more with match count rather "
     "than a flat tournament package - that's the revenue-side fix. Set explicit "
     "cost-sharing and shared-infrastructure targets with host countries before agreeing to "
     "any future expansion, since the tri-host cost base is the biggest driver of the gap. "
-    "And treat incremental in-match inventory like hydration breaks as a secondary, "
-    "low-risk revenue add-on, not the fix. The main risks are that broadcasters may prefer "
+    "The main risks are that broadcasters may prefer "
     "the certainty of a fixed package, and that cost-sharing runs into host-country "
     "politics. Next steps: commission a per-match value analysis on the broadcasting "
-    "portfolio, set country-specific cost targets ahead of the next bidding cycle, and "
-    "pilot a scoped hydration-break sponsorship program."
+    "portfolio, and set country-specific cost targets ahead of the next bidding cycle."
 )
 
 
@@ -190,7 +124,7 @@ ITEMS: list[dict[str, Any]] = [
     # ================================================================= FALSE (25)
     {
         "id": "WC_01",
-        "category": "OPENING_ONLY",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": (
             "Single unfounded guess after the opening prompt; no recap, no clarifying "
@@ -205,7 +139,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_02",
-        "category": "OPENING_ONLY",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_01: an unfounded first reaction with no recap, structure, or data.",
         "transcript": _t(
@@ -216,7 +150,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_03",
-        "category": "OPENING_ONLY",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_01/WC_02: a generic reaction with no structure or data exchanged.",
         "transcript": _t(
@@ -227,7 +161,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_04",
-        "category": "STRUCTURED_NO_DATA",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": (
             "Opening and a clean MECE structure are in place, but the interviewer hasn't "
@@ -255,7 +189,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_05",
-        "category": "STRUCTURED_NO_DATA",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_04: solid structure proposed, but the data block was never revealed.",
         "transcript": _t(
@@ -271,7 +205,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_06",
-        "category": "STRUCTURED_NO_DATA",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_04/WC_05: structure proposed but interviewer defers the data reveal.",
         "transcript": _t(
@@ -288,12 +222,12 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_07",
-        "category": "DATA_MID_SYNTHESIS_NO_REC",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": (
             "Structure and data-driven synthesis are both strong, but the interview stops "
-            "before the quantification step or the recommendation ask -- case_math_answer, "
-            "case_creative_answer, and final_recommendation all remain untested."
+            "before the quantification step or the recommendation ask -- case_math_answer "
+            "and final_recommendation both remain untested."
         ),
         "transcript": _t(
             f"Interviewer: {OPENING}",
@@ -315,9 +249,9 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_08",
-        "category": "DATA_MID_SYNTHESIS_NO_REC",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_07: correct qualitative synthesis, but stops before math/creative/recommendation.",
+        "rationale": "Same pattern as WC_07: correct qualitative synthesis, but stops before math/recommendation.",
         "transcript": _t(
             f"Interviewer: {OPENING}",
             "Candidate: Quick question first - should I anchor on EBITDA margin "
@@ -340,7 +274,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_09",
-        "category": "DATA_MID_SYNTHESIS_NO_REC",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_07/WC_08: solid diagnosis reached, but the interview ends before quantification or a recommendation.",
         "transcript": _t(
@@ -361,7 +295,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_10",
-        "category": "PREMATURE_RECOMMENDATION",
+        "category": "PREMATURE_CONCLUSION",
         "expected_enough_evidence": False,
         "rationale": (
             "A recommendation-shaped line exists, but it was given cold, with no "
@@ -375,7 +309,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_11",
-        "category": "PREMATURE_RECOMMENDATION",
+        "category": "PREMATURE_CONCLUSION",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_10: an ungrounded recommendation with no preceding structure or data.",
         "transcript": _t(
@@ -386,25 +320,24 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_12",
-        "category": "PREMATURE_RECOMMENDATION",
+        "category": "PREMATURE_CONCLUSION",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_10/WC_11: recommendation given before any case fact has been exchanged.",
         "transcript": _t(
             f"Interviewer: {OPENING}",
-            "Candidate: Honestly, they should just monetize the hydration breaks and "
-            "other unused ad space - that would close the gap.",
+            "Candidate: Honestly, they should just sell more sponsorships and unused ad "
+            "space around the stadiums - that would close the gap.",
         ),
     },
     {
         "id": "WC_13",
-        "category": "MATH_SKIPPED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": (
-            "The candidate reaches a well-grounded recommendation and even handles the "
-            "creative sizing question, but the interviewer never asked the case's "
-            "quantified per-match math question, so case_math_answer has nothing to be "
-            "scored against despite the case having a dedicated math exhibit ready to "
-            "test."
+            "The candidate reaches a well-grounded recommendation, but the interviewer "
+            "never asked the case's quantified per-match math question, so "
+            "case_math_answer has nothing to be scored against despite the case having a "
+            "dedicated math exhibit ready to test."
         ),
         "transcript": _t(
             f"Interviewer: {OPENING}",
@@ -419,17 +352,15 @@ ITEMS: list[dict[str, Any]] = [
             "matches grow, while tripled host-country infrastructure, added travel, and "
             "team-linked prize money push per-match cost up - a structural mismatch, not "
             "weak demand.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_14",
-        "category": "MATH_SKIPPED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_13: creative and recommendation both reached, but the math exchange is missing.",
+        "rationale": "Same pattern as WC_13: the recommendation is reached, but the math exchange is missing.",
         "transcript": _t(
             f"Interviewer: {OPENING}",
             "Candidate: Before structuring - is margin recovery the priority, even if it "
@@ -441,117 +372,17 @@ ITEMS: list[dict[str, Any]] = [
             "Candidate: This points to a fixed-revenue, scaling-cost mismatch: "
             "broadcasting barely grows with match count, while the tri-host format "
             "roughly triples infrastructure cost and adds new travel costs.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_15",
-        "category": "CREATIVE_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": (
-            "Math is handled well and the recommendation is grounded, but the creative "
-            "hydration-break question -- one of this case's required exchanges -- was "
-            "never asked, so case_creative_answer remains untested even though the case "
-            "has that exhibit ready."
-        ),
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is this a one-off diagnosis, or does the Committee want a "
-            "repeatable model for future editions?",
-            "Interviewer: A repeatable model.",
-            "Candidate: I'd split revenue streams from the incremental cost of the "
-            "expansion and look at per-match economics. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: So fixed broadcasting revenue is being diluted across more "
-            "matches, while tripled host-country costs and new travel costs are pushing "
-            "per-match cost up.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_16",
-        "category": "CREATIVE_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_15: math and recommendation both reached, but the creative question is missing.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Should I anchor on EBITDA margin specifically, or also free cash "
-            "flow?",
-            "Interviewer: EBITDA margin.",
-            "Candidate: I'll split revenue from the incremental cost base of expansion, "
-            "and look at per-match economics given matches jumped from 64 to 104. What's "
-            "changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: This is a structural mismatch: revenue is largely fixed-package "
-            "and cost is largely linear-to-triplicated with host-country count.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_17",
-        "category": "BOTH_EXHIBITS_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": (
-            "The candidate reaches a directionally sound recommendation straight after "
-            "the qualitative synthesis, but neither of this case's two required "
-            "exhibits -- the per-match math question and the hydration-break creative "
-            "question -- was ever raised, leaving case_math_answer and "
-            "case_creative_answer both untested."
-        ),
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is the objective a diagnosis only, or also a path to making the "
-            "expansion pay for itself?",
-            "Interviewer: Both.",
-            "Candidate: I'd split revenue streams from the incremental cost base of the "
-            "expansion, and look at per-match economics. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: So broadcasting is fixed and gets diluted as matches grow, while "
-            "three host countries roughly triple infrastructure cost instead of scaling "
-            "with match count.",
-            f"Interviewer: {REC_ASK}",
-            "Candidate: Renegotiate the broadcasting deal to scale better with matches, "
-            "and get the host countries to share more of the infrastructure cost.",
-        ),
-    },
-    {
-        "id": "WC_18",
-        "category": "BOTH_EXHIBITS_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_17: structure and data covered, recommendation reached, but neither math nor creative was ever raised.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Before structuring - is there a hard deadline tied to the next "
-            "bid cycle?",
-            "Interviewer: Yes.",
-            "Candidate: I'll split revenue from the incremental cost of expansion and "
-            "look at per-match figures. What's changed on each side?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: So the growth story is really sponsorship and licensing, while "
-            "the cost story is the tri-host infrastructure and new travel costs "
-            "outpacing the match-count increase.",
-            f"Interviewer: {REC_ASK}",
-            "Candidate: I'd push broadcasters toward a structure that captures more "
-            "value per match, and negotiate cost-sharing with host countries before any "
-            "further expansion.",
         ),
     },
     {
         "id": "WC_19",
-        "category": "MATH_STARTED_NOT_FINISHED",
+        "category": "UNFINISHED_ANALYSIS",
         "expected_enough_evidence": False,
         "rationale": (
             "The candidate begins the calculation but never reaches a usable answer, and "
-            "the conversation stops there -- no creative question, no recommendation. "
+            "the conversation stops there -- no recommendation. "
             "There isn't a complete answer to score case_math_answer against, and none of "
             "the later-stage dimensions have been reached either."
         ),
@@ -575,7 +406,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_20",
-        "category": "MATH_STARTED_NOT_FINISHED",
+        "category": "UNFINISHED_ANALYSIS",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_19: the math attempt stalls before producing usable numbers, and nothing later is reached.",
         "transcript": _t(
@@ -599,10 +430,10 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_21",
-        "category": "RECOMMENDATION_ASKED_NOT_ANSWERED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": (
-            "Every earlier stage -- structure, data, math, and the creative question -- "
+            "Every earlier stage -- structure, data, and math -- "
             "is fully covered, but the transcript ends the moment the interviewer asks "
             "for a recommendation, before the candidate answers. final_recommendation, "
             "the single most decision-relevant dimension, has no candidate content to "
@@ -621,14 +452,12 @@ ITEMS: list[dict[str, Any]] = [
             "structural mismatch, not weak demand.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
         ),
     },
     {
         "id": "WC_22",
-        "category": "RECOMMENDATION_ASKED_NOT_ANSWERED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_21: everything up to and including the recommendation ask is covered, but the candidate's answer is missing.",
         "transcript": _t(
@@ -644,14 +473,12 @@ ITEMS: list[dict[str, Any]] = [
             "infrastructure cost.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
         ),
     },
     {
         "id": "WC_23",
-        "category": "OFF_TOPIC_CIRCULAR_LONG",
+        "category": "NON_RESPONSIVE",
         "expected_enough_evidence": False,
         "rationale": (
             "Despite several turns of back-and-forth, the candidate keeps restating the "
@@ -679,7 +506,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_24",
-        "category": "OFF_TOPIC_CIRCULAR_LONG",
+        "category": "NON_RESPONSIVE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_23: many turns of restated generic framing, never reaching real data or a recommendation.",
         "transcript": _t(
@@ -703,13 +530,13 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_25",
-        "category": "KEY_FACT_MISUNDERSTOOD_INCOMPLETE",
+        "category": "EVIDENCE_MISREAD",
         "expected_enough_evidence": False,
         "rationale": (
             "The candidate misreads the central case fact -- broadcasting is explicitly "
             "a fixed package, not sold per match -- and even after a direct interviewer "
-            "correction, doesn't recover the insight or move on to quantification, the "
-            "creative question, or a recommendation."
+            "correction, doesn't recover the insight or move on to quantification or a "
+            "recommendation."
         ),
         "transcript": _t(
             f"Interviewer: {OPENING}",
@@ -729,11 +556,11 @@ ITEMS: list[dict[str, Any]] = [
     # ================================================================= TRUE (25)
     {
         "id": "WC_26",
-        "category": "FULL_COVERAGE_STRONG",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": (
             "Every stage -- objective clarification, MECE structure, data-grounded "
-            "synthesis, correct quantification, a well-sized creative answer, and a "
+            "synthesis, correct quantification, and a "
             "risk-aware recommendation -- closely mirrors the case's own expected "
             "analysis and ideal answer, giving the eval nodes clean material to score "
             "every dimension highly."
@@ -765,15 +592,13 @@ ITEMS: list[dict[str, Any]] = [
             "model, not weak demand.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_27",
-        "category": "FULL_COVERAGE_STRONG",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_26: a complete, well-grounded run through every stage, closely tracking the case's ideal solution.",
         "transcript": _t(
@@ -794,15 +619,13 @@ ITEMS: list[dict[str, Any]] = [
             "match is falling even as total revenue and sponsorship both grow.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_28",
-        "category": "FULL_COVERAGE_STRONG",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_26/WC_27: full, strong coverage of every stage.",
         "transcript": _t(
@@ -823,15 +646,13 @@ ITEMS: list[dict[str, Any]] = [
             "travel cost and team-linked prize money.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_29",
-        "category": "FULL_COVERAGE_STRONG",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_26-28: complete, strong-quality coverage of every applicable stage.",
         "transcript": _t(
@@ -852,15 +673,13 @@ ITEMS: list[dict[str, Any]] = [
             "and team-linked prize-money costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_30",
-        "category": "FULL_COVERAGE_WEAK",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": (
             "Every stage is touched, so there's transcript material for every rubric "
@@ -878,8 +697,6 @@ ITEMS: list[dict[str, Any]] = [
             f"Interviewer: {MATH_Q}",
             "Candidate: Roughly revenue per match went down a bit and cost per match "
             "went up a bit.",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Maybe it helps a little bit with the gap.",
             f"Interviewer: {REC_ASK}",
             "Candidate: Renegotiate broadcasting and manage the host-country costs "
             "better.",
@@ -887,7 +704,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_31",
-        "category": "FULL_COVERAGE_WEAK",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_30: full stage coverage, but thin and generic throughout.",
         "transcript": _t(
@@ -902,8 +719,6 @@ ITEMS: list[dict[str, Any]] = [
             f"Interviewer: {MATH_Q}",
             "Candidate: I think revenue per match goes down and cost per match goes up, "
             "somewhere around ten percent each way.",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Could be worth trying, not sure how much it really helps.",
             f"Interviewer: {REC_ASK}",
             "Candidate: Fix the broadcasting deal and try to cut some of the host-"
             "country costs.",
@@ -911,7 +726,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_32",
-        "category": "FULL_COVERAGE_WEAK",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_30/WC_31: every stage present, quality thin throughout.",
         "transcript": _t(
@@ -925,8 +740,6 @@ ITEMS: list[dict[str, Any]] = [
             f"Interviewer: {MATH_Q}",
             "Candidate: I'd say per match revenue is down and per match cost is up, "
             "roughly.",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Probably a small help, not a huge one.",
             f"Interviewer: {REC_ASK}",
             "Candidate: Try to fix the broadcasting side and control costs in the host "
             "countries.",
@@ -934,12 +747,12 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_33",
-        "category": "FULL_COVERAGE_WITH_REDIRECT",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": (
             "Needed one direct nudge to move off an unhelpful ticket-pricing tangent, "
             "but the transcript still reaches full coverage -- structure, data, math, "
-            "creative sizing, and a risk-aware recommendation -- so there is enough "
+            "and a risk-aware recommendation -- so there is enough "
             "evidence to evaluate, including how the candidate handled redirection."
         ),
         "transcript": _t(
@@ -956,15 +769,13 @@ ITEMS: list[dict[str, Any]] = [
             "cost and adds new travel costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_34",
-        "category": "FULL_COVERAGE_WITH_REDIRECT",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_33: one redirect needed, but full coverage still reached.",
         "transcript": _t(
@@ -979,15 +790,13 @@ ITEMS: list[dict[str, Any]] = [
             "add new travel costs on top.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_35",
-        "category": "FULL_COVERAGE_WITH_REDIRECT",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_33/WC_34: after a nudge back on track, the transcript reaches full coverage.",
         "transcript": _t(
@@ -1004,20 +813,18 @@ ITEMS: list[dict[str, Any]] = [
             "infrastructure cost and adds travel costs that didn't exist before.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_36",
-        "category": "FULL_COVERAGE_VERY_SHORT_EFFICIENT",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": (
             "Even compressed into very few turns, the candidate covers objective, "
-            "structure, hypothesis, correct quantification, a well-sized creative "
-            "answer, and a complete recommendation -- brevity doesn't reduce evidence "
+            "structure, hypothesis, correct quantification, "
+            "and a complete recommendation -- brevity doesn't reduce evidence "
             "when every stage is genuinely covered."
         ),
         "transcript": _t(
@@ -1036,18 +843,15 @@ ITEMS: list[dict[str, Any]] = [
             "tripling infrastructure plus travel and prize money scaling with team count "
             "pushes cost per match up. On the numbers, that's revenue per match down "
             "from about EUR 46.9M to EUR 41.8M, and cost per match up from about EUR "
-            "29.1M to EUR 31.8M. On hydration breaks - real incremental sponsorship, but "
-            "a rounding error against a roughly EUR 340M absolute EBITDA gap, so it's a "
-            "nice-to-have, not a fix. My recommendation: renegotiate broadcasting toward "
-            "per-match or tiered value, lock in cost-sharing with future host countries "
-            "before any more expansion, and treat hydration breaks and similar inventory "
-            "as a small add-on.",
+            "29.1M to EUR 31.8M. My recommendation: renegotiate broadcasting toward "
+            "per-match or tiered value, and lock in cost-sharing with future host countries "
+            "before any more expansion.",
             "Interviewer: That's right on the money.",
         ),
     },
     {
         "id": "WC_37",
-        "category": "FULL_COVERAGE_VERY_SHORT_EFFICIENT",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_36: concise, but every stage is genuinely covered.",
         "transcript": _t(
@@ -1061,18 +865,15 @@ ITEMS: list[dict[str, Any]] = [
             "cost. What does the data show?",
             f"Interviewer reveal: {DATA_REVEAL}",
             "Candidate: Confirmed. Revenue per match: EUR 46.9M to EUR 41.8M, down about "
-            "11%. Cost per match: EUR 29.1M to EUR 31.8M, up about 9%. Hydration-break "
-            "monetization is real but tiny against a roughly EUR 340M absolute EBITDA "
-            "gap - a nice-to-have, not the fix. Recommendation: renegotiate broadcasting "
-            "toward per-match value, lock in host-country cost-sharing before further "
-            "expansion, and treat in-match inventory like hydration breaks as a small "
-            "secondary revenue line.",
+            "11%. Cost per match: EUR 29.1M to EUR 31.8M, up about 9%. Recommendation: "
+            "renegotiate broadcasting toward per-match value, and lock in host-country "
+            "cost-sharing before further expansion.",
             "Interviewer: Good, that covers it.",
         ),
     },
     {
         "id": "WC_38",
-        "category": "FULL_COVERAGE_VERY_SHORT_EFFICIENT",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_36/WC_37: brief but complete coverage of every stage.",
         "transcript": _t(
@@ -1088,15 +889,13 @@ ITEMS: list[dict[str, Any]] = [
             "roughly triples infrastructure and security cost.",
             "Candidate: That's consistent with revenue per match falling from about EUR "
             "46.9M to EUR 41.8M and cost per match rising from about EUR 29.1M to EUR "
-            "31.8M. Hydration-break monetization is genuine but far too small against a "
-            "roughly EUR 340M absolute gap. I'd renegotiate broadcasting toward per-"
-            "match value, agree cost-sharing with host countries up front, and treat "
-            "hydration breaks as a minor add-on, not the fix.",
+            "31.8M. I'd renegotiate broadcasting toward per-"
+            "match value, agree cost-sharing with host countries up front.",
         ),
     },
     {
         "id": "WC_39",
-        "category": "FULL_COVERAGE_MATH_WRONG_BUT_ATTEMPTED",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": (
             "The candidate reaches every stage, including an attempt at the math, but "
@@ -1119,18 +918,15 @@ ITEMS: list[dict[str, Any]] = [
             "billion over... let me use 64 again for consistency - that gives about 68 "
             "million, so actually revenue per match went up, not down, which is "
             "interesting.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             "Candidate: Given revenue per match is actually holding up, I'd focus mainly "
             "on containing the host-country cost side - tighter cost-sharing "
-            "agreements before any further expansion, and treat hydration breaks as a "
-            "small incremental add-on.",
+            "agreements before any further expansion.",
         ),
     },
     {
         "id": "WC_40",
-        "category": "FULL_COVERAGE_MATH_WRONG_BUT_ATTEMPTED",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_39: full coverage, but the math conclusion is wrong -- a scoring issue, not a coverage gap.",
         "transcript": _t(
@@ -1148,17 +944,14 @@ ITEMS: list[dict[str, Any]] = [
             "the cost directly, so that's about 1.04 billion, divided by 104 matches, "
             "about 10 million per match - so cost per match actually looks like it's "
             "gone down a lot.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             "Candidate: Since the cost side looks more controlled than I expected, I'd "
-            "focus the recommendation on capturing more broadcasting value per match, "
-            "and treat hydration breaks as a small additional lever.",
+            "focus the recommendation on capturing more broadcasting value per match.",
         ),
     },
     {
         "id": "WC_41",
-        "category": "FULL_COVERAGE_MATH_WRONG_BUT_ATTEMPTED",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_39/WC_40: complete run, incorrect math result, still evaluable end to end.",
         "transcript": _t(
@@ -1174,62 +967,6 @@ ITEMS: list[dict[str, Any]] = [
             "46.9 million. This edition: 4.35 billion over 48 teams - so about 90 "
             "million per team, which suggests things are actually much healthier per "
             "unit than the margin numbers imply.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_42",
-        "category": "FULL_COVERAGE_CREATIVE_OVERSOLD_BUT_ATTEMPTED",
-        "expected_enough_evidence": True,
-        "rationale": (
-            "The candidate answers the creative question but oversells it without "
-            "sizing the opportunity against the roughly EUR 340M gap -- a "
-            "case_creative_answer quality problem, not a coverage gap, since every "
-            "stage still has an answer on the record."
-        ),
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is this a repeatable-model ask, or just this edition?",
-            "Interviewer: Repeatable model.",
-            "Candidate: I'll split revenue from the incremental cost of expansion and "
-            "look at per-match economics. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: Fixed-package broadcasting dilution plus tripled host-country "
-            "costs explain the gap.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: I think that's a great idea - they should definitely sell "
-            "sponsorships for the hydration breaks, put a partner's logo on the water "
-            "bottles and the big screens, and that extra revenue should help close the "
-            "margin gap significantly.",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_43",
-        "category": "FULL_COVERAGE_CREATIVE_OVERSOLD_BUT_ATTEMPTED",
-        "expected_enough_evidence": True,
-        "rationale": "Same pattern as WC_42: creative answer oversold, but every stage still has content to score.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is margin recovery the top priority?",
-            "Interviewer: Yes.",
-            "Candidate: I'll split revenue from the incremental cost of expansion and "
-            "look per match. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: Fixed broadcasting dilution and tripled host-country costs are "
-            "the two drivers.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Absolutely, monetizing hydration breaks sounds like a strong "
-            "lever - sponsor branding, on-screen ads, maybe even a dedicated hydration "
-            "partner - I'd expect that to make a real dent in the margin gap.",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
@@ -1258,8 +995,6 @@ ITEMS: list[dict[str, Any]] = [
             "costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
@@ -1281,15 +1016,13 @@ ITEMS: list[dict[str, Any]] = [
             "footprint, on top of the broadcasting dilution point.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_46",
-        "category": "FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": (
             "The path is long and non-linear -- two tangents, two interviewer "
@@ -1318,15 +1051,13 @@ ITEMS: list[dict[str, Any]] = [
             "triples infrastructure cost and adds new travel costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_47",
-        "category": "FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_46: several tangents and redirects, but full coverage is eventually reached.",
         "transcript": _t(
@@ -1348,15 +1079,13 @@ ITEMS: list[dict[str, Any]] = [
             "infrastructure cost and adds travel and prize-money costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_48",
-        "category": "FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_46/WC_47: a winding path that still lands on full coverage.",
         "transcript": _t(
@@ -1377,15 +1106,13 @@ ITEMS: list[dict[str, Any]] = [
             "infrastructure cost, plus new travel and prize-money costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_49",
-        "category": "FULL_COVERAGE_RECOMMENDATION_NO_RISKS",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": (
             "The recommendation is directionally correct and grounded in the analysis, "
@@ -1405,8 +1132,6 @@ ITEMS: list[dict[str, Any]] = [
             "cost.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             "Candidate: I'd renegotiate the broadcasting contracts to scale more with "
             "match count, and get the host countries to share more of the "
@@ -1415,7 +1140,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_50",
-        "category": "FULL_COVERAGE_RECOMMENDATION_NO_RISKS",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_49: full coverage reached, but the recommendation itself skips risks/next steps.",
         "transcript": _t(
@@ -1429,8 +1154,6 @@ ITEMS: list[dict[str, Any]] = [
             "explain the gap.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             "Candidate: Push broadcasters toward per-match value capture, and set "
             "cost-sharing agreements with host countries.",
@@ -1439,9 +1162,9 @@ ITEMS: list[dict[str, Any]] = [
     # ------------------------------------------------------- Second batch: more depth on weak categories
     {
         "id": "WC_51",
-        "category": "MATH_SKIPPED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_13/WC_14: creative and recommendation reached, but the math exchange is missing.",
+        "rationale": "Same pattern as WC_13/WC_14: the recommendation is reached, but the math exchange is missing.",
         "transcript": _t(
             f"Interviewer: {OPENING}",
             "Candidate: Should we treat this as a one-off issue for this edition, or "
@@ -1455,15 +1178,13 @@ ITEMS: list[dict[str, Any]] = [
             "tournament, so spreading it over more matches dilutes it, while the extra "
             "host countries add roughly triple the fixed infrastructure cost instead of "
             "a proportional increase.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_52",
-        "category": "MATH_SKIPPED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_51: everything but the math exchange is present.",
         "transcript": _t(
@@ -1478,80 +1199,13 @@ ITEMS: list[dict[str, Any]] = [
             "Candidate: So the structural story is a fixed-package broadcasting deal "
             "losing value per match as the tournament grows, combined with host-country "
             "costs that roughly triple instead of scaling with matches.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_53",
-        "category": "CREATIVE_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_15/WC_16: math and recommendation reached, but the creative question is missing.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is there a specific deadline the Secretary General has in mind "
-            "for a fix, like the next hosting bid cycle?",
-            "Interviewer: Ideally before the next hosting bid cycle.",
-            "Candidate: Got it. I'd separate revenue streams from the incremental cost "
-            "of the expansion, and look at per-match economics rather than totals.",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: This points to a two-sided problem: fixed broadcasting revenue "
-            "diluting per match, and host-country costs roughly tripling instead of "
-            "scaling with the match count.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_54",
-        "category": "CREATIVE_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_53: everything but the creative question is present.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Should I focus purely on EBITDA margin, or is cash flow also "
-            "part of the brief?",
-            "Interviewer: Focus on EBITDA margin.",
-            "Candidate: I'll split revenue streams from the incremental cost of the "
-            "expansion, and check this on a per-match basis.",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: So the fixed-package broadcasting deal is being diluted by the "
-            "extra matches, while the tri-host format multiplies infrastructure and "
-            "security cost well beyond a simple match-count scale-up.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_55",
-        "category": "BOTH_EXHIBITS_SKIPPED",
-        "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_17/WC_18: structure and data covered, recommendation reached, but neither math nor creative was ever raised.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Just to confirm, are we diagnosing only, or also expected to "
-            "propose a fix?",
-            "Interviewer: Both.",
-            "Candidate: I'd split revenue from the incremental cost of the expansion "
-            "and look at this per match. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: Fixed-package broadcasting is losing value per match, and the "
-            "three-country format is multiplying costs well beyond what a simple "
-            "match-count increase would explain.",
-            f"Interviewer: {REC_ASK}",
-            "Candidate: I'd push for a broadcasting structure that scales with match "
-            "count, and negotiate shared infrastructure costs with the host countries.",
         ),
     },
     {
         "id": "WC_56",
-        "category": "MATH_STARTED_NOT_FINISHED",
+        "category": "UNFINISHED_ANALYSIS",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_19/WC_20: the math attempt stalls before producing usable numbers, and nothing later is reached.",
         "transcript": _t(
@@ -1576,7 +1230,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_57",
-        "category": "RECOMMENDATION_ASKED_NOT_ANSWERED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_21/WC_22: everything up to and including the recommendation ask is covered, but the candidate's answer is missing.",
         "transcript": _t(
@@ -1591,14 +1245,12 @@ ITEMS: list[dict[str, Any]] = [
             "host-country costs are roughly tripling.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
         ),
     },
     {
         "id": "WC_58",
-        "category": "RECOMMENDATION_ASKED_NOT_ANSWERED",
+        "category": "INCOMPLETE_COVERAGE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_57: the transcript ends the moment the recommendation is asked for.",
         "transcript": _t(
@@ -1613,14 +1265,12 @@ ITEMS: list[dict[str, Any]] = [
             "cost.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
         ),
     },
     {
         "id": "WC_59",
-        "category": "OFF_TOPIC_CIRCULAR_LONG",
+        "category": "NON_RESPONSIVE",
         "expected_enough_evidence": False,
         "rationale": "Same pattern as WC_23/WC_24: many turns of restated generic framing, never reaching real data or a recommendation.",
         "transcript": _t(
@@ -1642,9 +1292,9 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_60",
-        "category": "KEY_FACT_MISUNDERSTOOD_INCOMPLETE",
+        "category": "EVIDENCE_MISREAD",
         "expected_enough_evidence": False,
-        "rationale": "Same pattern as WC_25: the candidate misreads a central case fact -- here, assuming broadcasting scales with host-country count -- isn't corrected even after a direct interviewer prompt, and the interview stops before quantification, the creative question, or a recommendation.",
+        "rationale": "Same pattern as WC_25: the candidate misreads a central case fact -- here, assuming broadcasting scales with host-country count -- isn't corrected even after a direct interviewer prompt, and the interview stops before quantification or a recommendation.",
         "transcript": _t(
             f"Interviewer: {OPENING}",
             "Candidate: Is this purely a diagnosis, or also a recommendation?",
@@ -1664,7 +1314,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_61",
-        "category": "FULL_COVERAGE_WEAK",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_30-32: full stage coverage, but thin and generic throughout.",
         "transcript": _t(
@@ -1678,8 +1328,6 @@ ITEMS: list[dict[str, Any]] = [
             f"Interviewer: {MATH_Q}",
             "Candidate: I think revenue per match drops a bit and cost per match goes "
             "up a bit, roughly.",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Might help some, hard to say how much.",
             f"Interviewer: {REC_ASK}",
             "Candidate: Fix the broadcasting deal and try to control the host-country "
             "costs.",
@@ -1687,7 +1335,7 @@ ITEMS: list[dict[str, Any]] = [
     },
     {
         "id": "WC_62",
-        "category": "FULL_COVERAGE_WITH_REDIRECT",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_33-35: one redirect needed, but full coverage still reached.",
         "transcript": _t(
@@ -1702,15 +1350,13 @@ ITEMS: list[dict[str, Any]] = [
             "grow, while the tri-host format multiplies infrastructure cost.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_63",
-        "category": "FULL_COVERAGE_VERY_SHORT_EFFICIENT",
+        "category": "FULL_COVERAGE_CLEAN",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_36-38: concise, but every stage is genuinely covered.",
         "transcript": _t(
@@ -1725,15 +1371,13 @@ ITEMS: list[dict[str, Any]] = [
             "roughly triples infrastructure and security cost.",
             "Candidate: That explains it - revenue per match falls from about EUR "
             "46.9M to EUR 41.8M while cost per match rises from about EUR 29.1M to EUR "
-            "31.8M. Hydration-break monetization is real but tiny against a roughly EUR "
-            "340M absolute gap. I'd renegotiate broadcasting toward per-match value, "
-            "agree cost-sharing with host countries up front, and treat in-match "
-            "inventory like hydration breaks as a minor add-on.",
+            "31.8M. I'd renegotiate broadcasting toward per-match value, "
+            "agree cost-sharing with host countries up front.",
         ),
     },
     {
         "id": "WC_64",
-        "category": "FULL_COVERAGE_MATH_WRONG_BUT_ATTEMPTED",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_39-41: full coverage, but the math conclusion is wrong -- a scoring issue, not a coverage gap.",
         "transcript": _t(
@@ -1752,57 +1396,6 @@ ITEMS: list[dict[str, Any]] = [
             "EBITDA is about 1.04 billion, so cost must be about 3.3 billion - divided "
             "across 48 teams instead of matches, that's roughly 69 million per team, "
             "which suggests things are actually in decent shape per team.",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_65",
-        "category": "FULL_COVERAGE_CREATIVE_OVERSOLD_BUT_ATTEMPTED",
-        "expected_enough_evidence": True,
-        "rationale": "Same pattern as WC_42/WC_43: creative answer oversold (and here also factually loose about which matches qualify), but every stage still has content to score.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
-            "Interviewer: Both.",
-            "Candidate: I'll split revenue from the incremental cost of expansion, per "
-            "match. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: Fixed-package broadcasting dilution and tripled host-country "
-            "costs explain the gap.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: Definitely worth doing - selling hydration-break sponsorships "
-            "across all 104 matches, with a dedicated partner brand, should generate "
-            "meaningful revenue and go a long way toward closing the margin gap.",
-            f"Interviewer: {REC_ASK}",
-            f"Candidate: {REC_STRONG}",
-        ),
-    },
-    {
-        "id": "WC_66",
-        "category": "FULL_COVERAGE_CREATIVE_OVERSOLD_BUT_ATTEMPTED",
-        "expected_enough_evidence": True,
-        "rationale": "Same pattern as WC_65: creative answer oversold, full coverage otherwise.",
-        "transcript": _t(
-            f"Interviewer: {OPENING}",
-            "Candidate: Should I anchor on EBITDA margin specifically?",
-            "Interviewer: Yes.",
-            "Candidate: I'll split revenue from the incremental cost of expansion, per "
-            "match. What's changed?",
-            f"Interviewer reveal: {DATA_REVEAL}",
-            "Candidate: Fixed broadcasting dilution and tripled host-country costs are "
-            "the two drivers.",
-            f"Interviewer: {MATH_Q}",
-            f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            "Candidate: I'd say monetizing hydration breaks could be one of the "
-            "biggest levers here - branded content, sponsor takeovers, maybe even "
-            "ticketed fan experiences tied to the break - it seems like a natural place "
-            "to recover a lot of the lost margin.",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
@@ -1825,8 +1418,6 @@ ITEMS: list[dict[str, Any]] = [
             "costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
@@ -1849,15 +1440,13 @@ ITEMS: list[dict[str, Any]] = [
             "alongside the broadcasting dilution.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_69",
-        "category": "FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS",
+        "category": "FULL_COVERAGE_MESSY_PROCESS",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_46-48: several tangents and redirects, but full coverage is eventually reached.",
         "transcript": _t(
@@ -1880,15 +1469,13 @@ ITEMS: list[dict[str, Any]] = [
             "infrastructure cost, plus new travel and prize-money costs.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             f"Candidate: {REC_STRONG}",
         ),
     },
     {
         "id": "WC_70",
-        "category": "FULL_COVERAGE_RECOMMENDATION_NO_RISKS",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
         "expected_enough_evidence": True,
         "rationale": "Same pattern as WC_49/WC_50: full coverage reached, but the recommendation itself skips risks/next steps.",
         "transcript": _t(
@@ -1902,11 +1489,475 @@ ITEMS: list[dict[str, Any]] = [
             "costs explain the gap.",
             f"Interviewer: {MATH_Q}",
             f"Candidate: {MATH_CORRECT}",
-            f"Interviewer: {CREATIVE_Q}",
-            f"Candidate: {CREATIVE_STRONG}",
             f"Interviewer: {REC_ASK}",
             "Candidate: I'd move broadcasting toward a per-match pricing structure and "
             "agree cost-sharing with host countries for future editions.",
+        ),
+    },
+    # ---- added 2026-07-19: bringing every category to >=7 items, each a genuinely
+    # ---- distinct scenario rather than a reworded duplicate of an existing one.
+    {
+        "id": "WC_71",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "Same pattern as WC_10-12: a cold recommendation with no structure or data behind it, this time aimed at prize money specifically.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'd just cut the prize money pool - that's obviously where the "
+            "excess is.",
+        ),
+    },
+    {
+        "id": "WC_72",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "A confident demand-side verdict delivered cold -- sounding plausible doesn't substitute for structure or data.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: This is clearly a demand problem - fewer fans are showing up "
+            "despite the bigger format, so I'd put more into marketing and fan "
+            "engagement.",
+        ),
+    },
+    {
+        "id": "WC_73",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "One clarifying question doesn't turn this into real analysis -- the candidate still jumps straight to a recommendation with no structure and no data exchanged.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the priority?",
+            "Interviewer: Yes.",
+            "Candidate: Then I'd recommend raising ticket prices across all three host "
+            "countries - that directly improves margin.",
+        ),
+    },
+    {
+        "id": "WC_74",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "Same pattern as WC_10-12/WC_73: a confident operational-efficiency verdict with no structure or data behind it.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: My honest take is the Committee just needs to run a leaner "
+            "operation - cut overhead and administrative costs across the board.",
+        ),
+    },
+    {
+        "id": "WC_75",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The revenue-per-match half of the calculation lands cleanly, but the "
+            "candidate visibly stalls trying to back cost per match out of the margin "
+            "percentage and never produces a usable cost figure -- an analysis genuinely "
+            "begun, not one that was skipped."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this meant to be a repeatable model for future editions?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion and "
+            "look at per-match figures. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So a fixed broadcasting package plus tripled host-country costs "
+            "looks like the core story.",
+            f"Interviewer: {MATH_Q}",
+            "Candidate: Revenue per match is straightforward - 4.35 billion over 104, so "
+            "a bit over 41 million. For cost per match I need total cost first, and I'm "
+            "working out 24% of 4.35 billion as EBITDA, so cost would be revenue minus "
+            "EBITDA... let me redo that, I want to make sure I'm not mixing up margin "
+            "and cost.",
+            "Interviewer: Take your time.",
+            "Candidate: Give me another moment - I keep second-guessing whether the 24% "
+            "is of revenue or of something else.",
+        ),
+    },
+    {
+        "id": "WC_76",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate visibly attempts to build a structure but trails off before "
+            "ever stating one cleanly, and the conversation ends there -- a structure "
+            "genuinely started, not a case where nothing was attempted at all."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'd want to split this into a few pieces - starting with, well, "
+            "the revenue side, and then... actually, let me think about how best to "
+            "break down the cost side too, since there's a lot going on there with the "
+            "three countries and everything that comes with that, and I want to make "
+            "sure I'm not missing a piece before I lay it all out...",
+            "Interviewer: Take your time, but I'd like to hear the actual structure.",
+            "Candidate: Right, sorry - give me a second to organize this properly, "
+            "there's a few ways I could cut it and I want to pick the right one.",
+        ),
+    },
+    {
+        "id": "WC_77",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate begins interpreting the data reveal but the synthesis trails "
+            "off before landing on an actual conclusion, and the conversation stops "
+            "there -- an analysis started, not one that was never attempted."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Before anything else - is margin recovery the hard priority, "
+            "even at the cost of slower future growth?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue streams from the incremental cost base of "
+            "the expansion and look at this per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Okay, so broadcasting being a fixed package means... and then "
+            "with the three host countries, the costs are... there's definitely a "
+            "connection between those two things, I just need a second to put it "
+            "together properly rather than guess at how they interact.",
+            "Interviewer: Go ahead whenever you're ready.",
+            "Candidate: Right - give me a moment, I want to state this precisely rather "
+            "than hand-wave it.",
+        ),
+    },
+    {
+        "id": "WC_78",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate correctly gets both raw per-match figures but stalls "
+            "specifically on converting them into percentage changes, and the "
+            "conversation ends before a usable answer -- the calculation was started, "
+            "not skipped."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Just to confirm - is the ask a repeatable model for future "
+            "editions?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So the fixed-package broadcasting deal plus tripled "
+            "host-country costs are the two drivers.",
+            f"Interviewer: {MATH_Q}",
+            "Candidate: Revenue per match before was about 46.9 million, and this "
+            "edition it's about 41.8 million. Cost per match before was about 29.1 "
+            "million, and I've got roughly 31.8 million for this edition. Now let me "
+            "work out the percentage change on each... that's going to take a second, "
+            "I don't want to round it wrong.",
+            "Interviewer: Go ahead.",
+            "Candidate: Sorry, I keep losing track of which direction I'm dividing - "
+            "give me another moment to get the percentages right rather than guess.",
+        ),
+    },
+    {
+        "id": "WC_79",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The interviewer asks about costs three separate times and the candidate "
+            "answers about revenue every time -- not vague or circular, just "
+            "consistently answering a different question than the one asked."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'd look at what's driving this.",
+            "Interviewer: Let's start with costs specifically - what do you think is "
+            "driving the cost side?",
+            "Candidate: Well, on revenue, I'd guess sponsorship and ticketing are "
+            "probably both up given the bigger format.",
+            "Interviewer: I asked about costs, not revenue - what's driving costs "
+            "specifically?",
+            "Candidate: Right, and I think broadcasting revenue is probably being "
+            "under-monetized too, which would explain a lot of this.",
+            "Interviewer: I need your view on the cost side specifically, not revenue.",
+            "Candidate: Sure - I think revenue overall is probably not keeping pace "
+            "with how big the tournament has gotten.",
+        ),
+    },
+    {
+        "id": "WC_80",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate keeps steering into tangents about format legitimacy and "
+            "fan sentiment instead of engaging with the profitability structure the "
+            "interviewer is asking for, even after two direct redirects."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Honestly, my first thought is whether a 48-team format even "
+            "makes sense for the sport - some fans think it dilutes the quality of "
+            "play compared to a smaller field.",
+            "Interviewer: That's not something we have data on here - can you propose "
+            "a structure for looking at the profitability question?",
+            "Candidate: Sure, but I do think the competitive-balance angle matters, "
+            "since weaker matchups might be part of why this feels different from "
+            "prior editions.",
+            "Interviewer: Let's stay on the financials - revenue streams versus costs. "
+            "Where would you start?",
+            "Candidate: Fair - though I'd note that fan sentiment about the format "
+            "could indirectly matter for sponsorship appetite down the line, which is "
+            "worth keeping in mind.",
+        ),
+    },
+    {
+        "id": "WC_81",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate never proposes a structure of their own, repeatedly asking "
+            "the interviewer to supply the answer instead, even after being told "
+            "directly that's not how this works."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: What would you say is the biggest piece of this, if you had to "
+            "guess?",
+            "Interviewer: I'd like your view first - how would you approach this?",
+            "Candidate: Sure, but is it more of a cost issue or a revenue issue in "
+            "your experience with cases like this?",
+            "Interviewer: I can't steer you toward an answer - propose your own "
+            "structure.",
+            "Candidate: Understood - though if you had to point me somewhere, would "
+            "you start with the revenue side or the cost side?",
+            "Interviewer: That's for you to decide - what's your structure?",
+            "Candidate: Okay, one more check - is there usually a pattern in these "
+            "cases I should be aware of?",
+        ),
+    },
+    {
+        "id": "WC_82",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The interviewer asks directly for the recommendation twice and the "
+            "candidate answers both times by re-summarizing the diagnosis instead of "
+            "ever stating what they'd actually recommend -- present and talking, but "
+            "never responsive to the actual question."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'll split revenue streams from the incremental cost base and "
+            "look at this per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So fixed-package broadcasting is diluting per-match revenue "
+            "while tripled host-country costs and new travel costs push per-match cost "
+            "up.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            "Candidate: So just to recap where we've landed - revenue's up 45%, "
+            "margin's down from 38% to 24%, and it traces back to the fixed-package "
+            "broadcasting deal plus the tripled host-country cost base.",
+            "Interviewer: Right, and given that - what's your recommendation?",
+            "Candidate: Yeah, so the core issue really is that revenue model versus "
+            "cost model mismatch I mentioned - fixed revenue, scaling costs.",
+        ),
+    },
+    {
+        "id": "WC_83",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate misattributes the 45% revenue growth to broadcasting when "
+            "the data explicitly says sponsorship and licensing drove it -- and after "
+            "a direct correction, doesn't recover the point or move on to "
+            "quantification or a recommendation."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue streams from the incremental cost of "
+            "expansion and look at this per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So broadcasting is clearly the growth engine here - with 104 "
+            "matches instead of 64, broadcasting revenue must be what's driving most "
+            "of that 45% growth.",
+            "Interviewer: Take another look at what's actually driving the 45% growth "
+            "in the data.",
+            "Candidate: Sure, but either way I think the bigger lever is probably just "
+            "negotiating a better overall broadcasting number for next time.",
+        ),
+    },
+    {
+        "id": "WC_84",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate reads the host-country cost increase as scaling with the "
+            "62.5% match-count jump, when the data says it's roughly triplicated by "
+            "having three host countries specifically -- and doesn't correct the "
+            "misread even after being pointed back to it."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the priority here?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Okay, so since matches went up 62.5%, I'd expect host-country "
+            "costs to have scaled roughly in line with that, maybe a bit more - so "
+            "that's probably a fairly proportionate increase, not really the core "
+            "issue.",
+            "Interviewer: Look again at how the host-country costs actually scaled "
+            "here.",
+            "Candidate: Right, but I still think the costs are roughly proportionate "
+            "to the extra matches, so I'd focus more on the revenue side being the "
+            "real driver.",
+        ),
+    },
+    {
+        "id": "WC_85",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate reads prize money as scaling with match count, when the "
+            "data ties it directly to the number of qualifying teams -- and after a "
+            "direct correction, keeps using the wrong driver instead of adopting the "
+            "right one."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this a one-time diagnosis or a repeatable model?",
+            "Interviewer: A repeatable model.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: On prize money, since matches nearly doubled, I'd expect that "
+            "pool to have roughly doubled too, which would explain a good chunk of "
+            "the cost increase on its own.",
+            "Interviewer: Prize money doesn't scale with matches here - look again at "
+            "what it's actually tied to.",
+            "Candidate: Understood, but I still think match count is the more useful "
+            "lens for the cost side generally, so I'd keep sizing things that way.",
+        ),
+    },
+    {
+        "id": "WC_86",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate reads the margin change backwards -- as an improvement "
+            "rather than the 38%-to-24% decline the case states -- and even after a "
+            "direct correction, keeps framing the situation as fundamentally healthy "
+            "rather than revisiting the diagnosis."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So if I've got this right, EBITDA margin actually improved "
+            "this edition, from 24% up to 38%, which is a good sign given how much "
+            "bigger the tournament got.",
+            "Interviewer: You have that backwards - margin fell from 38% to 24%, not "
+            "the other way round.",
+            "Candidate: Got it, but either way I think the underlying story is still "
+            "that the expansion is working well financially, just needs a bit of "
+            "fine-tuning.",
+        ),
+    },
+    {
+        "id": "WC_87",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate misreads total revenue as flat when the case states it's "
+            "up 45%, building a wrong 'demand problem' narrative from that error -- "
+            "and after a direct correction, keeps the same wrong frame instead of "
+            "revisiting it."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the priority?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So it sounds like total revenue has basically stayed flat "
+            "despite the bigger format, which would make sense if the new matches "
+            "aren't bringing in much at all.",
+            "Interviewer: Total revenue is actually up 45% - it's not flat, and "
+            "that's an important part of the story.",
+            "Candidate: Okay, but I still think the core narrative is a demand "
+            "shortfall from the expansion not resonating with fans the way it was "
+            "expected to.",
+        ),
+    },
+    {
+        "id": "WC_88",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": (
+            "The candidate invents a specific principal-sponsor deal value that "
+            "appears nowhere in the case materials, which should hurt groundedness "
+            "scoring, but every stage of the interview is still covered end to end."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion and "
+            "look at per-match economics. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: That tracks with what I recall - I believe the new principal "
+            "sponsor deal alone is worth somewhere around EUR 180M a year, on top of "
+            "the fixed-broadcasting dilution and the tripled host-country costs.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_89",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_88: an invented fact (here, a stadium-utilization figure) appears mid-analysis, but full stage coverage is still reached.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the hard priority this cycle?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Right, and I recall stadium utilization actually dropped to "
+            "around 70% this edition because of the expanded match schedule spreading "
+            "demand thinner, alongside the fixed-broadcasting and host-country cost "
+            "points.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_90",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_88/WC_89: an invented fact (here, a broadcasting-contract length and signing date) appears mid-analysis, but full stage coverage is still reached.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this a one-off diagnosis or a repeatable model for future "
+            "editions?",
+            "Interviewer: A repeatable model.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: That's consistent with what I understood - I believe this "
+            "broadcasting contract is an eight-year deal signed back in 2019, which "
+            "would explain why it's locked into a fixed-package structure regardless "
+            "of match count.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
         ),
     },
 ]

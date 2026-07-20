@@ -8,6 +8,13 @@
   {{ value if value is not none else '–' }}
 {%- endmacro %}
 
+{% macro duration(value) -%}
+  {%- if value is none -%}&ndash;
+  {%- elif value >= 60 -%}{{ (value / 60) | round(1) }}m
+  {%- else -%}{{ value | round(1) }}s
+  {%- endif -%}
+{%- endmacro %}
+
 {% macro rate_status(value) -%}
   {%- if value is none -%}status-not-tested
   {%- elif value >= 70 -%}status-exact-match
@@ -114,6 +121,8 @@
         <tr><td>Avg completion tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_completion_tokens) }}</td>{% endfor %}</tr>
         <tr><td>Avg total tokens / run</td>{% for g in overview.graph_metrics %}<td>{{ num(g.avg_total_tokens) }}</td>{% endfor %}</tr>
         <tr><td>Total tokens across batch</td>{% for g in overview.graph_metrics %}<td>{{ num(g.sum_total_tokens) }}</td>{% endfor %}</tr>
+        <tr><td>Avg duration / run</td>{% for g in overview.graph_metrics %}<td>{{ duration(g.avg_duration_seconds) }}</td>{% endfor %}</tr>
+        <tr><td>Total duration across batch</td>{% for g in overview.graph_metrics %}<td>{{ duration(g.sum_duration_seconds) }}</td>{% endfor %}</tr>
       </tbody>
     </table>
   </div>

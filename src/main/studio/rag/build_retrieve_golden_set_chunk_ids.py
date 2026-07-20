@@ -1,15 +1,9 @@
-"""Backfill `source_chunk_ids` onto `retrieve_golden_set.csv`.
-
-`retrieve_golden_set.csv` only carries `source_document` + `source_page`, unlike the
-generation golden sets which already have exact per-query `source_chunk_ids`. This
-resolves chunk-level ground truth automatically: embed each row's `answer` (and
-`query`) text, similarity-search the correct vector store for candidates, then score
-each candidate by lexical word-overlap against the answer to pick the chunk(s) that
-actually contain that content -- semantic search alone can return a topically related
-but wrong chunk, so the lexical check is what turns "plausible" into "grounded".
-
-Rows the heuristic isn't confident about are flagged for manual review rather than
-silently accepted, since this backs a dissertation dataset.
+"""Backfill `source_chunk_ids` onto `retrieve_golden_set.csv`, which only carries
+`source_document` + `source_page`. Embeds each row's `answer`/`query`, similarity-searches
+the correct vector store for candidates, then scores each by lexical word-overlap against
+the answer to pick the chunk(s) that actually contain that content (semantic search alone
+can return a topically related but wrong chunk). Low-confidence rows are flagged for
+manual review rather than silently accepted.
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.rag.build_retrieve_golden_set_chunk_ids            # report only

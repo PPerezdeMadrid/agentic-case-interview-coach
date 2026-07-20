@@ -16,28 +16,158 @@
   {{ 'status-exact-match' if is_diagonal else 'status-different' }}
 {%- endmacro %}
 
+{% macro category_section(id_prefix, categories, radar, heading) %}
+{% if categories %}
+<div class="panel-heading">
+  <div>
+    <p class="eyebrow">{{ categories|length }} categories</p>
+    <h3>{{ heading }}</h3>
+    <p class="lede">
+      Records grouped by the golden set's <code>category</code> column,
+      sorted worst-accuracy-first. The radar plots the same numbers
+      spatially &mdash; each spoke is one category (numbered to match the
+      <code>#</code> column below), worst at the top going clockwise.
+    </p>
+  </div>
+</div>
+
+{% if radar %}
+<div class="radar-wrap">
+  <svg class="radar-chart" id="{{ id_prefix }}-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+    {% for ring in radar.rings %}
+    <polygon class="radar-grid-ring{{ ' radar-grid-ring--mid' if ring.frac == 0.5 else '' }}" points="{{ ring.points }}"></polygon>
+    {% endfor %}
+    {% for axis in radar.axes %}
+    <line class="radar-spoke" x1="{{ radar.cx }}" y1="{{ radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
+    <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.index }}</text>
+    {% endfor %}
+    <polygon class="radar-category-shape" points="{{ radar.polygon_points }}"></polygon>
+    {% for axis in radar.axes %}
+    <circle class="radar-vertex" cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="5" style="fill: {{ axis.color }};"></circle>
+    <circle
+      class="radar-hit"
+      cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="12"
+      data-label="#{{ axis.index }} {{ axis.category }}"
+      data-pct="{{ pct(axis.accuracy) }}"
+    ></circle>
+    {% endfor %}
+  </svg>
+  <div class="radar-tooltip" id="{{ id_prefix }}-radar-tooltip" role="tooltip" hidden></div>
+  <div class="radar-legend">
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> &ge;90% accurate</div>
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> 50&ndash;89% accurate</div>
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> &lt;50% accurate &mdash; systematic failure</div>
+  </div>
+  <p class="helper radar-caption">Hover a dot for the category name. Center = 0% accuracy on that category, outer ring = 100%.</p>
+</div>
+<script>
+  (function () {
+    var svg = document.getElementById('{{ id_prefix }}-radar');
+    var tooltip = document.getElementById('{{ id_prefix }}-radar-tooltip');
+    if (!svg || !tooltip) return;
+    var wrap = svg.closest('.radar-wrap');
+
+    function pointFor(evt) {
+      var target = evt.target.closest ? evt.target.closest('.radar-hit') : null;
+      return target && target.dataset ? target : null;
+    }
+
+    svg.addEventListener('pointermove', function (evt) {
+      var target = pointFor(evt);
+      if (!target) {
+        tooltip.hidden = true;
+        return;
+      }
+      var wrapRect = wrap.getBoundingClientRect();
+      tooltip.textContent = target.dataset.label + ' — ' + target.dataset.pct;
+      tooltip.style.left = (evt.clientX - wrapRect.left) + 'px';
+      tooltip.style.top = (evt.clientY - wrapRect.top) + 'px';
+      tooltip.hidden = false;
+    });
+
+    svg.addEventListener('pointerleave', function () {
+      tooltip.hidden = true;
+    });
+  })();
+</script>
+{% endif %}
+
+<details class="disclosure" id="{{ id_prefix }}-category-details">
+  <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
+  <div class="form-grid disclosure-body" style="padding-bottom: 0;">
+    <label>
+      <span>Filter by category</span>
+      <select id="{{ id_prefix }}-category-filter">
+        <option value="">All categories ({{ categories|length }})</option>
+        {% for cat in categories %}
+        <option value="{{ cat.category }}">{{ cat.category }} ({{ cat.total }})</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <div class="table-wrap disclosure-body">
+    <table id="{{ id_prefix }}-category-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Category</th>
+          <th>Total</th>
+          <th>Correct</th>
+          <th>Wrong</th>
+          {% if categories|selectattr('errors', 'gt', 0)|list %}<th>Errors</th>{% endif %}
+          <th>Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr data-category="{{ cat.category }}">
+          <td>{{ cat.index }}</td>
+          <td><code>{{ cat.category }}</code></td>
+          <td>{{ cat.total }}</td>
+          <td>{{ cat.correct }}</td>
+          <td>{{ cat.wrong }}</td>
+          {% if categories|selectattr('errors', 'gt', 0)|list %}<td>{{ cat.errors or '' }}</td>{% endif %}
+          <td>
+            <div class="accuracy-cell">
+              <span class="accuracy-bar">
+                <span class="accuracy-bar-fill tier-{{ cat.tier }}" style="width: {{ (cat.accuracy * 100) if cat.accuracy is not none else 0 }}%;"></span>
+              </span>
+              <span class="accuracy-label">{{ pct(cat.accuracy) }}</span>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</details>
+{% endif %}
+{% endmacro %}
+
 {% block title %}Agents · Judge | main dashboard{% endblock %}
 
 {% block content %}
 <section class="panel">
-  <div class="panel-heading">
+  <div class="panel-heading panel-heading--stack">
     <div>
       <p class="eyebrow">Agents &middot; Judge &middot; Cached</p>
-      <h1>Judge: <code>enough_evidence</code> accuracy</h1>
+      <h1>Judge behaviour: agentic vs baseline</h1>
       <p class="lede">
         Runs each row of a hand-labeled golden set through the real judge LLM,
         using the exact rendered prompt <code>judge_node</code> would send
         (system prompt + transcript + case guidance/data/recommendation +
         rubric), and compares its <code>enough_evidence</code> answer against
-        the golden set's <code>expected_enough_evidence</code> label.
+        the golden set's <code>expected_enough_evidence</code> label. Baseline
+        has no separate judge node, so it's graded on the exact same
+        transcripts via its own fused <code>ready_for_evaluation</code> call.
       </p>
     </div>
-    {% if result %}
+    {% if result or baseline_result %}
     <div class="chip-row">
-      <span class="chip">{{ result.n_scored }}/{{ result.n_total }} scored</span>
-      <span class="chip">accuracy {{ pct(result.accuracy) }}</span>
-      {% if result.model %}<span class="chip">{{ result.model }}</span>{% endif %}
-      {% if result.computed_at %}<span class="chip">computed {{ result.computed_at }}</span>{% endif %}
+      {% if result %}<span class="chip">agentic accuracy {{ pct(result.accuracy) }}</span>{% endif %}
+      {% if baseline_result %}<span class="chip">baseline accuracy {{ pct(baseline_confusion.accuracy if baseline_confusion else None) }}</span>{% endif %}
+      {% if result and result.computed_at %}<span class="chip">agentic computed {{ result.computed_at | format_datetime }}</span>{% endif %}
+      {% if baseline_result and baseline_result.computed_at %}<span class="chip">baseline computed {{ baseline_result.computed_at | format_datetime }}</span>{% endif %}
     </div>
     {% endif %}
   </div>
@@ -57,11 +187,15 @@
   {% endif %}
 
   <p class="helper" style="padding: 0 24px 24px;">
-    This page does not recompute live &mdash; each row costs one real judge LLM
-    call, so it only reads the cached output of <code>run_judge_golden_set.py</code>.
-    To (re)compute, from <code>src/</code> run
+    This page does not recompute live &mdash; each row costs one real LLM
+    call, so it only reads cached output. To (re)compute the agentic side,
+    from <code>src/</code> run
     <code>python main/studio/node_eval/judge_eval/run_judge_golden_set.py</code> (or
-    <code>make judge-eval</code>), then reload this page.
+    <code>make judge-eval</code>); to (re)compute baseline's side, run
+    <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code> (first
+    regenerating the fixture via
+    <code>python main/studio/node_eval/baseline_eval/build_baseline_worldcup_golden_set.py</code>
+    if the golden set changed), then reload this page.
     {% if golden_set %}
     <a href="{{ url_for('agents_judge', golden_set=golden_set, refresh=1) }}">Reload cache</a>
     {% endif %}
@@ -78,11 +212,45 @@
       <code>src/</code>) first.
     </p>
   </div>
-  {% elif error %}
-  <div class="prompt-box">
-    <p class="helper">{{ error }}</p>
+  {% else %}
+
+  {% if result or baseline_result %}
+  <div class="metric-grid">
+    <div class="metric-card{{ ' metric-card--winner' if result and baseline_confusion and (result.accuracy or 0) >= (baseline_confusion.accuracy or 0) else '' }}">
+      <span>Agentic (Judge) accuracy</span>
+      <strong>{{ pct(result.accuracy) if result else '–' }}</strong>
+    </div>
+    <div class="metric-card{{ ' metric-card--winner' if result and baseline_confusion and (baseline_confusion.accuracy or 0) > (result.accuracy or 0) else '' }}">
+      <span>Baseline accuracy</span>
+      <strong>{{ pct(baseline_confusion.accuracy) if baseline_confusion else '–' }}</strong>
+    </div>
+    <div class="metric-card">
+      <span>Gap (agentic &minus; baseline)</span>
+      <strong>
+        {% if result and result.accuracy is not none and baseline_confusion and baseline_confusion.accuracy is not none %}
+          {{ pct(result.accuracy - baseline_confusion.accuracy) }}
+        {% else %}
+          &ndash;
+        {% endif %}
+      </strong>
+    </div>
   </div>
-  {% elif result %}
+  {% endif %}
+
+  {% if error %}
+  <div class="prompt-box"><p class="helper">Agentic: {{ error }}</p></div>
+  {% endif %}
+  {% if baseline_error %}
+  <div class="prompt-box"><p class="helper">Baseline: {{ baseline_error }}</p></div>
+  {% endif %}
+
+  {% if result %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Agentic</p>
+      <h2>Judge node: <code>enough_evidence</code> accuracy</h2>
+    </div>
+  </div>
   <div class="metric-grid">
     <div class="metric-card"><span>Accuracy</span><strong>{{ pct(result.accuracy) }}</strong></div>
     <div class="metric-card"><span>Correct</span><strong>{{ result.n_correct }}/{{ result.n_scored }}</strong></div>
@@ -126,140 +294,12 @@
     </table>
   </div>
 
-  {% if categories %}
-  <div class="panel-heading">
-    <div>
-      <p class="eyebrow">{{ categories|length }} categories</p>
-      <h3>Pass / fail by category</h3>
-      <p class="lede">
-        Same records as above, grouped by the golden set's <code>category</code>
-        column and sorted worst-accuracy-first, so a systematic judge failure
-        (e.g. every <code>MATH_SKIPPED</code> row wrong) is visible at a glance
-        instead of buried in the per-conversation table. The radar plots the
-        same numbers spatially &mdash; each spoke is one category (numbered to
-        match the <code>#</code> column below, worst at the top going
-        clockwise), and the dent toward the center is where the judge is
-        systematically wrong.
-      </p>
-    </div>
-  </div>
+  {{ category_section('agentic-judge', categories, radar, 'Pass / fail by category') }}
 
-  {% if radar %}
-  <div class="radar-wrap">
-    <svg class="radar-chart" id="judge-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
-      {% for ring in radar.rings %}
-      <polygon class="radar-grid-ring{{ ' radar-grid-ring--mid' if ring.frac == 0.5 else '' }}" points="{{ ring.points }}"></polygon>
-      {% endfor %}
-      {% for axis in radar.axes %}
-      <line class="radar-spoke" x1="{{ radar.cx }}" y1="{{ radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
-      <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.index }}</text>
-      {% endfor %}
-      <polygon class="radar-category-shape" points="{{ radar.polygon_points }}"></polygon>
-      {% for axis in radar.axes %}
-      <circle class="radar-vertex" cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="5" style="fill: {{ axis.color }};"></circle>
-      <circle
-        class="radar-hit"
-        cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="12"
-        data-label="#{{ axis.index }} {{ axis.category }}"
-        data-pct="{{ pct(axis.accuracy) }}"
-      ></circle>
-      {% endfor %}
-    </svg>
-    <div class="radar-tooltip" id="judge-radar-tooltip" role="tooltip" hidden></div>
-    <div class="radar-legend">
-      <div class="radar-legend-item"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> &ge;90% accurate</div>
-      <div class="radar-legend-item"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> 50&ndash;89% accurate</div>
-      <div class="radar-legend-item"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> &lt;50% accurate &mdash; systematic failure</div>
-    </div>
-    <p class="helper radar-caption">Hover a dot for the category name. Center = 0% accuracy on that category, outer ring = 100%.</p>
-  </div>
-  <script>
-    (function () {
-      var svg = document.getElementById('judge-radar');
-      var tooltip = document.getElementById('judge-radar-tooltip');
-      if (!svg || !tooltip) return;
-      var wrap = svg.closest('.radar-wrap');
-
-      function pointFor(evt) {
-        var target = evt.target.closest ? evt.target.closest('.radar-hit') : null;
-        return target && target.dataset ? target : null;
-      }
-
-      svg.addEventListener('pointermove', function (evt) {
-        var target = pointFor(evt);
-        if (!target) {
-          tooltip.hidden = true;
-          return;
-        }
-        var wrapRect = wrap.getBoundingClientRect();
-        tooltip.textContent = target.dataset.label + ' — ' + target.dataset.pct;
-        tooltip.style.left = (evt.clientX - wrapRect.left) + 'px';
-        tooltip.style.top = (evt.clientY - wrapRect.top) + 'px';
-        tooltip.hidden = false;
-      });
-
-      svg.addEventListener('pointerleave', function () {
-        tooltip.hidden = true;
-      });
-    })();
-  </script>
-  {% endif %}
-
-  <details class="disclosure" id="judge-category-details">
-    <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
-    <div class="form-grid disclosure-body" style="padding-bottom: 0;">
-      <label>
-        <span>Filter by category</span>
-        <select id="judge-category-filter">
-          <option value="">All categories ({{ categories|length }})</option>
-          {% for cat in categories %}
-          <option value="{{ cat.category }}">{{ cat.category }} ({{ cat.total }})</option>
-          {% endfor %}
-        </select>
-      </label>
-    </div>
-    <div class="table-wrap disclosure-body">
-      <table id="judge-category-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Category</th>
-            <th>Total</th>
-            <th>Correct</th>
-            <th>Wrong</th>
-            {% if categories|selectattr('errors', 'gt', 0)|list %}<th>Errors</th>{% endif %}
-            <th>Accuracy</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for cat in categories %}
-          <tr data-category="{{ cat.category }}">
-            <td>{{ cat.index }}</td>
-            <td><code>{{ cat.category }}</code></td>
-            <td>{{ cat.total }}</td>
-            <td>{{ cat.correct }}</td>
-            <td>{{ cat.wrong }}</td>
-            {% if categories|selectattr('errors', 'gt', 0)|list %}<td>{{ cat.errors or '' }}</td>{% endif %}
-            <td>
-              <div class="accuracy-cell">
-                <span class="accuracy-bar">
-                  <span class="accuracy-bar-fill tier-{{ cat.tier }}" style="width: {{ (cat.accuracy * 100) if cat.accuracy is not none else 0 }}%;"></span>
-                </span>
-                <span class="accuracy-label">{{ pct(cat.accuracy) }}</span>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </details>
-  {% endif %}
-
-  <details class="disclosure" id="judge-conversation-details">
+  <details class="disclosure" id="agentic-judge-conversation-details">
     <summary>Show per-conversation detail ({{ result.records|length }} conversations)</summary>
     <div class="table-wrap disclosure-body compact-table">
-      <table id="judge-conversation-table">
+      <table id="agentic-judge-conversation-table">
         <thead>
           <tr>
             <th>Conversation</th>
@@ -309,11 +349,11 @@
   {% if categories %}
   <script>
     (function () {
-      var select = document.getElementById('judge-category-filter');
+      var select = document.getElementById('agentic-judge-category-filter');
       if (!select) return;
-      var categoryRows = document.querySelectorAll('#judge-category-table tbody tr[data-category]');
-      var conversationRows = document.querySelectorAll('#judge-conversation-table tbody tr[data-category]');
-      var conversationDetails = document.getElementById('judge-conversation-details');
+      var categoryRows = document.querySelectorAll('#agentic-judge-category-table tbody tr[data-category]');
+      var conversationRows = document.querySelectorAll('#agentic-judge-conversation-table tbody tr[data-category]');
+      var conversationDetails = document.getElementById('agentic-judge-conversation-details');
 
       function applyFilter() {
         var value = select.value;
@@ -332,6 +372,149 @@
     })();
   </script>
   {% endif %}
+  {% endif %}
+
+  {% if baseline_result %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Baseline</p>
+      <h2>Fused node: <code>ready_for_evaluation</code> accuracy</h2>
+      <p class="lede">
+        Same {{ result.records|length if result else 70 }} transcripts as the
+        agentic Judge above, rendered as baseline's own single-call prompt
+        (see <code>build_baseline_worldcup_golden_set.py</code>) and graded
+        purely on whether <code>ready_for_evaluation</code> matches the same
+        <code>expected_enough_evidence</code> label.
+      </p>
+    </div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-card"><span>Accuracy</span><strong>{{ pct(baseline_confusion.accuracy) if baseline_confusion else '–' }}</strong></div>
+    <div class="metric-card"><span>Correct</span><strong>{{ baseline_result.n_correct }}/{{ baseline_result.n_scored }}</strong></div>
+    <div class="metric-card"><span>Precision</span><strong>{{ pct(baseline_confusion.precision) if baseline_confusion else '–' }}</strong></div>
+    <div class="metric-card"><span>Recall</span><strong>{{ pct(baseline_confusion.recall) if baseline_confusion else '–' }}</strong></div>
+    <div class="metric-card"><span>Errored calls</span><strong>{{ baseline_result.n_errors }}</strong></div>
+  </div>
+
+  {% if baseline_confusion %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Confusion matrix</p>
+      <h3>Predicted vs. expected</h3>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Predicted True</th>
+          <th>Predicted False</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Expected True</td>
+          <td><span class="status {{ cell_status(true) }}">TP {{ baseline_confusion.true_positive }}</span></td>
+          <td><span class="status {{ cell_status(false) }}">FN {{ baseline_confusion.false_negative }}</span></td>
+        </tr>
+        <tr>
+          <td>Expected False</td>
+          <td><span class="status {{ cell_status(false) }}">FP {{ baseline_confusion.false_positive }}</span></td>
+          <td><span class="status {{ cell_status(true) }}">TN {{ baseline_confusion.true_negative }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {{ category_section('baseline-judge', baseline_categories, baseline_radar, 'Pass / fail by category') }}
+
+  <details class="disclosure" id="baseline-judge-conversation-details">
+    <summary>Show per-conversation detail ({{ baseline_result.records|length }} conversations)</summary>
+    <div class="table-wrap disclosure-body compact-table">
+      <table id="baseline-judge-conversation-table">
+        <thead>
+          <tr>
+            <th>Conversation</th>
+            <th>Category</th>
+            <th>Expected ready</th>
+            <th>Predicted</th>
+            <th>Result</th>
+            <th>Prompt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in baseline_result.records %}
+          <tr data-category="{{ row.category }}">
+            <td>{{ row.conversation_id }}</td>
+            <td><code>{{ row.category }}</code></td>
+            <td>{{ row.expected_ready_for_judge }}</td>
+            <td>
+              {% if row.predicted %}
+              <code>{{ bool_label(row.predicted.ready_for_evaluation) }}</code>
+              {% else %}
+              <span class="helper">&ndash;</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if row.error %}
+              <span class="status status-not-tested">error</span>
+              <div class="helper">{{ row.error.message }}</div>
+              {% else %}
+              <span class="status {{ row_status(row.correct) }}">{{ 'correct' if row.correct else 'wrong' }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <details class="trace-json">
+                <summary>Baseline input</summary>
+                <pre>{{ row.baseline_input }}</pre>
+              </details>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  {% if baseline_categories %}
+  <script>
+    (function () {
+      var select = document.getElementById('baseline-judge-category-filter');
+      if (!select) return;
+      var categoryRows = document.querySelectorAll('#baseline-judge-category-table tbody tr[data-category]');
+      var conversationRows = document.querySelectorAll('#baseline-judge-conversation-table tbody tr[data-category]');
+      var conversationDetails = document.getElementById('baseline-judge-conversation-details');
+
+      function applyFilter() {
+        var value = select.value;
+        categoryRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        conversationRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        if (value && conversationDetails) {
+          conversationDetails.open = true;
+        }
+      }
+
+      select.addEventListener('change', applyFilter);
+    })();
+  </script>
+  {% endif %}
+  {% else %}
+  <div class="prompt-box">
+    <p class="helper">
+      No cached baseline results for the <code>worldcup</code>
+      golden set yet &mdash; run
+      <code>python main/studio/node_eval/baseline_eval/build_baseline_worldcup_golden_set.py</code>
+      then <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code> to populate this section.
+    </p>
+  </div>
+  {% endif %}
+
   {% endif %}
 </section>
 {% endblock %}

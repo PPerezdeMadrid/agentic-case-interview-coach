@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% macro duration(value) -%}
+  {%- if value >= 60 -%}{{ (value / 60) | round(1) }}m
+  {%- else -%}{{ value | round(1) }}s
+  {%- endif -%}
+{%- endmacro %}
+
 {% block title %}Scenario {{ scenario.slug }} | Experiment{% endblock %}
 
 {% block content %}
@@ -45,7 +51,7 @@
           <span class="chip">{{ r.candidate_repeat_count }} repeated line(s)</span>
           {% endif %}
           {% if r.total_tokens %}
-          <span class="chip">{{ r.llm_call_count }} LLM calls &bull; {{ r.total_tokens }} tokens ({{ r.total_prompt_tokens }} in / {{ r.total_completion_tokens }} out)</span>
+          <span class="chip">{{ r.llm_call_count }} LLM calls &bull; {{ r.total_tokens }} tokens ({{ r.total_prompt_tokens }} in / {{ r.total_completion_tokens }} out){% if r.total_duration_seconds %} &bull; {{ duration(r.total_duration_seconds) }}{% endif %}</span>
           {% endif %}
         </div>
         <p class="focus-areas"><strong>Judge focus areas:</strong> {{ r.focus_areas|join(', ') if r.focus_areas else ('none (enough evidence reached)' if r.enough_evidence else 'none') }}</p>

@@ -53,15 +53,8 @@ class AgenticGraphState(TypedDict):
     llm_usage: NotRequired[Annotated[list[dict], append_llm_usage]]
 
 
-# Pydantic schemas for the JSON payloads each LLM role is asked to return.
-# `utils.invoke_json_llm` turns these into an OpenRouter/OpenAI-style
-# `response_format: json_schema` request hint; the tolerant `load_json_object`
-# parser and per-node normalization still run on whatever comes back, since
-# schema support is best-effort and provider-dependent on OpenRouter.
-
-
 class InterviewerMove(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid") # Restrict extra fields
 
     reasoning: str
     action: Literal["question", "reveal"]

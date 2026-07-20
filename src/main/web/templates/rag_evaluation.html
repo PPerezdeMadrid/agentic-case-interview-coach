@@ -231,7 +231,7 @@
     {% if ablation_result %}
     <div class="chip-row">
       <span class="chip">{{ ablation_result.n_records }} records evaluated</span>
-      {% if ablation_result.computed_at %}<span class="chip">computed {{ ablation_result.computed_at }}</span>{% endif %}
+      {% if ablation_result.computed_at %}<span class="chip">computed {{ ablation_result.computed_at | format_datetime }}</span>{% endif %}
     </div>
     {% endif %}
   </div>

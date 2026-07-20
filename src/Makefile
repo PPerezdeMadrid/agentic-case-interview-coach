@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -53,6 +53,18 @@ help:
 	@printf "%s\n" "                    Run a judge golden-set CSV (database/node_eval/judge_eval/) against the"
 	@printf "%s\n" "                    real judge LLM and score enough_evidence accuracy; read the result"
 	@printf "%s\n" "                    on the workbench's Agents > Judge page"
+	@printf "%s\n" "  make interviewer-eval [INTERVIEWER_GOLDEN_SET=evidence_handling] [LIMIT=<n>]"
+	@printf "%s\n" "                    Run an interviewer golden-set CSV (database/node_eval/interviewer_eval/,"
+	@printf "%s\n" "                    one of socratic_function|evidence_handling|guardrail|turn_control)"
+	@printf "%s\n" "                    against the real interviewer LLM; read the result on the workbench's"
+	@printf "%s\n" "                    Agents > Interviewer page"
+	@printf "%s\n" "  make baseline-eval [BASELINE_GOLDEN_SET=evidence_handling] [LIMIT=<n>]"
+	@printf "%s\n" "                    Run a baseline golden-set CSV (database/node_eval/baseline_eval/,"
+	@printf "%s\n" "                    same 4 golden sets as interviewer-eval, plus 'worldcup' -- baseline's"
+	@printf "%s\n" "                    ready_for_evaluation call graded on the judge golden set, built via"
+	@printf "%s\n" "                    node_eval/baseline_eval/build_baseline_worldcup_golden_set.py) against"
+	@printf "%s\n" "                    the real baseline LLM; read the agentic-vs-baseline comparison on the"
+	@printf "%s\n" "                    workbench's Agents > Judge / Agents > Interviewer pages"
 	@printf "%s\n" ""
 	@printf "%s\n" "make setup-hpc persists RUNNER=hpc for later commands in $(RUNNER_STATE_FILE)"
 
@@ -135,4 +147,23 @@ GOLDEN_SET ?= worldcup
 judge-eval:
 	$(PY) main/studio/node_eval/judge_eval/run_judge_golden_set.py \
 		--csv database/node_eval/judge_eval/judge_golden_set_$(GOLDEN_SET).csv \
+		$(if $(LIMIT),--limit $(LIMIT),)
+
+# --- Interviewer golden-set eval: grade move accuracy against the real interviewer LLM ---
+# Usage: make interviewer-eval [INTERVIEWER_GOLDEN_SET=evidence_handling] [LIMIT=<n>]
+INTERVIEWER_GOLDEN_SET ?= evidence_handling
+
+interviewer-eval:
+	$(PY) main/studio/node_eval/interviewer_eval/run_interviewer_golden_set.py \
+		--csv database/node_eval/interviewer_eval/interviewer_golden_set_$(INTERVIEWER_GOLDEN_SET).csv \
+		$(if $(LIMIT),--limit $(LIMIT),)
+
+# --- Baseline golden-set eval: grade the fused interviewer/judge/grader node against ---
+# --- the same fixtures interviewer-eval uses, for a direct agentic-vs-baseline comparison ---
+# Usage: make baseline-eval [BASELINE_GOLDEN_SET=evidence_handling] [LIMIT=<n>]
+BASELINE_GOLDEN_SET ?= evidence_handling
+
+baseline-eval:
+	$(PY) main/studio/node_eval/baseline_eval/run_baseline_golden_set.py \
+		--csv database/node_eval/baseline_eval/baseline_golden_set_$(BASELINE_GOLDEN_SET).csv \
 		$(if $(LIMIT),--limit $(LIMIT),)

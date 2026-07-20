@@ -7,7 +7,7 @@
       "behaviour_description": "You have strong analytical ability, but your interaction quality is poor because you do not respond directly to the interviewer’s cues. You often continue on your own track, fail to adapt promptly when redirected, and only partially incorporate new information, even though your underlying diagnosis of the case is ultimately strong.",
       "behavioural_rules": [
         "Open the case well and use a strong unit-economics structure.",
-        "Reach the correct diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
+        "Reach the correct diagnosis and give the right final recommendation.",
         "Every time the interviewer redirects you or asks a specific follow-up question, finish at least one more sentence of your own prior line of reasoning before addressing what was actually asked.",
         "At least half the time, answer a related but different question than the one the interviewer actually asked. Only fully adopt a redirection after the interviewer has repeated or clarified it a second time; the first redirection should produce only a partial adjustment.",
         "Do not invent data or facts not present in the case materials.",
@@ -33,7 +33,6 @@
         "Explain why growth is making losses worse: each new customer requires upfront acquisition, hardware, installation, and servicing cash before recurring revenue pays back.",
         "Segment customers explicitly and conclude that large cooperatives can work economically while small cooperatives are structurally loss-making on a per-account basis.",
         "Use the runway constraint to prioritize only ideas that can improve economics within 6 months rather than long-term ideas alone.",
-        "For the creative prompt, propose practical actions such as stopping sales to small cooperatives, unbundling hardware or maintenance fees, setting minimum-acreage or multi-year terms, shifting sales toward larger accounts, and reducing technician routing costs in dense clusters like Candeleda and Talavera.",
         "Conclude that Verdex must stop scaling the current bad economics, focus on profitable larger customers, recover hardware costs through pricing or contract changes, and use financing or a partner to reach the software-only model."
       ],
       "math_guidance": [
@@ -58,8 +57,8 @@
           "rationale": "This scenario does not include a standalone math question."
         },
         "case_creative_answer": {
-          "expected": 4,
-          "rationale": "The candidate proposes practical, case-specific initiatives that improve near-term economics while preserving the best customers."
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
         },
         "final_recommendation": {
           "expected": 4,

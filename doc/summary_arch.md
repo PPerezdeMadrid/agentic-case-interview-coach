@@ -239,8 +239,8 @@ All active graph nodes use per-role LLM clients defined in `src/main/studio/llm_
 |---|---|---|
 | `lmstudio_llm_server` | Local LM Studio (`LMSTUDIO_MODEL`) | interviewer, candidate, feedback (agentic + baseline) |
 | `judge_llm_server` | OpenRouter, `meta-llama/llama-3.1-70b-instruct` | judge (agentic); all four roles (baseline) |
-| `interviewer_llm_server` | OpenRouter, `qwen/qwen-2.5-7b-instruct` | defined, currently unused (agentic interviewer runs on LM Studio instead — see below) |
-| `candidate_llm_server` | OpenRouter, `mistralai/mistral-nemo` | defined, currently unused (agentic candidate runs on LM Studio instead) |
+| `interviewer_llm_server` | OpenRouter, `qwen/qwen-2.5-32b-instruct` | defined, currently unused (agentic interviewer runs on LM Studio instead — see below) |
+| `candidate_llm_server` | OpenRouter, `mistralai/mixtral-8x7b-instruct` | defined, currently unused (agentic candidate runs on LM Studio instead) |
 | `openai_llm_server` | OpenAI, `gpt-5.4-nano` | not wired to any graph role; pinged only by the API-connection smoke test |
 
 In the **agentic** graph, `node.py` currently assigns `interviewer_llm = feedback_llm_server` and `candidate_llm = feedback_llm_server` — i.e. interviewer and candidate both run on the local LM Studio endpoint, and only `judge_llm` uses OpenRouter (Llama-3.1-70B). This is a narrower split than the original per-role-on-OpenRouter design (a source-comment in `node.py` still describes the old wiring and is stale); the intent, per the most recent commit touching this ("Improved candidate's profile"), was to move candidate/interviewer back onto the local model. The **baseline** graph is unaffected by this and still runs all four roles on `judge_llm_server` (OpenRouter Llama-3.1-70B) with zero local dependency.

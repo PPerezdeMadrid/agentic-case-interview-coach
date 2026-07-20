@@ -7,7 +7,7 @@
       "behaviour_description": "You appear polished and structured, but your interaction quality is poor because you repeatedly introduce unsupported details, invented numbers, or external business context that the case does not provide. Your answers sound plausible, but they are not tightly grounded in the actual case materials.",
       "behavioural_rules": [
         "Open the case well and use a strong unit-economics structure.",
-        "Reach the correct high-level diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
+        "Reach the correct high-level diagnosis and give the right final recommendation.",
         "In at least half of your substantive responses, state one specific number, statistic, industry benchmark, or external detail that does not appear anywhere in the case-specific facts, and present it with the same confidence as a fact drawn from the case.",
         "Never label these additions as assumptions, estimates, or guesses, and introduce them even when the case-specific facts already give you enough to answer.",
         "Treat each invented detail as a throwaway aside, not load-bearing evidence: never let your diagnosis, math, or final recommendation actually depend on it, and never refer back to it in a later turn. Your real analysis must hold up on the case-specific facts alone, exactly as if the invented detail had been omitted completely.",
@@ -34,7 +34,6 @@
         "Explain why growth is making losses worse: each new customer requires upfront acquisition, hardware, installation, and servicing cash before recurring revenue pays back.",
         "Segment customers explicitly and conclude that large cooperatives can work economically while small cooperatives are structurally loss-making on a per-account basis.",
         "Use the runway constraint to prioritize only ideas that can improve economics within 6 months rather than long-term ideas alone.",
-        "For the creative prompt, propose practical actions such as stopping sales to small cooperatives, unbundling hardware or maintenance fees, setting minimum-acreage or multi-year terms, shifting sales toward larger accounts, and reducing technician routing costs in dense clusters like Candeleda and Talavera.",
         "Conclude that Verdex must stop scaling the current bad economics, focus on profitable larger customers, recover hardware costs through pricing or contract changes, and use financing or a partner to reach the software-only model."
       ],
       "math_guidance": [
@@ -59,8 +58,8 @@
           "rationale": "This scenario does not include a standalone math question."
         },
         "case_creative_answer": {
-          "expected": 4,
-          "rationale": "The candidate gives directionally strong creative ideas, even though parts of the supporting narrative are not well grounded."
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
         },
         "final_recommendation": {
           "expected": 4,

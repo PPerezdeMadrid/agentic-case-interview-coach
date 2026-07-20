@@ -1,21 +1,21 @@
 {
   "golden_set": "worldcup",
-  "csv_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/database/judge_evaluation/judge_golden_set_worldcup.csv",
+  "csv_path": "database/node_eval/judge_eval/judge_golden_set_worldcup.csv",
   "model": "meta-llama/Llama-3.3-70B-Instruct",
-  "computed_at": "2026-07-17T15:18:33+00:00",
-  "n_total": 70,
-  "n_scored": 70,
+  "computed_at": "2026-07-19T08:58:00+00:00",
+  "n_total": 79,
+  "n_scored": 79,
   "n_errors": 0,
-  "n_correct": 56,
-  "accuracy": 0.8,
+  "n_correct": 68,
+  "accuracy": 0.8608,
   "confusion": {
-    "true_positive": 33,
-    "true_negative": 23,
-    "false_positive": 12,
+    "true_positive": 32,
+    "true_negative": 36,
+    "false_positive": 9,
     "false_negative": 2
   },
-  "precision": 0.7333,
-  "recall": 0.9429,
+  "precision": 0.7805,
+  "recall": 0.9412,
   "records": [
     {
       "conversation_id": "WC_01",
@@ -23,9 +23,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the case's core data, such as the revenue and cost economics, to understand the impact of the expansion on profitability",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+        "Ask the candidate to propose a structure for analyzing the case before touching numbers",
+        "Request the candidate to quantify the impact of the expansion on revenue and cost streams",
+        "Check whether the candidate can identify the root cause of the profitability problem"
       ],
       "error": null
     },
@@ -35,9 +35,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the case's core data, such as the revenue and cost economics, to understand the impact of the expansion on profitability",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including a clear synthesis of the case evidence, risks, and next steps"
+        "Ask the candidate to propose a structure for analyzing the problem before touching numbers",
+        "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
+        "Check whether the candidate can identify the root cause of the margin dilution and propose a recommendation to address it"
       ],
       "error": null
     },
@@ -47,9 +47,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the core data of the case, including the revenue and cost structure of the tournament",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the situation",
+        "Request the candidate to break down revenue and cost streams to identify the root cause of the profitability issue",
+        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
       ],
       "error": null
     },
@@ -59,9 +59,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to understand their synthesis of the case and proposed solution"
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
+        "Request the candidate to analyze the per-match economics and identify the key drivers of the margin dilution",
+        "Ask the candidate for a final recommendation on how to address the margin dilution issue, including specific steps the Committee can take to redesign the commercial model or control costs"
       ],
       "error": null
     },
@@ -71,9 +71,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of revenue dilution and cost increases on the profitability of the tournament",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
+        "Request the candidate to provide a clear recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the tournament's cost structure and potential areas for cost reduction or optimization"
       ],
       "error": null
     },
@@ -83,9 +83,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to determine if they can synthesize their findings and provide a clear direction for the client"
+        "Ask the candidate to quantify the revenue and cost drivers to understand the impact of expansion on profitability",
+        "Request the candidate to provide a final recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the case's core data, such as the 45% revenue growth and the decline in EBITDA margin from 38% to 24%"
       ],
       "error": null
     },
@@ -95,9 +95,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including specific actions to address the margin gap and associated risks"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Explore the potential risks and limitations of the candidate's potential recommendations, such as renegotiating broadcasting contracts or setting cost-sharing targets with host countries"
       ],
       "error": null
     },
@@ -107,8 +107,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation to the Secretary General",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size the opportunity and provide a reality check"
+        "Ask the candidate for a final recommendation on how to address the profitability issue",
+        "Explore the potential risks and limitations of the candidate's proposed solutions",
+        "Discuss potential next steps for the Interconta World Football Cup Organizing Committee to improve profitability"
       ],
       "error": null
     },
@@ -118,9 +119,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution issue"
+        "Ask the candidate for a final recommendation on how to address the profitability issue",
+        "Explore the candidate's thoughts on potential risks and limitations of their proposed solution",
+        "Discuss potential next steps for the Interconta World Football Cup Organizing Committee to implement the candidate's recommendation"
       ],
       "error": null
     },
@@ -130,9 +131,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the case's core data, specifically the revenue and cost streams, and how they are affected by the expansion",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including a clear synthesis of the case evidence, risks, and next steps"
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the situation",
+        "Request the candidate to break down revenue streams and cost streams to identify the root cause of the profitability issue",
+        "Check whether the candidate can quantify the impact of the expansion on revenue and cost per match"
       ],
       "error": null
     },
@@ -142,9 +143,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down the revenue and cost streams to understand the profitability issue",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including specific actions to address the margin dilution problem"
+        "Ask the candidate to break down the revenue and cost streams to understand the impact of expansion on profitability",
+        "Request the candidate to quantify the effect of the expansion on revenue per match and cost per match",
+        "Have the candidate provide a clear recommendation supported by case evidence, risks, and next steps"
       ],
       "error": null
     },
@@ -154,9 +155,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the case's core data, such as the revenue and cost structure, to understand the reasons behind the deteriorating profitability",
-        "Raise the case's creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to evaluate their ability to synthesize information and provide a clear, actionable proposal"
+        "Ask the candidate to break down the revenue and cost streams to understand the profitability issue",
+        "Request the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Check whether the candidate can propose a structured approach to addressing the margin dilution issue and provide a recommendation to the Secretary General"
       ],
       "error": null
     },
@@ -177,53 +178,14 @@
       "error": null
     },
     {
-      "conversation_id": "WC_15",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_16",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_17",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": false,
-      "correct": true,
-      "predicted_focus_areas": [
-        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
-        "Test whether the candidate can quantify the impact of the proposed recommendation on the EBITDA margin gap"
-      ],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_18",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": false,
-      "correct": true,
-      "predicted_focus_areas": [
-        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
-        "Check whether the candidate can quantify the impact of hydration-break monetization on the margin gap",
-        "Ensure the candidate provides a clear recommendation with next steps before concluding the case"
-      ],
-      "error": null
-    },
-    {
       "conversation_id": "WC_19",
       "expected_enough_evidence": false,
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to calculate revenue per match and cost per match for both editions explicitly",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size opportunities and understand their limits",
-        "Request a final recommendation from the candidate, including a clear proposal, supporting evidence, risks, and next steps"
+        "Ask the candidate to calculate revenue per match and cost per match for both editions explicitly and compare them to understand the impact of expansion on profitability",
+        "Request the candidate to provide a final recommendation on how the expansion can be made to pay for itself, including potential strategies to address the margin dilution issue",
+        "Explore the candidate's understanding of the risks and limitations associated with the recommended strategies, such as renegotiating broadcasting contracts or implementing cost-sharing agreements with host countries"
       ],
       "error": null
     },
@@ -233,9 +195,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to calculate revenue and cost per match for both editions to understand the impact of expansion on profitability",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match and to provide a clear explanation of the drivers of the margin dilution",
+        "Check if the candidate can identify potential solutions to address the margin dilution, such as renegotiating broadcasting deals or implementing cost-sharing agreements with host countries"
       ],
       "error": null
     },
@@ -261,9 +223,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to engage with the case's core data, specifically the revenue and cost streams, and how they are affected by the expansion",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution and any associated risks or next steps"
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs",
+        "Raise the case's math question about the broadcasting deal's value per match",
+        "Request a final recommendation from the candidate on how to address the margin dilution"
       ],
       "error": null
     },
@@ -274,8 +236,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to propose a specific structure to analyze the profitability problem",
-        "Raise the case's math question about the impact of expansion on revenue and cost per match",
-        "Request a final recommendation from the candidate on how to address the margin dilution issue"
+        "Request that the candidate quantify the impact of revenue and cost changes on profitability",
+        "Check whether the candidate can identify the key drivers of the declining EBITDA margin"
       ],
       "error": null
     },
@@ -285,9 +247,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate, including a clear proposal for how to address the margin dilution issue"
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
+        "Request a clear recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the tournament's revenue model and its limitations in capturing value per match"
       ],
       "error": null
     },
@@ -393,8 +355,9 @@
       "predicted_enough_evidence": false,
       "correct": false,
       "predicted_focus_areas": [
-        "Ask the candidate to provide a final recommendation to the Secretary General",
-        "Explore the creative question of monetizing hydration breaks in more depth to understand the candidate's ability to size opportunities and assess their impact on the margin gap"
+        "the candidate hasn't been asked for a final recommendation yet",
+        "check if the candidate can quantify the impact of the expansion on revenue and cost streams",
+        "ask the candidate to provide next steps for the Secretary General based on their analysis"
       ],
       "error": null
     },
@@ -416,22 +379,6 @@
     },
     {
       "conversation_id": "WC_41",
-      "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_42",
-      "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_43",
       "expected_enough_evidence": true,
       "predicted_enough_evidence": true,
       "correct": true,
@@ -511,41 +458,14 @@
       "error": null
     },
     {
-      "conversation_id": "WC_53",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_54",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_55",
-      "expected_enough_evidence": false,
-      "predicted_enough_evidence": false,
-      "correct": true,
-      "predicted_focus_areas": [
-        "Ask the case's creative question about monetizing hydration breaks, it hasn't come up yet",
-        "Check whether the candidate can quantify the opportunity and its limits relative to the scale of the problem"
-      ],
-      "error": null
-    },
-    {
       "conversation_id": "WC_56",
       "expected_enough_evidence": false,
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to calculate revenue per match and cost per match for both editions to understand the impact of expansion on profitability",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to think creatively and size opportunities",
-        "Request a final recommendation from the candidate to address the profitability issue and provide a clear direction for the client"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the revenue and cost per match for both editions and explain the change",
+        "Discuss the implications of the revenue and cost changes on the profitability of the tournament"
       ],
       "error": null
     },
@@ -572,8 +492,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to propose a clear structure to analyze the case",
-        "Request the candidate to quantify the impact of revenue and cost changes on profitability",
-        "Check whether the candidate can identify the root cause of the profitability problem"
+        "Request specific numbers or data to understand the revenue and cost streams",
+        "Check whether the candidate can break down the problem into revenue streams (broadcasting, sponsorship, ticketing, hospitality, licensing) versus the incremental cost base created by expansion"
       ],
       "error": null
     },
@@ -583,8 +503,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation to the Secretary General",
-        "Raise the creative question about monetizing hydration breaks to assess the candidate's ability to size the opportunity and understand its limits relative to the scale of the problem"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Test whether the candidate can quantify the impact of the expansion on revenue and cost per match",
+        "Ask the candidate to consider the risks and limitations of their potential recommendations"
       ],
       "error": null
     },
@@ -610,29 +531,13 @@
       "predicted_enough_evidence": false,
       "correct": false,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the potential revenue from monetizing hydration breaks and compare it to the total revenue gap",
-        "Request a clear recommendation on how to address the margin dilution issue, including specific steps and potential risks"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Test whether the candidate can quantify the impact of renegotiating broadcasting deals and cost-sharing with host countries on the EBITDA margin"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_64",
-      "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_65",
-      "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
-      "error": null
-    },
-    {
-      "conversation_id": "WC_66",
       "expected_enough_evidence": true,
       "predicted_enough_evidence": true,
       "correct": true,
@@ -665,6 +570,229 @@
     },
     {
       "conversation_id": "WC_70",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_71",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to clarify their understanding of the objective and propose a structure for analysis",
+        "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
+        "Ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_72",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to break down revenue and costs to understand the profitability issue",
+        "Raise the case's math question about the impact of match count on revenue and costs",
+        "Request a final recommendation from the candidate on how to address the profitability issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_73",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to break down revenue and costs to understand the impact of expansion on profitability",
+        "Request the candidate to quantify the effect of the expansion on revenue and cost per match",
+        "Check whether the candidate can identify the root cause of the margin dilution and propose a recommendation to address it"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_74",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to break down revenue and costs to understand the impact of expansion on profitability",
+        "Request the candidate to quantify the effect of the expansion on revenue per match and cost per match",
+        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_75",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to calculate the cost per match for the upcoming edition to complete the per-match quantification",
+        "Request a final recommendation from the candidate on how to address the margin dilution issue",
+        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_76",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to propose a clear structure for analyzing the case",
+        "Request the candidate to quantify the impact of expansion on revenue and cost per match",
+        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_77",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Request a clear recommendation on how to address the margin dilution issue",
+        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_78",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to provide a final recommendation based on their analysis",
+        "Request the candidate to quantify the potential impact of renegotiating broadcasting deals and implementing cost-sharing agreements with host countries"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_79",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to clarify the objective before analyzing: is the Committee asking for a one-time diagnosis of this edition, or a repeatable model for future editions?",
+        "Request that the candidate propose a structure before touching numbers: revenue streams versus cost streams, then per-match economics old format vs. new format",
+        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_80",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to propose a structure for analyzing the profitability issue before diving into numbers",
+        "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
+        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_81",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to propose a clear structure for analyzing the case",
+        "Request that the candidate quantify the impact of the expansion on revenue and costs per match",
+        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_82",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": true,
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_83",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
+        "Explore the candidate's understanding of the cost base and how it scales with the number of host countries and matches"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_84",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Request a clear recommendation on how to address the margin dilution issue",
+        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_85",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "the candidate hasn't been asked for a final recommendation yet",
+        "test whether the candidate can quantify the impact of the expansion on revenue and cost per match",
+        "ask the candidate to consider the risks and limitations of their potential recommendations"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_86",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Request a clear recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the trade-offs between revenue growth and cost increases due to the expansion"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_87",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Discuss potential risks and limitations of the candidate's potential recommendation"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_88",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_89",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_90",
       "expected_enough_evidence": true,
       "predicted_enough_evidence": true,
       "correct": true,

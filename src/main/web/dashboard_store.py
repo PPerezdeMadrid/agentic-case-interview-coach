@@ -19,9 +19,10 @@ def _json_loads(value: str | None, fallback: Any) -> Any:
     if not value:
         return fallback
     try:
-        return json.loads(value)
+        parsed = json.loads(value)
     except json.JSONDecodeError:
         return fallback
+    return fallback if parsed is None else parsed
 
 
 def _json_dumps(value: Any) -> str:

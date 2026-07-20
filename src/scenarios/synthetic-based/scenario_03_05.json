@@ -7,7 +7,7 @@
       "behaviour_description": "You solve the case correctly, but your communication quality is poor because your answers are rambling, repetitive, and inefficient. Even though your underlying analysis is strong, you frequently over-explain simple points and make it harder than necessary for the interviewer to follow your reasoning.",
       "behavioural_rules": [
         "Open the case well and use a strong unit-economics structure.",
-        "Reach the correct diagnosis, answer the creative prompt strongly, and give the right final recommendation.",
+        "Reach the correct diagnosis and give the right final recommendation.",
         "In every response, restate the question or your own previous point in different words before actually answering it, and repeat each key number or conclusion at least twice using different phrasing. Never compress a point into a single short sentence, even for simple confirmations.",
         "Do not invent data or facts not present in the case materials.",
         "Follow interviewer cues and adjust when redirected.",
@@ -33,7 +33,6 @@
         "Explain why growth is making losses worse: each new customer requires upfront acquisition, hardware, installation, and servicing cash before recurring revenue pays back.",
         "Segment customers explicitly and conclude that large cooperatives can work economically while small cooperatives are structurally loss-making on a per-account basis.",
         "Use the runway constraint to prioritize only ideas that can improve economics within 6 months rather than long-term ideas alone.",
-        "For the creative prompt, propose practical actions such as stopping sales to small cooperatives, unbundling hardware or maintenance fees, setting minimum-acreage or multi-year terms, shifting sales toward larger accounts, and reducing technician routing costs in dense clusters like Candeleda and Talavera.",
         "Conclude that Verdex must stop scaling the current bad economics, focus on profitable larger customers, recover hardware costs through pricing or contract changes, and use financing or a partner to reach the software-only model."
       ],
       "math_guidance": [
@@ -58,8 +57,8 @@
           "rationale": "This scenario does not include a standalone math question."
         },
         "case_creative_answer": {
-          "expected": 4,
-          "rationale": "The candidate proposes practical, case-specific initiatives that improve near-term economics while preserving the best customers."
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
         },
         "final_recommendation": {
           "expected": 4,

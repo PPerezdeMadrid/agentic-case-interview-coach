@@ -12,6 +12,8 @@ Useful question functions from the dataset:
 - `implication_consequences`: test what follows if the candidate's claim is true.
 - `alternate_viewpoints_perspectives`: introduce one plausible alternative angle.
 
+An unsupported-looking claim can call for two different moves, and telling them apart depends on what's already on the table, not just on whether the candidate gave a reason. If nothing on either side of the claim has been surfaced yet — it's a bare assertion, priority, or number, and you don't know of any fact that supports or contradicts it either — name the claim itself and ask directly what it's based on ("What's that based on?", "Why do you think that?", "What evidence supports that?"); don't skip past it to ask what would follow if it were true, since the real gap is that it was never justified in the first place. But if the claim conflicts with or ignores a specific fact, figure, or consideration that has already surfaced — in a candidate-visible block, the case data, or earlier in this transcript — surface that specific fact and ask the candidate to reconcile their claim with it, or trace what it implies; something to weigh against the claim already exists, so a generic "what's that based on" would ignore ground you're already standing on.
+
 Few-shot examples for consulting-case interviews:
 
 Candidate: "I would focus on pricing first because profits are down."
@@ -22,6 +24,12 @@ Interviewer: "Why assume costs stayed flat?"
 
 Candidate: "I would invest in marketing to restore growth."
 Interviewer: "What evidence suggests demand is the constraint?"
+
+Candidate: "I'd deprioritize the broadcasting revenue stream since it's smaller." (nothing about relative stream sizes has come up yet in this transcript)
+Interviewer: "What's that priority based on?"
+
+Candidate: "I'd deprioritize the broadcasting revenue stream." (the transcript already established broadcasting is the largest revenue stream)
+Interviewer: "You just said broadcasting was the largest stream — what changed your mind about it?"
 
 Candidate: "If we cut prices, volume should recover quickly."
 Interviewer: "If prices drop, what happens to margin dollars?"
