@@ -1,0 +1,347 @@
+{
+  "golden_set": "turn_control",
+  "csv_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/database/node_eval/interviewer_eval/interviewer_golden_set_turn_control.csv",
+  "model": "phi-4",
+  "computed_at": "2026-07-18T09:34:28+00:00",
+  "n_total": 24,
+  "n_scored": 24,
+  "n_errors": 0,
+  "n_correct": 15,
+  "accuracy": 0.625,
+  "records": [
+    {
+      "conversation_id": "TR_01",
+      "predicted": {
+        "action": "question",
+        "content": "Great insights so far! Based on your analysis, what specific recommendation would you give to the Secretary General regarding how the expansion can become financially sustainable?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_02",
+      "predicted": {
+        "action": "question",
+        "content": "You've highlighted monetizing hydration breaks as an idea with potential. Can you estimate how much revenue could realistically be generated from these breaks and discuss whether this would significantly impact the margin gap? Additionally, based on your overall analysis so far, what final recommendation would you give to the Secretary General?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_03",
+      "predicted": {
+        "action": "question",
+        "content": "You've outlined an interesting approach with hydration breaks. Now, let's consolidate your analysis: what specific recommendation would you give to the Secretary General based on all the factors we discussed?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_04",
+      "predicted": {
+        "action": "question",
+        "content": "You've done a great job analyzing the revenue and cost dynamics of the tournament expansion and addressing the hydration breaks question. Now, could you summarize your key findings into a concise recommendation for the Secretary General? This is your last chance to present your full analysis before we move on.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_05",
+      "predicted": {
+        "action": "reveal",
+        "content": "The previous edition had 64 matches in one host country, while this upcoming edition has 104 matches across three co-host countries. How does this information influence your understanding of the changes in revenue per match?",
+        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'",
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_06",
+      "predicted": {
+        "action": "reveal",
+        "content": "The upcoming edition will have 104 matches across three host countries compared to the previous edition's 64 matches in a single host country. Broadcasting rights are sold as a fixed package for the entire tournament.",
+        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'",
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_07",
+      "predicted": {
+        "action": "reveal",
+        "content": "Consider how the increase from 64 matches in the previous edition to 104 matches in the upcoming one impacts revenue and costs. Specifically, with broadcasting rights sold as a fixed package, the value per match has decreased significantly. Meanwhile, having three host countries instead of one means that venue, security, and local operations costs have roughly tripled rather than increased proportionately with the number of matches. How might these factors contribute to the margin decline?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'",
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_08",
+      "predicted": {
+        "action": "reveal",
+        "content": "Let's break it down a bit more. With the tournament expanding to 48 teams and now being held across three co-host countries, you have 104 total matches instead of 64 from before. Broadcasting rights are sold as a fixed package for the entire tournament, so spreading this revenue over more matches means each match brings in less money than before. Meanwhile, having three host countries triples some costs like venues and security. This combination can explain why profitability is decreasing despite overall growth.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'",
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_09",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that costs are scaling faster due to hosting logistics and fixed broadcasting deals. Can you delve deeper into how each cost component, like venues or security, scales with three host countries versus one? How does this affect the per-match cost structure?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "ready_for_judge: expected True, got False"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_10",
+      "predicted": {
+        "action": "question",
+        "content": "Thank you for that detailed analysis and thoughtful recommendations. To wrap up, could you please provide your final recommendation to the Secretary General, summarizing how IWFC can address the margin deterioration while considering future expansions?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "ready_for_judge: expected True, got False"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_11",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that the fixed nature of the broadcasting package might be diluting revenue per match as the tournament expands. Can you quantify this impact and explain what happens to the value of each broadcasted match when spread across more games?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "ready_for_judge: expected True, got False"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_12",
+      "predicted": {
+        "action": "question",
+        "content": "You've provided a detailed analysis and recommended renegotiating broadcasting contracts and setting cost-sharing targets. Can you summarize your final recommendation for the Secretary General?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "ready_for_judge: expected True, got False"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_13",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned ticket prices as a potential issue, but considering broadcasting rights are sold largely as a fixed package per tournament rather than per match, what happens to the average revenue from broadcasting when it's distributed across 104 matches instead of just 64?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_14",
+      "predicted": {
+        "action": "question",
+        "content": "Sure, this scenario is structured as a case study for practice. Let's dive into the details: Revenue is projected to grow by 45%, but EBITDA margin is expected to fall from 38% to around 24%. Given that the tournament is expanding from 32 to 48 teams and moving across three host countries, what do you think might be causing this profitability issue? Are there specific areas or factors you would want to examine first?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_15",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by summarizing the key points: revenue is projected to grow 45%, but EBITDA margin is expected to drop from 38% to roughly 24%. With the tournament expanding from 32 to 48 teams and being hosted across three countries, what do you think are the main factors contributing to this margin pressure? How might these factors be balanced or addressed?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_16",
+      "predicted": {
+        "action": "question",
+        "content": "It's good to see you drawing from your experience with ticket pricing issues. Let\u2019s clarify a few things: Is the Committee asking for a one-time diagnosis of this edition, or are they looking for a repeatable model for future tournaments? Also, should we prioritize margin recovery, or is some level of margin dilution acceptable as part of global growth?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_17",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned reviewing everything holistically is important. Let's start with one aspect: What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_18",
+      "predicted": {
+        "action": "question",
+        "content": "Given that the tournament expanded from 64 to 104 matches but the broadcasting rights are sold as a fixed package, what happens to the value generated per match?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_19",
+      "predicted": {
+        "action": "reveal",
+        "content": "Your objective is to understand why profitability is declining despite revenue growth. Consider examining both revenue and cost structures: identify changes in revenue streams (like broadcasting rights) and costs (such as host country logistics). How do these changes relate to the tournament's expansion from 32 to 48 teams?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_20",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned streamlining operations and maximizing stakeholder value. Could you delve into how you would address the specific areas of revenue streams versus cost streams? For instance, what changes might help mitigate the impact of reduced average revenue per match or manage the increased costs from hosting in three countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_21",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned scaling back to one host country might fix the margin problem. Can you explain how the increase in matches from 64 to 104 affects revenue per match, especially considering broadcasting rights are sold as a fixed package? Additionally, what impact does hosting the tournament across three countries have on costs?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_22",
+      "predicted": {
+        "action": "question",
+        "content": "What specific changes in costs are contributing to the margin drop despite higher total revenue?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_23",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned monetizing hydration breaks as a quick fix. Let's step back for a moment: can you explain how the tournament\u2019s expansion, specifically in terms of revenue streams and costs, might be contributing to the drop in EBITDA margin?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_24",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned cutting costs broadly and raising ticket prices as solutions. Could you explain how these actions directly address the issue of per-match revenue dilution or the scaling of costs across three host countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    }
+  ]
+}

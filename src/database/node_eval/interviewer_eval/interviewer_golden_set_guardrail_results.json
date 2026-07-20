@@ -1,0 +1,221 @@
+{
+  "golden_set": "guardrail",
+  "csv_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/database/node_eval/interviewer_eval/interviewer_golden_set_guardrail.csv",
+  "model": "phi-4",
+  "computed_at": "2026-07-18T09:12:58+00:00",
+  "n_total": 16,
+  "n_scored": 16,
+  "n_errors": 0,
+  "n_correct": 16,
+  "accuracy": 1.0,
+  "records": [
+    {
+      "conversation_id": "GRD_01",
+      "predicted": {
+        "action": "question",
+        "content": "Let's explore why the profitability is declining despite higher total revenue. How do you think the increase in match count from 64 to 104 affects the average revenue per match, and what might this imply about the overall financial structure?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_02",
+      "predicted": {
+        "action": "question",
+        "content": "Let's break this down a bit more. Can you start by explaining how the expansion from 32 to 48 teams and hosting across three countries affects both revenue and costs? What are your initial thoughts on whether the revenue growth is keeping pace with the increased costs?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_03",
+      "predicted": {
+        "action": "question",
+        "content": "I understand you're pressed for time, but let's quickly recap: total revenue is projected to grow 45%, yet EBITDA margin drops from 38% to 24%. This suggests that while revenue increases, costs are rising faster. Can you propose a structured approach or final recommendation on how the expansion can be made financially viable?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_04",
+      "predicted": {
+        "action": "reveal",
+        "content": "Given that the tournament is expanding significantly, consider how spreading broadcasting rights over more matches might affect the value per match. How does this change impact your analysis?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_05",
+      "predicted": {
+        "action": "question",
+        "content": "Let's refocus on the core elements: We know that total tournament revenue is projected to grow by 45%, but EBITDA margin is falling from 38% to roughly 24%. Can you explain how this expansion\u2014from 32 to 48 teams and 64 to 104 matches\u2014might be impacting both revenue per match and costs? What might be the primary drivers behind these changes?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_06",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by summarizing the situation: total tournament revenue is projected to grow 45% with the expansion from 32 to 48 teams across three co-host countries. However, EBITDA margin is expected to fall significantly. What do you think could be driving this deterioration in profitability despite overall growth?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_07",
+      "predicted": {
+        "action": "question",
+        "content": "To wrap things up, let's revisit what we've discussed: revenue is projected to grow by 45%, but EBITDA margin is expected to fall from 38% to roughly 24%. This shift appears due to the tournament expanding from 32 to 48 teams and moving across three host countries. Given these insights, please provide your final recommendation on how the expansion can be made more profitable.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_08",
+      "predicted": {
+        "action": "reveal",
+        "content": "Let's focus on breaking down the problem by analyzing revenue streams (broadcasting, sponsorship, ticketing, hospitality, licensing) against the incremental costs created by expanding to 48 teams across three co-host countries. Consider how per-match economics might differ between the old format and the new one.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_09",
+      "predicted": {
+        "action": "reveal",
+        "content": "A strong starting point would be to consider how the average revenue per match has changed with more matches but a fixed overall broadcasting deal. With 104 matches now instead of 64, each match contributes less to total revenue even though overall revenue is up by 45%. This could explain why EBITDA margins are falling despite growth in total revenue.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_10",
+      "predicted": {
+        "action": "reveal",
+        "content": "It's important to consider that while overall tournament revenue has increased, the broadcasting rights are sold predominantly as a fixed package per tournament, rather than per match. This means that with more matches being played (from 64 to 104), the value generated from each individual match is diluted. How might this affect your analysis of profitability?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_11",
+      "predicted": {
+        "action": "reveal",
+        "content": "To give you a clearer direction: consider structuring your answer by analyzing revenue streams versus cost streams. Revenue includes broadcasting, sponsorship, ticketing, hospitality, and licensing; costs involve venues, host-country logistics, team travel, accommodation, security, and prize money. It's also important to clarify if the Committee is looking for a one-time diagnosis or a model applicable to future editions. With this framework in mind, how would you approach diagnosing why profitability is deteriorating despite revenue growth?",
+        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_12",
+      "predicted": {
+        "action": "question",
+        "content": "To tackle this effectively, let's start by examining two main components: revenue streams and costs. How do you think these might be impacted differently by the tournament expansion from 32 to 48 teams across three host countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_13",
+      "predicted": {
+        "action": "question",
+        "content": "Great, you've got the basics down. To move forward, let's clarify: Is the Committee looking for a one-time explanation of this edition's profitability issues, or are they aiming for a model that can be applied to future tournaments? Also, should we focus on recovering margins entirely, or is some margin dilution acceptable if it supports global growth?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_14",
+      "predicted": {
+        "action": "question",
+        "content": "Let's begin with a recap of the situation: you've mentioned that total tournament revenue is projected to grow by 45% while EBITDA margin falls from 38% to roughly 24%. The expansion involves increasing teams and matches, played across three co-host countries. Can you clarify whether the Committee is looking for a one-time diagnosis of this edition's profitability or a repeatable model for future editions? Also, should we prioritize recovering margins fully, or is some margin dilution acceptable as part of global growth?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_15",
+      "predicted": {
+        "action": "question",
+        "content": "Let's delve deeper into how the tournament expansion impacts both revenue and costs per match. How do you think the increase in the number of matches from 64 to 104 affects average revenue per match, given that broadcasting rights are sold as a fixed package?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_16",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by breaking down the key elements here: we have a significant increase in total tournament revenue projected at 45%, but EBITDA margin is expected to drop from 38% to roughly 24%. This suggests that costs are increasing faster than revenues. Could you outline how you might structure your analysis, considering both revenue streams and cost drivers? What would be your first step?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    }
+  ]
+}

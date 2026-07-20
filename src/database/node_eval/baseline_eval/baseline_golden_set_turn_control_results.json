@@ -1,0 +1,347 @@
+{
+  "golden_set": "turn_control",
+  "csv_path": "database/node_eval/baseline_eval/baseline_golden_set_turn_control.csv",
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "socratic_judge_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "computed_at": "2026-07-18T10:54:39+00:00",
+  "n_total": 24,
+  "n_scored": 24,
+  "n_errors": 0,
+  "n_correct": 15,
+  "accuracy": 0.625,
+  "records": [
+    {
+      "conversation_id": "TR_01",
+      "predicted": {
+        "action": "question",
+        "content": "Based on your analysis, what is your final recommendation to the Secretary General on how to address the margin dilution resulting from the expansion of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_02",
+      "predicted": {
+        "action": "question",
+        "content": "Based on your analysis, what is your final recommendation to the Secretary General on how to address the margin dilution resulting from the expansion of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_03",
+      "predicted": {
+        "action": "question",
+        "content": "Based on your analysis, what is your final recommendation to the Secretary General on how to address the margin dilution resulting from the expansion of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_04",
+      "predicted": {
+        "action": "question",
+        "content": "Based on your analysis, what is your final recommendation to the Secretary General on how to address the margin dilution resulting from the expansion of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_05",
+      "predicted": {
+        "action": "question",
+        "content": "You've already been told that the previous edition had 64 matches and this one has 104 matches. Given this, and considering the fixed-package nature of broadcasting rights, how do you think the expansion affects the revenue per match, and what implications might this have for the profitability of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_06",
+      "predicted": {
+        "action": "question",
+        "content": "You've already been given the match count for this edition and the previous one. Let's move forward: what's your analysis of the revenue and cost structure, and how do you think the expansion can be made to pay for itself?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_07",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'",
+        "ready_for_evaluation: expected False, got True",
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_08",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is driving the decline in EBITDA margin despite the growth in revenue, and how would you propose to investigate this further?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['recommend']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_09",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_10",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_11",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_12",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_13",
+      "predicted": {
+        "action": "question",
+        "content": "That's a fair assumption, but can you think of any other factors that might be contributing to the decline in profitability, such as changes in revenue streams or cost structures?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_14",
+      "predicted": {
+        "action": "question",
+        "content": "This is a case study for practice. Now that we have that clarified, can you please recap the situation and provide your initial thoughts on why the profitability of the Interconta World Football Cup is deteriorating despite the growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_15",
+      "predicted": {
+        "action": "question",
+        "content": "Can you start by recapping the situation and clarifying what the Interconta World Football Cup Organizing Committee is trying to achieve? What are the key issues that you think need to be addressed?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_16",
+      "predicted": {
+        "action": "question",
+        "content": "Can you please recap the situation with the Interconta World Football Cup Organizing Committee and clarify what you understand the main objective to be?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_17",
+      "predicted": {
+        "action": "question",
+        "content": "What specifically would you like to explore first: the impact of the expansion on revenue streams or the changes in the cost base?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_18",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_19",
+      "predicted": {
+        "action": "question",
+        "content": "Let's dive into the case. What do you think is the main reason for the decline in EBITDA margin despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_20",
+      "predicted": {
+        "action": "question",
+        "content": "Can you specify which part of the value chain you would focus on and what changes you would make to address the decline in EBITDA margin despite revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_21",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'evaluate'",
+        "ready_for_evaluation: expected False, got True"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_22",
+      "predicted": {
+        "action": "question",
+        "content": "Can you walk me through your thought process on how the expansion from 32 to 48 teams and the increase in matches from 64 to 104 will affect the tournament's revenue and costs?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_23",
+      "predicted": {
+        "action": "question",
+        "content": "Can you take a step back and walk me through your understanding of the case? What are the key drivers of the decline in EBITDA margin despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "TR_24",
+      "predicted": {
+        "action": "question",
+        "content": "Can you please provide a more detailed analysis of the situation and explain how you would approach this case?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "golden_set": "guardrail",
+  "csv_path": "database/node_eval/baseline_eval/baseline_golden_set_guardrail.csv",
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "socratic_judge_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "computed_at": "2026-07-18T10:51:45+00:00",
+  "n_total": 16,
+  "n_scored": 16,
+  "n_errors": 0,
+  "n_correct": 16,
+  "accuracy": 1.0,
+  "records": [
+    {
+      "conversation_id": "GRD_01",
+      "predicted": {
+        "action": "question",
+        "content": "Let's take a step back. Can you recap the situation for me and clarify what you think the Secretary General is trying to achieve with this expansion?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_02",
+      "predicted": {
+        "action": "question",
+        "content": "Let's take a step back. What do you think are the main drivers of the decline in EBITDA margin despite the revenue growth, and how would you recommend the Committee address this issue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_03",
+      "predicted": {
+        "action": "question",
+        "content": "Let's take a step back. Can you walk me through your understanding of the situation and how you would approach this problem?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_04",
+      "predicted": {
+        "action": "question",
+        "content": "What are your thoughts on how the expansion from 32 to 48 teams and the change from one host country to three could be impacting the tournament's profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_05",
+      "predicted": {
+        "action": "question",
+        "content": "Let's refocus on the case at hand. Can you please recap the situation and provide your initial thoughts on why the profitability of the Interconta World Football Cup is deteriorating despite revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_06",
+      "predicted": {
+        "action": "question",
+        "content": "Let's get started with the case. Can you please recap the situation and provide your initial thoughts on why the profitability of the Interconta World Football Cup is deteriorating despite revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_07",
+      "predicted": {
+        "action": "evaluate",
+        "content": "",
+        "block_id": "",
+        "ready_for_evaluation": true,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_08",
+      "predicted": {
+        "action": "question",
+        "content": "Let's focus on the problem at hand. Can you tell me what you understand about the Interconta World Football Cup Organizing Committee's situation and what they're trying to achieve?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_09",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by recapping the situation: we have a 45% growth in revenue, but the EBITDA margin is falling from 38% to 24%. What would you like to know or clarify before analyzing this problem further?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_10",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_11",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start with the basics. Can you recap the situation for me - what's happening with the Interconta World Football Cup's revenue and profitability, and what's the Secretary General's objective?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_12",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by recapping the situation: we have a 45% growth in revenue but a decline in EBITDA margin from 38% to 24%. What are your initial thoughts on how to structure our analysis to understand why profitability is deteriorating despite this growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_13",
+      "predicted": {
+        "action": "question",
+        "content": "Let's dive into the case. Can you recap the situation and clarify what you think the Committee is asking you to achieve?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_14",
+      "predicted": {
+        "action": "question",
+        "content": "Let's dive into the case. Can you start by recapping the situation with the Interconta World Football Cup Organizing Committee and clarifying what you understand the objective to be?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_15",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by recapping the situation: the Interconta World Football Cup is expanding from 32 to 48 teams, and despite a 45% growth in revenue, the EBITDA margin is expected to fall from 38% to 24%. Can you clarify what you think the Committee is asking for - a one-time diagnosis of this edition or a repeatable model for future editions? And what would be your initial approach to tackling this problem?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "GRD_16",
+      "predicted": {
+        "action": "question",
+        "content": "Let's dive into the case. Can you start by recapping the situation and clarifying what you understand the client's objective to be?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    }
+  ]
+}

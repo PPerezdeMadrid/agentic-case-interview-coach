@@ -1,0 +1,274 @@
+{
+  "golden_set": "evidence_handling",
+  "csv_path": "/Users/palomaperezdemadrid/Desktop/Dissertation/agentic-case-interview-coach/src/database/node_eval/interviewer_eval/interviewer_golden_set_evidence_handling.csv",
+  "model": "phi-4",
+  "computed_at": "2026-07-18T07:49:33+00:00",
+  "n_total": 18,
+  "n_scored": 18,
+  "n_errors": 0,
+  "n_correct": 6,
+  "accuracy": 0.3333,
+  "records": [
+    {
+      "conversation_id": "EVI_01",
+      "predicted": {
+        "action": "reveal",
+        "content": "To help you delve deeper into the cost structure, here are some specifics: Team travel and accommodation costs have risen due to inter-country movement during the group stage. Additionally, three host countries mean venues, security, and local operations costs are roughly triplicated rather than scaled by 62.5%. Prize money also scales directly with the number of qualifying teams.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "block_id: expected 'worldcup_creative_001', got '(empty)'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_02",
+      "predicted": {
+        "action": "question",
+        "content": "You've highlighted the per-match revenue dilution and rising costs due to multiple host countries. Let's explore other potential revenue streams. How might sponsorship or licensing be leveraged more effectively given the expanded global reach of this edition?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'reveal', got 'question'",
+        "block_id: expected 'worldcup_creative_001', got '(empty)'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_03",
+      "predicted": {
+        "action": "question",
+        "content": "How would you prioritize addressing the revenue dilution and cost multiplication? Are there any other factors in the financial model that might influence your final recommendation?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'reveal', got 'question'",
+        "block_id: expected 'worldcup_creative_001', got '(empty)'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_04",
+      "predicted": {
+        "action": "question",
+        "content": "Good starting point. How do you think expanding from 64 to 104 matches might affect average revenue per match, considering that broadcasting rights are sold as a fixed package?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_05",
+      "predicted": {
+        "action": "question",
+        "content": "You've asked about how broadcasting revenue is sold, which gives us a good starting point on understanding revenue changes. Let's also consider how costs might be changing with this expansion. What do you think happens to the cost per match when the tournament moves from one host country to three co-host countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['fixed package']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_06",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned team travel and accommodation costs have risen. Given that broadcasting rights are sold as a fixed package per tournament rather than per match, how do you think this affects the revenue per match with the increase in total matches?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_07",
+      "predicted": {
+        "action": "reveal",
+        "content": "In the previous edition, total revenue was EUR 3.0B with total costs of EUR 1.86B, resulting in an EBITDA margin of 38%. This corresponds to approximately EUR 46.9M per match in revenue and EUR 29.1M per match in costs for a tournament with 64 matches.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_08",
+      "predicted": {
+        "action": "reveal",
+        "content": "For the previous edition: total revenue was EUR 3.0B across 64 matches, making it roughly EUR 46.9M per match. Costs were about EUR 1.86B, or roughly EUR 29.1M per match. For the upcoming edition: projected total revenue is EUR 4.35B over 104 matches, which means roughly EUR 41.8M per match. Projected costs are EUR 3.31B, translating to approximately EUR 31.8M per match.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_09",
+      "predicted": {
+        "action": "reveal",
+        "content": "The projected total revenue for the upcoming edition is EUR 4.35 billion, with an EBITDA margin of roughly 24%. For context, in the previous edition, the total revenue was EUR 3.0 billion with a 38% EBITDA margin. The tournament has expanded from 64 matches to 104 matches across three host countries.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_10",
+      "predicted": {
+        "action": "reveal",
+        "content": "The prize money pool has increased in line with the number of qualifying teams, but there are other significant costs to consider as well. With three host countries instead of one, venues, security, and local operations costs have roughly tripled. Additionally, team travel and accommodation expenses are rising because teams must move between host countries during the group stage.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'",
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_11",
+      "predicted": {
+        "action": "question",
+        "content": "Given that broadcasting rights are sold as fixed packages rather than per match, how do you think this affects revenue per match with the increase in matches from 64 to 104? And what about cost implications of hosting across three countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_12",
+      "predicted": {
+        "action": "question",
+        "content": "Given that the tournament is expanding from 64 matches to 104, what happens to the value of the broadcasting deal when it's spread across more matches?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_13",
+      "predicted": {
+        "action": "question",
+        "content": "Let\u2019s clarify what you think the main drivers are behind the profitability issue. Then, I\u2019d like to hear your preliminary thoughts on how you might address this challenge in terms of recommendations for the Secretary General.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_14",
+      "predicted": {
+        "action": "question",
+        "content": "Good starting point\u2014let\u2019s delve into the specifics. Given that revenue is up by 45% while match count increased by 62.5%, how do you think this affects per-match revenue? Additionally, with three host countries now involved instead of one, what might be the impact on costs?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_15",
+      "predicted": {
+        "action": "question",
+        "content": "To start with, let\u2019s clarify your objective here. Are you looking to diagnose this edition of the tournament specifically, or are you aiming for a repeatable model that could apply to future editions? Additionally, it might help to think about whether recovering margin is the top priority, or if some dilution in margins can be acceptable as part of broader global growth.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_16",
+      "predicted": {
+        "action": "reveal",
+        "content": "I understand you'd like to confirm: the upcoming edition will have three co-host countries, up from one previously. With this in mind, how might the increase in host countries affect costs?",
+        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_17",
+      "predicted": {
+        "action": "question",
+        "content": "Remember, with 104 matches instead of 64, what happens to the value each match contributes to the total broadcasting deal?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_18",
+      "predicted": {
+        "action": "reveal",
+        "content": "Broadcasting rights for the tournament are sold predominantly as a fixed package for the whole tournament, rather than priced per match. Given this, how might spreading this fixed revenue over more matches impact the average revenue per match?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "action: expected 'question', got 'reveal'"
+      ],
+      "error": null
+    }
+  ]
+}

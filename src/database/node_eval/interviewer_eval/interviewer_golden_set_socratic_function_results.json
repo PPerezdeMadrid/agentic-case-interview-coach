@@ -1,0 +1,292 @@
+{
+  "golden_set": "socratic_function",
+  "csv_path": "database/node_eval/interviewer_eval/interviewer_golden_set_socratic_function.csv",
+  "model": "phi-4",
+  "socratic_judge_model": "meta-llama/Llama-3.3-70B-Instruct",
+  "computed_at": "2026-07-18T10:23:22+00:00",
+  "n_total": 20,
+  "n_scored": 20,
+  "n_errors": 0,
+  "n_correct": 11,
+  "accuracy": 0.55,
+  "records": [
+    {
+      "conversation_id": "SOC_01",
+      "predicted": {
+        "action": "question",
+        "content": "What specifically suggests that the cost structure is off under this new tournament format?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "premise_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'clarity', got 'premise_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_02",
+      "predicted": {
+        "action": "question",
+        "content": "To better understand why profitability is decreasing despite increased revenues, let's start by breaking down the revenue streams and cost structures. How do you think the expansion from 32 to 48 teams impacts each of these elements?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'clarity', got 'perspective_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_03",
+      "predicted": {
+        "action": "question",
+        "content": "That's a good starting point. To dive deeper into making the tournament more efficient, can you clarify whether the Committee is asking for a one-time diagnosis for this edition or if they're looking for a repeatable model for future editions? Also, how would you propose structuring your analysis to better understand the revenue versus cost dynamics?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "clarity"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_04",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned a scale problem\u2014could you elaborate on how expanding from 32 to 48 teams affects revenue per match versus cost per match? What specific changes in the cost base should we consider given the three host countries?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "clarity"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_05",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_06",
+      "predicted": {
+        "action": "question",
+        "content": "Can you explain why you think the extra costs from expansion are mostly one-off? What evidence or reasoning supports this view?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "premise_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_07",
+      "predicted": {
+        "action": "question",
+        "content": "Let's delve deeper into what happens to the average revenue per match with this expansion. How do you think spreading the fixed broadcasting rights across more matches impacts the revenue per match?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_08",
+      "predicted": {
+        "action": "question",
+        "content": "Given that the tournament is expanding from 64 matches to 104, how do you think this affects average revenue per match, especially considering broadcasting deals are sold as a fixed package? And what might be the impact on costs with three host countries involved?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_09",
+      "predicted": {
+        "action": "question",
+        "content": "What leads you to prioritize addressing costs over revenues in this situation? How do you see per-match economics playing a role?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "premise_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_10",
+      "predicted": {
+        "action": "question",
+        "content": "What specific evidence or reasoning leads you to believe that focusing on ticketing and hospitality will be more effective than analyzing the broadcasting revenue stream?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "premise_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_11",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that expanding to three host countries might have been a mistake. Can you elaborate on which costs or logistical challenges specifically contribute to this view?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "clarity"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'clarity'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_12",
+      "predicted": {
+        "action": "question",
+        "content": "Given that match count has increased by 62.5% while total revenue grew only 45%, how do you think this affects average revenue per match? Also, considering the expansion involves three host countries instead of one, what impact might this have on costs?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_13",
+      "predicted": {
+        "action": "question",
+        "content": "It sounds like you're considering logistical simplification as a solution. However, let\u2019s first delve into understanding how the expansion impacts costs versus revenues. Could you explore whether each match is generating more or less value now compared to before, particularly in terms of broadcasting and sponsorship?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_14",
+      "predicted": {
+        "action": "question",
+        "content": "You've suggested renegotiating the broadcasting deal to capture more value as the number of matches increases. What are your thoughts on how the expansion impacts other cost areas, such as venue and logistics with three host countries? How might these affect the overall profitability?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_15",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned cutting the prize money pool as a way to reduce costs. Can you elaborate on which specific cost areas you think are most responsible for the EBITDA margin decline?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "clarity"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'perspective_testing', got 'clarity'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_16",
+      "predicted": {
+        "action": "question",
+        "content": "Before analyzing, let's clarify: is the Committee asking for a one-time diagnosis of this edition's profitability issue, or are they looking for a repeatable model for future editions? Also, should margin recovery be the priority, or is some margin dilution acceptable as part of global growth?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "clarity"
+      },
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'perspective_testing', got 'clarity'"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_17",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that expanding into three host countries is the main issue. Can you explore how the expansion affects both revenue and cost per match? Consider that total revenue grew by 45%, but matches increased from 64 to 104, which might affect average revenue per match.",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_18",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that broadcasting is fixed per tournament rather than per match. Can you explain how spreading the same broadcasting revenue over more matches might affect the average value per match, and why ticketing and hospitality should be prioritized in your analysis?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_19",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "SOC_20",
+      "predicted": {
+        "action": "question",
+        "content": "You mentioned that it's an execution problem with costs - have you considered how the revenue per match might be affected by increasing from 64 to 104 matches? How does this change in match count impact both revenue generation and cost structure?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    }
+  ]
+}

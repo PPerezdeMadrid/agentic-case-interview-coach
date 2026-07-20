@@ -1,0 +1,525 @@
+{% extends "base.html" %}
+
+{% macro pct(value) -%}
+  {{ (value * 100) | round(1) if value is not none else '–' }}{{ '%' if value is not none else '' }}
+{%- endmacro %}
+
+{% macro bool_label(value) -%}
+  {{ 'True' if value else 'False' }}
+{%- endmacro %}
+
+{% macro row_status(correct) -%}
+  {{ 'status-exact-match' if correct else 'status-different' }}
+{%- endmacro %}
+
+{% macro category_section(id_prefix, categories, radar, heading) %}
+{% if categories %}
+<div class="panel-heading">
+  <div>
+    <p class="eyebrow">{{ categories|length }} categories</p>
+    <h3>{{ heading }}</h3>
+    <p class="lede">
+      Records grouped by the golden set's <code>category</code> column,
+      sorted worst-accuracy-first. The radar plots the same numbers
+      spatially &mdash; each spoke is one category (numbered to match the
+      <code>#</code> column below), worst at the top going clockwise.
+    </p>
+  </div>
+</div>
+
+{% if radar %}
+<div class="radar-wrap">
+  <svg class="radar-chart" id="{{ id_prefix }}-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+    {% for ring in radar.rings %}
+    <polygon class="radar-grid-ring{{ ' radar-grid-ring--mid' if ring.frac == 0.5 else '' }}" points="{{ ring.points }}"></polygon>
+    {% endfor %}
+    {% for axis in radar.axes %}
+    <line class="radar-spoke" x1="{{ radar.cx }}" y1="{{ radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
+    <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.index }}</text>
+    {% endfor %}
+    <polygon class="radar-category-shape" points="{{ radar.polygon_points }}"></polygon>
+    {% for axis in radar.axes %}
+    <circle class="radar-vertex" cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="5" style="fill: {{ axis.color }};"></circle>
+    <circle
+      class="radar-hit"
+      cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="12"
+      data-label="#{{ axis.index }} {{ axis.category }}"
+      data-pct="{{ pct(axis.accuracy) }}"
+    ></circle>
+    {% endfor %}
+  </svg>
+  <div class="radar-tooltip" id="{{ id_prefix }}-radar-tooltip" role="tooltip" hidden></div>
+  <div class="radar-legend">
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> &ge;90% accurate</div>
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> 50&ndash;89% accurate</div>
+    <div class="radar-legend-item"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> &lt;50% accurate &mdash; systematic failure</div>
+  </div>
+  <p class="helper radar-caption">Hover a dot for the category name. Center = 0% accuracy on that category, outer ring = 100%.</p>
+</div>
+<script>
+  (function () {
+    var svg = document.getElementById('{{ id_prefix }}-radar');
+    var tooltip = document.getElementById('{{ id_prefix }}-radar-tooltip');
+    if (!svg || !tooltip) return;
+    var wrap = svg.closest('.radar-wrap');
+
+    function pointFor(evt) {
+      var target = evt.target.closest ? evt.target.closest('.radar-hit') : null;
+      return target && target.dataset ? target : null;
+    }
+
+    svg.addEventListener('pointermove', function (evt) {
+      var target = pointFor(evt);
+      if (!target) {
+        tooltip.hidden = true;
+        return;
+      }
+      var wrapRect = wrap.getBoundingClientRect();
+      tooltip.textContent = target.dataset.label + ' — ' + target.dataset.pct;
+      tooltip.style.left = (evt.clientX - wrapRect.left) + 'px';
+      tooltip.style.top = (evt.clientY - wrapRect.top) + 'px';
+      tooltip.hidden = false;
+    });
+
+    svg.addEventListener('pointerleave', function () {
+      tooltip.hidden = true;
+    });
+  })();
+</script>
+{% endif %}
+
+<details class="disclosure" id="{{ id_prefix }}-category-details">
+  <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
+  <div class="form-grid disclosure-body" style="padding-bottom: 0;">
+    <label>
+      <span>Filter by category</span>
+      <select id="{{ id_prefix }}-category-filter">
+        <option value="">All categories ({{ categories|length }})</option>
+        {% for cat in categories %}
+        <option value="{{ cat.category }}">{{ cat.category }} ({{ cat.total }})</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <div class="table-wrap disclosure-body">
+    <table id="{{ id_prefix }}-category-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Category</th>
+          <th>Total</th>
+          <th>Correct</th>
+          <th>Wrong</th>
+          {% if categories|selectattr('errors', 'gt', 0)|list %}<th>Errors</th>{% endif %}
+          <th>Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr data-category="{{ cat.category }}">
+          <td>{{ cat.index }}</td>
+          <td><code>{{ cat.category }}</code></td>
+          <td>{{ cat.total }}</td>
+          <td>{{ cat.correct }}</td>
+          <td>{{ cat.wrong }}</td>
+          {% if categories|selectattr('errors', 'gt', 0)|list %}<td>{{ cat.errors or '' }}</td>{% endif %}
+          <td>
+            <div class="accuracy-cell">
+              <span class="accuracy-bar">
+                <span class="accuracy-bar-fill tier-{{ cat.tier }}" style="width: {{ (cat.accuracy * 100) if cat.accuracy is not none else 0 }}%;"></span>
+              </span>
+              <span class="accuracy-label">{{ pct(cat.accuracy) }}</span>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</details>
+{% endif %}
+{% endmacro %}
+
+{% block title %}Agents · Interviewer | main dashboard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-heading panel-heading--stack">
+    <div>
+      <p class="eyebrow">Agents &middot; Interviewer &middot; Cached</p>
+      <h1>Interviewer behaviour: agentic vs baseline</h1>
+      <p class="lede">
+        Runs each row of a golden set through the real interviewer LLM, using the
+        exact rendered prompt <code>interviewer_node</code> would send, and grades
+        its <code>action</code>/<code>block_id</code>/<code>ready_for_judge</code>/
+        message against whichever of that row's <code>expected_*</code>,
+        <code>must_contain</code>, <code>must_not_contain</code> or
+        <code>forbidden_substrings</code> columns apply. Baseline (the single
+        fused interviewer/judge/grader node) is graded on the exact same
+        fixture, so the two are directly comparable. The 4 golden sets test
+        different mechanisms (Socratic question function, evidence
+        reveal/state/decline, leak resistance, turn control) &mdash; pick one
+        below.
+      </p>
+    </div>
+    {% if result or baseline_result %}
+    <div class="chip-row">
+      {% if result %}<span class="chip">agentic accuracy {{ pct(result.accuracy) }}</span>{% endif %}
+      {% if baseline_result %}<span class="chip">baseline accuracy {{ pct(baseline_result.accuracy) }}</span>{% endif %}
+      {% if result and result.computed_at %}<span class="chip">agentic computed {{ result.computed_at | format_datetime }}</span>{% endif %}
+      {% if baseline_result and baseline_result.computed_at %}<span class="chip">baseline computed {{ baseline_result.computed_at | format_datetime }}</span>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if golden_sets|length > 1 %}
+  <form class="form-grid" method="get" action="{{ url_for('agents_interviewer') }}">
+    <label>
+      <span>Golden set</span>
+      <select name="golden_set" onchange="this.form.submit()">
+        {% for g in golden_sets %}
+        <option value="{{ g }}" {% if g == golden_set %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <noscript><button class="button" type="submit">Load</button></noscript>
+  </form>
+  {% endif %}
+
+  <p class="helper" style="padding: 0 24px 24px;">
+    This page does not recompute live &mdash; each row costs one (or two, for
+    <code>socratic_function</code>) real LLM call, so it only reads cached
+    output. To (re)compute the agentic side, from <code>src/</code> run
+    <code>make interviewer-eval INTERVIEWER_GOLDEN_SET={{ golden_set or '<name>' }}</code>;
+    to (re)compute baseline's side, run
+    <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set or '<name>' }}</code>,
+    then reload this page.
+    {% if golden_set %}
+    <a href="{{ url_for('agents_interviewer', golden_set=golden_set, refresh=1) }}">Reload cache</a>
+    {% endif %}
+  </p>
+
+  {% if not golden_sets %}
+  <div class="prompt-box">
+    <p class="helper">
+      No interviewer golden-set results found under
+      <code>database/node_eval/interviewer_eval/</code>. Build the golden-set CSVs (see
+      <code>main/studio/node_eval/interviewer_eval/build_interviewer_golden_sets.py</code>),
+      then run <code>make interviewer-eval INTERVIEWER_GOLDEN_SET=&lt;name&gt;</code> (or
+      <code>run_interviewer_golden_set.py</code> directly from <code>src/</code>) first.
+    </p>
+  </div>
+  {% else %}
+
+  {% if result or baseline_result %}
+  <div class="metric-grid">
+    <div class="metric-card{{ ' metric-card--winner' if result and baseline_result and (result.accuracy or 0) >= (baseline_result.accuracy or 0) else '' }}">
+      <span>Agentic (interviewer) accuracy</span>
+      <strong>{{ pct(result.accuracy) if result else '–' }}</strong>
+    </div>
+    <div class="metric-card{{ ' metric-card--winner' if result and baseline_result and (baseline_result.accuracy or 0) > (result.accuracy or 0) else '' }}">
+      <span>Baseline accuracy</span>
+      <strong>{{ pct(baseline_result.accuracy) if baseline_result else '–' }}</strong>
+    </div>
+    <div class="metric-card">
+      <span>Gap (agentic &minus; baseline)</span>
+      <strong>
+        {% if result and result.accuracy is not none and baseline_result and baseline_result.accuracy is not none %}
+          {{ pct(result.accuracy - baseline_result.accuracy) }}
+        {% else %}
+          &ndash;
+        {% endif %}
+      </strong>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if comparison %}
+  <details class="disclosure" open>
+    <summary>Per-category comparison ({{ comparison|length }} categories)</summary>
+    <div class="table-wrap disclosure-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Agentic (interviewer)</th>
+            <th>Baseline</th>
+            <th>Gap</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in comparison %}
+          <tr>
+            <td><code>{{ row.category }}</code></td>
+            <td>
+              <div class="accuracy-cell">
+                <span class="accuracy-bar">
+                  <span class="accuracy-bar-fill tier-{{ row.agentic_tier }}" style="width: {{ (row.agentic_accuracy * 100) if row.agentic_accuracy is not none else 0 }}%;"></span>
+                </span>
+                <span class="accuracy-label">{{ pct(row.agentic_accuracy) }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="accuracy-cell">
+                <span class="accuracy-bar">
+                  <span class="accuracy-bar-fill tier-{{ row.baseline_tier }}" style="width: {{ (row.baseline_accuracy * 100) if row.baseline_accuracy is not none else 0 }}%;"></span>
+                </span>
+                <span class="accuracy-label">{{ pct(row.baseline_accuracy) }}</span>
+              </div>
+            </td>
+            <td>{{ pct(row.gap) if row.gap is not none else '–' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% endif %}
+
+  {% if error %}
+  <div class="prompt-box"><p class="helper">Agentic: {{ error }}</p></div>
+  {% endif %}
+  {% if baseline_error %}
+  <div class="prompt-box"><p class="helper">Baseline: {{ baseline_error }}</p></div>
+  {% endif %}
+
+  {% if result %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Agentic</p>
+      <h2>Interviewer node: move accuracy</h2>
+    </div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-card"><span>Accuracy</span><strong>{{ pct(result.accuracy) }}</strong></div>
+    <div class="metric-card"><span>Correct</span><strong>{{ result.n_correct }}/{{ result.n_scored }}</strong></div>
+    <div class="metric-card"><span>Errored calls</span><strong>{{ result.n_errors }}</strong></div>
+  </div>
+
+  {{ category_section('agentic-interviewer', categories, radar, 'Pass / fail by category') }}
+
+  <details class="disclosure" id="agentic-interviewer-conversation-details">
+    <summary>Show per-conversation detail ({{ result.records|length }} conversations)</summary>
+    <div class="table-wrap disclosure-body compact-table">
+      <table id="agentic-interviewer-conversation-table">
+        <thead>
+          <tr>
+            <th>Conversation</th>
+            <th>Category</th>
+            <th>Expected</th>
+            <th>Predicted</th>
+            <th>Result</th>
+            <th>Prompt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result.records %}
+          <tr data-category="{{ row.category }}">
+            <td>{{ row.conversation_id }}</td>
+            <td><code>{{ row.category }}</code></td>
+            <td>
+              <p class="helper compact-list">
+                {% if row.expected_action %}action: <code>{{ row.expected_action }}</code><br>{% endif %}
+                {% if row.expected_block_id %}block_id: <code>{{ row.expected_block_id }}</code><br>{% endif %}
+                {% if row.expected_ready_for_judge %}ready_for_judge: <code>{{ row.expected_ready_for_judge }}</code><br>{% endif %}
+                {% if row.expected_socratic_function %}function: <code>{{ row.expected_socratic_function }}</code><br>{% endif %}
+                {% if row.must_contain %}must contain: <code>{{ row.must_contain }}</code><br>{% endif %}
+                {% if row.must_not_contain %}must not contain: <code>{{ row.must_not_contain }}</code><br>{% endif %}
+                {% if row.forbidden_substrings %}forbidden: <code>{{ row.forbidden_substrings }}</code>{% endif %}
+              </p>
+            </td>
+            <td>
+              {% if row.predicted %}
+              <p class="helper compact-list">{{ row.predicted.content }}</p>
+              <p class="helper compact-list">
+                action: <code>{{ row.predicted.action }}</code>
+                {% if row.predicted.block_id %} &middot; block_id: <code>{{ row.predicted.block_id }}</code>{% endif %}
+                &middot; ready_for_judge: <code>{{ bool_label(row.predicted.ready_for_judge) }}</code>
+                {% if row.predicted.socratic_function %} &middot; function: <code>{{ row.predicted.socratic_function }}</code>{% endif %}
+              </p>
+              {% else %}
+              <span class="helper">&ndash;</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if row.error %}
+              <span class="status status-not-tested">error</span>
+              <div class="helper">{{ row.error.message }}</div>
+              {% else %}
+              <span class="status {{ row_status(row.correct) }}">{{ 'correct' if row.correct else 'wrong' }}</span>
+              {% if not row.correct and row.failed_checks %}
+              <ul class="helper compact-list">
+                {% for check in row.failed_checks %}<li>{{ check }}</li>{% endfor %}
+              </ul>
+              {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              <details class="trace-json">
+                <summary>Interviewer input</summary>
+                <pre>{{ row.interviewer_input }}</pre>
+              </details>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  {% if categories %}
+  <script>
+    (function () {
+      var select = document.getElementById('agentic-interviewer-category-filter');
+      if (!select) return;
+      var categoryRows = document.querySelectorAll('#agentic-interviewer-category-table tbody tr[data-category]');
+      var conversationRows = document.querySelectorAll('#agentic-interviewer-conversation-table tbody tr[data-category]');
+      var conversationDetails = document.getElementById('agentic-interviewer-conversation-details');
+
+      function applyFilter() {
+        var value = select.value;
+        categoryRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        conversationRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        if (value && conversationDetails) {
+          conversationDetails.open = true;
+        }
+      }
+
+      select.addEventListener('change', applyFilter);
+    })();
+  </script>
+  {% endif %}
+  {% endif %}
+
+  {% if baseline_result %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Baseline</p>
+      <h2>Fused node: move accuracy</h2>
+      <p class="lede">
+        Same <code>{{ golden_set }}</code> golden set, graded on baseline's
+        single combined interviewer/judge/grader call instead of a
+        role-differentiated interviewer.
+      </p>
+    </div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-card"><span>Accuracy</span><strong>{{ pct(baseline_result.accuracy) }}</strong></div>
+    <div class="metric-card"><span>Correct</span><strong>{{ baseline_result.n_correct }}/{{ baseline_result.n_scored }}</strong></div>
+    <div class="metric-card"><span>Errored calls</span><strong>{{ baseline_result.n_errors }}</strong></div>
+  </div>
+
+  {{ category_section('baseline-interviewer', baseline_categories, baseline_radar, 'Pass / fail by category') }}
+
+  <details class="disclosure" id="baseline-interviewer-conversation-details">
+    <summary>Show per-conversation detail ({{ baseline_result.records|length }} conversations)</summary>
+    <div class="table-wrap disclosure-body compact-table">
+      <table id="baseline-interviewer-conversation-table">
+        <thead>
+          <tr>
+            <th>Conversation</th>
+            <th>Category</th>
+            <th>Expected</th>
+            <th>Predicted</th>
+            <th>Result</th>
+            <th>Prompt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in baseline_result.records %}
+          <tr data-category="{{ row.category }}">
+            <td>{{ row.conversation_id }}</td>
+            <td><code>{{ row.category }}</code></td>
+            <td>
+              <p class="helper compact-list">
+                {% if row.expected_action %}action: <code>{{ row.expected_action }}</code><br>{% endif %}
+                {% if row.expected_block_id %}block_id: <code>{{ row.expected_block_id }}</code><br>{% endif %}
+                {% if row.expected_ready_for_judge %}ready_for_evaluation: <code>{{ row.expected_ready_for_judge }}</code><br>{% endif %}
+                {% if row.expected_socratic_function %}function: <code>{{ row.expected_socratic_function }}</code><br>{% endif %}
+                {% if row.must_contain %}must contain: <code>{{ row.must_contain }}</code><br>{% endif %}
+                {% if row.must_not_contain %}must not contain: <code>{{ row.must_not_contain }}</code><br>{% endif %}
+                {% if row.forbidden_substrings %}forbidden: <code>{{ row.forbidden_substrings }}</code>{% endif %}
+              </p>
+            </td>
+            <td>
+              {% if row.predicted %}
+              <p class="helper compact-list">{{ row.predicted.content }}</p>
+              <p class="helper compact-list">
+                action: <code>{{ row.predicted.action }}</code>
+                {% if row.predicted.block_id %} &middot; block_id: <code>{{ row.predicted.block_id }}</code>{% endif %}
+                &middot; ready_for_evaluation: <code>{{ bool_label(row.predicted.ready_for_evaluation) }}</code>
+                {% if row.predicted.socratic_function %} &middot; function: <code>{{ row.predicted.socratic_function }}</code>{% endif %}
+              </p>
+              {% else %}
+              <span class="helper">&ndash;</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if row.error %}
+              <span class="status status-not-tested">error</span>
+              <div class="helper">{{ row.error.message }}</div>
+              {% else %}
+              <span class="status {{ row_status(row.correct) }}">{{ 'correct' if row.correct else 'wrong' }}</span>
+              {% if not row.correct and row.failed_checks %}
+              <ul class="helper compact-list">
+                {% for check in row.failed_checks %}<li>{{ check }}</li>{% endfor %}
+              </ul>
+              {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              <details class="trace-json">
+                <summary>Baseline input</summary>
+                <pre>{{ row.baseline_input }}</pre>
+              </details>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  {% if baseline_categories %}
+  <script>
+    (function () {
+      var select = document.getElementById('baseline-interviewer-category-filter');
+      if (!select) return;
+      var categoryRows = document.querySelectorAll('#baseline-interviewer-category-table tbody tr[data-category]');
+      var conversationRows = document.querySelectorAll('#baseline-interviewer-conversation-table tbody tr[data-category]');
+      var conversationDetails = document.getElementById('baseline-interviewer-conversation-details');
+
+      function applyFilter() {
+        var value = select.value;
+        categoryRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        conversationRows.forEach(function (row) {
+          row.style.display = (!value || row.dataset.category === value) ? '' : 'none';
+        });
+        if (value && conversationDetails) {
+          conversationDetails.open = true;
+        }
+      }
+
+      select.addEventListener('change', applyFilter);
+    })();
+  </script>
+  {% endif %}
+  {% else %}
+  <div class="prompt-box">
+    <p class="helper">
+      No cached baseline results for <code>{{ golden_set }}</code> yet &mdash;
+      run <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set }}</code>
+      to populate this section.
+    </p>
+  </div>
+  {% endif %}
+
+  {% endif %}
+</section>
+{% endblock %}
