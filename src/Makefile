@@ -40,9 +40,9 @@ help:
 	@printf "%s\n" "  make workbench    Start the workbench web app on port $(WORKBENCH_PORT)"
 	@printf "%s\n" "  make app          Alias for make workbench"
 	@printf "%s\n" "  make test         Run studio and workbench test suites"
-	@printf "%s\n" "  make run-all      Run baseline and agentic across all scenarios [N=<repeat>]"
-	@printf "%s\n" "  make run-all-baseline  Run baseline across all scenarios [N=<repeat>]"
-	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios [N=<repeat>]"
+	@printf "%s\n" "  make run-all      Run baseline and agentic across all scenarios [N=<repeat>] [LABEL=...]"
+	@printf "%s\n" "  make run-all-baseline  Run baseline across all scenarios [N=<repeat>] [LABEL=...]"
+	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios [N=<repeat>] [LABEL=...]"
 	@printf "%s\n" "  make experiment CASE=<case_id> N=<repeat> [GRAPH=agentic|baseline|both] [LABEL=...]"
 	@printf "%s\n" "                    Run every scenario of a case N times each"
 	@printf "%s\n" "  make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]"
@@ -107,13 +107,13 @@ test:
 	cd main/web && $(PY) -m unittest discover -s tests
 
 run-all:
-	$(PY) run_all_scenarios.py --graph both --repeat $(N)
+	$(PY) run_all_scenarios.py --graph both --repeat $(N) --label "$(LABEL)"
 
 run-all-baseline:
-	$(PY) run_all_scenarios.py --graph baseline --repeat $(N)
+	$(PY) run_all_scenarios.py --graph baseline --repeat $(N) --label "$(LABEL)"
 
 run-all-agentic:
-	$(PY) run_all_scenarios.py --graph agentic --repeat $(N)
+	$(PY) run_all_scenarios.py --graph agentic --repeat $(N) --label "$(LABEL)"
 
 # --- Experiment: run every scenario of one case N times each ---
 # Usage: make experiment CASE=01-energy-company N=10 [GRAPH=agentic] [LABEL=exp1]
