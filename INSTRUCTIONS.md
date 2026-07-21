@@ -8,7 +8,6 @@ All commands below are run from the `src/` directory unless stated otherwise:
 cd src
 ```
 
----
 
 ## 1. Setup
 
@@ -53,7 +52,6 @@ WORKBENCH_PORT=5020
 
 `LMSTUDIO_BASE_URL` can be given with or without the trailing `/v1`; the runtime normalizes it. Any OpenAI-compatible endpoint (local LM Studio, remote vLLM, OpenRouter, ...) works as long as it exposes a chat-completions API. See [.env](.env) for the values currently configured in this checkout.
 
----
 
 ## 2. Running Interview Batches
 
@@ -133,7 +131,6 @@ Each batch writes:
 
 Each record includes: graph name, scenario reference, full transcript, final feedback, case-performance scores + rationales, dialog-quality scores + rationales, and error status if the run failed.
 
----
 
 ## 3. The Workbench (Web UI)
 
@@ -169,7 +166,6 @@ What it lets you do:
 - add human evaluation notes and scores
 - (per the Makefile help) view node-eval results under **Agents > Judge** and **Agents > Interviewer**, including the agentic-vs-baseline comparison
 
----
 
 ## 4. LangGraph Dev Server
 
@@ -185,7 +181,6 @@ Equivalent direct call:
 cd main/studio && langgraph dev --no-browser
 ```
 
----
 
 ## 5. Tests
 
@@ -198,7 +193,6 @@ Runs, from `src/`:
 - `main/studio/tests/` (`python3 -m unittest discover -s tests`)
 - `main/web/tests/` (`python3 -m unittest discover -s tests`)
 
----
 
 ## 6. Node-Level Evaluation Suites
 
@@ -272,7 +266,6 @@ Equivalent direct call:
 python3 rag_ablation_eval.py --batch <batch_dir_name> [--limit N]
 ```
 
----
 
 ## 7. Command Reference (cheat sheet)
 
@@ -305,13 +298,11 @@ make help                                       # prints this same target list
 
 Run `make help` at any time from `src/` to see the authoritative, up-to-date list of targets — this document mirrors it but the Makefile is the source of truth.
 
----
 
 ## 8. HPC / Remote GPU Notes
 
 For running on a Slurm cluster with vLLM-served models instead of a local LM Studio endpoint, see the batch scripts [src/server.bash](src/server.bash) (serves Mistral-Nemo as candidate + Llama-3.3-70B as judge, then runs `run_all_scenarios.py --graph both --repeat 3`) and [src/experiment.bash](src/experiment.bash) (Mistral-only variant, `--repeat 1`), plus [src/main/GPU-server.md](src/main/GPU-server.md) for setup details.
 
----
 
 ## Related Documentation
 

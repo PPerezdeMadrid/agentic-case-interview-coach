@@ -157,7 +157,15 @@ WORKBENCH_PORT=5020
 - [src/README.md](src/README.md): detailed runtime and development guide
 - [RAG_GUIDE_PDF.md](RAG_GUIDE_PDF.md): notes on the PDF-based RAG layer
 - [doc/summary_arch.md](doc/summary_arch.md): architecture summary
+- [doc/graph.md](doc/graph.md): agentic graph design (interviewer/judge loop)
+- [doc/model-selection.md](doc/model-selection.md): rationale for the LLMs used per role
 - [doc/RAG.md](doc/RAG.md): retrieval design notes
+- [doc/profitability-case.md](doc/profitability-case.md): shared schema and authoring template for profitability cases
+- [doc/tests-overview.md](doc/tests-overview.md): overview of the test suite structure
+- [doc/evaluation/agent-evaluation.md](doc/evaluation/agent-evaluation.md): judge and interviewer evaluation, agentic vs baseline
+- [doc/evaluation/RAG-evaluation.md](doc/evaluation/RAG-evaluation.md): RAG evaluation framework
+- [doc/prompts/](doc/prompts/): system prompts used by each role (interviewer, candidate, judge, feedback, baseline)
+- [doc/Mindmaps/](doc/Mindmaps/): drawio diagrams for the graph and evaluation design
 
 ## Research And Publication Notes
 
