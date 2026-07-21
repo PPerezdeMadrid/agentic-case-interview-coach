@@ -15,6 +15,7 @@ if str(WEB_DIR) not in sys.path:
 try:
     import app as workbench_app
     import dashboard_store
+    import experiment_store
     from node_eval import judge_eval
 except ModuleNotFoundError as exc:
     raise unittest.SkipTest(f"Workbench test dependencies are not installed: {exc.name}") from exc
@@ -622,6 +623,32 @@ class WorkbenchAppTests(unittest.TestCase):
         body = response.get_data(as_text=True)
         self.assertIn("DEMO_01", body)
         self.assertIn("100.0%", body)
+
+    def test_delete_batch_page_removes_batch_and_redirects(self) -> None:
+        batch_runs_dir = Path(self.temp_dir.name) / "batch_runs"
+        batch_dir = batch_runs_dir / "batch_001"
+        batch_dir.mkdir(parents=True)
+        (batch_dir / "summary.json").write_text(
+            json.dumps({"batch_id": "batch_001", "created_at": "2026-01-01", "scenario_count": 1, "repeat_count": 1})
+        )
+        (batch_dir / "combined_results.jsonl").write_text("")
+
+        with patch.object(experiment_store, "BATCH_RUNS_DIR", batch_runs_dir):
+            response = self.client.post("/experiment/batch_001/delete", follow_redirects=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertFalse(batch_dir.exists())
+
+            missing_response = self.client.post("/experiment/batch_001/delete")
+            self.assertEqual(missing_response.status_code, 404)
+
+    def test_delete_batch_rejects_path_traversal_outside_batch_runs_dir(self) -> None:
+        batch_runs_dir = Path(self.temp_dir.name) / "batch_runs"
+        batch_runs_dir.mkdir(parents=True)
+
+        with patch.object(experiment_store, "BATCH_RUNS_DIR", batch_runs_dir):
+            with self.assertRaises(FileNotFoundError):
+                experiment_store.delete_batch("..")
 
     def test_human_evaluation_api_rejects_invalid_section_shape(self) -> None:
         response = self.client.post(

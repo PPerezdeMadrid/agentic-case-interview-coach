@@ -21,6 +21,7 @@ from dashboard_store import (
 )
 from experiment_store import (
     build_overview,
+    delete_batch,
     list_batches,
     load_batch,
     load_scenario_detail,
@@ -159,6 +160,17 @@ def experiment_index():
         abort(404, f"Batch '{dir_name}' not found.")
 
     return render_template("experiment.html", batches=batches, batch=dir_name, overview=overview)
+
+
+@app.post("/experiment/<dir_name>/delete")
+def delete_batch_page(dir_name: str):
+    try:
+        delete_batch(dir_name)
+    except FileNotFoundError as exc:
+        abort(404, str(exc))
+
+    flash(f"Batch '{dir_name}' deleted.", "success")
+    return redirect(url_for("experiment_index"))
 
 
 @app.get("/experiment/<dir_name>/<slug>")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import shutil
 from collections import defaultdict
 from functools import lru_cache
 from pathlib import Path
@@ -96,6 +97,14 @@ def load_batch(dir_name: str) -> dict[str, Any]:
                 records.append(json.loads(line))
 
     return {"dir_name": dir_name, "summary": summary, "records": records}
+
+
+def delete_batch(dir_name: str) -> None:
+    batch_dir = BATCH_RUNS_DIR / dir_name
+    if batch_dir.parent.resolve() != BATCH_RUNS_DIR.resolve() or not batch_dir.is_dir():
+        raise FileNotFoundError(f"Batch '{dir_name}' not found.")
+
+    shutil.rmtree(batch_dir)
 
 
 def parse_transcript(transcript: list[str]) -> list[dict[str, Any]]:
