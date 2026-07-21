@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Página-1" id="QZy83eED_sFjOPlgQ1Ul">
-    <mxGraphModel dx="359" dy="268" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1528" dy="1140" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -135,8 +135,8 @@
             <mxPoint x="870" y="540" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Juq6fXyGjDSmXVS3NqAy-48" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Dimensions&lt;/h1&gt;" vertex="1">
-          <mxGeometry height="30" width="230" x="330" y="960" as="geometry" />
+        <mxCell id="Juq6fXyGjDSmXVS3NqAy-48" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;RAG Evaluation Dimensions&lt;/h1&gt;" vertex="1">
+          <mxGeometry height="30" width="330" x="330" y="960" as="geometry" />
         </mxCell>
         <mxCell id="Juq6fXyGjDSmXVS3NqAy-63" edge="1" parent="1" source="Juq6fXyGjDSmXVS3NqAy-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Juq6fXyGjDSmXVS3NqAy-62" value="">
           <mxGeometry relative="1" as="geometry" />
