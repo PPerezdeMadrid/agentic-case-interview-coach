@@ -1,5 +1,6 @@
 langgraph
 langgraph-prebuilt
+flask
 langchain-core>=1.2.28
 langchain-community
 langchain-openai>=1.1.14

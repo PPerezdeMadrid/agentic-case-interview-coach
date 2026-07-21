@@ -3,7 +3,9 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import logging
 import sys
+import traceback
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -120,6 +122,18 @@ def list_scenario_paths(selected_refs: list[str], case_id: str = "") -> list[Pat
     if not matched:
         raise SystemExit(f"No scenarios found for case_id '{case_id}'.")
     return matched
+
+
+def setup_error_logger(output_dir: Path) -> logging.Logger:
+    logger = logging.getLogger(f"run_all_scenarios.{output_dir.name}")
+    logger.setLevel(logging.ERROR)
+    logger.propagate = False
+    logger.handlers.clear()
+
+    handler = logging.FileHandler(output_dir / "errors.log", encoding="utf-8")
+    handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+    logger.addHandler(handler)
+    return logger
 
 
 def make_output_dir(raw_output_dir: str, label: str) -> Path:
@@ -273,10 +287,13 @@ def run_batch(
     batch_id = output_dir.name
     combined_records: list[dict[str, Any]] = []
     total_runs_per_graph = len(scenario_paths) * repeat_count
+    error_logger = setup_error_logger(output_dir)
+    errors_log_path = output_dir / "errors.log"
     summary: dict[str, Any] = {
         "batch_id": batch_id,
         "output_dir": str(output_dir),
         "runs_db_path": str(persistence.ensure_runs_db()),
+        "errors_log_path": str(errors_log_path),
         "scenario_count": len(scenario_paths),
         "repeat_count": repeat_count,
         "total_runs_per_graph": total_runs_per_graph,
@@ -314,12 +331,22 @@ def run_batch(
                     ok_count += 1
                 except Exception as exc:
                     error_count += 1
+                    thread_id = (
+                        f"{runtime.name}_{scenario_path.stem}_{index:03d}"
+                        f"_r{repeat_index:02d}_{batch_id}"
+                    )
+                    error_logger.error(
+                        "[%s] %s (repeat %d/%d) thread_id=%s\n%s",
+                        runtime.name,
+                        scenario_path.stem,
+                        repeat_index,
+                        repeat_count,
+                        thread_id,
+                        traceback.format_exc(),
+                    )
                     record = build_record(
                         runtime.name,
-                        thread_id=(
-                            f"{runtime.name}_{scenario_path.stem}_{index:03d}"
-                            f"_r{repeat_index:02d}_{batch_id}"
-                        ),
+                        thread_id=thread_id,
                         scenario_ref=str(scenario_path),
                         result=None,
                         repeat_index=repeat_index,
@@ -352,6 +379,11 @@ def run_batch(
     summary_path = output_dir / "summary.json"
     summary["summary_path"] = str(summary_path)
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    for handler in list(error_logger.handlers):
+        handler.close()
+        error_logger.removeHandler(handler)
+
     return summary
 
 
@@ -390,6 +422,9 @@ def main() -> int:
         )
     print(f"Combined CSV: {summary['combined_csv_path']}", flush=True)
     print(f"Summary JSON: {summary['summary_path']}", flush=True)
+    total_errors = sum(g["errors"] for g in summary["graphs"].values())
+    if total_errors:
+        print(f"Errors log ({total_errors} total): {summary['errors_log_path']}", flush=True)
     return 0
 
 

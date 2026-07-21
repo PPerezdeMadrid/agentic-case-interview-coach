@@ -55,15 +55,15 @@ openai_llm_server = ChatOpenAI(
 
 # OpenRouter Qwen Interviewer model
 interviewer_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen-2.5-32b-instruct"),
+    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen-2.5-72b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.7),
 )
 
-# OpenRouter Mixtral Candidate model
+# OpenRouter Mistral Nemo Candidate model
 candidate_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mixtral-8x7b-instruct"),
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-nemo"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.7),
