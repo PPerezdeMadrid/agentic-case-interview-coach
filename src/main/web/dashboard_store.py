@@ -741,6 +741,23 @@ def list_runs(limit: int = 100) -> list[dict[str, Any]]:
     return items
 
 
+def delete_run(run_id: str) -> None:
+    ensure_dashboard_db()
+
+    with get_db_connection() as connection:
+        run_exists = connection.execute(
+            "SELECT 1 FROM runs WHERE run_id = ?",
+            (run_id,),
+        ).fetchone()
+        if run_exists is None:
+            raise FileNotFoundError(f"Run '{run_id}' not found.")
+
+        connection.execute("DELETE FROM human_evaluations WHERE run_id = ?", (run_id,))
+        if _table_exists(connection, "agent_state_traces"):
+            connection.execute("DELETE FROM agent_state_traces WHERE run_id = ?", (run_id,))
+        connection.execute("DELETE FROM runs WHERE run_id = ?", (run_id,))
+
+
 def load_run(run_id: str) -> dict[str, Any]:
     ensure_dashboard_db()
 

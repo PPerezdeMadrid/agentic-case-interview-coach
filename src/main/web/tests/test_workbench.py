@@ -527,6 +527,21 @@ class WorkbenchAppTests(unittest.TestCase):
         self.assertEqual(payload["run_id"], "run_001")
         self.assertIsNone(payload["human_evaluation"])
 
+    def test_delete_run_page_removes_run_and_redirects_to_index(self) -> None:
+        response = self.client.post("/runs/run_001/delete", follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        with self.assertRaises(FileNotFoundError):
+            dashboard_store.load_run("run_001")
+
+        missing_response = self.client.get("/runs/run_001?format=json")
+        self.assertEqual(missing_response.status_code, 404)
+
+    def test_delete_run_page_returns_404_for_unknown_run(self) -> None:
+        response = self.client.post("/runs/does-not-exist/delete")
+
+        self.assertEqual(response.status_code, 404)
+
     def test_runs_page_includes_trace_summary(self) -> None:
         response = self.client.get("/")
 

@@ -159,6 +159,15 @@ textarea {
   background: var(--accent-strong);
 }
 
+.button--danger {
+  padding: 6px 14px;
+  background: var(--danger);
+}
+
+.button--danger:hover {
+  background: #591616;
+}
+
 .chip-row,
 .metric-grid,
 .meta-grid,

@@ -11,6 +11,7 @@ from dashboard_store import (
     CASE_PERFORMANCE_SECTION,
     DIALOG_QUALITY_SECTION,
     NOT_TESTED,
+    delete_run,
     ensure_dashboard_db,
     get_human_evaluation,
     list_runs,
@@ -377,6 +378,17 @@ def get_run_trace(run_id: str):
         return jsonify(trace_payload)
 
     return render_template("run_trace.html", trace=trace_payload)
+
+
+@app.post("/runs/<run_id>/delete")
+def delete_run_page(run_id: str):
+    try:
+        delete_run(run_id)
+    except FileNotFoundError as exc:
+        abort(404, str(exc))
+
+    flash(f"Run '{run_id}' deleted.", "success")
+    return redirect(url_for("index"))
 
 
 @app.get("/runs/<run_id>/human-evaluation")

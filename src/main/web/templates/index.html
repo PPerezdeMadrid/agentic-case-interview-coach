@@ -33,6 +33,7 @@
           <th>Model vs Human MAE</th>
           <th>Trace</th>
           <th>Compare</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -52,10 +53,15 @@
             {% endif %}
           </td>
           <td><a href="{{ url_for('compare_runs', run_a=run.run_id) }}">Use as A</a></td>
+          <td>
+            <form method="post" action="{{ url_for('delete_run_page', run_id=run.run_id) }}" onsubmit="return confirm('Delete run {{ run.run_id }}? This cannot be undone.');">
+              <button class="button button--danger" type="submit">Delete</button>
+            </form>
+          </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="8">No persisted runs found in <code>artifacts/runs.sqlite</code>.</td>
+          <td colspan="9">No persisted runs found in <code>artifacts/runs.sqlite</code>.</td>
         </tr>
         {% endfor %}
       </tbody>
