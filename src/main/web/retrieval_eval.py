@@ -1,17 +1,8 @@
 """Retrieval evaluation: Precision@K, Recall@K, Hit Rate, MRR.
 
-`retrieve_golden_set.csv` has no chunk-level ground truth (only source_document +
-source_page, and for the profitability guide those page numbers are the textbook's
-own printed pagination, offset ~16-18 pages from the PDF's actual page index because
-of front matter -- confirmed by spot-checking a query, so a page-based relevance
-heuristic would silently report near-zero, meaningless numbers for that document).
-
-The generation golden sets (`generation_golden_set_case_guide.csv` and
-`generation_golden_set_profitability.csv`) already carry exact per-query
-`source_chunk_ids`, which is precisely the chunk-level ground truth retrieval
-metrics need -- and it's also what `doc/evaluation/RAG-evaluation.md` specifies
-`retrieve_golden_set.csv` itself should have. So retrieval quality is evaluated
-against those two files instead.
+Evaluated against the generation golden sets (`generation_golden_set_case_guide.csv`
+and `generation_golden_set_profitability.csv`), which carry exact per-query
+`source_chunk_ids` -- the chunk-level ground truth retrieval metrics need.
 """
 from __future__ import annotations
 

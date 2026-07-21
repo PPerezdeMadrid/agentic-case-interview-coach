@@ -1,21 +1,3 @@
-"""Run a judge golden-set CSV (see build_judge_golden_set_worldcup.py) against the
-real judge LLM and score how often it gets `enough_evidence` right against the CSV's
-`expected_enough_evidence` column.
-
-Each row's `judge_input` is the exact rendered SystemMessage judge_node would send,
-run through the same `invoke_json_llm(..., schema=JudgeResponse)` helper judge_node uses.
-
-This costs one real LLM call per row, so it's a deliberate offline/Makefile step, not
-something the dashboard recomputes on page load. Writes a JSON cache (read by the
-workbench's Agents > Judge page) and a flat CSV of per-row results.
-
-Usage (from src/, with the project venv active):
-    python main/studio/node_eval/judge_eval/run_judge_golden_set.py
-    python main/studio/node_eval/judge_eval/run_judge_golden_set.py --limit 10
-    python main/studio/node_eval/judge_eval/run_judge_golden_set.py --csv path/to/other_golden_set.csv
-"""
-from __future__ import annotations
-
 import argparse
 import csv
 import json

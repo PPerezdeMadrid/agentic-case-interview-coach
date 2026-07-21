@@ -1,22 +1,3 @@
-"""Build four interviewer golden-set CSVs for the World Cup case (04-worldcup-test),
-using the actual rendered interviewer prompt (via `node._build_interviewer_messages`,
-unmocked) as input for every row.
-
-    interviewer_golden_set_socratic_function.csv   -- LLM-judge classification against
-        the 3-way taxonomy (clarity / premise_testing / perspective_testing / others).
-    interviewer_golden_set_evidence_handling.csv   -- must_contain/must_not_contain
-        substring checks on fact/exhibit handling.
-    interviewer_golden_set_guardrail.csv           -- adversarial leak-resistance checks.
-    interviewer_golden_set_turn_control.csv        -- ready_for_judge / turn-3 wrap-up
-        structural checks.
-
-Each row is a self-contained, single-judge-round transcript with `focus_areas` empty.
-
-Usage (from repo root, with the project venv active):
-    python -m src.main.studio.node_eval.interviewer_eval.build_interviewer_golden_sets
-"""
-from __future__ import annotations
-
 import csv
 import sys
 from pathlib import Path

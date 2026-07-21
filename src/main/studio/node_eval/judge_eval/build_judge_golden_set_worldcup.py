@@ -1,38 +1,3 @@
-"""Build a judge golden set (CSV) for the World Cup case, using the actual
-rendered judge prompt (via `judge_node` with `judge_llm` mocked) as input. Unlike
-build_judge_golden_set.py, this captures the exact SystemMessage text judge_node sends,
-not the raw state fields. All items use judge_round=0 to target the judge LLM's own
-reasoning rather than the deterministic MAX_JUDGE_ROUNDS override.
-
-Case: 04-worldcup-test (IWFC), the only case with a math block besides case 02.
-
-Category taxonomy -- enough_evidence measures stage coverage, not performance quality:
-
-    INCOMPLETE_COVERAGE      False  Never got around to a mandatory element (an exhibit,
-                                     the quantitative section, the creative section, or it
-                                     simply didn't progress past the opening).
-    UNFINISHED_ANALYSIS      False  Analysis (structure, data synthesis, or a calculation)
-                                     was started but stalls before it's usable.
-    PREMATURE_CONCLUSION     False  Recommendation/verdict given cold, before the work.
-    NON_RESPONSIVE           False  Does not answer what was asked (wanders off-topic,
-                                     beats around the bush, ignores the question).
-    EVIDENCE_MISREAD         False  Did use the evidence, but understood/read it wrong.
-    FULL_COVERAGE_CLEAN                   True  Every stage touched, cleanly executed
-                                                 (strong or efficient/compressed).
-    FULL_COVERAGE_MESSY_PROCESS           True  Every stage touched, but the path there
-                                                 was thin, redirected, or long/iterative.
-    FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED  True  Every stage touched, but content has a
-                                                 flaw (wrong math, or a recommendation
-                                                 missing risks/next steps) -- a scoring
-                                                 gap, not a coverage gap.
-    FULL_COVERAGE_HALLUCINATED_DATA       True  Every stage touched; candidate invents an
-                                                 unsupported fact along the way.
-
-Usage (from repo root, with the project venv active):
-    python -m src.main.studio.node_eval.judge_eval.build_judge_golden_set_worldcup
-"""
-from __future__ import annotations
-
 import csv
 import json
 import sys
@@ -119,9 +84,9 @@ def _t(*lines: str) -> list[str]:
     """Small readability helper: pass alternating role-prefixed strings."""
     return list(lines)
 
-
+# Handwritten case
 ITEMS: list[dict[str, Any]] = [
-    # ================================================================= FALSE (25)
+    # FALSE (25)
     {
         "id": "WC_01",
         "category": "INCOMPLETE_COVERAGE",
@@ -553,7 +518,7 @@ ITEMS: list[dict[str, Any]] = [
             "added too many teams overall.",
         ),
     },
-    # ================================================================= TRUE (25)
+    # TRUE (25)
     {
         "id": "WC_26",
         "category": "FULL_COVERAGE_CLEAN",
@@ -1494,8 +1459,6 @@ ITEMS: list[dict[str, Any]] = [
             "agree cost-sharing with host countries for future editions.",
         ),
     },
-    # ---- added 2026-07-19: bringing every category to >=7 items, each a genuinely
-    # ---- distinct scenario rather than a reworded duplicate of an existing one.
     {
         "id": "WC_71",
         "category": "PREMATURE_CONCLUSION",

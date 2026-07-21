@@ -5,7 +5,7 @@ This document extracts the shared structure across the repository's current prof
 Corpus reviewed:
 - 10 Duke profitability cases
 - 12 AGSM profitability cases
-- Total: 22 profitability cases in `03-MVP/database/duke_cases` and `03-MVP/database/agsm_cases`
+- Total: 22 profitability cases in `src/database/duke_cases` and `src/database/agsm_cases`
 
 ## What All Profitability Cases Have in Common
 

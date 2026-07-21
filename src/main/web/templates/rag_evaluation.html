@@ -77,17 +77,12 @@
   <p class="helper" style="padding: 0 24px 24px;">
     Ground truth comes from the <code>source_chunk_ids</code> column already annotated in
     <code>generation_golden_set_case_guide.csv</code> and
-    <code>generation_golden_set_profitability.csv</code> &mdash; exact chunk IDs per query, not a
-    page-number approximation. (<code>retrieve_golden_set.csv</code> only has
-    <code>source_document</code>/<code>source_page</code>, and for the profitability guide those
-    page numbers are the textbook's own printed pagination, offset ~16&ndash;18 pages from the
-    PDF's real page index by front matter, so a page-based match would be unreliable for that
-    document.)
+    <code>generation_golden_set_profitability.csv</code> &mdash; exact chunk IDs per query.
   </p>
 
   {% if retrieval_error %}
   <div class="prompt-box">
-    <p class="helper">{{ retrieval_error }} Check that <code>src/database/rag_evaluation/retrieve_golden_set.csv</code> exists and has rows.</p>
+    <p class="helper">{{ retrieval_error }} Check that <code>src/database/rag_evaluation/generation_golden_set_case_guide.csv</code> and <code>generation_golden_set_profitability.csv</code> exist and have rows.</p>
   </div>
   {% elif retrieval_result and retrieval_result.overall %}
   <div class="metric-grid">
@@ -209,7 +204,7 @@
   </div>
   {% else %}
   <div class="prompt-box">
-    <p class="helper">No rows evaluated. Check that <code>src/database/rag_evaluation/retrieve_golden_set.csv</code> exists and has rows.</p>
+    <p class="helper">No rows evaluated. Check that <code>src/database/rag_evaluation/generation_golden_set_case_guide.csv</code> and <code>generation_golden_set_profitability.csv</code> exist and have rows.</p>
   </div>
   {% endif %}
 </section>

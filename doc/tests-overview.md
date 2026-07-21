@@ -1,110 +1,112 @@
 # Test Overview
 
-Este documento resume como estan organizados los tests del proyecto y que se evalua en cada archivo y seccion. La idea no es describir cada test individual, sino dejar clara la estructura general para que el suite siga siendo facil de mantener aunque se añadan o eliminen casos.
+This document summarizes how the project's tests are organized and what is evaluated in each file and section. The idea is not to describe every individual test, but to make the general structure clear so the suite remains easy to maintain even as cases are added or removed.
 
-## Estructura general
+## General structure
 
-Actualmente los tests principales estan separados por area funcional:
+Tests are currently separated by functional area:
 
 - `src/main/studio/tests/test_agentic_graph.py`
+- `src/main/studio/tests/test_api_connection.py`
 - `src/main/web/tests/test_workbench.py`
 
-La separacion sigue la arquitectura del proyecto:
+The separation follows the project's architecture:
 
-- `studio` cubre la logica del grafo conversacional y sus variantes.
-- `web` cubre la capa de dashboard, metricas, almacenamiento y endpoints HTTP.
+- `studio` covers the conversational graph logic and its variants, plus connectivity to the different LLMs it uses.
+- `web` covers the dashboard layer, metrics, storage, and HTTP endpoints.
 
 ## `src/main/studio/tests/test_agentic_graph.py`
 
-Este archivo valida el comportamiento del sistema de entrevista en modo `agentic` y en modo `baseline`.
+This file validates the behavior of the interview system in `agentic` mode and in `baseline` mode.
 
-### Helpers y fixtures del archivo
+### File helpers and fixtures
 
-La parte inicial del archivo construye un caso sintetico minimo para probar el flujo sin depender de datos externos reales:
+The initial part of the file builds a minimal synthetic case to test the flow without depending on real external data:
 
-- `make_runtime_case()`: crea los bloques del caso de prueba.
-- `make_runtime_bundle()`: monta escenario, caso y rubrica.
-- `make_state()`: genera un estado inicial util para invocar nodos concretos del grafo.
+- `make_runtime_case()`: creates the test case's blocks.
+- `make_runtime_bundle()`: assembles scenario, case, and rubric.
+- `make_state()`: generates a useful initial state for invoking specific graph nodes.
 
-Estos helpers permiten probar nodos y recorridos completos con datos controlados y faciles de razonar.
+These helpers make it possible to test individual nodes and full runs with controlled, easy-to-reason-about data.
 
-### Seccion `AgenticGraphTests`
+### `AgenticGraphTests` section
 
-Esta seccion cubre el comportamiento del grafo principal `agentic`.
+This section covers the behavior of the main `agentic` graph.
 
-Los bloques de cobertura aqui se centran en:
+The coverage blocks here focus on:
 
-- Construccion del estado inicial del grafo.
-- Comportamiento del nodo entrevistador en el primer turno.
-- Visibilidad correcta del transcript para el candidato.
-- Uso de `focus_areas` del juez para guiar el siguiente turno.
-- Limite de rondas del juez y forzado de evaluacion.
-- Reconstruccion de contexto cuando falta `case_prompt`.
-- Ejecucion end-to-end del grafo completo, incluyendo transcript, evaluacion final y persistencia en SQLite.
+- Construction of the graph's initial state.
+- Interviewer node behavior on the first turn.
+- Correct transcript visibility for the candidate.
+- Use of the judge's `focus_areas` to guide the next turn.
+- Judge round limit and forced evaluation.
+- Context reconstruction when `case_prompt` is missing.
+- End-to-end execution of the full graph, including transcript, final evaluation, and persistence to SQLite.
 
-En esta seccion se usan `Mock` y `patch` para aislar el LLM, la recuperacion de contexto y la persistencia, de forma que la logica del grafo se pueda verificar sin depender de servicios externos.
+This section uses `Mock` and `patch` to isolate the LLM, context retrieval, and persistence, so that the graph logic can be verified without depending on external services.
 
-### Seccion `BaselineGraphTests`
+### `BaselineGraphTests` section
 
-Esta seccion cubre la variante `baseline`, que comparte parte de la logica del sistema pero con un flujo mas simple.
+This section covers the `baseline` variant, which shares part of the system logic but with a simpler flow.
 
-Aqui se valida principalmente:
+It mainly validates:
 
-- Inyeccion de contexto recuperado en el prompt del entrevistador baseline.
-- Almacenamiento del contexto recuperado dentro del estado.
-- Reconstruccion de la query cuando no existe `case_prompt`.
+- Injection of retrieved context into the baseline interviewer prompt.
+- Storage of retrieved context within the state.
+- Query reconstruction when `case_prompt` does not exist.
 
-En resumen, esta parte asegura que el baseline siga teniendo cobertura propia y no dependa implicitamente de la cobertura del grafo agentic.
+In summary, this part ensures the baseline keeps its own coverage and does not implicitly depend on the agentic graph's coverage.
+
+## `src/main/studio/tests/test_api_connection.py`
+
+This file does not test business logic: it is a connectivity smoke test that performs a real ping to each configured LLM endpoint (`lmstudio_llm_server`, `openai_llm_server`, and the three OpenRouter clients: interviewer, candidate, and judge) before the graph needs them.
+
+The `APIConnectionTests` class is meant to be run manually before `make langgraph`, so that a downed server or a misconfigured API key is detected immediately instead of midway through a run inside LangGraph Studio.
 
 ## `src/main/web/tests/test_workbench.py`
 
-Este archivo cubre la capa web y el almacenamiento asociado al dashboard de evaluacion.
+This file covers the web layer and the storage associated with the evaluation dashboard.
 
-### Helpers y fixtures del archivo
+### File helpers and fixtures
 
-La parte inicial define utilidades para crear una base SQLite temporal y poblarla con un run de ejemplo:
+The initial part defines utilities for creating a temporary SQLite database and populating it with a sample run:
 
-- `create_runs_table(db_path)`: crea las tablas necesarias del dashboard.
-- `insert_sample_run(db_path)`: inserta un run sintetico con transcript, scores y trazas.
+- `create_runs_table(db_path)`: creates the dashboard's necessary tables.
+- `insert_sample_run(db_path)`: inserts a synthetic run with transcript, scores, and traces.
 
-El objetivo de estos helpers es permitir tests deterministas sobre carga de runs, metricas, trazas y APIs HTTP.
+The purpose of these helpers is to enable deterministic tests for run loading, metrics, traces, and HTTP APIs.
 
-### Seccion `DashboardStoreTests`
+### `DashboardStoreTests` section
 
-Esta seccion prueba la capa de acceso a datos y calculo de metricas en `dashboard_store.py`.
+This section tests the data access and metrics calculation layer in `dashboard_store.py`.
 
-Los temas que cubre son:
+The topics it covers are:
 
-- Calculo de metricas de error entre expected, model y human scores.
-- Comportamiento de `exact_match_rate` en distintos escenarios.
-- Tratamiento de pares no comparables o scores no numericos.
-- Construccion del payload agregado de un run con expected scores, model scores, human scores y metricas.
-- Construccion del payload de trazas para la vista temporal del run.
+- Calculation of error metrics between expected, model, and human scores.
+- Behavior of `exact_match_rate` in different scenarios.
+- Handling of non-comparable pairs or non-numeric scores.
+- Construction of a run's aggregated payload with expected scores, model scores, human scores, and metrics.
+- Construction of the traces payload for the run's timeline view.
 
-Esta seccion es la referencia principal para validar la logica numerica y de agregacion del dashboard.
+### `JudgeEvalStoreTests` section
 
-### Seccion `WorkbenchAppTests`
+This section tests `judge_eval.py`, the layer that lists and loads the judge's golden set results (e.g. `judge_golden_set_worldcup_results.json`) for the **Agents > Judge** page of the workbench.
 
-Esta seccion prueba la capa HTTP de Flask usando `test_client()`.
+It covers:
 
-Los bloques de cobertura aqui incluyen:
+- Listing available golden sets and loading a cached result, including making the original `judge_input` accessible alongside the verdict.
+- That requesting a golden set with no cached results raises `FileNotFoundError` instead of returning partial or fabricated data.
 
-- Respuesta JSON de detalle de run.
-- Flujo de guardado y lectura de evaluacion humana por API.
-- Contrato del endpoint de evaluacion humana cuando no existe evaluacion previa.
-- Respuesta de la vista o endpoint de trazas.
-- Validaciones de payload invalido para la API.
+### `WorkbenchAppTests` section
 
-Estas pruebas no se centran en HTML detallado, sino en verificar que los endpoints principales responden con la estructura esperada y que estan conectados correctamente con `dashboard_store`.
+This section tests the Flask HTTP layer using `test_client()`.
 
-## Criterio de organizacion
+The coverage blocks here include:
 
-La organizacion actual sigue tres ideas:
+- JSON response for run detail.
+- Save and read flow for human evaluation via the API.
+- Human evaluation endpoint contract when no prior evaluation exists.
+- Response of the traces view or endpoint.
+- Invalid payload validations for the API.
 
-- Un archivo por subsistema grande.
-- Fixtures locales y pequeñas dentro de cada archivo, para que el contexto del test sea visible cerca de donde se usa.
-- Separacion interna por clases de `unittest` para distinguir entre logica de dominio, almacenamiento y capa HTTP.
-
-## Alcance del documento
-
-Este documento describe que se cubre en cada archivo y en cada bloque principal. No pretende ser un inventario fijo de tests, porque esa lista cambiara con la evolucion del proyecto.
+These tests do not focus on detailed HTML, but on verifying that the main endpoints respond with the expected structure and are correctly connected to `dashboard_store`.

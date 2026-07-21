@@ -1,27 +1,3 @@
-"""Run an interviewer golden-set CSV (see build_interviewer_golden_sets.py) against the
-real interviewer LLM and grade each row generically from whichever `expected_*` /
-`must_contain` / `must_not_contain` / `forbidden_substrings` columns are present --
-the same script works for all 4 golden-set files.
-
-Each row's `interviewer_input` is the exact rendered SystemMessage `interviewer_node`
-would send, run through the same `invoke_json_llm(..., schema=InterviewerMove)` and
-`parse_interviewer_output` the real node uses.
-
-Rows with an `expected_socratic_function` also get a classification call against the
-3-way taxonomy, graded by `SOCRATIC_JUDGE_LLM` (the independent judge model, not the
-interviewer itself, to avoid self-assessment bias).
-
-This costs one (or two) real LLM call per row, so it's a deliberate offline/Makefile
-step. Writes a JSON cache (read by the workbench's Agents > Interviewer page); static
-per-row metadata is re-merged from the source CSV at page-load time.
-
-Usage (from src/, with the project venv active):
-    python main/studio/node_eval/interviewer_eval/run_interviewer_golden_set.py \\
-        --csv database/node_eval/interviewer_eval/interviewer_golden_set_evidence_handling.csv
-    make interviewer-eval INTERVIEWER_GOLDEN_SET=guardrail
-"""
-from __future__ import annotations
-
 import argparse
 import csv
 import json

@@ -1,27 +1,3 @@
-"""Build a synthetic golden set for evaluating the judge node's `enough_evidence` decision.
-
-Each item's `case_prompt`/`case_guidance`/`case_data`/`case_recommendation`/`rubric_data`
-are derived through the same `loader`/`utils` functions the real graph uses, and
-`assemble_state(item, cases, rubric_data)` reconstitutes the exact per-call judge_node
-input. All items use judge_round=0 to target the judge LLM's own reasoning rather than
-the deterministic MAX_JUDGE_ROUNDS override.
-
-Category taxonomy -- `enough_evidence` measures stage coverage, not performance quality:
-
-    OPENING_ONLY                False  Opening + unfounded reaction only.
-    STRUCTURED_MID_ANALYSIS     False  Structure + data, no recommendation yet.
-    PREMATURE_RECOMMENDATION    False  Recommendation given cold, ungrounded.
-    REQUIRED_EXHIBIT_SKIPPED    False  Recommendation reached but a required math/
-                                        creative exhibit was never touched.
-    FULL_COVERAGE_WEAK          True   All stages touched, thin execution.
-    FULL_COVERAGE_STRONG        True   All stages touched, closely mirrors expected answer.
-    FULL_COVERAGE_WITH_REDIRECT True   All stages touched after an interviewer redirect.
-
-Usage (from repo root, with the project venv active):
-    python -m src.main.studio.node_eval.judge_eval.build_judge_golden_set
-"""
-from __future__ import annotations
-
 import json
 import sys
 from pathlib import Path
