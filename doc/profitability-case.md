@@ -1,11 +1,11 @@
 # Profitability Case Common Schema
 
-This document extracts the shared structure across the repository's current profitability cases and turns it into an authoring template for new synthetic datasets.
+This document extracts the shared structure across profitability cases from sevveral casebooks and turns it into an authoring template for new synthetic datasets.
 
 Corpus reviewed:
-- 10 Duke profitability cases
-- 12 AGSM profitability cases
-- Total: 22 profitability cases in `src/database/duke_cases` and `src/database/agsm_cases`
+- 10 Duke Casebook profitability cases
+- 12 AGSM Casebook profitability cases
+- Total: 22 profitability cases
 
 ## What All Profitability Cases Have in Common
 
@@ -93,8 +93,6 @@ Every profitability case contains at least one calculation that changes the conv
 - test whether an action closes a target profit gap
 - estimate unit economics after an operational change
 
-The math is usually decision-oriented, not abstract.
-
 ### 6. Recommendation Under Constraints
 
 The final step is always managerial. The candidate must recommend what to do, not just what is true.
@@ -107,8 +105,6 @@ Strong recommendations in the corpus usually include:
 - what to test next if uncertainty remains
 
 ## Common Block Pattern In The Repository
-
-The repository currently expresses profitability cases as staged blocks inside `case_content`.
 
 Most Duke cases use:
 - `prompt`
@@ -136,7 +132,7 @@ Even when block names differ, they map to the same logical stages:
 
 ## Synthetic Authoring Template
 
-Use this template when creating a new profitability case.
+This is the template to be used when creating a new profitability case.
 
 ### A. Case Header
 
@@ -256,23 +252,9 @@ Most current profitability cases can be generated from a small set of root-cause
 
 This is the best menu to reuse for synthetic generation because it matches the source corpus closely.
 
-## Recommended JSON-or-Markdown Content Skeleton
-
-Whether you store the synthetic case as markdown or later convert it to JSON, keep this content order:
-
-1. Case overview
-2. Candidate opening prompt
-3. Hidden interviewer guidance
-4. Reveal 1: base facts
-5. Reveal 2: quantitative exhibit or data
-6. Expected insight
-7. Optional follow-up calculation or creativity prompt
-8. Final recommendation prompt
-9. Hidden ideal answer
-
 ## Quality Checklist
 
-Before accepting a new synthetic profitability case, verify:
+Before accepting a new synthetic profitability case, it is important to verify:
 - the profit problem is explicit
 - the case can be opened with a standard profitability structure
 - one primary economic driver explains most of the issue
@@ -320,10 +302,4 @@ Before accepting a new synthetic profitability case, verify:
 - Next steps: [pilot / validate / implement]
 ```
 
-## Bottom Line
 
-If you want new synthetic profitability datasets to match the existing corpus, optimize for this formula:
-
-`simple opening + one dominant hidden driver + one decisive quantitative reveal + action-oriented recommendation`
-
-That is the stable common schema across the current profitability cases in this repository.
