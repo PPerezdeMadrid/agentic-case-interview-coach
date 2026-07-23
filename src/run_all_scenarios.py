@@ -389,7 +389,7 @@ def run_batch(
 
 def resolve_runtimes(graph_selection: str) -> list[GraphRuntime]:
     if graph_selection == "both":
-        return [GRAPH_RUNTIMES["baseline"], GRAPH_RUNTIMES["agentic"]]
+        return [GRAPH_RUNTIMES["agentic"], GRAPH_RUNTIMES["baseline"]]
     return [GRAPH_RUNTIMES[graph_selection]]
 
 

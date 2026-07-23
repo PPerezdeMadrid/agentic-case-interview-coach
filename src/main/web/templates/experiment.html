@@ -86,6 +86,9 @@
       <span class="chip">{{ overview.summary.scenario_count }} scenarios</span>
       <span class="chip">{{ overview.summary.repeat_count }} repeats each</span>
       <span class="chip">created {{ overview.summary.created_at }}</span>
+      {% if overview.errors %}
+      <a class="chip chip-link" href="#batch-errors">{{ overview.errors|length }} error{{ 's' if overview.errors|length != 1 else '' }}</a>
+      {% endif %}
     </div>
   </div>
 
@@ -132,6 +135,36 @@
     </table>
   </div>
   <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design (<code>OPENROUTER_TEMPERATURE=0</code>), so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
+
+  {% if overview.errors %}
+  <details class="disclosure" id="batch-errors">
+    <summary>Show errors ({{ overview.errors|length }})</summary>
+    <div class="table-wrap disclosure-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Graph</th>
+            <th>Scenario</th>
+            <th>Repeat</th>
+            <th>Thread ID</th>
+            <th>Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for err in overview.errors %}
+          <tr>
+            <td>{{ err.graph_name }}</td>
+            <td>{{ err.slug }}</td>
+            <td>{{ err.repeat_index if err.repeat_index is not none else '–' }}</td>
+            <td><code>{{ err.thread_id }}</code></td>
+            <td><span class="status status-different">{{ err.status }}</span> <span class="helper">{{ err.error }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {% endif %}
 </section>
 
 {% if overview.accuracy.total_dims %}
@@ -272,6 +305,67 @@
   </div>
   <p class="helper" style="padding: 0 24px 24px;">If <strong>baseline</strong> shows &ndash; on every single dimension while <strong>agentic</strong> doesn't, that's a structural difference between the two graphs' evaluation nodes (baseline isn't producing comparable numeric scores here), not noise.</p>
 </section>
+
+{% if overview.overscoring.total_dims %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Dimensions the scenario author marked "not_tested"</p>
+      <h2>Does the judge know when to abstain?</h2>
+      <p class="lede">
+        Some scenarios don't exercise every rubric dimension (e.g. no standalone creative prompt) &mdash; the scenario author marks the expected score <code>not_tested</code> for those.
+        This shows how often each graph's judge scored the dimension with a real number anyway, instead of recognizing it doesn't apply.
+        <strong>The accuracy heatmap above can't see this</strong>: it only compares pairs where both scores are numeric, so a judge that fabricates scores on <code>not_tested</code> dimensions is silently pooled out of that comparison rather than penalized for it. Lower % is better.
+      </p>
+    </div>
+  </div>
+
+  {% if overview.overscoring.summary %}
+  <div class="metric-grid accuracy-scoreboard" style="padding: 0 24px 16px;">
+    {% for s in overview.overscoring.summary %}
+    <div class="metric-card">
+      <span>{{ s.graph_name }}</span>
+      <strong>{{ pct(s.overscore_rate) }}</strong>
+      <p class="helper">scored a not_tested dimension anyway &bull; {{ s.n_overscored }} / {{ s.n_not_tested }} cases</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% set n_graphs_ot = overview.overscoring.graph_names | length %}
+  {% set cols_ot = 'minmax(220px, 1.4fr) repeat(' ~ n_graphs_ot ~ ', minmax(130px, 1fr))' %}
+  <div class="heatmap">
+    <div class="heatmap-row" style="grid-template-columns: {{ cols_ot }};">
+      <div></div>
+      {% for g in overview.overscoring.graph_names %}
+      <div class="heatmap-col-label">{{ g }}</div>
+      {% endfor %}
+    </div>
+
+    {% set ns_ot = namespace(section='') %}
+    {% for row in overview.overscoring.rows %}
+    {% if row.section_label != ns_ot.section %}
+    {% set ns_ot.section = row.section_label %}
+    <div class="heatmap-section">{{ row.section_label }}</div>
+    {% endif %}
+    <div class="heatmap-row" style="grid-template-columns: {{ cols_ot }};">
+      <div class="heatmap-dim-label">{{ row.dimension }}</div>
+      {% for g in overview.overscoring.graph_names %}
+      {% set cell = row.graphs.get(g) %}
+      <div class="heatmap-cell heatmap-{{ cell.severity if cell else 'empty' }}"{% if cell and cell.overscore_rate is not none %} title="{{ cell.n_overscored }} / {{ cell.n_not_tested }} not_tested cases scored numerically"{% endif %}>
+        {% if cell and cell.overscore_rate is not none %}
+        <span class="mae-value">{{ pct(cell.overscore_rate) }}</span>
+        <span class="helper">{{ cell.n_overscored }} / {{ cell.n_not_tested }} cases</span>
+        {% else %}
+        <span class="helper">no not_tested cases</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 <section class="panel">
   <div class="panel-heading">

@@ -227,13 +227,14 @@ All active graph nodes use per-role LLM clients defined in `src/main/studio/llm_
 
 | Client | Provider / model | Wired to |
 |---|---|---|
-| `lmstudio_llm_server` | Local LM Studio (`LMSTUDIO_MODEL`, currently `phi-4`) | feedback (agentic only; baseline has no separate feedback role) |
+| `interviewer_llm_server` | OpenRouter, `qwen/qwen3-14b` (code default, matches current `.env`) | interviewer (agentic) |
+| `candidate_llm_server` | OpenRouter, `mistralai/mistral-small-24b-instruct-2501` | candidate (agentic) |
 | `judge_llm_server` | OpenRouter; code default `meta-llama/llama-3.1-70b-instruct`, currently overridden in `.env` to `meta-llama/llama-3.3-70b-instruct` | judge (agentic); candidate, judge, and interviewer all share this one client in baseline |
-| `interviewer_llm_server` | OpenRouter, `qwen/qwen-2.5-72b-instruct` | interviewer (agentic) |
-| `candidate_llm_server` | OpenRouter, `mistralai/mistral-nemo` | candidate (agentic) |
-| `openai_llm_server` | OpenAI, `gpt-5.4-nano` | not wired to any graph role; pinged only by the API-connection smoke test |
+| `feedback_llm_server` | OpenRouter, `openai/gpt-4o-mini` | feedback (agentic only; baseline has no separate feedback role) |
+| `lmstudio_llm_server` | Local LM Studio (`LMSTUDIO_MODEL`, currently `phi-4`) | not wired to any graph role; kept as a manual fallback and pinged only by the API-connection smoke test (skipped by default -- requires the LM Studio app running locally) |
+| `openai_llm_server` | OpenAI direct, `gpt-5.4-nano` | not wired to any graph role; pinged only by the API-connection smoke test |
 
-In the **agentic** graph, `node.py` currently gives each role its own dedicated client: `interviewer_llm = interviewer_llm_server`, `candidate_llm = candidate_llm_server`, `judge_llm = judge_llm_server`, `feedback_llm = feedback_llm_server`. A comment directly above that block in `node.py` states the intent explicitly: "Per-role servers: interviewer/candidate/judge on OpenRouter, feedback on local LM Studio."
+In the **agentic** graph, `node.py` currently gives each role its own dedicated client: `interviewer_llm = interviewer_llm_server`, `candidate_llm = candidate_llm_server`, `judge_llm = judge_llm_server`, `feedback_llm = feedback_llm_server`. A comment directly above that block in `node.py` states the intent explicitly: "Per-role servers: all four roles on OpenRouter."
 
 ## 11. RAG Evaluation and Ablation
 

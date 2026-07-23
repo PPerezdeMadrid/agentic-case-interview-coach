@@ -59,9 +59,9 @@ In summary, this part ensures the baseline keeps its own coverage and does not i
 
 ## `src/main/studio/tests/test_api_connection.py`
 
-This file does not test business logic: it is a connectivity smoke test that performs a real ping to each configured LLM endpoint (`lmstudio_llm_server`, `openai_llm_server`, and the three OpenRouter clients: interviewer, candidate, and judge) before the graph needs them.
+This file does not test business logic: it is a connectivity smoke test that performs a real ping to each configured LLM endpoint -- the four OpenRouter clients actually wired into the agentic graph's roles (interviewer, candidate, judge, feedback), plus the two clients kept only as manual fallbacks (`openai_llm_server`, direct OpenAI; `lmstudio_llm_server`, local LM Studio) -- before the graph needs them.
 
-The `APIConnectionTests` class is meant to be run manually before `make langgraph`, so that a downed server or a misconfigured API key is detected immediately instead of midway through a run inside LangGraph Studio.
+The `APIConnectionTests` class is meant to be run manually before `make langgraph`, so that a downed server or a misconfigured API key is detected immediately instead of midway through a run inside LangGraph Studio. The `lmstudio_llm_server` check is skipped unless `LMSTUDIO_RUN_LOCAL_TESTS=1` is set, since it isn't wired to any active role and requires the LM Studio app running locally.
 
 ## `src/main/web/tests/test_workbench.py`
 

@@ -624,6 +624,66 @@ class WorkbenchAppTests(unittest.TestCase):
         self.assertIn("DEMO_01", body)
         self.assertIn("100.0%", body)
 
+    def test_experiment_page_shows_errors_disclosure_when_batch_has_errors(self) -> None:
+        batch_runs_dir = Path(self.temp_dir.name) / "batch_runs"
+        batch_dir = batch_runs_dir / "batch_002"
+        batch_dir.mkdir(parents=True)
+        (batch_dir / "summary.json").write_text(
+            json.dumps({"batch_id": "batch_002", "created_at": "2026-01-01", "scenario_count": 1, "repeat_count": 1})
+        )
+        ok_record = {
+            "graph_name": "agentic",
+            "thread_id": "agentic_scenario_01_ok",
+            "scenario_ref": "/tmp/scenario_01.json",
+            "repeat_index": 1,
+            "status": "ok",
+            "transcript": [],
+        }
+        error_record = {
+            "graph_name": "agentic",
+            "thread_id": "agentic_scenario_02_err",
+            "scenario_ref": "/tmp/scenario_02.json",
+            "repeat_index": 1,
+            "status": "error",
+            "error": "ValueError: boom",
+            "transcript": [],
+        }
+        (batch_dir / "combined_results.jsonl").write_text(
+            "\n".join(json.dumps(r) for r in (ok_record, error_record))
+        )
+
+        with patch.object(experiment_store, "BATCH_RUNS_DIR", batch_runs_dir):
+            response = self.client.get("/experiment?batch=batch_002")
+
+        self.assertEqual(response.status_code, 200)
+        body = response.get_data(as_text=True)
+        self.assertIn("batch-errors", body)
+        self.assertIn("Show errors (1)", body)
+        self.assertIn("ValueError: boom", body)
+
+    def test_experiment_page_hides_errors_disclosure_when_batch_has_no_errors(self) -> None:
+        batch_runs_dir = Path(self.temp_dir.name) / "batch_runs"
+        batch_dir = batch_runs_dir / "batch_003"
+        batch_dir.mkdir(parents=True)
+        (batch_dir / "summary.json").write_text(
+            json.dumps({"batch_id": "batch_003", "created_at": "2026-01-01", "scenario_count": 1, "repeat_count": 1})
+        )
+        ok_record = {
+            "graph_name": "agentic",
+            "thread_id": "agentic_scenario_01_ok",
+            "scenario_ref": "/tmp/scenario_01.json",
+            "repeat_index": 1,
+            "status": "ok",
+            "transcript": [],
+        }
+        (batch_dir / "combined_results.jsonl").write_text(json.dumps(ok_record))
+
+        with patch.object(experiment_store, "BATCH_RUNS_DIR", batch_runs_dir):
+            response = self.client.get("/experiment?batch=batch_003")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("batch-errors", response.get_data(as_text=True))
+
     def test_delete_batch_page_removes_batch_and_redirects(self) -> None:
         batch_runs_dir = Path(self.temp_dir.name) / "batch_runs"
         batch_dir = batch_runs_dir / "batch_001"

@@ -41,9 +41,18 @@ class APIConnectionTests(unittest.TestCase):
 
     Run this ahead of `make langgraph` to catch a down server or a bad/missing
     API key immediately, instead of hitting it mid-run inside LangGraph Studio.
+
+    Covers all four active agentic-graph roles (interviewer, candidate, judge,
+    feedback -- all OpenRouter per node.py) plus the two clients kept around
+    for manual/fallback use only (lmstudio_llm_server, openai_llm_server).
     """
 
     def test_lmstudio_connection(self):
+        if not os.getenv("LMSTUDIO_RUN_LOCAL_TESTS"):
+            self.skipTest(
+                "Set LMSTUDIO_RUN_LOCAL_TESTS=1 to check this local, not-wired-to-any-active-role "
+                "client; skipped by default since it requires the LM Studio app running locally."
+            )
         client = llm_server.lmstudio_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
         self.assertTrue(
@@ -79,6 +88,13 @@ class APIConnectionTests(unittest.TestCase):
         client = llm_server.judge_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
         self.assertTrue(ok, f"OpenRouter connection (judge/Llama-70B) failed: {detail}")
+
+    def test_feedback_openrouter_connection(self):
+        if not os.getenv("OPENROUTER_API_KEY"):
+            self.skipTest("OPENROUTER_API_KEY is not set in .env")
+        client = llm_server.feedback_llm_server
+        ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
+        self.assertTrue(ok, f"OpenRouter connection (feedback/GPT-4o-mini) failed: {detail}")
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ import requests
 SERVERS = {
     "mistral": "http://127.0.0.1:18401",
     "llama": "http://127.0.0.1:18402",
+    # "mistral-small": "http://127.0.0.1:18403",  # uncomment if server.bash launches it
 }
 
 

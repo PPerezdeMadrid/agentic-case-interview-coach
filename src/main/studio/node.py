@@ -11,7 +11,6 @@ from llm_server import (
     feedback_llm_server,
     interviewer_llm_server,
     judge_llm_server,
-    lmstudio_llm_server,
     openai_llm_server,
 )
 from persistence import build_initial_graph_state, load_scenario_node
@@ -66,7 +65,7 @@ from utils import (
     strip_thinking,
 )
 
-# Per-role servers: interviewer/candidate/judge on OpenRouter, feedback on local LM Studio.
+# Per-role servers: all four roles on OpenRouter.
 candidate_llm = candidate_llm_server
 judge_llm = judge_llm_server
 interviewer_llm = interviewer_llm_server
@@ -193,7 +192,6 @@ def _invoke_interviewer_move(
         focus_areas,
         turn_index,
     )
-    print("Calling Interviewer Server...")
     payload, usage_log = invoke_json_llm(
         interviewer_llm,
         messages,
@@ -607,8 +605,13 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
             )
         ),
     ]
+    print("Calling Give Feedback server...")
     started_at = time.perf_counter()
-    response = feedback_llm.invoke(messages)
+    try:
+        response = feedback_llm.invoke(messages)
+    except Exception as exc:
+        print(f"Error calling Give Feedback server: {exc}")
+        raise
     usage_entry = extract_token_usage(
         response, node="give_feedback", model=feedback_llm.model_name, duration_seconds=time.perf_counter() - started_at
     )

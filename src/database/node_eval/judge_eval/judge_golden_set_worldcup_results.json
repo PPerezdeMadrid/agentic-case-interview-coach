@@ -1,8 +1,8 @@
 {
   "golden_set": "worldcup",
   "csv_path": "database/node_eval/judge_eval/judge_golden_set_worldcup.csv",
-  "model": "meta-llama/Llama-3.3-70B-Instruct",
-  "computed_at": "2026-07-19T08:58:00+00:00",
+  "model": "meta-llama/llama-3.3-70b-instruct",
+  "computed_at": "2026-07-23T08:44:04+00:00",
   "n_total": 79,
   "n_scored": 79,
   "n_errors": 0,
@@ -23,9 +23,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to propose a structure for analyzing the case before touching numbers",
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the case",
         "Request the candidate to quantify the impact of the expansion on revenue and cost streams",
-        "Check whether the candidate can identify the root cause of the profitability problem"
+        "Check whether the candidate can identify the key drivers of the declining EBITDA margin"
       ],
       "error": null
     },
@@ -35,9 +35,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to propose a structure for analyzing the problem before touching numbers",
-        "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
-        "Check whether the candidate can identify the root cause of the margin dilution and propose a recommendation to address it"
+        "Ask the candidate to break down the revenue and cost streams to understand the impact of expansion on profitability",
+        "Request the candidate to quantify the effect of the expansion on revenue per match and cost per match",
+        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
       ],
       "error": null
     },
@@ -47,9 +47,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify the objective and propose a structure before analyzing the situation",
-        "Request the candidate to break down revenue and cost streams to identify the root cause of the profitability issue",
-        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
+        "Ask the candidate to break down revenue and costs to understand the profitability issue",
+        "Request the candidate to propose a structure for analyzing the problem before diving into numbers",
+        "Check whether the candidate can quantify the impact of the expansion on revenue and costs per match"
       ],
       "error": null
     },
@@ -60,8 +60,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
-        "Request the candidate to analyze the per-match economics and identify the key drivers of the margin dilution",
-        "Ask the candidate for a final recommendation on how to address the margin dilution issue, including specific steps the Committee can take to redesign the commercial model or control costs"
+        "Request the candidate to provide a final recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the tournament's revenue model and cost structure, particularly the implications of the fixed-package broadcasting deal and the triplicated costs due to three host countries"
       ],
       "error": null
     },
@@ -72,8 +72,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
-        "Request the candidate to provide a clear recommendation on how to address the margin dilution issue",
-        "Explore the candidate's understanding of the tournament's cost structure and potential areas for cost reduction or optimization"
+        "Raise the case's math question about the broadcasting deal to surface per-match revenue dilution",
+        "Request a final recommendation from the candidate on how to address the margin dilution"
       ],
       "error": null
     },
@@ -84,8 +84,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to quantify the revenue and cost drivers to understand the impact of expansion on profitability",
-        "Request the candidate to provide a final recommendation on how to address the margin dilution issue",
-        "Explore the candidate's understanding of the case's core data, such as the 45% revenue growth and the decline in EBITDA margin from 38% to 24%"
+        "Request the candidate to provide a recommendation on how to address the margin dilution issue",
+        "Explore the candidate's understanding of the tournament's revenue model and cost structure, specifically the implications of a fixed-package revenue model versus a triplicated cost base"
       ],
       "error": null
     },
@@ -97,7 +97,7 @@
       "predicted_focus_areas": [
         "The candidate hasn't been asked for a final recommendation yet",
         "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Explore the potential risks and limitations of the candidate's potential recommendations, such as renegotiating broadcasting contracts or setting cost-sharing targets with host countries"
+        "Explore potential solutions to address the margin dilution, such as renegotiating broadcasting deals or implementing cost-sharing agreements with host countries"
       ],
       "error": null
     },
@@ -107,9 +107,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation on how to address the profitability issue",
-        "Explore the potential risks and limitations of the candidate's proposed solutions",
-        "Discuss potential next steps for the Interconta World Football Cup Organizing Committee to improve profitability"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
+        "Explore potential solutions to address the margin dilution, such as renegotiating broadcasting deals or implementing cost-sharing agreements with host countries"
       ],
       "error": null
     },
@@ -119,9 +119,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation on how to address the profitability issue",
-        "Explore the candidate's thoughts on potential risks and limitations of their proposed solution",
-        "Discuss potential next steps for the Interconta World Football Cup Organizing Committee to implement the candidate's recommendation"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
+        "Explore the potential risks and limitations of the candidate's potential recommendations"
       ],
       "error": null
     },
@@ -131,9 +131,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify the objective and propose a structure before analyzing the situation",
-        "Request the candidate to break down revenue streams and cost streams to identify the root cause of the profitability issue",
-        "Check whether the candidate can quantify the impact of the expansion on revenue and cost per match"
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the case",
+        "Request the candidate to engage with the core data and exhibits, such as the revenue and cost economics",
+        "Ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -143,9 +143,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down the revenue and cost streams to understand the impact of expansion on profitability",
-        "Request the candidate to quantify the effect of the expansion on revenue per match and cost per match",
-        "Have the candidate provide a clear recommendation supported by case evidence, risks, and next steps"
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the case",
+        "Request the candidate to break down revenue streams and cost streams to identify the root cause of the profitability problem",
+        "The candidate hasn't been asked for a detailed analysis of the case data, such as the impact of the expansion on revenue and cost per match"
       ],
       "error": null
     },
@@ -155,9 +155,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down the revenue and cost streams to understand the profitability issue",
-        "Request the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Check whether the candidate can propose a structured approach to addressing the margin dilution issue and provide a recommendation to the Secretary General"
+        "Ask the candidate to clarify the objective and propose a structure before analyzing the case",
+        "Request the candidate to quantify the impact of the expansion on revenue and cost streams",
+        "Check whether the candidate can identify the root cause of the profitability problem and provide a recommendation to address it"
       ],
       "error": null
     },
@@ -183,9 +183,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to calculate revenue per match and cost per match for both editions explicitly and compare them to understand the impact of expansion on profitability",
-        "Request the candidate to provide a final recommendation on how the expansion can be made to pay for itself, including potential strategies to address the margin dilution issue",
-        "Explore the candidate's understanding of the risks and limitations associated with the recommended strategies, such as renegotiating broadcasting contracts or implementing cost-sharing agreements with host countries"
+        "Ask the candidate to calculate revenue per match and cost per match for both editions explicitly and compare the changes",
+        "Request a final recommendation from the candidate on how to address the margin dilution issue",
+        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
       ],
       "error": null
     },
@@ -195,9 +195,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "The candidate hasn't been asked for a final recommendation yet",
-        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match and to provide a clear explanation of the drivers of the margin dilution",
-        "Check if the candidate can identify potential solutions to address the margin dilution, such as renegotiating broadcasting deals or implementing cost-sharing agreements with host countries"
+        "Ask the candidate to calculate revenue per match and cost per match for both editions to understand the impact of expansion on profitability",
+        "Request the candidate to provide a final recommendation on how to address the margin dilution issue, including potential risks and next steps"
       ],
       "error": null
     },
@@ -224,8 +223,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to quantify the impact of the expansion on revenue and costs",
-        "Raise the case's math question about the broadcasting deal's value per match",
-        "Request a final recommendation from the candidate on how to address the margin dilution"
+        "Raise the case's math question about the broadcasting deal's value when spread across 104 matches instead of 64",
+        "Request a final recommendation from the candidate on how to address the profitability issue"
       ],
       "error": null
     },
@@ -236,8 +235,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to propose a specific structure to analyze the profitability problem",
-        "Request that the candidate quantify the impact of revenue and cost changes on profitability",
-        "Check whether the candidate can identify the key drivers of the declining EBITDA margin"
+        "Request the candidate to quantify the impact of revenue and cost changes on the EBITDA margin",
+        "Raise the case's math question about the broadcasting deal's value when spread across 104 matches instead of 64"
       ],
       "error": null
     },
@@ -247,9 +246,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and cost streams",
-        "Request a clear recommendation on how to address the margin dilution issue",
-        "Explore the candidate's understanding of the tournament's revenue model and its limitations in capturing value per match"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
+        "Explore the candidate's understanding of the tournament's revenue model and its limitations in capturing value from the expansion"
       ],
       "error": null
     },
@@ -355,9 +354,9 @@
       "predicted_enough_evidence": false,
       "correct": false,
       "predicted_focus_areas": [
-        "the candidate hasn't been asked for a final recommendation yet",
-        "check if the candidate can quantify the impact of the expansion on revenue and cost streams",
-        "ask the candidate to provide next steps for the Secretary General based on their analysis"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Check if the candidate can quantify the impact of the expansion on revenue and cost per match",
+        "Ask the candidate to discuss potential risks and limitations of their proposed solution"
       ],
       "error": null
     },
@@ -463,9 +462,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "The candidate hasn't been asked for a final recommendation yet",
-        "Ask the candidate to quantify the revenue and cost per match for both editions and explain the change",
-        "Discuss the implications of the revenue and cost changes on the profitability of the tournament"
+        "Ask the candidate to calculate revenue per match and cost per match for both editions and compare the changes",
+        "Request a final recommendation from the candidate on how to address the margin dilution issue",
+        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
       ],
       "error": null
     },
@@ -504,8 +503,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "The candidate hasn't been asked for a final recommendation yet",
-        "Test whether the candidate can quantify the impact of the expansion on revenue and cost per match",
-        "Ask the candidate to consider the risks and limitations of their potential recommendations"
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
+        "Discuss potential risks and limitations of the candidate's potential recommendation"
       ],
       "error": null
     },
@@ -532,7 +531,8 @@
       "correct": false,
       "predicted_focus_areas": [
         "The candidate hasn't been asked for a final recommendation yet",
-        "Test whether the candidate can quantify the impact of renegotiating broadcasting deals and cost-sharing with host countries on the EBITDA margin"
+        "Check whether the candidate can quantify the impact of renegotiating broadcasting deals and cost-sharing with host countries on the EBITDA margin",
+        "Ask the candidate to discuss potential risks and limitations of their proposed solutions and how to address them"
       ],
       "error": null
     },
@@ -582,9 +582,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify their understanding of the objective and propose a structure for analysis",
+        "Ask the candidate to propose a structure for analyzing the case before touching numbers",
         "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
-        "Ask the candidate for a final recommendation based on their analysis"
+        "Check whether the candidate can break down the cost base into its constituent parts and identify the main drivers of the margin dilution"
       ],
       "error": null
     },
@@ -594,9 +594,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down revenue and costs to understand the profitability issue",
-        "Raise the case's math question about the impact of match count on revenue and costs",
-        "Request a final recommendation from the candidate on how to address the profitability issue"
+        "Ask the candidate to break down revenue and cost drivers to understand the profitability issue",
+        "Request the candidate to quantify the impact of expansion on revenue and costs per match",
+        "Check whether the candidate can propose a recommendation to address the margin dilution issue"
       ],
       "error": null
     },
@@ -606,7 +606,7 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down revenue and costs to understand the impact of expansion on profitability",
+        "Ask the candidate to break down revenue and cost streams to understand the impact of expansion on profitability",
         "Request the candidate to quantify the effect of the expansion on revenue and cost per match",
         "Check whether the candidate can identify the root cause of the margin dilution and propose a recommendation to address it"
       ],
@@ -618,9 +618,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down revenue and costs to understand the impact of expansion on profitability",
-        "Request the candidate to quantify the effect of the expansion on revenue per match and cost per match",
-        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
+        "Ask the candidate to break down revenue and cost streams to understand the impact of expansion on profitability",
+        "Request the candidate to quantify the effect of the expansion on revenue and cost per match",
+        "Check whether the candidate can propose a recommendation to address the margin dilution issue"
       ],
       "error": null
     },
@@ -630,9 +630,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to calculate the cost per match for the upcoming edition to complete the per-match quantification",
-        "Request a final recommendation from the candidate on how to address the margin dilution issue",
-        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Check if the candidate can quantify the impact of the expansion on revenue and cost per match and relate it to the EBITDA margin dilution",
+        "Ask the candidate to consider potential risks and limitations of their proposed solution and suggest next steps for the client"
       ],
       "error": null
     },
@@ -643,8 +643,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "Ask the candidate to propose a clear structure for analyzing the case",
-        "Request the candidate to quantify the impact of expansion on revenue and cost per match",
-        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+        "Request the candidate to quantify the impact of expansion on revenue and costs",
+        "Check whether the candidate can identify the root cause of the profitability problem"
       ],
       "error": null
     },
@@ -666,8 +666,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to provide a final recommendation based on their analysis",
-        "Request the candidate to quantify the potential impact of renegotiating broadcasting deals and implementing cost-sharing agreements with host countries"
+        "Ask the candidate for a final recommendation on how the expansion can be made to pay for itself",
+        "Explore the candidate's thoughts on potential risks and limitations of their proposed solution",
+        "Discuss potential next steps for the Interconta World Football Cup Organizing Committee to address the margin dilution issue"
       ],
       "error": null
     },
@@ -677,9 +678,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify the objective before analyzing: is the Committee asking for a one-time diagnosis of this edition, or a repeatable model for future editions?",
-        "Request that the candidate propose a structure before touching numbers: revenue streams versus cost streams, then per-match economics old format vs. new format",
-        "The candidate hasn't been asked for a final recommendation yet, prompt them to provide one based on their analysis"
+        "Ask the candidate to engage with the core data and provide a clear structure for their analysis",
+        "Raise the case's math question about the impact of match count on revenue and cost per match",
+        "Request a final recommendation from the candidate, including potential risks and next steps"
       ],
       "error": null
     },
@@ -691,7 +692,7 @@
       "predicted_focus_areas": [
         "Ask the candidate to propose a structure for analyzing the profitability issue before diving into numbers",
         "Request that the candidate quantify the impact of the expansion on revenue and cost streams",
-        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+        "Check whether the candidate can break down the cost base into its key components and identify the main drivers of the margin dilution"
       ],
       "error": null
     },
@@ -701,9 +702,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to propose a clear structure for analyzing the case",
-        "Request that the candidate quantify the impact of the expansion on revenue and costs per match",
-        "Ask the candidate for a final recommendation on how to address the margin dilution issue"
+        "Ask the candidate to propose a structure for analyzing the case",
+        "Request that the candidate quantify the impact of the expansion on revenue and costs",
+        "Ask the candidate for a final recommendation on how to address the profitability issue"
       ],
       "error": null
     },
@@ -723,7 +724,7 @@
       "predicted_focus_areas": [
         "The candidate hasn't been asked for a final recommendation yet",
         "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
-        "Explore the candidate's understanding of the cost base and how it scales with the number of host countries and matches"
+        "Explore the candidate's understanding of the tournament's revenue model and its limitations in capturing value from the expansion"
       ],
       "error": null
     },
@@ -733,9 +734,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Request a clear recommendation on how to address the margin dilution issue",
-        "Explore the candidate's thoughts on potential risks and next steps for the Interconta World Football Cup Organizing Committee"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the candidate to quantify the impact of the expansion on revenue and cost per match",
+        "Discuss potential risks and limitations of the candidate's potential recommendation"
       ],
       "error": null
     },
@@ -745,9 +746,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "the candidate hasn't been asked for a final recommendation yet",
-        "test whether the candidate can quantify the impact of the expansion on revenue and cost per match",
-        "ask the candidate to consider the risks and limitations of their potential recommendations"
+        "The candidate hasn't been asked for a final recommendation yet",
+        "Ask the case's math question before moving on, it hasn't come up yet"
       ],
       "error": null
     },
@@ -759,7 +759,7 @@
       "predicted_focus_areas": [
         "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
         "Request a clear recommendation on how to address the margin dilution issue",
-        "Explore the candidate's understanding of the trade-offs between revenue growth and cost increases due to the expansion"
+        "Explore the candidate's understanding of the tournament's revenue model and cost structure"
       ],
       "error": null
     },
@@ -770,8 +770,8 @@
       "correct": true,
       "predicted_focus_areas": [
         "The candidate hasn't been asked for a final recommendation yet",
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match",
-        "Discuss potential risks and limitations of the candidate's potential recommendation"
+        "Ask the case's math question before moving on, it hasn't come up yet",
+        "Check whether the candidate prioritises the biggest cost bucket"
       ],
       "error": null
     },

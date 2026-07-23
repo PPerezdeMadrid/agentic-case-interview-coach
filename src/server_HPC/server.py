@@ -6,6 +6,7 @@ CUDA_VISIBLE_DEVICES (see server.bash) rather than sharing a process/GPU set.
 
 Usage:
     CUDA_VISIBLE_DEVICES=0   python server.py --model mistral
+    CUDA_VISIBLE_DEVICES=0   python server.py --model mistral-small
     CUDA_VISIBLE_DEVICES=1,2 python server.py --model llama
 """
 
@@ -37,17 +38,35 @@ MODELS = {
         "repo_id": "meta-llama/Llama-3.3-70B-Instruct",
         "port": 18402,
     },
+    "mistral-small": {
+        "repo_id": "mistralai/Mistral-Small-24B-Instruct-2501",
+        "port": 18403,
+    },
 }
 
 
 def local_model_dir(repo_id: str) -> Path:
-    """Directory used by `hf download <repo_id> --local-dir ...` (see server.bash).
-
-    This is a flat directory of real files, not the HF hub cache layout
-    (models--org--name/snapshots/<rev>/...), so it must be passed directly as
-    the model path rather than as `cache_dir` to `from_pretrained`.
-    """
+    """Directory `hf download <repo_id>` (with or without --local-dir) places files in."""
     return HF_HOME / "hub" / f"models--{repo_id.replace('/', '--')}"
+
+
+def resolve_model_source(repo_id: str) -> tuple[str, dict]:
+    """Returns (model_name_or_path, extra_from_pretrained_kwargs) for a downloaded model.
+
+    Handles both `hf download <repo_id> --local-dir ...` (flat directory of real
+    files) and a plain `hf download <repo_id>` (standard HF hub cache layout:
+    models--org--name/snapshots/<rev>/...), since either can end up under
+    HF_HOME/hub depending on how the weights were fetched.
+    """
+    model_dir = local_model_dir(repo_id)
+    if (model_dir / "config.json").exists():
+        return str(model_dir), {}
+    if model_dir.exists():
+        return repo_id, {"cache_dir": str(HF_HOME / "hub")}
+    raise FileNotFoundError(
+        f"{repo_id} not found under {model_dir}. Download it first with: "
+        f"hf download {repo_id} --local-dir {model_dir}"
+    )
 
 
 class ChatMessage(BaseModel):
@@ -72,20 +91,16 @@ class CompletionRequest(BaseModel):
 
 
 def load_model(repo_id: str):
-    model_dir = local_model_dir(repo_id)
-    if not model_dir.exists():
-        raise FileNotFoundError(
-            f"{repo_id} not found at {model_dir}. Download it first with: "
-            f"hf download {repo_id} --local-dir {model_dir}"
-        )
+    model_source, extra_kwargs = resolve_model_source(repo_id)
 
-    logger.info("Loading %s from %s ...", repo_id, model_dir)
-    tokenizer = AutoTokenizer.from_pretrained(str(model_dir), local_files_only=True)
+    logger.info("Loading %s from %s ...", repo_id, model_source)
+    tokenizer = AutoTokenizer.from_pretrained(model_source, local_files_only=True, **extra_kwargs)
     model = AutoModelForCausalLM.from_pretrained(
-        str(model_dir),
+        model_source,
         local_files_only=True,
         torch_dtype="auto",
         device_map="auto",
+        **extra_kwargs,
     )
     model.eval()
     logger.info("%s loaded (dtype=%s)", repo_id, model.dtype)

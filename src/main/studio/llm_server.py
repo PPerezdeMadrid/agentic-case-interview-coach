@@ -32,7 +32,7 @@ _openrouter_base_url = _normalize_base_url(
 _openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "")
 _openrouter_temperature = float(os.getenv("OPENROUTER_TEMPERATURE", "0.2"))
 
-# Local LM Studio model - used for final candidate feedback
+# Local LM Studio model
 lmstudio_llm_server = ChatOpenAI(
     model=os.getenv("LMSTUDIO_MODEL", "deepseek-r1-distill-llama-8b"),
     base_url=_normalize_base_url(os.getenv("LMSTUDIO_BASE_URL", "http://localhost:8081")),
@@ -42,20 +42,20 @@ lmstudio_llm_server = ChatOpenAI(
 )
 
 
-# OpenAI model
+# OpenAI model (direct API, not OpenRouter) - kept for connectivity tests and
+# as a manual fallback; no active graph role is wired to this client.
 openai_llm_server = ChatOpenAI(
     model=os.getenv("OPENAI_MODEL", "gpt-5.4-nano"),
     base_url=_normalize_base_url(os.getenv("OPENAI_BASE_URL", "https://api.openai.com")),
     api_key=os.getenv("OPENAI_API_KEY", ""),
     temperature=float(os.getenv("OPENAI_TEMPERATURE", "0")),
     disable_streaming=True,
-    model_kwargs={"response_format": {"type": "json_object"}},
 )
 
 
 # OpenRouter Qwen Interviewer model
 interviewer_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen-2.5-72b-instruct"),
+    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen3-14b"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.7),
@@ -77,7 +77,14 @@ judge_llm_server = ChatOpenAI(
     temperature=os.getenv("JUDGE_TEMPERATURE", 0.3),
 )
 
-feedback_llm_server = lmstudio_llm_server
+# OpenRouter GPT-4o-mini Feedback model - free-form prose, so no forced JSON
+# response_format here; callers that need JSON bind it per-call via invoke_json_llm.
+feedback_llm_server = ChatOpenAI(
+    model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "openai/gpt-4o-mini"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
+    temperature=os.getenv("FEEDBACK_TEMPERATURE", 0),
+)
 
 
 # Alternative: GPU-hosted models on the university HPC cluster. 

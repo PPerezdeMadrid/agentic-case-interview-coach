@@ -230,6 +230,26 @@ def format_candidate_persona(candidate_profile: dict) -> str:
         cleaned_math = [f"- {str(item).strip()}" for item in math_guidance if str(item).strip()]
         if cleaned_math:
             sections.append("Math guidance:\n" + "\n".join(cleaned_math))
+
+    expected_scores = candidate_profile.get("expected_scores", {})
+    if isinstance(expected_scores, dict):
+        rationale_lines = []
+        for group_key in ("rubric", "case_interaction_quality"):
+            group = expected_scores.get(group_key, {})
+            if not isinstance(group, dict):
+                continue
+            for dimension_id, entry in group.items():
+                if not isinstance(entry, dict):
+                    continue
+                rationale = str(entry.get("rationale", "")).strip()
+                if rationale:
+                    label = str(dimension_id).replace("_", " ").strip()
+                    rationale_lines.append(f"- {label}: {rationale}")
+        if rationale_lines:
+            sections.append(
+                "How you must actually come across in this interview, trait by trait:\n"
+                + "\n".join(rationale_lines)
+            )
     return "\n\n".join(sections) if sections else "No scenario persona provided."
 
 
@@ -394,20 +414,31 @@ def invoke_json_llm(
     usage_log: list[dict] = []
     model_name = getattr(llm, "model_name", "")
     is_acceptable = accept or (lambda payload: bool(payload))
+    server_label = node.replace("_", " ").title()
 
     structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
 
     def _invoke(target_llm, invoke_messages: list):
         if target_llm is llm:
-            return llm.invoke(invoke_messages)
+            try:
+                return llm.invoke(invoke_messages)
+            except Exception as exc:
+                print(f"Error calling {server_label} server: {exc}")
+                raise
         try:
             return target_llm.invoke(invoke_messages)
-        except Exception:
+        except Exception as exc:
             # Some OpenRouter-routed providers advertise structured_outputs
             # support but reject this particular schema/request - fall back
             # to an unconstrained call rather than losing the turn.
-            return llm.invoke(invoke_messages)
+            print(f"Structured call to {server_label} server failed ({exc}); retrying unconstrained.")
+            try:
+                return llm.invoke(invoke_messages)
+            except Exception as fallback_exc:
+                print(f"Error calling {server_label} server: {fallback_exc}")
+                raise
 
+    print(f"Calling {server_label} server...")
     started_at = time.perf_counter()
     response = _invoke(structured_llm, messages)
     usage_log.append(extract_token_usage(response, node=node, model=model_name, duration_seconds=time.perf_counter() - started_at))
@@ -427,6 +458,7 @@ def invoke_json_llm(
                 )
             ),
         ]
+        print(f"Calling {server_label} server (JSON repair retry)...")
         started_at = time.perf_counter()
         response = _invoke(llm, repair_messages)
         usage_log.append(

@@ -8,7 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from dashboard_store import to_numeric_score
+from dashboard_store import NOT_TESTED, to_numeric_score
 
 WEB_DIR = Path(__file__).resolve().parent
 MAIN_DIR = WEB_DIR.parent
@@ -364,6 +364,93 @@ def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _overscore_severity(rate: float | None) -> str:
+    if rate is None:
+        return "empty"
+    if rate <= 10:
+        return "good"
+    if rate <= 40:
+        return "fair"
+    return "poor"
+
+
+def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """
+    For dimensions the scenario author explicitly marked 'not_tested' (the case has no
+    moment that exercises that dimension), track how often each graph's judge scored it
+    with a real number anyway. compute_accuracy_stats can't see this: it only ever compares
+    pairs where both the judge score and the reference are numeric, so a judge that
+    fabricates a score for a not_tested dimension is pooled out of that comparison
+    entirely instead of being penalized for it.
+    """
+    graph_names = sorted({record.get("graph_name", "unknown") for record in records})
+
+    all_keys: set[tuple[str, str, str]] = set()
+    counts: dict[tuple[str, str, str], dict[str, list[int]]] = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+
+    for record in records:
+        graph_name = record.get("graph_name", "unknown")
+        reference = load_reference_scores(record.get("scenario_ref", ""))
+        for section_key, label in SECTION_LABELS.items():
+            record_section = record.get(section_key) or {}
+            if not isinstance(record_section, dict):
+                record_section = {}
+            for dimension, expected_entry in reference.get(section_key, {}).items():
+                expected_raw = expected_entry.get("score") if isinstance(expected_entry, dict) else None
+                if str(expected_raw).strip().lower() != NOT_TESTED:
+                    continue
+                # Look up directly rather than via iter_dimension_scores: a graph that never
+                # even emits this dimension's key is still a "did not overscore" case, not
+                # one to silently drop from the not_tested denominator.
+                entry = record_section.get(dimension)
+                score = entry.get("score") if isinstance(entry, dict) else entry
+                key = (section_key, label, dimension)
+                all_keys.add(key)
+                bucket = counts[key][graph_name]
+                bucket[0] += 1
+                if to_numeric_score(score) is not None:
+                    bucket[1] += 1
+
+    rows = []
+    graph_pooled: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+
+    for section_key, label, dimension in sorted(all_keys):
+        key = (section_key, label, dimension)
+        by_graph = counts.get(key, {})
+        row_graphs: dict[str, Any] = {}
+
+        for graph_name in graph_names:
+            n_not_tested, n_overscored = by_graph.get(graph_name, [0, 0])
+            rate = _rate(n_overscored, n_not_tested)
+            row_graphs[graph_name] = {
+                "n_not_tested": n_not_tested,
+                "n_overscored": n_overscored,
+                "overscore_rate": rate,
+                "severity": _overscore_severity(rate),
+            }
+            if n_not_tested:
+                pooled = graph_pooled[graph_name]
+                pooled[0] += n_not_tested
+                pooled[1] += n_overscored
+
+        rows.append({"section": section_key, "section_label": label, "dimension": dimension, "graphs": row_graphs})
+
+    summary = []
+    for graph_name in graph_names:
+        n_not_tested, n_overscored = graph_pooled.get(graph_name, [0, 0])
+        rate = _rate(n_overscored, n_not_tested)
+        summary.append(
+            {
+                "graph_name": graph_name,
+                "n_not_tested": n_not_tested,
+                "n_overscored": n_overscored,
+                "overscore_rate": rate,
+            }
+        )
+
+    return {"rows": rows, "summary": summary, "graph_names": graph_names, "total_dims": len(rows)}
+
+
 def build_radar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str]) -> dict[str, Any] | None:
     """Precompute SVG polygon geometry for an accuracy radar chart (one axis per rubric dimension)."""
     rows = [row for row in accuracy_rows if any(row["graphs"].get(g, {}).get("n_compared") for g in graph_names)]
@@ -421,6 +508,26 @@ def build_radar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str
         )
 
     return {"cx": cx, "cy": cy, "radius": radius, "axes": axes, "rings": rings, "series": series}
+
+
+def list_errors(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    errors = []
+    for record in records:
+        if record.get("status") == "ok":
+            continue
+        scenario_ref = record.get("scenario_ref") or ""
+        slug = Path(scenario_ref).stem if scenario_ref else record.get("thread_id", "unknown")
+        errors.append(
+            {
+                "graph_name": record.get("graph_name", "unknown"),
+                "slug": slug,
+                "thread_id": record.get("thread_id", ""),
+                "repeat_index": record.get("repeat_index"),
+                "status": record.get("status", "error"),
+                "error": record.get("error", ""),
+            }
+        )
+    return errors
 
 
 def list_scenarios(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -576,4 +683,6 @@ def build_overview(dir_name: str) -> dict[str, Any]:
         "scenarios": list_scenarios(records),
         "accuracy": accuracy,
         "radar": build_radar_chart(accuracy["rows"], accuracy["graph_names"]),
+        "overscoring": compute_overscoring_stats(records),
+        "errors": list_errors(records),
     }

@@ -33,10 +33,10 @@ The project is being developed using computational resources provided by the Uni
 
 To ensure the system remains practical, reproducible, and cost-effective, the implementation now runs entirely on hosted or local inference instead of the HPC GPU allocation. As currently configured in `.env`:
 
-* **Interviewer**: Qwen2.5-72B-Instruct (OpenRouter, `qwen/qwen-2.5-72b-instruct`)
-* **Candidate**: Mistral-Nemo-Instruct (OpenRouter, `mistralai/mistral-nemo`)
+* **Interviewer**: Qwen3-14B (OpenRouter, `qwen/qwen3-14b`)
+* **Candidate**: Mistral-Small-24B-Instruct (OpenRouter, `mistralai/mistral-small-24b-instruct-2501`)
 * **Judge**: Llama-3.3-70B-Instruct (OpenRouter, `meta-llama/llama-3.3-70b-instruct`)
-* **Feedback**: local model served via LM Studio (`LMSTUDIO_MODEL`, currently `phi-4`) 
+* **Feedback**: GPT-4o-mini (OpenRouter, `openai/gpt-4o-mini`)
 
 
 The GPU-hosted configuration (`localhost:18401`/`18402` via `server.bash` on the HPC cluster) is kept commented out in `llm_server.py` in case the project reverts to self-hosted inference; it still targets the smaller Mistral-Nemo/Llama-3.3-70B pair, since it remains constrained by the single-GPU allocation.
