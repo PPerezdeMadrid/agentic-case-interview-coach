@@ -41,11 +41,8 @@ from utils import (
     strip_thinking,
 )
 
-# Baseline uses a single model (Llama-3.1-70B via OpenRouter) across all roles, unlike
-# the role-differentiated agentic graph.
 candidate_llm = candidate_llm_server
-judge_llm = judge_llm_server
-interviewer_llm = judge_llm_server
+baseline_llm = judge_llm_server
 
 DEFAULT_THREAD_ID = "main_baseline"
 MAX_BASELINE_TURNS = 4
@@ -106,7 +103,7 @@ def get_profitability_guide_context(
         )
     ]
     payload, usage_log = invoke_json_llm(
-        judge_llm,
+        baseline_llm,
         scouting_messages,
         node=f"{evaluation_target}_profitability_scout",
         schema=ProfitabilityRagScoutingDecision,
@@ -140,16 +137,7 @@ def build_initial_baseline_state(
 
 
 def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> dict | None:
-    """Parse the baseline's single unified per-turn payload.
-
-    Unlike the agentic graph, baseline gets no separate judge/eval/feedback
-    turns: this same schema is used on every call, and when action is
-    "evaluate" it must also carry the full case_performance/quality_dialog/
-    feedback content in that one response. `require_evaluate` is set once the
-    turn budget is exhausted, so a model that ignores the instruction to
-    evaluate now is treated as an invalid reply and retried rather than
-    silently continuing the interview past its turn budget.
-    """
+    """Parse the baseline's single unified per-turn payload."""
     if not payload:
         return None
 
@@ -220,7 +208,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
         }
 
     payload, usage_log = invoke_json_llm(
-        interviewer_llm,
+        baseline_llm,
         messages,
         node="baseline_move",
         schema=BaselineTurnOutput,

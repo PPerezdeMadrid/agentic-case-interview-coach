@@ -1923,6 +1923,480 @@ ITEMS: list[dict[str, Any]] = [
             f"Candidate: {REC_STRONG}",
         ),
     },
+    # ------------------------------------------------------- Third batch: balance small categories to 10 rows each
+    {
+        "id": "WC_91",
+        "category": "FULL_COVERAGE_CLEAN",
+        "expected_enough_evidence": True,
+        "rationale": (
+            "Every stage -- objective clarification, MECE structure, data-grounded "
+            "synthesis, correct quantification, and a risk-aware recommendation -- is "
+            "covered end to end, this time anchored on whether the margin decline is a "
+            "one-off or a recurring pattern."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Let me recap: revenue up 45%, margin down from 38% to 24%, "
+            "tied to going from 32 to 48 teams across three host countries. Before I "
+            "structure this - is this margin decline expected to be a one-off for this "
+            "edition, or does the Committee expect it to recur at future expansions "
+            "too?",
+            "Interviewer: They expect it to recur unless something structural changes.",
+            "Candidate: Understood. Then I'd split revenue streams from the incremental "
+            "cost base of the three-host expansion, and compare per-match economics "
+            "rather than totals, since match count nearly doubled. My hypothesis is "
+            "that a flat-package revenue model isn't scaling with match count the way "
+            "the cost base is.",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: That confirms it - broadcasting's fixed-package structure "
+            "dilutes revenue per match as matches grow, sponsorship and licensing "
+            "explain the actual 45% growth, and the tri-host format roughly triples "
+            "infrastructure cost while adding new travel and team-linked prize-money "
+            "costs.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_92",
+        "category": "FULL_COVERAGE_CLEAN",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_36-38/WC_63: compressed into a handful of turns, but every stage is genuinely covered.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Quick check first - is the Committee prioritizing margin "
+            "recovery even if it slows future expansion, or is some dilution "
+            "acceptable?",
+            "Interviewer: Margin recovery is the priority.",
+            "Candidate: Then I'd split revenue from the incremental cost of the "
+            "three-host expansion, per match, and check two things: how broadcasting "
+            "is sold, and how host-country count drives cost versus match count.",
+            "Interviewer: Broadcasting is a fixed package, and yes, three host "
+            "countries roughly triples infrastructure and security cost.",
+            "Candidate: That's the whole story then - revenue per match falls from "
+            "about EUR 46.9M to EUR 41.8M, cost per match rises from about EUR 29.1M "
+            "to EUR 31.8M. I'd renegotiate broadcasting toward per-match value, and "
+            "lock in cost-sharing with future host countries before further "
+            "expansion.",
+            "Interviewer: That covers everything I needed.",
+        ),
+    },
+    {
+        "id": "WC_93",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "Same pattern as WC_10-12/WC_71-74: a confident revenue-side verdict delivered cold, with no structure or data behind it.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'd just go after a bigger global sponsorship deal with a "
+            "major tech brand - that alone should cover the margin gap.",
+        ),
+    },
+    {
+        "id": "WC_94",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "Same pattern as WC_10-12/WC_71-74: an immediate pricing verdict with no preceding structure or data exchanged.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Honestly the simplest fix is to push for a much higher "
+            "broadcasting rights price at the next renegotiation - that solves it.",
+        ),
+    },
+    {
+        "id": "WC_95",
+        "category": "PREMATURE_CONCLUSION",
+        "expected_enough_evidence": False,
+        "rationale": "Same pattern as WC_73: one clarifying question doesn't turn this into real analysis -- the candidate still jumps straight to a recommendation with no structure and no data exchanged.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this urgent enough that we're looking for a quick fix "
+            "rather than a full redesign?",
+            "Interviewer: We'd like a quick fix if one exists.",
+            "Candidate: Then I'd recommend dropping back to a single host country next "
+            "time - fewer host countries means fewer costs, plain and simple.",
+        ),
+    },
+    {
+        "id": "WC_96",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "Structure, data, and math are all correctly covered, but the candidate "
+            "visibly starts the final recommendation and trails off mid-sentence "
+            "without ever completing it -- a recommendation genuinely begun, not one "
+            "that was skipped."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis only, or also a recommendation on "
+            "making the expansion pay for itself?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue streams from the incremental cost base of "
+            "the three-host expansion, and look at per-match economics. What's changed "
+            "on each side?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So a fixed broadcasting package dilutes per-match revenue as "
+            "matches grow, while tripled host-country infrastructure and added travel "
+            "push per-match cost up.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            "Candidate: Given all that, I'd say the priority has to be renegotiating "
+            "the broadcasting side, and then, well, on the cost side there's probably "
+            "a few different ways to approach the host-country piece, so let me think "
+            "about which one actually makes the most sense before I commit to...",
+        ),
+    },
+    {
+        "id": "WC_97",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate correctly works out both per-match figures but stalls "
+            "trying to tie them into a single structural conclusion, and the "
+            "conversation ends before a recommendation -- an interpretation genuinely "
+            "begun, not skipped."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the hard priority here?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, per "
+            "match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So fixed-package broadcasting and tripled host-country costs "
+            "both look relevant.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            "Candidate: So revenue per match is down about 11% and cost per match is "
+            "up about 9% - I want to make sure I state the combined margin effect of "
+            "those two correctly rather than just eyeballing it, give me a second to "
+            "work through how they net out together...",
+            "Interviewer: Take your time.",
+            "Candidate: Right, I keep going back and forth on whether to express this "
+            "as a margin-point impact or a euro impact - let me settle that before I "
+            "give you the full picture.",
+        ),
+    },
+    {
+        "id": "WC_98",
+        "category": "UNFINISHED_ANALYSIS",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate builds out the cost side of the structure in real detail "
+            "but trails off before ever stating the revenue side, and the "
+            "conversation stops there -- half a structure genuinely attempted, not "
+            "one that was never started."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: I'll start on the cost side - venue and security "
+            "infrastructure across three host countries, team travel and "
+            "accommodation between host countries, and prize money tied to team "
+            "count. On the revenue side, I'd want to look at... actually, let me make "
+            "sure I've got the cost buckets exhaustive first before I move to "
+            "revenue, since I don't want to double-count anything across the two.",
+            "Interviewer: Go ahead and give me the revenue side whenever you're "
+            "ready.",
+            "Candidate: Right, sorry - let me just double check I haven't missed a "
+            "cost bucket first, there might be one more I'm forgetting related to "
+            "logistics specifically...",
+        ),
+    },
+    {
+        "id": "WC_99",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "Asked repeatedly for a concrete structure, the candidate keeps offering "
+            "surface-level predictions instead of ever stating a MECE breakdown -- "
+            "present and talking, but never actually responsive to the ask."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: My gut says this is mostly a cost story.",
+            "Interviewer: Can you lay out a structure for how you'd confirm that?",
+            "Candidate: Sure, I'd guess venues and security are probably the biggest "
+            "piece of it.",
+            "Interviewer: That's a guess at an answer, not a structure - how would "
+            "you organize the analysis?",
+            "Candidate: Fair, I think travel costs are probably up a lot too given "
+            "three countries.",
+            "Interviewer: I need an actual framework before we go further - how would "
+            "you break this problem down?",
+            "Candidate: I'd say prize money is worth a look as well, given more teams "
+            "qualify now.",
+        ),
+    },
+    {
+        "id": "WC_100",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "Every time the interviewer asks the candidate to commit to a number or a "
+            "structure, the candidate deflects the question back to the interviewer "
+            "instead of answering it, even after being told directly to commit."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Before I say anything - roughly how big would you say the "
+            "cost increase is?",
+            "Interviewer: I'd like your estimate, not mine - how would you structure "
+            "this?",
+            "Candidate: Fair enough, but what would you say is the biggest cost "
+            "bucket, just so I calibrate?",
+            "Interviewer: That's for you to work out - propose your own structure.",
+            "Candidate: Understood - though if you had to rank the cost categories, "
+            "which would you put first?",
+            "Interviewer: I can't answer that for you - what's your structure?",
+            "Candidate: Okay, one last check - is there a standard way these "
+            "profitability cases are usually cut?",
+        ),
+    },
+    {
+        "id": "WC_101",
+        "category": "NON_RESPONSIVE",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate responds to every prompt with rapport-building filler -- "
+            "praising the question, promising to get there -- without ever "
+            "contributing a structure, a data request, or a conclusion."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Great setup - this is exactly the kind of case I enjoy "
+            "digging into.",
+            "Interviewer: How would you like to structure the analysis?",
+            "Candidate: Love that question - let's definitely make sure we get to "
+            "the bottom of this properly.",
+            "Interviewer: What specifically would you look at first?",
+            "Candidate: Good instinct to push on that - I want to make sure I cover "
+            "this the right way rather than rush it.",
+            "Interviewer: I need something concrete - what's your first question for "
+            "me?",
+            "Candidate: Appreciate the nudge - let's make sure we're thorough as we "
+            "get into it.",
+        ),
+    },
+    {
+        "id": "WC_102",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate conflates the team-count jump (32 to 48) with the "
+            "match-count jump (64 to 104), treating them as the same figure, and "
+            "doesn't correct the conflation even after being pointed back to it."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Okay, so since the team count only went from 32 to 48, "
+            "that's the same increase I should use for the match count too, which "
+            "keeps the per-match math fairly simple.",
+            "Interviewer: Look again at the match counts specifically - they didn't "
+            "move the same amount as the team count.",
+            "Candidate: Sure, but I think using the team-count increase as the "
+            "stand-in for everything keeps this cleaner, so I'd stick with that.",
+        ),
+    },
+    {
+        "id": "WC_103",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate assumes the previous, single-host edition was the more "
+            "expensive one, backwards from the data, and doesn't correct the "
+            "misread even after a direct correction."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery the priority here?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So it sounds like the single-host previous edition was "
+            "actually the pricier one to run, and this upcoming edition should be "
+            "cheaper per match given the shared infrastructure across three "
+            "countries.",
+            "Interviewer: That's backwards - the upcoming, three-host edition is the "
+            "more cost-heavy one, not the previous edition.",
+            "Candidate: Got it, but either way I still think the single-host format "
+            "was the more expensive setup, so I'd focus on what made that one costly.",
+        ),
+    },
+    {
+        "id": "WC_104",
+        "category": "EVIDENCE_MISREAD",
+        "expected_enough_evidence": False,
+        "rationale": (
+            "The candidate attributes the 45% revenue growth to ticketing and "
+            "hospitality, when the data says sponsorship and licensing drove it, and "
+            "keeps the wrong attribution even after a direct correction."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this a one-off diagnosis or a repeatable model?",
+            "Interviewer: A repeatable model.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So with more matches and more host countries, ticketing and "
+            "hospitality sales must be what's driving most of that 45% revenue "
+            "growth.",
+            "Interviewer: Look again at what the data says actually drove the 45% "
+            "growth.",
+            "Candidate: Fair, but I still think ticketing is the more reliable "
+            "growth lever here, so I'd keep building the story around that.",
+        ),
+    },
+    {
+        "id": "WC_105",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_39-41/WC_64: full coverage reached, but this time the candidate divides the new edition's cost by team count instead of match count, producing a wrong but complete answer.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Fixed broadcasting dilution and tripled host-country costs "
+            "look like the two drivers.",
+            f"Interviewer: {MATH_Q}",
+            "Candidate: For the new edition, 24% margin on EUR 4.35B means EBITDA is "
+            "about EUR 1.04B, so cost is about EUR 3.31B - I'll divide that by the 48 "
+            "teams instead of matches, so cost per team is about EUR 69M, which "
+            "looks quite manageable.",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_106",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_49/WC_50/WC_70: full coverage reached, but the recommendation itself skips risks and next steps.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is margin recovery non-negotiable this cycle?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Fixed-package broadcasting dilution and tripled host-country "
+            "costs explain the gap.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            "Candidate: I'd renegotiate broadcasting toward per-match value and "
+            "agree cost-sharing targets with future host countries.",
+        ),
+    },
+    {
+        "id": "WC_107",
+        "category": "FULL_COVERAGE_CONTENT_FLAW_ATTEMPTED",
+        "expected_enough_evidence": True,
+        "rationale": (
+            "Structure, data, and math are all correct and fully covered, but the "
+            "final recommendation only addresses the cost side even though the "
+            "candidate's own diagnosis clearly implicated both revenue and cost -- a "
+            "recommendation inconsistent with the candidate's own analysis, not a "
+            "coverage gap."
+        ),
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: So a fixed broadcasting package dilutes per-match revenue as "
+            "matches grow, while tripled host-country infrastructure and added "
+            "travel push per-match cost up - it's a mismatch on both sides.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            "Candidate: Given that, I'd focus entirely on tightening host-country "
+            "cost-sharing agreements before any future expansion.",
+        ),
+    },
+    {
+        "id": "WC_108",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_44/WC_45/WC_67/WC_68/WC_88-90: an invented fact (here, a broadcaster viewership penalty clause) appears mid-analysis, but full stage coverage is still reached.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is the ask a diagnosis, a recommendation, or both?",
+            "Interviewer: Both.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: Right, and I believe the broadcasting contract has a "
+            "viewership penalty clause that cuts the fee by roughly EUR 100M if global "
+            "audience share drops below a threshold, which adds downside risk on top "
+            "of the fixed-package dilution and tripled host-country costs.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_109",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_108: a different invented fact (a host-country government subsidy), full coverage otherwise.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Should I anchor purely on EBITDA margin recovery?",
+            "Interviewer: Yes.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: That's consistent with what I recall - I believe one host "
+            "country is providing a government infrastructure subsidy of around EUR "
+            "120M that partly offsets the tripled venue costs, on top of the "
+            "broadcasting dilution point.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
+    {
+        "id": "WC_110",
+        "category": "FULL_COVERAGE_HALLUCINATED_DATA",
+        "expected_enough_evidence": True,
+        "rationale": "Same pattern as WC_108/WC_109: a different invented fact (a specific total-attendance figure), full coverage otherwise.",
+        "transcript": _t(
+            f"Interviewer: {OPENING}",
+            "Candidate: Is this a one-off diagnosis or a repeatable model for future "
+            "editions?",
+            "Interviewer: A repeatable model.",
+            "Candidate: I'll split revenue from the incremental cost of expansion, "
+            "per match. What's changed?",
+            f"Interviewer reveal: {DATA_REVEAL}",
+            "Candidate: That tracks with what I understood - I believe total "
+            "in-stadium attendance is projected at around 6.5 million across the "
+            "tournament, which would support the sponsorship and licensing growth "
+            "story alongside the broadcasting dilution and tripled host-country "
+            "costs.",
+            f"Interviewer: {MATH_Q}",
+            f"Candidate: {MATH_CORRECT}",
+            f"Interviewer: {REC_ASK}",
+            f"Candidate: {REC_STRONG}",
+        ),
+    },
 ]
 
 
