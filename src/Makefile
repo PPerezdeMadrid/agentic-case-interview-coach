@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test test-api-connection run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -40,6 +40,7 @@ help:
 	@printf "%s\n" "  make workbench    Start the workbench web app on port $(WORKBENCH_PORT)"
 	@printf "%s\n" "  make app          Alias for make workbench"
 	@printf "%s\n" "  make test         Run studio and workbench test suites"
+	@printf "%s\n" "  make test-api-connection  Run just tests.test_api_connection (studio) -- [RUNNER=hpc]"
 	@printf "%s\n" "  make run-all      Run baseline and agentic across all scenarios [N=<repeat>] [LABEL=...]"
 	@printf "%s\n" "  make run-all-baseline  Run baseline across all scenarios [N=<repeat>] [LABEL=...]"
 	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios [N=<repeat>] [LABEL=...]"
@@ -105,6 +106,10 @@ app: workbench
 test:
 	cd main/studio && $(PY) -m unittest discover -s tests
 	cd main/web && $(PY) -m unittest discover -s tests
+
+# Usage: make test-api-connection [RUNNER=hpc]
+test-api-connection:
+	cd main/studio && $(PY) -m unittest tests.test_api_connection -v
 
 run-all:
 	$(PY) run_all_scenarios.py --graph both --repeat $(N) --label "$(LABEL)"

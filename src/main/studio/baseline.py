@@ -18,7 +18,7 @@ from rag.profitability_guide_context import (
     format_profitability_guide_snippet,
     retrieve_profitability_guide_context,
 )
-from llm_server import judge_llm_server
+from llm_server import judge_llm_server, candidate_llm_server
 from persistence import build_initial_graph_state, load_scenario_node, make_persist_run_node, make_trace_node
 from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
@@ -43,7 +43,7 @@ from utils import (
 
 # Baseline uses a single model (Llama-3.1-70B via OpenRouter) across all roles, unlike
 # the role-differentiated agentic graph.
-candidate_llm = judge_llm_server
+candidate_llm = candidate_llm_server
 judge_llm = judge_llm_server
 interviewer_llm = judge_llm_server
 

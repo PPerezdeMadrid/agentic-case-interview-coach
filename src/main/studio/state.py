@@ -74,6 +74,7 @@ class CandidateResponse(BaseModel):
 class JudgeResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    reasoning: str
     enough_evidence: bool
     focus_areas: list[str]
 

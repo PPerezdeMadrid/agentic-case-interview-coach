@@ -32,19 +32,20 @@ tail -f logs/langgraph-agents_123456.out   # ver el stdout en vivo
 tail -f logs/langgraph-agents_123456.err   # stderr
 scancel 123456                # cancelar el job si algo va mal
 
-4312371
+4313794
 
 tail -f logs/mistral.log
 tail -f logs/llama70b.log
 tail -f logs/run_all_scenarios.log 
 
-tail -f logs/lhf-llm-s_4312371.out 
+tail -f logs/hf-llm-server-candidate-exp02HPC_4313794.
 tail -f logs/langgraph-agents-experiment_4107254.out 
 tail -f logs/api_connection_check.log
 
 cd main/studio && conda run -n coach --no-capture-output python -m unittest tests.test_api_connection -v
 
-cd main/studio && conda run -n coach --no-capture-output python -m unittest tests.test_api_connection -v
+# equivalente via Makefile (usa el runner ya configurado con setup-hpc, o fuerza RUNNER=hpc)
+cd .. && make test-api-connection RUNNER=hpc
 
 
 ---

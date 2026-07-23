@@ -1,68 +1,20 @@
 {
   "golden_set": "evidence_handling",
   "csv_path": "database/node_eval/baseline_eval/baseline_golden_set_evidence_handling.csv",
-  "model": "meta-llama/Llama-3.3-70B-Instruct",
-  "socratic_judge_model": "meta-llama/Llama-3.3-70B-Instruct",
-  "computed_at": "2026-07-18T10:49:58+00:00",
-  "n_total": 18,
-  "n_scored": 18,
+  "model": "meta-llama/llama-3.3-70b-instruct",
+  "socratic_judge_model": "meta-llama/llama-3.3-70b-instruct",
+  "computed_at": "2026-07-23T10:21:49+00:00",
+  "n_total": 15,
+  "n_scored": 15,
   "n_errors": 0,
-  "n_correct": 4,
-  "accuracy": 0.2222,
+  "n_correct": 7,
+  "accuracy": 0.4667,
   "records": [
-    {
-      "conversation_id": "EVI_01",
-      "predicted": {
-        "action": "question",
-        "content": "You've identified the structural issue with the revenue and cost models. What do you think are the most critical drivers of the margin gap, and how might you address them to make the expansion more profitable?",
-        "block_id": "",
-        "ready_for_evaluation": false,
-        "socratic_function": ""
-      },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'reveal', got 'question'",
-        "block_id: expected 'worldcup_creative_001', got '(empty)'"
-      ],
-      "error": null
-    },
-    {
-      "conversation_id": "EVI_02",
-      "predicted": {
-        "action": "question",
-        "content": "You've done a good job of identifying the structural issues with the revenue and cost model. Now, based on your analysis, what recommendation would you give to the Secretary General on how to address the margin dilution and make the expansion pay for itself?",
-        "block_id": "",
-        "ready_for_evaluation": false,
-        "socratic_function": ""
-      },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'reveal', got 'question'",
-        "block_id: expected 'worldcup_creative_001', got '(empty)'"
-      ],
-      "error": null
-    },
-    {
-      "conversation_id": "EVI_03",
-      "predicted": {
-        "action": "question",
-        "content": "You've covered the core diagnosis. What final recommendation would you give to the Secretary General?",
-        "block_id": "",
-        "ready_for_evaluation": false,
-        "socratic_function": ""
-      },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'reveal', got 'question'",
-        "block_id: expected 'worldcup_creative_001', got '(empty)'"
-      ],
-      "error": null
-    },
     {
       "conversation_id": "EVI_04",
       "predicted": {
         "action": "reveal",
-        "content": "The previous edition had 64 matches, while the upcoming edition will have 104 matches.",
+        "content": "The previous edition had 32 teams and 64 matches, while the upcoming edition has 48 teams and 104 matches, played across three co-host countries.",
         "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -78,7 +30,7 @@
       "predicted": {
         "action": "reveal",
         "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
-        "block_id": "",
+        "block_id": "Facts to provide upon request",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
@@ -91,24 +43,22 @@
     {
       "conversation_id": "EVI_06",
       "predicted": {
-        "action": "reveal",
-        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage.",
+        "action": "question",
+        "content": "What do you think is the main driver of the increase in team travel and accommodation costs, and how do you think this cost increase will impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_07",
       "predicted": {
         "action": "reveal",
-        "content": "The previous edition had a total revenue of EUR 3.0B and total costs of EUR 1.86B, implying an EBITDA margin of 38%. With 64 matches, the revenue per match was roughly EUR 46.9M and the cost per match was roughly EUR 29.1M.",
-        "block_id": "",
+        "content": "The previous edition's total revenue was EUR 3.0B, and the total cost was EUR 1.86B, which implies an EBITDA margin of 38%. What structure would you propose to analyze the current edition's profitability issues?",
+        "block_id": "Data - Revenue and Cost Economics",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
@@ -122,8 +72,8 @@
       "conversation_id": "EVI_08",
       "predicted": {
         "action": "reveal",
-        "content": "The previous edition had 64 matches with a total revenue of EUR 3.0B and total costs of EUR 1.86B, which translates to a revenue per match of roughly EUR 46.9M and a cost per match of roughly EUR 29.1M. The upcoming edition has 104 matches with a projected total revenue of EUR 4.35B and an implied total cost of EUR 3.31B, which translates to a revenue per match of roughly EUR 41.8M and a cost per match of roughly EUR 31.8M.",
-        "block_id": "",
+        "content": "The previous edition had 64 matches with a total revenue of EUR 3.0B and total costs of EUR 1.86B, resulting in a revenue per match of roughly EUR 46.9M and a cost per match of roughly EUR 29.1M. The upcoming edition has 104 matches with a projected total revenue of EUR 4.35B and an implied total cost of EUR 3.31B, resulting in a revenue per match of roughly EUR 41.8M and a cost per match of roughly EUR 31.8M. How would you like to proceed with your analysis?",
+        "block_id": "Data - Revenue and Cost Economics",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
@@ -137,7 +87,7 @@
       "conversation_id": "EVI_09",
       "predicted": {
         "action": "reveal",
-        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, and the EBITDA margin is roughly 24%. Now, can you walk me through how you plan to approach this case and identify the key drivers of the declining profitability?",
+        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, and the projected EBITDA margin is 24%. The previous edition had a total revenue of EUR 3.0B and an EBITDA margin of 38%. How would you like to proceed with analyzing the decline in profitability?",
         "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -151,15 +101,14 @@
     {
       "conversation_id": "EVI_10",
       "predicted": {
-        "action": "reveal",
-        "content": "The prize money pool has increased in line with the number of qualifying teams. The previous edition had 32 teams, and the upcoming edition has 48 teams.",
+        "action": "question",
+        "content": "What's the basis for your question about the prize money pool? How do you think it relates to the profitability issue?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
       "correct": false,
       "failed_checks": [
-        "action: expected 'question', got 'reveal'",
         "must_contain: missing at least one of ['assum']"
       ],
       "error": null
@@ -167,14 +116,15 @@
     {
       "conversation_id": "EVI_11",
       "predicted": {
-        "action": "question",
-        "content": "That's a good starting point. Can you tell me how you plan to use this information to understand the impact of the expansion on the tournament's profitability?",
+        "action": "reveal",
+        "content": "The revenue growth is driven primarily by sponsorship and licensing, which are tied to global brand reach rather than match count. Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
       "correct": false,
       "failed_checks": [
+        "action: expected 'question', got 'reveal'",
         "must_contain: missing at least one of ['assum']"
       ],
       "error": null
@@ -182,15 +132,14 @@
     {
       "conversation_id": "EVI_12",
       "predicted": {
-        "action": "reveal",
-        "content": "The tournament is expanding from 32 to 48 national teams, played across three co-host countries. Total tournament revenue is projected to grow 45% versus the last edition, but the Organizing Committee's own financial model shows EBITDA margin falling from 38% to roughly 24% over the same period.",
-        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "action": "question",
+        "content": "How do you think the expansion from 32 to 48 teams and the introduction of three co-host countries might affect the tournament's cost structure, and what implications could this have for profitability?",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
       "correct": false,
       "failed_checks": [
-        "action: expected 'question', got 'reveal'",
         "must_contain: missing at least one of ['assum']"
       ],
       "error": null
@@ -199,7 +148,7 @@
       "conversation_id": "EVI_13",
       "predicted": {
         "action": "question",
-        "content": "Let's start by recapping the situation: the Interconta World Football Cup is expanding from 32 to 48 teams, and despite a 45% growth in revenue, the EBITDA margin is expected to fall from 38% to 24%. What specific aspects of this situation would you like to focus on, and how do you plan to structure your analysis?",
+        "content": "What specific aspect of the tournament's expansion do you think is most relevant to understanding the decline in EBITDA margin, and how would you structure your analysis to address the Secretary General's concerns?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -212,7 +161,7 @@
       "conversation_id": "EVI_14",
       "predicted": {
         "action": "question",
-        "content": "That's a fair assumption\u2014can you walk me through what you mean by 'structural problem' in this context, and how you think it might be contributing to the decline in EBITDA margin despite revenue growth?",
+        "content": "That's a fair assumption\u2014structural problems can indeed lead to profitability issues. Can you propose a structure for how you'd like to analyze this case, and what key factors you think might be driving the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -225,7 +174,7 @@
       "conversation_id": "EVI_15",
       "predicted": {
         "action": "question",
-        "content": "The Secretary General wants you to explain why the profitability of the Interconta World Football Cup is deteriorating despite revenue growth, and recommend whether and how the expansion can be made to pay for itself. Can you recap the situation and propose a structure for your analysis?",
+        "content": "Let's break it down. The Interconta World Football Cup Organizing Committee is concerned about the deteriorating profitability despite revenue growth. Can you recap the situation and propose a structure to analyze this problem?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -237,23 +186,21 @@
     {
       "conversation_id": "EVI_16",
       "predicted": {
-        "action": "reveal",
-        "content": "The tournament is being played across three co-host countries.",
+        "action": "question",
+        "content": "To confirm, there are three co-host countries for this edition of the tournament. Now, can you tell me how you plan to approach the case and what factors you think might be contributing to the decline in EBITDA margin despite the revenue growth?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_17",
       "predicted": {
         "action": "question",
-        "content": "You've already been told there are 104 matches this edition. Let's move forward - what do you think might be causing the profitability to deteriorate despite the revenue growth?",
+        "content": "You already know there are 104 matches this edition. What do you think is driving the increase in total revenue despite the expansion, and how might that impact profitability?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -265,16 +212,14 @@
     {
       "conversation_id": "EVI_18",
       "predicted": {
-        "action": "reveal",
-        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
-        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "action": "question",
+        "content": "You've already been told that broadcasting is sold as a fixed package for the whole tournament. What's your next step in analyzing the impact of the tournament expansion on profitability?",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     }
   ]
