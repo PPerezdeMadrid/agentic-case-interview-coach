@@ -54,7 +54,8 @@ Current status:
 - FastEmbed
 - `pypdf`
 - OpenAI-compatible LLM endpoints
-- LM Studio for local model serving in the current setup
+- OpenRouter for the four active LLM roles (interviewer, candidate, judge, feedback)
+- LM Studio wiring exists for local dev and connectivity tests, but the active `baseline`/`agentic` graphs run entirely on OpenRouter
 
 ## Repository Layout
 
@@ -142,14 +143,24 @@ http://localhost:5020
 
 The runtime loads a repository-level `.env` file when present.
 
-Typical variables:
+The `baseline` and `agentic` graphs call OpenRouter for all four roles:
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL_INTERVIEWER=qwen/qwen3-14b
+OPENROUTER_MODEL_CANDIDATE=mistralai/mistral-small-24b-instruct-2501
+OPENROUTER_MODEL_JUDGE=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_FEEDBACK=openai/gpt-4o-mini
+WORKBENCH_PORT=5020
+```
+
+`LMSTUDIO_*` variables are also read (used by the connectivity test and as a manual local fallback), but no active graph role is wired to them by default:
 
 ```bash
 LMSTUDIO_BASE_URL=http://localhost:8081/v1
 LMSTUDIO_MODEL=deepseek-r1-distill-llama-8b
 LMSTUDIO_API_KEY=lm-studio
 LMSTUDIO_TEMPERATURE=0.14
-WORKBENCH_PORT=5020
 ```
 
 ## Documentation

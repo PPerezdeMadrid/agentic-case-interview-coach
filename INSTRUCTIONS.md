@@ -40,14 +40,30 @@ You can switch back to local by re-running `make setup-local`. The active runner
 
 ### 1.3 Environment variables
 
-The runtime loads a repository-level `.env` file automatically. Typical variables:
+The runtime loads a repository-level `.env` file automatically.
+
+The `baseline` and `agentic` graphs both call OpenRouter for their LLM roles — this is the config that matters for actually running interviews:
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL_INTERVIEWER=qwen/qwen3-14b
+OPENROUTER_MODEL_CANDIDATE=mistralai/mistral-small-24b-instruct-2501
+OPENROUTER_MODEL_JUDGE=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_FEEDBACK=openai/gpt-4o-mini
+CANDIDATE_TEMPERATURE=0.5
+INTERVIEWER_TEMPERATURE=0.6
+JUDGE_TEMPERATURE=0.0
+FEEDBACK_TEMPERATURE=0.0
+WORKBENCH_PORT=5020
+```
+
+`LMSTUDIO_*` variables are also read by [llm_server.py](main/studio/llm_server.py), but no active graph role is wired to them by default — they only back the connectivity test (`tests.test_api_connection`) and are available as a manual local fallback:
 
 ```bash
 LMSTUDIO_BASE_URL=http://localhost:8081/v1
 LMSTUDIO_MODEL=deepseek-r1-distill-llama-8b
 LMSTUDIO_API_KEY=lm-studio
 LMSTUDIO_TEMPERATURE=0.14
-WORKBENCH_PORT=5020
 ```
 
 `LMSTUDIO_BASE_URL` can be given with or without the trailing `/v1`; the runtime normalizes it. Any OpenAI-compatible endpoint (local LM Studio, remote vLLM, OpenRouter, ...) works as long as it exposes a chat-completions API. See [.env](.env) for the values currently configured in this checkout.
@@ -301,7 +317,12 @@ Run `make help` at any time from `src/` to see the authoritative, up-to-date lis
 
 ## 8. HPC / Remote GPU Notes
 
-For running on a Slurm cluster with vLLM-served models instead of a local LM Studio endpoint, see the batch scripts [src/server.bash](src/server.bash) (serves Mistral-Nemo as candidate + Llama-3.3-70B as judge, then runs `run_all_scenarios.py --graph both --repeat 3`) and [src/experiment.bash](src/experiment.bash) (Mistral-only variant, `--repeat 1`), plus [src/main/GPU-server.md](src/main/GPU-server.md) for setup details.
+Self-hosting the LLM roles on a Slurm cluster is set up but **not wired into the runtime** — `llm_server.py` calls OpenRouter for all four roles (see [Section 1.3](#13-environment-variables)); the GPU-hosted client definitions are present only as a commented-out block. Using either setup below means starting the Slurm job yourself and manually pointing the relevant `OPENROUTER_MODEL_*`/base-URL wiring at the resulting `http://127.0.0.1:<port>/v1` endpoint.
+
+There are two independent HPC setups in the repo:
+
+- [src/server.bash](src/server.bash) / [src/experiment.bash](src/experiment.bash) — self-contained Slurm jobs that `vllm serve` the models directly, run `run_all_scenarios.py` against them, then tear the servers down. `server.bash` serves Mistral-Nemo as candidate + Llama-3.3-70B as judge (`--graph both --repeat 3`); `experiment.bash` is a Mistral-only variant (`--repeat 1`).
+- [src/server_HPC/](src/server_HPC/) — a FastAPI-based alternative ([server.py](src/server_HPC/server.py) + [server.bash](src/server_HPC/server.bash)) that only starts and holds the model servers open (no scenario run baked in); pairs with [src/server_HPC/test_servers.py](src/server_HPC/test_servers.py) to smoke-test the endpoints once up. It currently serves Mistral-Small-24B as candidate (port 18403) + Llama-3.3-70B as judge (port 18402); Mistral-Nemo is still available via `python server.py --model mistral` (port 18401) but is not launched by `server.bash` by default. See [src/server_HPC/GPU-server.md](src/server_HPC/GPU-server.md) for model download paths and monitoring commands.
 
 
 ## Related Documentation
