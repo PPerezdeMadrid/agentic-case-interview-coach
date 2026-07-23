@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import logging
 import sys
@@ -230,26 +229,6 @@ def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
             handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def write_csv(path: Path, records: list[dict[str, Any]]) -> None:
-    fieldnames: list[str] = []
-    for record in records:
-        for key in record.keys():
-            if key not in fieldnames:
-                fieldnames.append(key)
-
-    with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        for record in records:
-            normalized = {
-                key: json.dumps(value, ensure_ascii=False)
-                if isinstance(value, (list, dict))
-                else value
-                for key, value in record.items()
-            }
-            writer.writerow(normalized)
-
-
 def run_graph_for_scenario(
     runtime: GraphRuntime,
     scenario_path: Path,
@@ -356,26 +335,16 @@ def run_batch(
                 graph_records.append(record)
                 combined_records.append(record)
 
-        jsonl_path = output_dir / f"{runtime.name}_results.jsonl"
-        csv_path = output_dir / f"{runtime.name}_results.csv"
-        write_jsonl(jsonl_path, graph_records)
-        write_csv(csv_path, graph_records)
-
         summary["graphs"][runtime.name] = {
             "records": len(graph_records),
             "ok": ok_count,
             "errors": error_count,
-            "jsonl_path": str(jsonl_path),
-            "csv_path": str(csv_path),
         }
 
     combined_jsonl = output_dir / "combined_results.jsonl"
-    combined_csv = output_dir / "combined_results.csv"
     write_jsonl(combined_jsonl, combined_records)
-    write_csv(combined_csv, combined_records)
 
     summary["combined_jsonl_path"] = str(combined_jsonl)
-    summary["combined_csv_path"] = str(combined_csv)
     summary_path = output_dir / "summary.json"
     summary["summary_path"] = str(summary_path)
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -416,11 +385,10 @@ def main() -> int:
     print(f"Runs database: {summary['runs_db_path']}", flush=True)
     for graph_name, graph_summary in summary["graphs"].items():
         print(
-            f"{graph_name}: ok={graph_summary['ok']} errors={graph_summary['errors']} "
-            f"jsonl={graph_summary['jsonl_path']}",
+            f"{graph_name}: ok={graph_summary['ok']} errors={graph_summary['errors']}",
             flush=True,
         )
-    print(f"Combined CSV: {summary['combined_csv_path']}", flush=True)
+    print(f"Combined JSONL: {summary['combined_jsonl_path']}", flush=True)
     print(f"Summary JSON: {summary['summary_path']}", flush=True)
     total_errors = sum(g["errors"] for g in summary["graphs"].values())
     if total_errors:

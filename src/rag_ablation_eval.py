@@ -11,7 +11,6 @@ Usage (from src/, with the project venv active):
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
 from collections import defaultdict
@@ -32,20 +31,6 @@ import baseline  # noqa: E402
 
 CASE_PERFORMANCE_FIELDS = agentic.CASE_PERFORMANCE_FIELDS
 QUALITY_DIALOG_FIELDS = agentic.QUALITY_DIALOG_FIELDS
-
-CSV_FIELDNAMES = [
-    "thread_id",
-    "graph_name",
-    "scenario_ref",
-    "repeat_index",
-    "section",
-    "dimension",
-    "with_rag_score",
-    "without_rag_score",
-    "delta",
-    "with_rag_rationale",
-    "without_rag_rationale",
-]
 
 
 def _load_batch(dir_name: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -177,24 +162,6 @@ def _aggregate_by_dimension(results: list[dict[str, Any]]) -> list[dict[str, Any
     return aggregate
 
 
-def _flatten_for_csv(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    rows = []
-    for record in results:
-        for section_key in ("case_performance", "quality_dialog"):
-            for row in record[section_key]:
-                rows.append(
-                    {
-                        "thread_id": record["thread_id"],
-                        "graph_name": record["graph_name"],
-                        "scenario_ref": record["scenario_ref"],
-                        "repeat_index": record["repeat_index"],
-                        "section": section_key,
-                        **row,
-                    }
-                )
-    return rows
-
-
 def run_ablation(dir_name: str, *, limit: int | None = None) -> dict[str, Any]:
     summary, records = _load_batch(dir_name)
     ok_records = [record for record in records if record.get("status") == "ok"]
@@ -253,16 +220,8 @@ def run_ablation(dir_name: str, *, limit: int | None = None) -> dict[str, Any]:
     json_path = batch_dir / "rag_ablation_results.json"
     json_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    csv_path = batch_dir / "rag_ablation_results.csv"
-    with csv_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=CSV_FIELDNAMES)
-        writer.writeheader()
-        for row in _flatten_for_csv(results):
-            writer.writerow(row)
-
     print(f"\n{len(results)} records evaluated, ~{total_tokens} total tokens for the without-RAG judge calls.")
     print(f"Wrote results to {json_path}")
-    print(f"Wrote results to {csv_path}")
     return output
 
 
