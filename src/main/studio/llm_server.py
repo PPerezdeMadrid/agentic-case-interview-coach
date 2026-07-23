@@ -63,7 +63,7 @@ interviewer_llm_server = ChatOpenAI(
 
 # OpenRouter Mistral Nemo Candidate model
 candidate_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-nemo"),
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-small-24b-instruct-2501"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.7),
@@ -89,13 +89,13 @@ feedback_llm_server = ChatOpenAI(
 
 # Alternative: GPU-hosted models on the university HPC cluster. 
 #
-# candidate_llm_server_gpu = ChatOpenAI(
-#     model=model_mistral12B,
-#     base_url="http://localhost:18401/v1",
-#     api_key="EMPTY",
-#     temperature=float(os.getenv("TEMPERATURE", "0.0")),
-# )
-#
+candidate_llm_server_gpu = ChatOpenAI(
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-small-24b-instruct-2501"),
+    base_url="http://localhost:18403/v1",
+    api_key="EMPTY",
+    temperature=float(os.getenv("CANDIDATE_TEMPERATURE", 0.7)),
+)
+
 # judge_llm_server_gpu = ChatOpenAI(
 #     model=model_llama70B,
 #     base_url="http://localhost:18402/v1",

@@ -8,6 +8,7 @@ from adapter import get_candidate_visible_blocks
 from loader import DEFAULT_MAX_JUDGE_ROUNDS
 from llm_server import (
     candidate_llm_server,
+    candidate_llm_server_gpu,
     feedback_llm_server,
     interviewer_llm_server,
     judge_llm_server,
@@ -66,7 +67,7 @@ from utils import (
 )
 
 # Per-role servers: all four roles on OpenRouter.
-candidate_llm = candidate_llm_server
+candidate_llm = candidate_llm_server # candidate_llm_server_gpu
 judge_llm = judge_llm_server
 interviewer_llm = interviewer_llm_server
 feedback_llm = feedback_llm_server

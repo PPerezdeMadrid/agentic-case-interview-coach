@@ -634,9 +634,7 @@ class BaselineGraphTests(unittest.TestCase):
             baseline,
             "retrieve_profitability_guide_context",
             return_value=[],
-        ), patch.object(baseline, "interviewer_llm", mock_llm), patch.object(
-            baseline, "judge_llm", mock_llm
-        ):
+        ), patch.object(baseline, "baseline_llm", mock_llm):
             update = baseline.baseline_node(state)
 
         self.assertIn(f"Excerpts from the {baseline.CASE_GUIDE_CITATION_LABEL}:", observed_prompt["content"])
@@ -678,9 +676,7 @@ class BaselineGraphTests(unittest.TestCase):
             baseline,
             "retrieve_profitability_guide_context",
             return_value=[],
-        ), patch.object(baseline, "interviewer_llm", mock_llm), patch.object(
-            baseline, "judge_llm", mock_llm
-        ):
+        ), patch.object(baseline, "baseline_llm", mock_llm):
             update = baseline.baseline_node(state)
 
         get_context.assert_called_once_with(state)
