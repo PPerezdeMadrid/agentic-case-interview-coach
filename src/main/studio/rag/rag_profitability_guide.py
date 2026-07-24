@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -56,7 +57,14 @@ PROFITABILITY_CITATION_LABEL = _PROFITABILITY_SOURCE_NAVIGATION["citation_label"
 def get_embeddings() -> FastEmbedEmbeddings:
     global _embeddings_singleton
     if _embeddings_singleton is None:
-        _embeddings_singleton = FastEmbedEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+        # Cap onnxruntime's thread pool to the CPUs actually allocated to this
+        # job -- left unset, it sizes itself to the node's full core count and
+        # tries to pin threads to cores outside the SLURM cgroup, spamming
+        # pthread_setaffinity_np "Invalid argument" errors.
+        threads = int(os.environ.get("SLURM_CPUS_PER_TASK", os.cpu_count() or 1))
+        _embeddings_singleton = FastEmbedEmbeddings(
+            model_name=EMBEDDING_MODEL_NAME, threads=threads
+        )
     return _embeddings_singleton
 
 

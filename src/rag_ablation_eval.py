@@ -66,14 +66,18 @@ def _rebuild_state(graph_name: str, record: dict[str, Any]) -> dict[str, Any]:
 
 def _evaluate_without_rag(graph_name: str, state: dict[str, Any]) -> tuple[dict, dict, list[dict]]:
     if graph_name == "baseline":
+        # baseline_node evaluates case_performance and quality_dialog together in a
+        # single combined call; force it down that path regardless of the replayed
+        # transcript's own turn_index.
+        state = dict(state)
+        state["turn_index"] = baseline.MAX_BASELINE_TURNS
         with patch.multiple(
             baseline,
             get_baseline_case_guide_context=lambda state, **kwargs: ([], {}),
             retrieve_profitability_guide_context=lambda *args, **kwargs: [],
         ):
-            case_result = baseline.evaluate_case_performance(state)
-            quality_dialog, _dialog_log, dialog_usage = baseline.evaluate_dialog_quality(state)
-        return case_result["case_performance"], quality_dialog, case_result["llm_usage"] + dialog_usage
+            result = baseline.baseline_node(state)
+        return result["case_performance"], result["quality_dialog"], result["llm_usage"]
 
     # agentic.eval_case_performance_node/eval_dialog_quality_node call
     # _sync_node_dependencies() first, which copies agentic's own
