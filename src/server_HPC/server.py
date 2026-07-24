@@ -116,7 +116,13 @@ def build_app(model_key: str) -> FastAPI:
 
     app = FastAPI(title=f"HPC LLM server ({model_key})")
 
-    def run_generate(input_ids: torch.Tensor, max_tokens: int, temperature: float, top_p: float):
+    def run_generate(
+        input_ids: torch.Tensor,
+        attention_mask: Optional[torch.Tensor],
+        max_tokens: int,
+        temperature: float,
+        top_p: float,
+    ):
         gen_kwargs = dict(
             max_new_tokens=max_tokens,
             pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.eos_token_id,
@@ -127,7 +133,7 @@ def build_app(model_key: str) -> FastAPI:
             gen_kwargs["do_sample"] = False
 
         with torch.no_grad():
-            output_ids = model.generate(input_ids, **gen_kwargs)
+            output_ids = model.generate(input_ids, attention_mask=attention_mask, **gen_kwargs)
 
         completion_ids = output_ids[0][input_ids.shape[1]:]
         text = tokenizer.decode(completion_ids, skip_special_tokens=True)
@@ -144,14 +150,18 @@ def build_app(model_key: str) -> FastAPI:
     def chat_completions(request: ChatCompletionRequest):
         messages = [m.model_dump() for m in request.messages]
         try:
-            input_ids = tokenizer.apply_chat_template(
-                messages, add_generation_prompt=True, return_tensors="pt"
+            inputs = tokenizer.apply_chat_template(
+                messages, add_generation_prompt=True, return_tensors="pt", return_dict=True
             ).to(model.device)
+            input_ids = inputs["input_ids"]
+            attention_mask = inputs["attention_mask"]
         except Exception as exc:
             raise HTTPException(status_code=400, detail=f"Failed to render chat template: {exc}") from exc
 
         try:
-            text, completion_tokens = run_generate(input_ids, request.max_tokens, request.temperature, request.top_p)
+            text, completion_tokens = run_generate(
+                input_ids, attention_mask, request.max_tokens, request.temperature, request.top_p
+            )
         except Exception as exc:
             logger.exception("Generation failed")
             raise HTTPException(status_code=500, detail=str(exc)) from exc
@@ -181,7 +191,7 @@ def build_app(model_key: str) -> FastAPI:
         inputs = tokenizer(request.prompt, return_tensors="pt").to(model.device)
         try:
             text, completion_tokens = run_generate(
-                inputs["input_ids"], request.max_tokens, request.temperature, request.top_p
+                inputs["input_ids"], inputs["attention_mask"], request.max_tokens, request.temperature, request.top_p
             )
         except Exception as exc:
             logger.exception("Generation failed")
