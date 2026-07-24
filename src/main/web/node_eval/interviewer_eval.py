@@ -3,9 +3,9 @@
 `main/studio/node_eval/interviewer_eval/run_interviewer_golden_set.py` writes into
 `src/database/node_eval/interviewer_eval/`.
 
-Same pattern as node_eval/judge_eval.py, whose `category_breakdown`/`build_category_radar`
-are reused as-is here -- neither is judge-specific, both just aggregate/plot generic
-{category, correct, error} records. Not recomputed on page load: each row costs one (or
+Same pattern as node_eval/judge_eval.py, whose `category_breakdown` is reused
+as-is here -- it isn't judge-specific, just aggregates generic {category,
+correct, error} records. Not recomputed on page load: each row costs one (or
 two, for the socratic-function golden set) real interviewer LLM call. Rerun via
 `make interviewer-eval INTERVIEWER_GOLDEN_SET=<name>` and reload to refresh.
 """
@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from node_eval.judge_eval import build_category_radar, category_breakdown
+from node_eval.judge_eval import category_breakdown
 
 SRC_DIR = Path(__file__).resolve().parents[3]
 INTERVIEWER_EVAL_DIR = SRC_DIR / "database" / "node_eval" / "interviewer_eval"

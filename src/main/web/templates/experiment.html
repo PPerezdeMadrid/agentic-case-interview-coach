@@ -173,7 +173,7 @@
     <div>
       <p class="eyebrow">Accuracy vs. reference (author-defined expected scores)</p>
       <h2>Who scores it right?</h2>
-      <p class="lede">Each square compares a graph's judge score to the scenario's own expected score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The radar plots the same comparison as one overlaid shape per graph &mdash; a shape collapsed toward the center means that graph rarely produced a numeric score to compare at all.</p>
+      <p class="lede">Each square compares a graph's judge score to the scenario's own expected score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The bars below plot the same comparison per dimension &mdash; a short bar means that graph rarely produced a numeric score to compare at all.</p>
     </div>
   </div>
 
@@ -190,27 +190,33 @@
     </div>
     {% endif %}
 
-    {% if overview.radar %}
-    <div class="radar-wrap">
-      <svg class="radar-chart" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-        {% for ring in overview.radar.rings %}
-        <polygon class="radar-grid-ring" points="{{ ring.points }}"></polygon>
-        {% endfor %}
-        {% for axis in overview.radar.axes %}
-        <line class="radar-spoke" x1="{{ overview.radar.cx }}" y1="{{ overview.radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
-        <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.label }}</text>
-        {% endfor %}
-        {% for s in overview.radar.series %}
-        <polygon class="radar-series" points="{{ s.points }}" style="stroke: {{ s.color }}; fill: {{ s.color }};"></polygon>
-        {% endfor %}
-      </svg>
-      <div class="radar-legend">
-        {% for s in overview.radar.series %}
-        <div class="radar-legend-item"><span class="radar-legend-swatch" style="background: {{ s.color }};"></span>{{ s.graph_name }}</div>
-        {% endfor %}
-      </div>
-      <p class="helper radar-caption">Near the outer ring = judge score close to the reference (accurate). Collapsed toward the center = far off from the reference, or no comparable score at all for that dimension.</p>
+    {% if overview.accuracy_bars %}
+    <div class="bar-chart-legend">
+      {% for s in overview.accuracy_bars.legend %}
+      <span class="bar-chart-legend-item"><span class="bar-legend-swatch" style="background: {{ s.color }};"></span>{{ s.graph_name }}</span>
+      {% endfor %}
     </div>
+    <div class="bar-chart" style="--bar-row-cols: minmax(160px, 260px) 1fr;">
+      <div class="bar-chart-axis">
+        <span></span>
+        <div class="bar-chart-ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+      </div>
+      {% for row in overview.accuracy_bars.rows %}
+      <div class="bar-row">
+        <div class="bar-row-label">{{ row.dimension }}</div>
+        <div class="bar-row-series">
+          {% for s in row.series %}
+          <div class="bar-series-line">
+            <span class="bar-series-name">{{ s.graph_name }}</span>
+            <span class="bar-track"><span class="bar-fill" style="width: {{ s.accuracy_pct or 0 }}%; background: {{ s.color }};"></span></span>
+            <span class="bar-value">{{ num(s.accuracy_pct) }}{{ '%' if s.accuracy_pct is not none else '' }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="helper bar-chart-caption">Longer bar = judge score close to the reference (accurate). Short or empty = far off from the reference, or no comparable score at all for that dimension.</p>
     {% endif %}
   </div>
 

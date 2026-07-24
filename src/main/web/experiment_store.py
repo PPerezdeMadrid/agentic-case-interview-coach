@@ -221,7 +221,11 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
 # Rubric dimensions are scored 1-4, so the widest possible miss is 3 points.
 MAX_SCORE_SPAN = 3.0
 BIAS_EPSILON = 0.15
-RADAR_PALETTE = ["#2d5a27", "#a8622a", "#3a5a78", "#7a3d78", "#8a7a1f"]
+# Leads with the same green/blue pair the agentic/baseline comparison bars use
+# elsewhere in the dashboard (--chart-agentic / --chart-baseline in styles.css,
+# validated as a CVD-safe pair), so "agentic" and "baseline" read as the same
+# colors everywhere; extra colors cover any additional graph_name beyond those two.
+BAR_PALETTE = ["#357a38", "#3f76b0", "#a8622a", "#7a3d78", "#8a7a1f"]
 
 
 def _severity(mae: float | None) -> str:
@@ -451,63 +455,34 @@ def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {"rows": rows, "summary": summary, "graph_names": graph_names, "total_dims": len(rows)}
 
 
-def build_radar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str]) -> dict[str, Any] | None:
-    """Precompute SVG polygon geometry for an accuracy radar chart (one axis per rubric dimension)."""
+def build_accuracy_bar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str]) -> dict[str, Any] | None:
+    """Precompute a grouped bar chart (one row per rubric dimension, one bar per
+    graph) from the same accuracy_pct numbers the heatmap above already shows,
+    so the dashboard doesn't need a second scoring pass to plot them."""
     rows = [row for row in accuracy_rows if any(row["graphs"].get(g, {}).get("n_compared") for g in graph_names)]
     if not rows or not graph_names:
         return None
 
-    n = len(rows)
-    cx, cy, radius = 200.0, 200.0, 150.0
-    start_angle = -math.pi / 2
+    legend = [
+        {"graph_name": graph_name, "color": BAR_PALETTE[idx % len(BAR_PALETTE)]}
+        for idx, graph_name in enumerate(graph_names)
+    ]
 
-    def point_at(angle: float, frac: float) -> dict[str, float]:
-        return {
-            "x": round(cx + radius * frac * math.cos(angle), 1),
-            "y": round(cy + radius * frac * math.sin(angle), 1),
-        }
-
-    axes = []
-    for i, row in enumerate(rows):
-        angle = start_angle + i * (2 * math.pi / n)
-        label_pos = point_at(angle, 1.16)
-        anchor = "middle"
-        if label_pos["x"] > cx + 10:
-            anchor = "start"
-        elif label_pos["x"] < cx - 10:
-            anchor = "end"
-        axes.append(
-            {
-                "label": row["dimension"],
-                "angle": angle,
-                "spoke": point_at(angle, 1.0),
-                "label_pos": label_pos,
-                "anchor": anchor,
-            }
-        )
-
-    rings = []
-    for frac in (0.25, 0.5, 0.75, 1.0):
-        points = " ".join(f"{point_at(axis['angle'], frac)['x']},{point_at(axis['angle'], frac)['y']}" for axis in axes)
-        rings.append({"frac": frac, "points": points})
-
-    series = []
-    for idx, graph_name in enumerate(graph_names):
-        points = []
-        for i, row in enumerate(rows):
+    bars = []
+    for row in rows:
+        series = []
+        for idx, graph_name in enumerate(graph_names):
             cell = row["graphs"].get(graph_name, {})
-            frac = (cell.get("accuracy_pct") or 0) / 100
-            point = point_at(axes[i]["angle"], frac)
-            points.append(f"{point['x']},{point['y']}")
-        series.append(
-            {
-                "graph_name": graph_name,
-                "color": RADAR_PALETTE[idx % len(RADAR_PALETTE)],
-                "points": " ".join(points),
-            }
-        )
+            series.append(
+                {
+                    "graph_name": graph_name,
+                    "color": BAR_PALETTE[idx % len(BAR_PALETTE)],
+                    "accuracy_pct": cell.get("accuracy_pct"),
+                }
+            )
+        bars.append({"dimension": row["dimension"], "series": series})
 
-    return {"cx": cx, "cy": cy, "radius": radius, "axes": axes, "rings": rings, "series": series}
+    return {"legend": legend, "rows": bars}
 
 
 def list_errors(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -682,7 +657,7 @@ def build_overview(dir_name: str) -> dict[str, Any]:
         "graph_metrics": compute_graph_metrics(records),
         "scenarios": list_scenarios(records),
         "accuracy": accuracy,
-        "radar": build_radar_chart(accuracy["rows"], accuracy["graph_names"]),
+        "accuracy_bars": build_accuracy_bar_chart(accuracy["rows"], accuracy["graph_names"]),
         "overscoring": compute_overscoring_stats(records),
         "errors": list_errors(records),
     }

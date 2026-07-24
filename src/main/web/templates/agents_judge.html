@@ -16,7 +16,44 @@
   {{ 'status-exact-match' if is_diagonal else 'status-different' }}
 {%- endmacro %}
 
-{% macro category_section(id_prefix, categories, radar, heading) %}
+{% macro comparison_bar_chart(id_prefix, comparison) %}
+{% if comparison %}
+<div class="bar-chart-legend">
+  <span class="bar-chart-legend-item"><span class="bar-legend-swatch bar-legend-swatch--agentic"></span>Agentic</span>
+  <span class="bar-chart-legend-item"><span class="bar-legend-swatch bar-legend-swatch--baseline"></span>Baseline</span>
+</div>
+<div class="bar-chart" id="{{ id_prefix }}-bar-chart">
+  <div class="bar-chart-axis">
+    <span></span>
+    <div class="bar-chart-ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+    <span></span>
+  </div>
+  {% for row in comparison %}
+  <div class="bar-row">
+    <div class="bar-row-label"><code>{{ row.category }}</code></div>
+    <div class="bar-row-series">
+      <div class="bar-series-line">
+        <span class="bar-series-name">Agentic</span>
+        <span class="bar-track"><span class="bar-fill bar-fill--agentic" style="width: {{ (row.agentic_accuracy * 100) if row.agentic_accuracy is not none else 0 }}%;"></span></span>
+        <span class="bar-value">{{ pct(row.agentic_accuracy) }}</span>
+      </div>
+      <div class="bar-series-line">
+        <span class="bar-series-name">Baseline</span>
+        <span class="bar-track"><span class="bar-fill bar-fill--baseline" style="width: {{ (row.baseline_accuracy * 100) if row.baseline_accuracy is not none else 0 }}%;"></span></span>
+        <span class="bar-value">{{ pct(row.baseline_accuracy) }}</span>
+      </div>
+    </div>
+    <div class="bar-row-gap{{ ' bar-row-gap--positive' if row.gap is not none and row.gap > 0 else (' bar-row-gap--negative' if row.gap is not none and row.gap < 0 else '') }}">
+      {{ '+' if row.gap is not none and row.gap > 0 }}{{ pct(row.gap) if row.gap is not none else '–' }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<p class="helper bar-chart-caption">Sorted by widest agentic&minus;baseline gap first. Gap badge: green/positive = agentic more accurate on that category, red/negative = baseline more accurate.</p>
+{% endif %}
+{% endmacro %}
+
+{% macro category_section(id_prefix, categories, heading) %}
 {% if categories %}
 <div class="panel-heading">
   <div>
@@ -24,73 +61,10 @@
     <h3>{{ heading }}</h3>
     <p class="lede">
       Records grouped by the golden set's <code>category</code> column,
-      sorted worst-accuracy-first. The radar plots the same numbers
-      spatially &mdash; each spoke is one category (numbered to match the
-      <code>#</code> column below), worst at the top going clockwise.
+      sorted worst-accuracy-first.
     </p>
   </div>
 </div>
-
-{% if radar %}
-<div class="radar-wrap">
-  <svg class="radar-chart" id="{{ id_prefix }}-radar" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
-    {% for ring in radar.rings %}
-    <polygon class="radar-grid-ring{{ ' radar-grid-ring--mid' if ring.frac == 0.5 else '' }}" points="{{ ring.points }}"></polygon>
-    {% endfor %}
-    {% for axis in radar.axes %}
-    <line class="radar-spoke" x1="{{ radar.cx }}" y1="{{ radar.cy }}" x2="{{ axis.spoke.x }}" y2="{{ axis.spoke.y }}"></line>
-    <text class="radar-axis-label" x="{{ axis.label_pos.x }}" y="{{ axis.label_pos.y }}" text-anchor="{{ axis.anchor }}" dy="0.35em">{{ axis.index }}</text>
-    {% endfor %}
-    <polygon class="radar-category-shape" points="{{ radar.polygon_points }}"></polygon>
-    {% for axis in radar.axes %}
-    <circle class="radar-vertex" cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="5" style="fill: {{ axis.color }};"></circle>
-    <circle
-      class="radar-hit"
-      cx="{{ axis.vertex.x }}" cy="{{ axis.vertex.y }}" r="12"
-      data-label="#{{ axis.index }} {{ axis.category }}"
-      data-pct="{{ pct(axis.accuracy) }}"
-    ></circle>
-    {% endfor %}
-  </svg>
-  <div class="radar-tooltip" id="{{ id_prefix }}-radar-tooltip" role="tooltip" hidden></div>
-  <div class="radar-legend">
-    <div class="radar-legend-item"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> &ge;90% accurate</div>
-    <div class="radar-legend-item"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> 50&ndash;89% accurate</div>
-    <div class="radar-legend-item"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> &lt;50% accurate &mdash; systematic failure</div>
-  </div>
-  <p class="helper radar-caption">Hover a dot for the category name. Center = 0% accuracy on that category, outer ring = 100%.</p>
-</div>
-<script>
-  (function () {
-    var svg = document.getElementById('{{ id_prefix }}-radar');
-    var tooltip = document.getElementById('{{ id_prefix }}-radar-tooltip');
-    if (!svg || !tooltip) return;
-    var wrap = svg.closest('.radar-wrap');
-
-    function pointFor(evt) {
-      var target = evt.target.closest ? evt.target.closest('.radar-hit') : null;
-      return target && target.dataset ? target : null;
-    }
-
-    svg.addEventListener('pointermove', function (evt) {
-      var target = pointFor(evt);
-      if (!target) {
-        tooltip.hidden = true;
-        return;
-      }
-      var wrapRect = wrap.getBoundingClientRect();
-      tooltip.textContent = target.dataset.label + ' — ' + target.dataset.pct;
-      tooltip.style.left = (evt.clientX - wrapRect.left) + 'px';
-      tooltip.style.top = (evt.clientY - wrapRect.top) + 'px';
-      tooltip.hidden = false;
-    });
-
-    svg.addEventListener('pointerleave', function () {
-      tooltip.hidden = true;
-    });
-  })();
-</script>
-{% endif %}
 
 <details class="disclosure" id="{{ id_prefix }}-category-details">
   <summary>Show per-category numbers ({{ categories|length }} rows)</summary>
@@ -237,6 +211,16 @@
   </div>
   {% endif %}
 
+  {% if comparison %}
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">{{ comparison|length }} categories</p>
+      <h3>Per-category comparison: agentic vs baseline</h3>
+    </div>
+  </div>
+  {{ comparison_bar_chart('judge-comparison', comparison) }}
+  {% endif %}
+
   {% if error %}
   <div class="prompt-box"><p class="helper">Agentic: {{ error }}</p></div>
   {% endif %}
@@ -294,7 +278,7 @@
     </table>
   </div>
 
-  {{ category_section('agentic-judge', categories, radar, 'Pass / fail by category') }}
+  {{ category_section('agentic-judge', categories, 'Pass / fail by category') }}
 
   <details class="disclosure" id="agentic-judge-conversation-details">
     <summary>Show per-conversation detail ({{ result.records|length }} conversations)</summary>
@@ -428,7 +412,7 @@
   </div>
   {% endif %}
 
-  {{ category_section('baseline-judge', baseline_categories, baseline_radar, 'Pass / fail by category') }}
+  {{ category_section('baseline-judge', baseline_categories, 'Pass / fail by category') }}
 
   <details class="disclosure" id="baseline-judge-conversation-details">
     <summary>Show per-conversation detail ({{ baseline_result.records|length }} conversations)</summary>

@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import csv
 import json
-import math
 from pathlib import Path
 from typing import Any
 
@@ -20,16 +19,6 @@ SRC_DIR = Path(__file__).resolve().parents[3]
 JUDGE_EVAL_DIR = SRC_DIR / "database" / "node_eval" / "judge_eval"
 
 _CACHE: dict[str, dict[str, Any]] = {}
-
-# Matches --success/--warning/--danger in static/styles.css -- same tiers as
-# the legend-dot--good/--fair/--poor convention used on the accuracy radar in
-# experiment.html, reused here so "good/warn/bad" reads the same everywhere.
-_TIER_COLOR = {
-    "good": "#2d5a27",
-    "warn": "#7a6520",
-    "bad": "#7a2020",
-    "none": "#4a5e47",
-}
 
 
 def _results_path(golden_set: str) -> Path:
@@ -141,59 +130,3 @@ def category_breakdown(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for index, row in enumerate(breakdown, start=1):
         row["index"] = index
     return breakdown
-
-
-def build_category_radar(categories: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """Precompute SVG geometry for a per-category accuracy radar: one spoke per
-    golden-set category, positioned worst-to-best around the circle (same order
-    as the breakdown table) so failing categories cluster visually instead of
-    scattering randomly. Spokes are numbered rather than labeled with the full
-    (long, e.g. `FULL_COVERAGE_LONG_ITERATIVE_MANY_REDIRECTS`) category name --
-    match the number to the breakdown table's `#` column or hover the vertex."""
-    rows = [c for c in categories if c["accuracy"] is not None]
-    if len(rows) < 3:
-        return None
-
-    n = len(rows)
-    cx, cy, radius = 210.0, 210.0, 150.0
-    start_angle = -math.pi / 2
-
-    def point_at(angle: float, frac: float) -> dict[str, float]:
-        return {
-            "x": round(cx + radius * frac * math.cos(angle), 1),
-            "y": round(cy + radius * frac * math.sin(angle), 1),
-        }
-
-    axes = []
-    for i, row in enumerate(rows):
-        angle = start_angle + i * (2 * math.pi / n)
-        label_pos = point_at(angle, 1.1)
-        anchor = "middle"
-        if label_pos["x"] > cx + 10:
-            anchor = "start"
-        elif label_pos["x"] < cx - 10:
-            anchor = "end"
-        axes.append(
-            {
-                "index": row["index"],
-                "category": row["category"],
-                "accuracy": row["accuracy"],
-                "spoke": point_at(angle, 1.0),
-                "label_pos": label_pos,
-                "anchor": anchor,
-                "vertex": point_at(angle, max(row["accuracy"], 0.04)),
-                "color": _TIER_COLOR[row["tier"]],
-            }
-        )
-
-    rings = []
-    for frac in (0.25, 0.5, 0.75, 1.0):
-        points = " ".join(
-            f"{point_at(start_angle + i * (2 * math.pi / n), frac)['x']},{point_at(start_angle + i * (2 * math.pi / n), frac)['y']}"
-            for i in range(n)
-        )
-        rings.append({"frac": frac, "points": points})
-
-    polygon_points = " ".join(f"{a['vertex']['x']},{a['vertex']['y']}" for a in axes)
-
-    return {"cx": cx, "cy": cy, "radius": radius, "axes": axes, "rings": rings, "polygon_points": polygon_points}

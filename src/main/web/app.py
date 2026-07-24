@@ -32,7 +32,7 @@ from node_eval.baseline_eval import (
     load_baseline_eval,
 )
 from node_eval.interviewer_eval import list_interviewer_golden_sets, load_interviewer_eval
-from node_eval.judge_eval import build_category_radar, category_breakdown, list_judge_golden_sets, load_judge_eval
+from node_eval.judge_eval import category_breakdown, list_judge_golden_sets, load_judge_eval
 from rag_ablation import list_ablation_batches, load_ablation
 from retrieval_eval import DEFAULT_TOP_K, evaluate_retrieval
 
@@ -246,12 +246,11 @@ def agents_judge():
     result = None
     error = None
     categories = None
-    radar = None
     baseline_result = None
     baseline_categories = None
-    baseline_radar = None
     baseline_confusion = None
     baseline_error = None
+    comparison = None
     if golden_sets:
         requested = str(request.args.get("golden_set", "")).strip()
         golden_set = requested if requested in golden_sets else golden_sets[0]
@@ -259,7 +258,6 @@ def agents_judge():
         try:
             result = load_judge_eval(golden_set, refresh=refresh)
             categories = category_breakdown(result["records"])
-            radar = build_category_radar(categories)
         except FileNotFoundError as exc:
             error = str(exc)
 
@@ -270,10 +268,12 @@ def agents_judge():
         try:
             baseline_result = load_baseline_eval(JUDGE_BASELINE_GOLDEN_SET, refresh=refresh)
             baseline_categories = category_breakdown(baseline_result["records"])
-            baseline_radar = build_category_radar(baseline_categories)
             baseline_confusion = compute_readiness_confusion(baseline_result["records"])
         except FileNotFoundError as exc:
             baseline_error = str(exc)
+
+        if categories is not None or baseline_categories is not None:
+            comparison = build_agentic_vs_baseline_comparison(categories, baseline_categories)
 
     if _wants_json():
         return jsonify(
@@ -292,12 +292,11 @@ def agents_judge():
         result=result,
         error=error,
         categories=categories,
-        radar=radar,
         baseline_result=baseline_result,
         baseline_categories=baseline_categories,
-        baseline_radar=baseline_radar,
         baseline_confusion=baseline_confusion,
         baseline_error=baseline_error,
+        comparison=comparison,
     )
 
 
@@ -308,10 +307,8 @@ def agents_interviewer():
     result = None
     error = None
     categories = None
-    radar = None
     baseline_result = None
     baseline_categories = None
-    baseline_radar = None
     baseline_error = None
     comparison = None
     if golden_sets:
@@ -321,7 +318,6 @@ def agents_interviewer():
         try:
             result = load_interviewer_eval(golden_set, refresh=refresh)
             categories = category_breakdown(result["records"])
-            radar = build_category_radar(categories)
         except FileNotFoundError as exc:
             error = str(exc)
 
@@ -335,7 +331,6 @@ def agents_interviewer():
             try:
                 baseline_result = load_baseline_eval(golden_set, refresh=refresh)
                 baseline_categories = category_breakdown(baseline_result["records"])
-                baseline_radar = build_category_radar(baseline_categories)
             except FileNotFoundError as exc:
                 baseline_error = str(exc)
 
@@ -357,10 +352,8 @@ def agents_interviewer():
         result=result,
         error=error,
         categories=categories,
-        radar=radar,
         baseline_result=baseline_result,
         baseline_categories=baseline_categories,
-        baseline_radar=baseline_radar,
         baseline_error=baseline_error,
         comparison=comparison,
     )

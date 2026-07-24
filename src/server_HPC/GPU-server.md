@@ -32,13 +32,13 @@ tail -f logs/langgraph-agents_123456.out   # ver el stdout en vivo
 tail -f logs/langgraph-agents_123456.err   # stderr
 scancel 123456                # cancelar el job si algo va mal
 
-4329758
+4329802
 
 tail -f logs/mistral.log
 tail -f logs/llama70b.log
 tail -f logs/run_all_scenarios.log 
 
-tail -f logs/hf-llm-server-candidate-exp02HPC_4329758.err 
+tail -f logs/hf-llm-server-candidate-exp02HPC_4329802.err 
 tail -f logs/langgraph-agents-experiment_4329758.out 
 tail -f logs/api_connection_check.log
 
