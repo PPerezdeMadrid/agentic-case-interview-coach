@@ -48,6 +48,7 @@ class AgenticGraphState(TypedDict):
     judge_round: NotRequired[int]
     candidate_reasoning: NotRequired[str]
     interviewer_reasoning: NotRequired[str]
+    pending_profitability_query: NotRequired[str]
     retrieved_profitability_context: NotRequired[list[str]]
     rag_query_log: NotRequired[Annotated[list[dict], append_rag_query_log]]
     llm_usage: NotRequired[Annotated[list[dict], append_llm_usage]]
@@ -98,15 +99,6 @@ class CaseAndProfitabilityRagScoutingDecision(BaseModel):
     profitability_query: str
 
 
-class ProfitabilityRagScoutingDecision(BaseModel):
-    """A node's own decision on whether it needs an excerpt from the
-    profitability methodology textbook right now, and what to ask it."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    profitability_query: str
-
-
 class ScoreRationale(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -143,7 +135,12 @@ class BaselineTurnOutput(BaseModel):
     full evaluation. case_performance/quality_dialog/feedback must be null
     unless action is "evaluate", in which case all three must be populated in
     that same response -- the baseline gets no separate judge/eval/feedback
-    turns the way the role-differentiated agentic graph does."""
+    turns the way the role-differentiated agentic graph does.
+
+    profitability_query is this same call's own opportunistic decision on
+    whether it wants an excerpt from the profitability methodology textbook --
+    empty string if not. Baseline has no separate scouting turn, so a query
+    written now can only be fetched and shown on the *next* baseline turn."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -151,6 +148,7 @@ class BaselineTurnOutput(BaseModel):
     action: Literal["question", "reveal", "evaluate"]
     content: str
     block_id: str
+    profitability_query: str
     ready_for_evaluation: bool
     case_performance: CaseEvaluation | None
     quality_dialog: DialogEvaluation | None

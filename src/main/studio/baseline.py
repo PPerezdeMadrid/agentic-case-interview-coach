@@ -24,7 +24,7 @@ from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
 )
-from state import AgenticGraphState, BaselineTurnOutput, ProfitabilityRagScoutingDecision
+from state import AgenticGraphState, BaselineTurnOutput
 from utils import (
     candidate_transcript_messages,
     extract_token_usage,
@@ -72,55 +72,32 @@ class GraphConfig(TypedDict, total=False):
     thread_id: str
 
 
-def get_profitability_guide_context(
+def get_pending_profitability_guide_context(
     state: AgenticGraphState,
     *,
-    evaluation_target: str,
     top_k: int,
-    base_prompt: str,
-    situation: str,
-) -> tuple[list[dict], dict, list[dict]]:
-    """Let this step decide -- with its own prompt and its own (single) model --
-    whether it needs an excerpt from the profitability textbook right now, and
-    what to ask it. Mirrors node.py's eval_case_performance_node scouting, but
-    as a standalone helper since baseline's case_guide retrieval stays the
-    deliberately simple comparison arm (see get_baseline_case_guide_context).
+) -> tuple[list[dict], dict]:
+    """Fetch the profitability excerpt the *previous* baseline turn asked for,
+    if any. Baseline has no separate scouting call -- the single combined
+    schema (see BaselineTurnOutput.profitability_query) lets the model flag a
+    query opportunistically while producing its move, so the earliest that
+    query can be resolved and shown back to the model is the following turn.
 
-    Returns (chunks, rag_query_log_entry, scouting_usage_log).
+    Returns (chunks, rag_query_log_entry).
     """
-    scouting_messages = [
-        SystemMessage(
-            content=(
-                base_prompt
-                + "\n\n"
-                + situation
-                + "\n\nAvailable support source -- Profitability methodology textbook: "
-                + PROFITABILITY_SOURCE_NAVIGATION_GUIDE
-                + "\n\nBefore continuing, decide whether an excerpt from this textbook would help "
-                + "you right now. If yes, write one short, specific question for it. If not, leave "
-                + "profitability_query empty."
-            )
-        )
-    ]
-    payload, usage_log = invoke_json_llm(
-        baseline_llm,
-        scouting_messages,
-        node=f"{evaluation_target}_profitability_scout",
-        schema=ProfitabilityRagScoutingDecision,
-    )
-    query = str(payload.get("profitability_query", "")).strip()
+    query = str(state.get("pending_profitability_query", "") or "").strip()
     if not query:
-        return [], {}, usage_log
+        return [], {}
 
     chunks = retrieve_profitability_guide_context(query, top_k=top_k)
     log_entry = {
-        "node": evaluation_target,
+        "node": "baseline",
         "source": "profitability_guide",
         "query": query,
         "top_k": top_k,
         "chunk_ids": [chunk.get("chunk_id") for chunk in chunks],
     }
-    return chunks, log_entry, usage_log
+    return chunks, log_entry
 
 
 def build_initial_baseline_state(
@@ -161,6 +138,7 @@ def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> d
             "action": "evaluate",
             "content": "",
             "block_id": "",
+            "profitability_query": "",
             "ready_for_evaluation": True,
             "reasoning": reasoning,
             "case_performance": normalize_eval_payload(case_performance_raw, CASE_PERFORMANCE_FIELDS),
@@ -175,6 +153,7 @@ def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> d
         "action": action,
         "content": content,
         "block_id": str(payload.get("block_id", "")).strip(),
+        "profitability_query": str(payload.get("profitability_query", "")).strip(),
         "ready_for_evaluation": bool(payload.get("ready_for_evaluation", False)),
         "reasoning": reasoning,
         "case_performance": None,
@@ -194,6 +173,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
                 "action": "evaluate",
                 "content": "",
                 "block_id": "",
+                "profitability_query": "",
                 "ready_for_evaluation": True,
                 "case_performance": {},
                 "quality_dialog": {},
@@ -204,6 +184,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
             "action": "question",
             "content": "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
             "block_id": "",
+            "profitability_query": "",
             "ready_for_evaluation": False,
         }
 
@@ -313,6 +294,13 @@ def _build_baseline_messages(
         + ". quality_dialog must contain exactly these fields: "
         + ", ".join(QUALITY_DIALOG_FIELDS)
         + ". Each field in both objects must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
+        + "\n\nAvailable support source -- Profitability methodology textbook: "
+        + PROFITABILITY_SOURCE_NAVIGATION_GUIDE
+        + " Decide, as part of this same response, whether an excerpt from it would help you right "
+        + "now. If yes, write one short, specific question in profitability_query; if not, leave it "
+        + "empty. You have no separate turn to consult it: a query you write now can only be "
+        + "retrieved and shown to you on your NEXT turn, not this one, so do not treat it as already "
+        + "available while producing this response."
     )
     return [
         SystemMessage(
@@ -350,46 +338,10 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
         }
 
     turn_index = int(state.get("turn_index", 0))
-    is_final_turn = turn_index >= MAX_BASELINE_TURNS - 1
     force_evaluation = turn_index >= MAX_BASELINE_TURNS
 
     case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
-    situation = (
-        "Current interviewer turn: "
-        + str(turn_index)
-        + "\nMaximum interviewer turns before forced evaluation: "
-        + str(MAX_BASELINE_TURNS)
-        + "\nFinal turn before forced evaluation: "
-        + ("yes" if is_final_turn else "no")
-        + "\nTurn budget exhausted, must evaluate now: "
-        + ("yes" if force_evaluation else "no")
-        + "\n\nPublic transcript:\n"
-        + ("\n".join(transcript) if transcript else "No previous messages.")
-        + "\n\nCase prompt:\n"
-        + (case_prompt or "None.")
-        + "\n\nCandidate-visible case blocks:\n"
-        + format_case_blocks(visible_blocks)
-        + "\n\nHidden case guidance:\n"
-        + (case_guidance or "None.")
-        + "\n\nCase data:\n"
-        + format_full_case_data(case_data if isinstance(case_data, dict) else {})
-        + "\n\nExpected recommendation:\n"
-        + (case_recommendation or "None.")
-        + "\n\nRubric:\n"
-        + format_rubric(rubric_data if isinstance(rubric_data, dict) else {})
-        + "\n\nWhen action is \"evaluate\", case_performance must contain exactly these fields: "
-        + ", ".join(CASE_PERFORMANCE_FIELDS)
-        + ". quality_dialog must contain exactly these fields: "
-        + ", ".join(QUALITY_DIALOG_FIELDS)
-        + ". Each field in both objects must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
-    )
-    profitability_context, profitability_log, profitability_rag_usage = get_profitability_guide_context(
-        state,
-        evaluation_target="baseline",
-        top_k=3,
-        base_prompt=BASELINE_GRAPH_SYSTEM_PROMPT,
-        situation=situation,
-    )
+    profitability_context, profitability_log = get_pending_profitability_guide_context(state, top_k=3)
     messages = _build_baseline_messages(
         case_prompt,
         case_data,
@@ -409,6 +361,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     revealed_block_id = move["block_id"]
     ready_for_evaluation = move["ready_for_evaluation"]
     reasoning = move["reasoning"]
+    next_profitability_query = move["profitability_query"]
 
     action, content = resolve_reveal_content(case_data, action, revealed_block_id, content)
 
@@ -421,13 +374,14 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
             "interviewer_reasoning": reasoning,
             "case_performance": None,
             "quality_dialog": None,
+            "pending_profitability_query": next_profitability_query,
             "retrieved_profitability_context": [
                 format_profitability_guide_snippet(chunk)
                 for chunk in profitability_context
                 if str(chunk.get("content", "")).strip()
             ],
             "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
-            "llm_usage": profitability_rag_usage + move_usage_log,
+            "llm_usage": move_usage_log,
         }
 
     return {
@@ -448,7 +402,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
             if str(chunk.get("content", "")).strip()
         ],
         "rag_query_log": [entry for entry in (case_guide_log, profitability_log) if entry],
-        "llm_usage": profitability_rag_usage + move_usage_log,
+        "llm_usage": move_usage_log,
     }
 
 
