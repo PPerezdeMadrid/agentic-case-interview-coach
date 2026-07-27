@@ -73,7 +73,7 @@ def _evaluate_without_rag(graph_name: str, state: dict[str, Any]) -> tuple[dict,
         state["turn_index"] = baseline.MAX_BASELINE_TURNS
         with patch.multiple(
             baseline,
-            get_baseline_case_guide_context=lambda state, **kwargs: ([], {}),
+            get_pending_case_guide_context=lambda state, **kwargs: ([], {}),
             retrieve_profitability_guide_context=lambda *args, **kwargs: [],
         ):
             result = baseline.baseline_node(state)

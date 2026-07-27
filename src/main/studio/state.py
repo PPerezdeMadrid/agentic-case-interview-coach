@@ -48,6 +48,7 @@ class AgenticGraphState(TypedDict):
     judge_round: NotRequired[int]
     candidate_reasoning: NotRequired[str]
     interviewer_reasoning: NotRequired[str]
+    pending_case_guide_query: NotRequired[str]
     pending_profitability_query: NotRequired[str]
     retrieved_profitability_context: NotRequired[list[str]]
     rag_query_log: NotRequired[Annotated[list[dict], append_rag_query_log]]
@@ -137,10 +138,11 @@ class BaselineTurnOutput(BaseModel):
     that same response -- the baseline gets no separate judge/eval/feedback
     turns the way the role-differentiated agentic graph does.
 
-    profitability_query is this same call's own opportunistic decision on
-    whether it wants an excerpt from the profitability methodology textbook --
-    empty string if not. Baseline has no separate scouting turn, so a query
-    written now can only be fetched and shown on the *next* baseline turn."""
+    case_guide_query and profitability_query are this same call's own
+    opportunistic decision on whether it wants an excerpt from the Consulting
+    Case Interview Guide / the profitability methodology textbook -- empty
+    string if not. Baseline has no separate scouting turn, so a query written
+    now can only be fetched and shown on the *next* baseline turn."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -148,6 +150,7 @@ class BaselineTurnOutput(BaseModel):
     action: Literal["question", "reveal", "evaluate"]
     content: str
     block_id: str
+    case_guide_query: str
     profitability_query: str
     ready_for_evaluation: bool
     case_performance: CaseEvaluation | None

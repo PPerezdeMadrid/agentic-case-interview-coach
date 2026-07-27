@@ -8,8 +8,9 @@ from typing_extensions import TypedDict
 from adapter import get_candidate_visible_blocks
 from rag.case_guide_context import (
     CASE_GUIDE_CITATION_LABEL,
+    CASE_GUIDE_SOURCE_DESCRIPTION,
     format_case_guide_snippets,
-    get_baseline_case_guide_context,
+    get_pending_case_guide_context,
 )
 from rag.profitability_guide_context import (
     PROFITABILITY_CITATION_LABEL,
@@ -138,6 +139,7 @@ def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> d
             "action": "evaluate",
             "content": "",
             "block_id": "",
+            "case_guide_query": "",
             "profitability_query": "",
             "ready_for_evaluation": True,
             "reasoning": reasoning,
@@ -153,6 +155,7 @@ def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> d
         "action": action,
         "content": content,
         "block_id": str(payload.get("block_id", "")).strip(),
+        "case_guide_query": str(payload.get("case_guide_query", "")).strip(),
         "profitability_query": str(payload.get("profitability_query", "")).strip(),
         "ready_for_evaluation": bool(payload.get("ready_for_evaluation", False)),
         "reasoning": reasoning,
@@ -173,6 +176,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
                 "action": "evaluate",
                 "content": "",
                 "block_id": "",
+                "case_guide_query": "",
                 "profitability_query": "",
                 "ready_for_evaluation": True,
                 "case_performance": {},
@@ -184,6 +188,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
             "action": "question",
             "content": "I need one concrete next step from you. Which area would you like to analyze first: revenue or costs?",
             "block_id": "",
+            "case_guide_query": "",
             "profitability_query": "",
             "ready_for_evaluation": False,
         }
@@ -294,13 +299,17 @@ def _build_baseline_messages(
         + ". quality_dialog must contain exactly these fields: "
         + ", ".join(QUALITY_DIALOG_FIELDS)
         + ". Each field in both objects must be an object {\"score\": 1-4 or \"not_tested\", \"rationale\": \"short text\"}."
-        + "\n\nAvailable support source -- Profitability methodology textbook: "
+        + "\n\nAvailable support sources:\n"
+        + "- Consulting Case Interview Guide -- "
+        + CASE_GUIDE_SOURCE_DESCRIPTION
+        + "\n- Profitability methodology textbook -- "
         + PROFITABILITY_SOURCE_NAVIGATION_GUIDE
-        + " Decide, as part of this same response, whether an excerpt from it would help you right "
-        + "now. If yes, write one short, specific question in profitability_query; if not, leave it "
-        + "empty. You have no separate turn to consult it: a query you write now can only be "
-        + "retrieved and shown to you on your NEXT turn, not this one, so do not treat it as already "
-        + "available while producing this response."
+        + "\n\nDecide, as part of this same response, whether an excerpt from either source would "
+        + "help you right now. Write one short, specific question for whichever source(s) you need in "
+        + "case_guide_query / profitability_query; leave a field empty if you don't need that source. "
+        + "You have no separate turn to consult them: a query you write now can only be retrieved and "
+        + "shown to you on your NEXT turn, not this one, so do not treat it as already available while "
+        + "producing this response."
     )
     return [
         SystemMessage(
@@ -340,7 +349,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     turn_index = int(state.get("turn_index", 0))
     force_evaluation = turn_index >= MAX_BASELINE_TURNS
 
-    case_guide_context, case_guide_log = get_baseline_case_guide_context(state)
+    case_guide_context, case_guide_log = get_pending_case_guide_context(state)
     profitability_context, profitability_log = get_pending_profitability_guide_context(state, top_k=3)
     messages = _build_baseline_messages(
         case_prompt,
@@ -361,6 +370,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
     revealed_block_id = move["block_id"]
     ready_for_evaluation = move["ready_for_evaluation"]
     reasoning = move["reasoning"]
+    next_case_guide_query = move["case_guide_query"]
     next_profitability_query = move["profitability_query"]
 
     action, content = resolve_reveal_content(case_data, action, revealed_block_id, content)
@@ -374,6 +384,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
             "interviewer_reasoning": reasoning,
             "case_performance": None,
             "quality_dialog": None,
+            "pending_case_guide_query": next_case_guide_query,
             "pending_profitability_query": next_profitability_query,
             "retrieved_profitability_context": [
                 format_profitability_guide_snippet(chunk)

@@ -622,7 +622,7 @@ class BaselineGraphTests(unittest.TestCase):
         mock_llm.invoke.side_effect = fake_invoke
         with patch.object(
             baseline,
-            "get_baseline_case_guide_context",
+            "get_pending_case_guide_context",
             return_value=(
                 [
                     "Start by clarifying the objective and metric.",
@@ -664,7 +664,7 @@ class BaselineGraphTests(unittest.TestCase):
         )
         with patch.object(
             baseline,
-            "get_baseline_case_guide_context",
+            "get_pending_case_guide_context",
             return_value=(
                 [
                     "Probe the objective before branching.",
@@ -685,24 +685,33 @@ class BaselineGraphTests(unittest.TestCase):
             "Interviewer: What has changed in revenue versus costs?",
         )
 
-    def test_baseline_context_without_prompt(self) -> None:
-        # Checks that the shared baseline guide helper can rebuild the query when case_prompt is missing.
+    def test_pending_case_guide_context_empty_without_pending_query(self) -> None:
+        # Baseline has no separate scouting call, so a turn with nothing queued
+        # in pending_case_guide_query (e.g. the first live turn) must not hit
+        # retrieval at all -- the model hasn't had a chance to ask for anything yet.
         state = {"scenario_ref": "scenario_test"}
+
+        with patch.object(case_guide_context, "retrieve_case_guide_context") as retrieve:
+            context, log_entry = case_guide_context.get_pending_case_guide_context(state)
+
+        retrieve.assert_not_called()
+        self.assertEqual(context, [])
+        self.assertEqual(log_entry, {})
+
+    def test_pending_case_guide_context_retrieves_queued_query(self) -> None:
+        # Checks that a query the *previous* baseline turn queued in
+        # pending_case_guide_query is what actually gets retrieved and shown now.
+        state = {"pending_case_guide_query": "How should I structure a profitability drop case?"}
 
         with patch.object(
             case_guide_context,
-            "load_selected_simulation_bundle",
-            return_value=make_runtime_bundle(),
-        ):
-            with patch.object(
-                case_guide_context,
-                "retrieve_case_guide_context",
-                return_value=[{"content": "Split revenue from cost drivers.", "chunk_id": "guide::chunk_9"}],
-            ) as retrieve:
-                context, log_entry = baseline.get_baseline_case_guide_context(state)
+            "retrieve_case_guide_context",
+            return_value=[{"content": "Split revenue from cost drivers.", "chunk_id": "guide::chunk_9"}],
+        ) as retrieve:
+            context, log_entry = case_guide_context.get_pending_case_guide_context(state)
 
         retrieve.assert_called_once_with(
-            "Our profits are down. What would you look at first?",
+            "How should I structure a profitability drop case?",
             top_k=4,
         )
         self.assertEqual(
