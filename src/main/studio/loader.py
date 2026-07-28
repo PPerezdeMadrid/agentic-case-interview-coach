@@ -169,7 +169,7 @@ def adapt_scenario(raw_scenario: dict[str, Any]) -> dict[str, Any]:
     scenario_id = str(raw_scenario.get("scenario_id", "")).strip()
     case_id = str(raw_scenario.get("case_id", "")).strip()
     candidate_profile = raw_scenario.get("candidate_profile", {})
-    expected_scores = candidate_profile.get("expected_scores", {})
+    reference_scores = candidate_profile.get("reference_scores", {})
 
     if not scenario_id:
         raise LoaderError("Scenario is missing 'scenario_id'.")
@@ -177,15 +177,15 @@ def adapt_scenario(raw_scenario: dict[str, Any]) -> dict[str, Any]:
         raise LoaderError(f"Scenario '{scenario_id}' is missing 'case_id'.")
     if not isinstance(candidate_profile, dict):
         raise LoaderError(f"Scenario '{scenario_id}' has invalid 'candidate_profile'.")
-    if not isinstance(expected_scores, dict):
-        raise LoaderError(f"Scenario '{scenario_id}' has invalid 'candidate_profile.expected_scores'.")
+    if not isinstance(reference_scores, dict):
+        raise LoaderError(f"Scenario '{scenario_id}' has invalid 'candidate_profile.reference_scores'.")
 
     return {
         "scenario_id": scenario_id,
         "case_id": case_id,
         "rubric_id": DEFAULT_RUBRIC_ID,
         "candidate_profile": candidate_profile,
-        "expected_scores": expected_scores,
+        "reference_scores": reference_scores,
         "max_judge_rounds": DEFAULT_MAX_JUDGE_ROUNDS,
         "source_path": raw_scenario.get("_source_path", ""),
     }

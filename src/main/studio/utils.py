@@ -231,11 +231,11 @@ def format_candidate_persona(candidate_profile: dict) -> str:
         if cleaned_math:
             sections.append("Math guidance:\n" + "\n".join(cleaned_math))
 
-    expected_scores = candidate_profile.get("expected_scores", {})
-    if isinstance(expected_scores, dict):
+    reference_scores = candidate_profile.get("reference_scores", {})
+    if isinstance(reference_scores, dict):
         rationale_lines = []
         for group_key in ("rubric", "case_interaction_quality"):
-            group = expected_scores.get(group_key, {})
+            group = reference_scores.get(group_key, {})
             if not isinstance(group, dict):
                 continue
             for dimension_id, entry in group.items():

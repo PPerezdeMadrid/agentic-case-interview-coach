@@ -100,16 +100,16 @@ def _normalize_dimension_entry(raw_entry: Any) -> dict[str, Any]:
     }
 
 
-def _extract_expected_scores(state: dict[str, Any]) -> dict[str, dict[str, Any]]:
+def _extract_reference_scores(state: dict[str, Any]) -> dict[str, dict[str, Any]]:
     candidate_profile = state.get("candidate_profile", {})
-    expected_scores = candidate_profile.get("expected_scores", {})
+    reference_scores = candidate_profile.get("reference_scores", {})
 
     sections: dict[str, dict[str, Any]] = {
         CASE_PERFORMANCE_SECTION: {},
         DIALOG_QUALITY_SECTION: {},
     }
     for section_name in sections:
-        raw_section = expected_scores.get(section_name, {})
+        raw_section = reference_scores.get(section_name, {})
         if not isinstance(raw_section, dict):
             continue
         for dimension, details in raw_section.items():
@@ -281,12 +281,12 @@ def _absolute_error(left_score: Any, right_score: Any) -> float | None:
 
 def calculate_error_metrics(comparison_rows: list[dict[str, Any]]) -> dict[str, Any]:
     """
-    Given rows containing expected_score, model_score and human_score,
+    Given rows containing reference_score, model_score and human_score,
     calculate MAE, exact match rate, off-by-one rate, overestimation count,
-    underestimation count, signed error, and expected-vs-human MAE.
+    underestimation count, signed error, and reference-vs-human MAE.
     """
     model_abs_errors: list[float] = []
-    expected_abs_errors: list[float] = []
+    reference_abs_errors: list[float] = []
     signed_errors: list[float] = []
     exact_match_count = 0
     off_by_one_count = 0
@@ -296,7 +296,7 @@ def calculate_error_metrics(comparison_rows: list[dict[str, Any]]) -> dict[str, 
     for row in comparison_rows:
         model_score = to_numeric_score(row.get("model_score"))
         human_score = to_numeric_score(row.get("human_score"))
-        expected_score = to_numeric_score(row.get("expected_score"))
+        reference_score = to_numeric_score(row.get("reference_score"))
 
         if model_score is not None and human_score is not None:
             absolute_error = abs(model_score - human_score)
@@ -312,11 +312,11 @@ def calculate_error_metrics(comparison_rows: list[dict[str, Any]]) -> dict[str, 
             if signed_error < 0:
                 underestimation_count += 1
 
-        if expected_score is not None and human_score is not None:
-            expected_abs_errors.append(abs(expected_score - human_score))
+        if reference_score is not None and human_score is not None:
+            reference_abs_errors.append(abs(reference_score - human_score))
 
     comparable_dimensions = len(model_abs_errors)
-    expected_human_comparable_dimensions = len(expected_abs_errors)
+    reference_human_comparable_dimensions = len(reference_abs_errors)
 
     def _mean(values: list[float]) -> float | None:
         if not values:
@@ -335,14 +335,14 @@ def calculate_error_metrics(comparison_rows: list[dict[str, Any]]) -> dict[str, 
         "overestimation_count": overestimation_count,
         "underestimation_count": underestimation_count,
         "signed_error": _mean(signed_errors),
-        "expected_vs_human_mae": _mean(expected_abs_errors),
+        "reference_vs_human_mae": _mean(reference_abs_errors),
         "comparable_dimensions": comparable_dimensions,
-        "expected_human_comparable_dimensions": expected_human_comparable_dimensions,
+        "reference_human_comparable_dimensions": reference_human_comparable_dimensions,
     }
 
 
 def build_three_way_score_comparison(
-    expected_scores: dict[str, dict[str, Any]],
+    reference_scores: dict[str, dict[str, Any]],
     model_scores: dict[str, dict[str, Any]],
     human_scores: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
@@ -352,41 +352,41 @@ def build_three_way_score_comparison(
         (CASE_PERFORMANCE_SECTION, "Case Performance"),
         (DIALOG_QUALITY_SECTION, "Dialog Quality"),
     ):
-        expected_section = expected_scores.get(section_name, {})
+        reference_section = reference_scores.get(section_name, {})
         model_section = model_scores.get(section_name, {})
         human_section = human_scores.get(section_name, {})
         dimensions = sorted(
-            set(expected_section) | set(model_section) | set(human_section),
+            set(reference_section) | set(model_section) | set(human_section),
             key=_score_sort_key,
         )
 
         for dimension in dimensions:
-            expected_entry = expected_section.get(dimension, {})
+            reference_entry = reference_section.get(dimension, {})
             model_entry = _normalize_dimension_entry(model_section.get(dimension, {}))
             human_entry = _normalize_dimension_entry(human_section.get(dimension, {}))
-            expected_score = expected_entry.get("score", "")
+            reference_score = reference_entry.get("score", "")
             model_score = model_entry.get("score", "")
             human_score = human_entry.get("score", "")
             model_human_error = _absolute_error(model_score, human_score)
-            expected_human_error = _absolute_error(expected_score, human_score)
+            reference_human_error = _absolute_error(reference_score, human_score)
 
             comparison_rows.append(
                 {
                     "section": section_name,
                     "section_label": label,
                     "dimension": dimension,
-                    "expected_score": expected_score,
-                    "expected_rationale": expected_entry.get("rationale", ""),
+                    "reference_score": reference_score,
+                    "reference_rationale": reference_entry.get("rationale", ""),
                     "model_score": model_score,
                     "model_rationale": model_entry.get("rationale", ""),
                     "human_score": human_score,
                     "human_rationale": human_entry.get("rationale", ""),
                     "human_evidence": human_entry.get("evidence", ""),
                     "model_human_absolute_error": model_human_error,
-                    "expected_human_absolute_error": expected_human_error,
-                    "expected_model_status": _pair_status(expected_score, model_score),
+                    "reference_human_absolute_error": reference_human_error,
+                    "reference_model_status": _pair_status(reference_score, model_score),
                     "model_human_status": score_status(model_human_error),
-                    "expected_human_status": score_status(expected_human_error),
+                    "reference_human_status": score_status(reference_human_error),
                 }
             )
 
@@ -531,10 +531,10 @@ def _build_run_payload(run_row: sqlite3.Row) -> dict[str, Any]:
             DIALOG_QUALITY_SECTION: human_evaluation["dialog_quality_human"],
         }
 
-    expected_scores = _extract_expected_scores(state)
+    reference_scores = _extract_reference_scores(state)
     model_scores = _extract_model_scores(run_row)
     comparison_rows = build_three_way_score_comparison(
-        expected_scores=expected_scores,
+        reference_scores=reference_scores,
         model_scores=model_scores,
         human_scores=human_sections,
     )
@@ -554,7 +554,7 @@ def _build_run_payload(run_row: sqlite3.Row) -> dict[str, Any]:
         "transcript": transcript,
         "final_feedback": run_row["final_feedback"] or "",
         "state": state,
-        "expected_scores": expected_scores,
+        "reference_scores": reference_scores,
         "model_scores": model_scores,
         "human_evaluation": human_evaluation,
         "human_scores": human_sections,

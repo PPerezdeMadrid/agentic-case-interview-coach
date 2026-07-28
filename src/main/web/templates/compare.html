@@ -54,7 +54,7 @@
         <tr><td>Graph Name</td><td>{{ run_a.graph_name }}</td><td>{{ run_b.graph_name }}</td></tr>
         <tr><td>Scenario</td><td>{{ run_a.scenario_ref or 'n/a' }}</td><td>{{ run_b.scenario_ref or 'n/a' }}</td></tr>
         <tr><td>Model-Human MAE</td><td>{{ metric_value(run_a.metrics.model_vs_human_mae) }}</td><td>{{ metric_value(run_b.metrics.model_vs_human_mae) }}</td></tr>
-        <tr><td>Reference-Human MAE</td><td>{{ metric_value(run_a.metrics.expected_vs_human_mae) }}</td><td>{{ metric_value(run_b.metrics.expected_vs_human_mae) }}</td></tr>
+        <tr><td>Reference-Human MAE</td><td>{{ metric_value(run_a.metrics.reference_vs_human_mae) }}</td><td>{{ metric_value(run_b.metrics.reference_vs_human_mae) }}</td></tr>
         <tr><td>Exact Match Rate</td><td>{{ metric_value(run_a.metrics.exact_match_rate, '%') }}</td><td>{{ metric_value(run_b.metrics.exact_match_rate, '%') }}</td></tr>
         <tr><td>Off-by-One Rate</td><td>{{ metric_value(run_a.metrics.off_by_one_rate, '%') }}</td><td>{{ metric_value(run_b.metrics.off_by_one_rate, '%') }}</td></tr>
         <tr><td>Bias / Signed Error</td><td>{{ metric_value(run_a.metrics.signed_error) }}</td><td>{{ metric_value(run_b.metrics.signed_error) }}</td></tr>
@@ -62,7 +62,7 @@
         <tr><td>Underestimation Count</td><td>{{ run_a.metrics.underestimation_count }}</td><td>{{ run_b.metrics.underestimation_count }}</td></tr>
         <tr><td>Comparable Dimensions</td><td>{{ run_a.metrics.comparable_dimensions }}</td><td>{{ run_b.metrics.comparable_dimensions }}</td></tr>
         <tr><td>Model-Human Agreement</td><td>{{ 'available' if run_a.human_evaluation else 'no human evaluation' }}</td><td>{{ 'available' if run_b.human_evaluation else 'no human evaluation' }}</td></tr>
-        <tr><td>Reference-Human Agreement</td><td>{{ metric_value(run_a.metrics.expected_vs_human_mae) }}</td><td>{{ metric_value(run_b.metrics.expected_vs_human_mae) }}</td></tr>
+        <tr><td>Reference-Human Agreement</td><td>{{ metric_value(run_a.metrics.reference_vs_human_mae) }}</td><td>{{ metric_value(run_b.metrics.reference_vs_human_mae) }}</td></tr>
         <tr><td>Final Feedback</td><td><pre class="inline-pre">{{ run_a.final_feedback or 'No final feedback stored.' }}</pre></td><td><pre class="inline-pre">{{ run_b.final_feedback or 'No final feedback stored.' }}</pre></td></tr>
       </tbody>
     </table>

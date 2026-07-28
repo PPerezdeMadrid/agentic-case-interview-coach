@@ -20,8 +20,8 @@ SECTION_LABELS = {
 }
 
 # Maps SECTION_LABELS keys (as produced by the judge / stored in combined_results.jsonl)
-# to the section keys used inside a scenario JSON's candidate_profile.expected_scores.
-EXPECTED_SCORE_SECTION_MAP = {
+# to the section keys used inside a scenario JSON's candidate_profile.reference_scores.
+REFERENCE_SCORE_SECTION_MAP = {
     "case_performance": "rubric",
     "quality_dialog": "case_interaction_quality",
 }
@@ -258,7 +258,7 @@ def _bias_label(signed_bias: float | None) -> str:
 def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
     """
     Compare each graph's judge scores against the scenario's own author-defined
-    expected score (candidate_profile.expected_scores), pooled across every
+    reference score (candidate_profile.reference_scores), pooled across every
     repeat in the batch. This is what answers "which graph scores accurately"
     and "who wins".
     """
@@ -274,11 +274,13 @@ def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
             key = (section_key, label, dimension)
             all_keys.add(key)
             actual = to_numeric_score(score)
-            expected_entry = reference.get(section_key, {}).get(dimension, {})
-            expected = to_numeric_score(expected_entry.get("score")) if isinstance(expected_entry, dict) else None
-            if actual is None or expected is None:
+            reference_entry = reference.get(section_key, {}).get(dimension, {})
+            reference_value = (
+                to_numeric_score(reference_entry.get("score")) if isinstance(reference_entry, dict) else None
+            )
+            if actual is None or reference_value is None:
                 continue
-            pairs[key][graph_name].append((actual, expected))
+            pairs[key][graph_name].append((actual, reference_value))
 
     rows = []
     graph_pooled_errors: dict[str, list[float]] = defaultdict(list)
@@ -399,9 +401,9 @@ def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
             record_section = record.get(section_key) or {}
             if not isinstance(record_section, dict):
                 record_section = {}
-            for dimension, expected_entry in reference.get(section_key, {}).items():
-                expected_raw = expected_entry.get("score") if isinstance(expected_entry, dict) else None
-                if str(expected_raw).strip().lower() != NOT_TESTED:
+            for dimension, reference_entry in reference.get(section_key, {}).items():
+                reference_raw = reference_entry.get("score") if isinstance(reference_entry, dict) else None
+                if str(reference_raw).strip().lower() != NOT_TESTED:
                     continue
                 # Look up directly rather than via iter_dimension_scores: a graph that never
                 # even emits this dimension's key is still a "did not overscore" case, not
@@ -549,14 +551,14 @@ def _load_scenario_json(scenario_ref: str) -> dict[str, Any]:
 
 
 def load_reference_scores(scenario_ref: str) -> dict[str, dict[str, Any]]:
-    """Load the scenario's own (author-defined) expected scores, keyed like SECTION_LABELS."""
+    """Load the scenario's own (author-defined) reference scores, keyed like SECTION_LABELS."""
     scenario = _load_scenario_json(scenario_ref)
     candidate_profile = scenario.get("candidate_profile", {}) if isinstance(scenario, dict) else {}
-    expected_scores = candidate_profile.get("expected_scores", {}) if isinstance(candidate_profile, dict) else {}
+    reference_scores = candidate_profile.get("reference_scores", {}) if isinstance(candidate_profile, dict) else {}
 
     sections: dict[str, dict[str, Any]] = {}
-    for section_key, expected_section_key in EXPECTED_SCORE_SECTION_MAP.items():
-        raw_section = expected_scores.get(expected_section_key, {}) if isinstance(expected_scores, dict) else {}
+    for section_key, reference_section_key in REFERENCE_SCORE_SECTION_MAP.items():
+        raw_section = reference_scores.get(reference_section_key, {}) if isinstance(reference_scores, dict) else {}
         section: dict[str, Any] = {}
         if isinstance(raw_section, dict):
             for dimension, details in raw_section.items():

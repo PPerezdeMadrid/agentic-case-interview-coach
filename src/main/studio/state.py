@@ -27,7 +27,12 @@ def append_llm_usage(existing: list[dict], new_entries: list[dict] | None) -> li
     return existing + list(new_entries)
 
 
-class AgenticGraphState(TypedDict):
+class BaseCaseState(TypedDict):
+    """Fields both graphs read/write identically: scenario content, transcript,
+    turn bookkeeping, and the shared final evaluation outputs. Role-specific
+    fields (multi-node judge/eval loop vs. single-call deferred RAG queries)
+    live on AgenticGraphState / BaselineState below, not here."""
+
     case_prompt: str
     candidate_profile: dict
     turn_index: int
@@ -35,7 +40,6 @@ class AgenticGraphState(TypedDict):
     case_guidance: str
     case_data: dict
     enough_evidence: bool
-    focus_areas: Annotated[list[str], replace_focus_areas]
     case_recommendation: str
     case_performance: dict | None
     quality_dialog: dict | None
@@ -45,14 +49,31 @@ class AgenticGraphState(TypedDict):
     trace_step_index: NotRequired[int]
     scenario_ref: NotRequired[str]
     rubric_data: NotRequired[dict]
-    judge_round: NotRequired[int]
-    candidate_reasoning: NotRequired[str]
     interviewer_reasoning: NotRequired[str]
-    pending_case_guide_query: NotRequired[str]
-    pending_profitability_query: NotRequired[str]
     retrieved_profitability_context: NotRequired[list[str]]
     rag_query_log: NotRequired[Annotated[list[dict], append_rag_query_log]]
     llm_usage: NotRequired[Annotated[list[dict], append_llm_usage]]
+
+
+class AgenticGraphState(BaseCaseState):
+    """State for the role-differentiated graph (node.py): separate
+    interviewer/candidate/judge/eval/feedback nodes, so the judge's
+    evidence-gathering loop needs its own round counter and focus areas, and
+    the candidate node reports its own reasoning trace."""
+
+    focus_areas: Annotated[list[str], replace_focus_areas]
+    judge_round: NotRequired[int]
+    candidate_reasoning: NotRequired[str]
+
+
+class BaselineState(BaseCaseState):
+    """State for the single-call baseline graph (baseline.py): one combined
+    model does interviewer + judge + eval + feedback per turn, with no
+    separate scouting call, so a RAG query it flags this turn can only be
+    resolved and shown back on the *next* turn -- hence the pending_* fields."""
+
+    pending_case_guide_query: NotRequired[str]
+    pending_profitability_query: NotRequired[str]
 
 
 class InterviewerMove(BaseModel):
@@ -135,12 +156,12 @@ class BaselineTurnOutput(BaseModel):
     an ordinary interviewer move or the terminal call that also produces the
     full evaluation. case_performance/quality_dialog/feedback must be null
     unless action is "evaluate", in which case all three must be populated in
-    that same response -- the baseline gets no separate judge/eval/feedback
+    that same response - the baseline gets no separate judge/eval/feedback
     turns the way the role-differentiated agentic graph does.
 
     case_guide_query and profitability_query are this same call's own
     opportunistic decision on whether it wants an excerpt from the Consulting
-    Case Interview Guide / the profitability methodology textbook -- empty
+    Case Interview Guide / the profitability methodology textbook - empty
     string if not. Baseline has no separate scouting turn, so a query written
     now can only be fetched and shown on the *next* baseline turn."""
 

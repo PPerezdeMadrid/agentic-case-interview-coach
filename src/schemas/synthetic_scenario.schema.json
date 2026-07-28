@@ -103,9 +103,9 @@
     "ground_truth": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["expected_scores", "expected_issues", "expected_feedback_points"],
+      "required": ["reference_scores", "expected_issues", "expected_feedback_points"],
       "properties": {
-        "expected_scores": {
+        "reference_scores": {
           "type": "object",
           "additionalProperties": false,
           "required": [

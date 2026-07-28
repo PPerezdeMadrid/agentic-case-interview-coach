@@ -73,7 +73,7 @@ def create_runs_table(db_path: Path) -> None:
 def insert_sample_run(db_path: Path, run_id: str = "run_001") -> None:
     state = {
         "candidate_profile": {
-            "expected_scores": {
+            "reference_scores": {
                 dashboard_store.CASE_PERFORMANCE_SECTION: {
                     "case_structure": {
                         "expected": 4,
@@ -268,9 +268,9 @@ def insert_sample_run(db_path: Path, run_id: str = "run_001") -> None:
 class DashboardStoreTests(unittest.TestCase):
     def test_calculate_error_metrics_ignores_non_numeric_pairs(self) -> None:
         rows = [
-            {"expected_score": 4, "model_score": 3, "human_score": 4},
-            {"expected_score": 3, "model_score": "not_tested", "human_score": 2},
-            {"expected_score": "", "model_score": 2, "human_score": None},
+            {"reference_score": 4, "model_score": 3, "human_score": 4},
+            {"reference_score": 3, "model_score": "not_tested", "human_score": 2},
+            {"reference_score": "", "model_score": 2, "human_score": None},
         ]
 
         metrics = dashboard_store.calculate_error_metrics(rows)
@@ -280,14 +280,14 @@ class DashboardStoreTests(unittest.TestCase):
         self.assertEqual(metrics["off_by_one_rate"], 100.0)
         self.assertEqual(metrics["overestimation_count"], 0)
         self.assertEqual(metrics["underestimation_count"], 1)
-        self.assertEqual(metrics["expected_vs_human_mae"], 0.5)
+        self.assertEqual(metrics["reference_vs_human_mae"], 0.5)
         self.assertEqual(metrics["comparable_dimensions"], 1)
-        self.assertEqual(metrics["expected_human_comparable_dimensions"], 2)
+        self.assertEqual(metrics["reference_human_comparable_dimensions"], 2)
 
     def test_calculate_error_metrics_exact_match_rate_is_100_for_all_matches(self) -> None:
         rows = [
-            {"expected_score": 4, "model_score": 4, "human_score": 4},
-            {"expected_score": 3, "model_score": 3, "human_score": 3},
+            {"reference_score": 4, "model_score": 4, "human_score": 4},
+            {"reference_score": 3, "model_score": 3, "human_score": 3},
         ]
 
         metrics = dashboard_store.calculate_error_metrics(rows)
@@ -299,8 +299,8 @@ class DashboardStoreTests(unittest.TestCase):
 
     def test_calculate_error_metrics_exact_match_rate_is_50_for_mixed_results(self) -> None:
         rows = [
-            {"expected_score": 4, "model_score": 4, "human_score": 4},
-            {"expected_score": 3, "model_score": 2, "human_score": 3},
+            {"reference_score": 4, "model_score": 4, "human_score": 4},
+            {"reference_score": 3, "model_score": 2, "human_score": 3},
         ]
 
         metrics = dashboard_store.calculate_error_metrics(rows)
@@ -312,9 +312,9 @@ class DashboardStoreTests(unittest.TestCase):
 
     def test_calculate_error_metrics_exact_match_rate_ignores_missing_pairs(self) -> None:
         rows = [
-            {"expected_score": 4, "model_score": 4, "human_score": 4},
-            {"expected_score": 3, "model_score": "", "human_score": 3},
-            {"expected_score": 2, "model_score": 2, "human_score": None},
+            {"reference_score": 4, "model_score": 4, "human_score": 4},
+            {"reference_score": 3, "model_score": "", "human_score": 3},
+            {"reference_score": 2, "model_score": 2, "human_score": None},
         ]
 
         metrics = dashboard_store.calculate_error_metrics(rows)
@@ -324,8 +324,8 @@ class DashboardStoreTests(unittest.TestCase):
 
     def test_calculate_error_metrics_exact_match_rate_is_none_without_comparable_pairs(self) -> None:
         rows = [
-            {"expected_score": 4, "model_score": "", "human_score": 4},
-            {"expected_score": 3, "model_score": "not_tested", "human_score": None},
+            {"reference_score": 4, "model_score": "", "human_score": 4},
+            {"reference_score": 3, "model_score": "not_tested", "human_score": None},
         ]
 
         metrics = dashboard_store.calculate_error_metrics(rows)
@@ -364,7 +364,7 @@ class DashboardStoreTests(unittest.TestCase):
                 payload = dashboard_store.load_run("run_001")
 
         self.assertEqual(payload["run_id"], "run_001")
-        self.assertEqual(payload["expected_scores"]["rubric"]["case_structure"]["score"], 4)
+        self.assertEqual(payload["reference_scores"]["rubric"]["case_structure"]["score"], 4)
         self.assertEqual(payload["model_scores"]["rubric"]["case_structure"]["score"], 3)
         self.assertEqual(payload["human_scores"]["rubric"]["case_structure"]["score"], 4)
         self.assertEqual(payload["metrics"]["model_vs_human_mae"], 1.0)

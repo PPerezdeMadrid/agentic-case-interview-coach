@@ -5,7 +5,8 @@ This document extracts the shared structure across profitability cases from sevv
 Corpus reviewed:
 - 10 Duke Casebook profitability cases
 - 12 AGSM Casebook profitability cases
-- Total: 22 profitability cases
+- 10 Harvard Casebook profitability cases
+- Total: 32 profitability cases
 
 ## What All Profitability Cases Have in Common
 

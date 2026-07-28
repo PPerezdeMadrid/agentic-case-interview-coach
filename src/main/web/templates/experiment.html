@@ -171,9 +171,9 @@
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Accuracy vs. reference (author-defined expected scores)</p>
+      <p class="eyebrow">Accuracy vs. reference (author-defined reference scores)</p>
       <h2>Who scores it right?</h2>
-      <p class="lede">Each square compares a graph's judge score to the scenario's own expected score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The bars below plot the same comparison per dimension &mdash; a short bar means that graph rarely produced a numeric score to compare at all.</p>
+      <p class="lede">Each square compares a graph's judge score to the scenario's own reference score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The bars below plot the same comparison per dimension &mdash; a short bar means that graph rarely produced a numeric score to compare at all.</p>
     </div>
   </div>
 
@@ -276,9 +276,9 @@
       <p class="eyebrow">Eval Case Performance &amp; Eval Dialog Quality</p>
       <h2>Per-dimension: deviation from reference &amp; hit rate</h2>
       <p class="lede">
-        For every repeat where a graph returned a real number for this dimension (not <code>not_tested</code>) and the scenario has an author-defined expected score, this compares the two.
-        <strong>Mean deviation</strong> is the signed average of (judge score &minus; expected score): <code>+</code> means the graph overestimates on average, <code>&minus;</code> means it underestimates, close to <code>0</code> means it lands on target.
-        <strong>% exact match</strong> is the share of those comparisons where the judge's score matched the expected score exactly &mdash; treat it as anecdotal when the compared-count in parentheses is small.
+        For every repeat where a graph returned a real number for this dimension (not <code>not_tested</code>) and the scenario has an author-defined reference score, this compares the two.
+        <strong>Mean deviation</strong> is the signed average of (judge score &minus; reference score): <code>+</code> means the graph overestimates on average, <code>&minus;</code> means it underestimates, close to <code>0</code> means it lands on target.
+        <strong>% exact match</strong> is the share of those comparisons where the judge's score matched the reference score exactly &mdash; treat it as anecdotal when the compared-count in parentheses is small.
       </p>
     </div>
   </div>
@@ -319,7 +319,7 @@
       <p class="eyebrow">Dimensions the scenario author marked "not_tested"</p>
       <h2>Does the judge know when to abstain?</h2>
       <p class="lede">
-        Some scenarios don't exercise every rubric dimension (e.g. no standalone creative prompt) &mdash; the scenario author marks the expected score <code>not_tested</code> for those.
+        Some scenarios don't exercise every rubric dimension (e.g. no standalone creative prompt) &mdash; the scenario author marks the reference score <code>not_tested</code> for those.
         This shows how often each graph's judge scored the dimension with a real number anyway, instead of recognizing it doesn't apply.
         <strong>The accuracy heatmap above can't see this</strong>: it only compares pairs where both scores are numeric, so a judge that fabricates scores on <code>not_tested</code> dimensions is silently pooled out of that comparison rather than penalized for it. Lower % is better.
       </p>

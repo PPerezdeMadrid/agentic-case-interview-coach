@@ -461,7 +461,7 @@ def get_run_scores_api(run_id: str):
     run_payload = load_run(run_id)
     return jsonify(
         {
-            "expected_scores": run_payload["expected_scores"],
+            "reference_scores": run_payload["reference_scores"],
             "model_scores": run_payload["model_scores"],
             "human_scores": run_payload["human_scores"],
             "comparison_rows": run_payload["comparison_rows"],

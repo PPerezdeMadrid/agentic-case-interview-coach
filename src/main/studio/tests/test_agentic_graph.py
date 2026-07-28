@@ -83,7 +83,7 @@ def make_runtime_bundle() -> dict:
                     "solution_roadmap": ["Clarify objective", "Split revenue and costs"],
                     "math_guidance": ["Show assumptions clearly."],
                 },
-                "expected_scores": {},
+                "reference_scores": {},
             },
             "source_path": "tests/scenario_test.json",
         },

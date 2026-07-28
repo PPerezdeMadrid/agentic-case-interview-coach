@@ -25,7 +25,7 @@ from prompts import (
     BASELINE_GRAPH_SYSTEM_PROMPT,
     CANDIDATE_SYSTEM_PROMPT,
 )
-from state import AgenticGraphState, BaselineTurnOutput
+from state import BaselineState, BaselineTurnOutput
 from utils import (
     candidate_transcript_messages,
     extract_token_usage,
@@ -74,7 +74,7 @@ class GraphConfig(TypedDict, total=False):
 
 
 def get_pending_profitability_guide_context(
-    state: AgenticGraphState,
+    state: BaselineState,
     *,
     top_k: int,
 ) -> tuple[list[dict], dict]:
@@ -105,7 +105,7 @@ def build_initial_baseline_state(
     case_name: str | None = None,
     seed: int | None = None,
     scenario_ref: str | None = None,
-) -> AgenticGraphState:
+) -> BaselineState:
     return build_initial_graph_state(
         case_name=case_name,
         seed=seed,
@@ -208,7 +208,7 @@ def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bo
     return parsed, usage_log
 
 
-def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
+def candidate_node(state: BaselineState) -> BaselineState:
     candidate_profile = state.get("candidate_profile", {})
     transcript = state.get("transcript", [])
     data_gathered = normalize_string_list(state.get("data_gathered", []))
@@ -326,7 +326,7 @@ def _build_baseline_messages(
     ]
 
 
-def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
+def baseline_node(state: BaselineState) -> BaselineState:
     case_prompt = state.get("case_prompt", "")
     case_data = state.get("case_data", {})
     case_guidance = state.get("case_guidance", "")
@@ -418,7 +418,7 @@ def baseline_node(state: AgenticGraphState) -> AgenticGraphState:
 
 
 def route_after_baseline(
-    state: AgenticGraphState,
+    state: BaselineState,
 ) -> Literal["candidate", "end"]:
     if state.get("enough_evidence") is True:
         return "end"
@@ -433,7 +433,7 @@ def build_graph_config(thread_id: str | None = None) -> dict:
     }
 
 
-builder = StateGraph(AgenticGraphState, config_schema=GraphConfig)
+builder = StateGraph(BaselineState, config_schema=GraphConfig)
 builder.add_node("load_scenario", load_scenario_node)
 builder.add_node("baseline", make_trace_node("baseline", "baseline", "interviewer", baseline_node))
 builder.add_node("candidate", make_trace_node("baseline", "candidate", "candidate", candidate_node))

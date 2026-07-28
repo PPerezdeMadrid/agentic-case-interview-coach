@@ -112,14 +112,14 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "expected_scores",
+        "reference_scores",
         "expected_issues",
         "expected_feedback_points",
         "case_performance",
         "dialogue_quality"
       ],
       "properties": {
-        "expected_scores": {
+        "reference_scores": {
           "$ref": "#/$defs/rubricScores"
         },
         "expected_issues": {
@@ -158,13 +158,13 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "expected_scores",
+            "reference_scores",
             "strengths",
             "issues",
             "feedback_points"
           ],
           "properties": {
-            "expected_scores": {
+            "reference_scores": {
               "type": "object",
               "additionalProperties": false,
               "required": [

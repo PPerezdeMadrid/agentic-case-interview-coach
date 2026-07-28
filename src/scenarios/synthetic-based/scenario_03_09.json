@@ -38,7 +38,7 @@
         "Use relative economics rather than invented numbers: larger cooperatives spread fixed onboarding costs better, while small cooperatives are loss-making per account."
       ]
     },
-    "expected_scores": {
+    "reference_scores": {
       "scale": "1-4",
       "rubric": {
         "case_opening": {

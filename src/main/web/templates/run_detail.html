@@ -60,7 +60,7 @@
     <div class="metric-card"><span>Bias / Signed Error</span><strong>{{ run.metrics.signed_error if run.metrics.signed_error is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Overestimated Dimensions</span><strong>{{ run.metrics.overestimation_count }}</strong></div>
     <div class="metric-card"><span>Underestimated Dimensions</span><strong>{{ run.metrics.underestimation_count }}</strong></div>
-    <div class="metric-card"><span>Reference vs Human MAE</span><strong>{{ run.metrics.expected_vs_human_mae if run.metrics.expected_vs_human_mae is not none else '–' }}</strong></div>
+    <div class="metric-card"><span>Reference vs Human MAE</span><strong>{{ run.metrics.reference_vs_human_mae if run.metrics.reference_vs_human_mae is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Comparable Dimensions</span><strong>{{ run.metrics.comparable_dimensions }}</strong></div>
   </div>
 </section>
@@ -94,14 +94,14 @@
         <tr>
           <td>{{ row.section_label }}</td>
           <td>{{ row.dimension }}</td>
-          <td>{{ score_value(row.expected_score) }}</td>
+          <td>{{ score_value(row.reference_score) }}</td>
           <td>{{ score_value(row.model_score) }}</td>
           <td>{{ score_value(row.human_score) }}</td>
-          <td><span class="status status-{{ row.expected_model_status|replace(' ', '-') }}">{{ row.expected_model_status }}</span></td>
+          <td><span class="status status-{{ row.reference_model_status|replace(' ', '-') }}">{{ row.reference_model_status }}</span></td>
           <td>{{ row.model_human_absolute_error if row.model_human_absolute_error is not none else 'not applicable' }}</td>
-          <td>{{ row.expected_human_absolute_error if row.expected_human_absolute_error is not none else 'not applicable' }}</td>
+          <td>{{ row.reference_human_absolute_error if row.reference_human_absolute_error is not none else 'not applicable' }}</td>
           <td><span class="status status-{{ row.model_human_status|replace(' ', '-') }}">{{ row.model_human_status }}</span></td>
-          <td><span class="status status-{{ row.expected_human_status|replace(' ', '-') }}">{{ row.expected_human_status }}</span></td>
+          <td><span class="status status-{{ row.reference_human_status|replace(' ', '-') }}">{{ row.reference_human_status }}</span></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -204,7 +204,7 @@
             {% for row in annotation_rows %}
             <tr>
               <td>{{ row.dimension }}</td>
-              <td>{{ score_value(row.expected_score) }}</td>
+              <td>{{ score_value(row.reference_score) }}</td>
               <td>{{ score_value(row.model_score) }}</td>
               <td>
                 <select name="{{ section_name }}__{{ row.dimension }}__score">

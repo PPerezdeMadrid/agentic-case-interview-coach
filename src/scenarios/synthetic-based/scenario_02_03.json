@@ -39,7 +39,7 @@
         "Even with the math mistake, still explain that the broad business issue is a wage bill designed for La Liga revenue despite now operating with Segunda income."
       ]
     },
-    "expected_scores": {
+    "reference_scores": {
       "scale": "1-4",
       "rubric": {
         "case_opening": {

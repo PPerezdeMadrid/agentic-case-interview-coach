@@ -35,7 +35,7 @@
         "State clearly that revenue growth plus EBITDA decline implies worsening cost mix or margin mix, not a healthy expansion."
       ]
     },
-    "expected_scores": {
+    "reference_scores": {
       "scale": "1-4",
       "rubric": {
         "case_opening": {

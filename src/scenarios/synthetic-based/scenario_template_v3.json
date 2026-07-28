@@ -22,7 +22,7 @@
         "If this case has strong math expectations, list the exact formulas or calculations to use."
       ]
     },
-    "expected_scores": {
+    "reference_scores": {
       "scale": "1-4",
       "rubric": {
         "case_opening": {

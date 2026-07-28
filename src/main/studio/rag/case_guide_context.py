@@ -5,7 +5,7 @@ from rag.rag_case_guide import (
     CASE_GUIDE_SOURCE_DESCRIPTION,
     retrieve_case_guide_context as _retrieve_case_guide_context,
 )
-from state import AgenticGraphState
+from state import BaselineState
 
 DEFAULT_TOP_K = 4
 
@@ -43,7 +43,7 @@ def retrieve_case_guide_context(query: str, *, top_k: int = DEFAULT_TOP_K) -> li
 
 
 def get_pending_case_guide_context(
-    state: AgenticGraphState,
+    state: BaselineState,
     *,
     top_k: int = DEFAULT_TOP_K,
 ) -> tuple[list[str], dict]:

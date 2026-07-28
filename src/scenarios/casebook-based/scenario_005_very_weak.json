@@ -28,7 +28,7 @@
     }
   },
   "ground_truth": {
-    "expected_scores": {
+    "reference_scores": {
       "case_opening": 1,
       "case_structure": 1,
       "case_math_answer": "not_tested",
