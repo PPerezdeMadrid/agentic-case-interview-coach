@@ -53,46 +53,57 @@ openai_llm_server = ChatOpenAI(
 )
 
 
-# OpenRouter Qwen Interviewer model
+# OpenRouter Llama 3.3 70B Interviewer model
 interviewer_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "qwen/qwen3-14b"),
+    model=os.getenv("OPENROUTER_MODEL_INTERVIEWER", "meta-llama/llama-3.3-70b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.7),
+    temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.6),
 )
 
-# OpenRouter Mistral Nemo Candidate model
+# OpenRouter Llama 3.1 8B Candidate model
 candidate_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-small-24b-instruct-2501"),
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "meta-llama/llama-3.1-8b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.7),
+    temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.8),
 )
 
-# OpenRouter Llama 70B Judge model
+# OpenRouter Qwen2.5 72B Judge model
 judge_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_JUDGE", "meta-llama/llama-3.1-70b-instruct"),
+    model=os.getenv("OPENROUTER_MODEL_JUDGE", "qwen/qwen-2.5-72b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=os.getenv("JUDGE_TEMPERATURE", 0.3),
+    temperature=os.getenv("JUDGE_TEMPERATURE", 0.0),
 )
 
-# OpenRouter GPT-4o-mini Feedback model - free-form prose, so no forced JSON
+# OpenRouter Phi-4 Feedback model - free-form prose, so no forced JSON
 # response_format here; callers that need JSON bind it per-call via invoke_json_llm.
 feedback_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "openai/gpt-4o-mini"),
+    model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "microsoft/phi-4"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
-    temperature=os.getenv("FEEDBACK_TEMPERATURE", 0),
+    temperature=os.getenv("FEEDBACK_TEMPERATURE", 0.3),
 )
 
 
-# Alternative: GPU-hosted models on the university HPC cluster. 
-#
+# Alternative: GPU-hosted models on the university HPC cluster. Model name is
+# fixed to what server.bash actually serves on this port (Mistral-Small-24B),
+# independent of OPENROUTER_MODEL_CANDIDATE (now Llama-3.1-8B for the OpenRouter role).
 candidate_llm_server_gpu = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "mistralai/mistral-small-24b-instruct-2501"),
+    model="mistralai/mistral-small-24b-instruct-2501",
     base_url="http://localhost:18403/v1",
     api_key="EMPTY",
+    temperature=float(os.getenv("CANDIDATE_TEMPERATURE", 0.8)),
+)
+
+# Alternative: GPT-3.5 Turbo 16k Candidate model via OpenRouter (not wired into
+# any active graph role). OpenAI is retiring gpt-3.5-turbo, 16k included, on
+# 2026-10-23 - treat this as a temporary/legacy option only.
+candidate_llm_server_gpt35 = ChatOpenAI(
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE_GPT35", "openai/gpt-3.5-turbo-16k"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
     temperature=float(os.getenv("CANDIDATE_TEMPERATURE", 0.7)),
 )
 
