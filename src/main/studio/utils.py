@@ -376,6 +376,30 @@ def _json_schema_response_format(schema: type[BaseModel]) -> dict:
     }
 
 
+def _merge_adjacent_messages(messages: list) -> list:
+    """Merge adjacent same-role messages into one before a call.
+
+    Our message lists routinely end up with two messages of the same role in
+    a row -- e.g. the candidate's trailing "update data_gathered" instruction
+    stacked after a transcript that already ends on an interviewer turn, or a
+    JSON-repair retry stacking a HumanMessage onto a list that already ends
+    with one. OpenAI-compatible providers tolerate that, but some
+    OpenRouter-routed providers (e.g. Gemma via NextBit) reject it with
+    "Conversation roles must alternate user/assistant/...". Merging is lossless
+    (content is preserved, just joined) so it's safe to apply unconditionally.
+    """
+    if not messages:
+        return list(messages)
+    coalesced = [messages[0]]
+    for message in messages[1:]:
+        previous = coalesced[-1]
+        if type(previous) is type(message):
+            coalesced[-1] = previous.__class__(content=f"{previous.content}\n\n{message.content}")
+        else:
+            coalesced.append(message)
+    return coalesced
+
+
 def invoke_json_llm(
     llm,
     messages: list,
@@ -419,6 +443,7 @@ def invoke_json_llm(
     structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
 
     def _invoke(target_llm, invoke_messages: list):
+        invoke_messages = _merge_adjacent_messages(invoke_messages)
         if target_llm is llm:
             try:
                 return llm.invoke(invoke_messages)

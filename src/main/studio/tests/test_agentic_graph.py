@@ -178,10 +178,13 @@ class AgenticGraphTests(unittest.TestCase):
             update = agentic.candidate_node(state)
 
         messages = observed_messages["messages"]
-        self.assertEqual(messages[0].content, agentic.node_module.CANDIDATE_SYSTEM_PROMPT)
+        # Adjacent same-role messages are coalesced (some OpenRouter-routed
+        # providers reject non-alternating roles), so the system prompt and
+        # persona share messages[0] rather than being separate messages.
+        self.assertTrue(messages[0].content.startswith(agentic.node_module.CANDIDATE_SYSTEM_PROMPT))
         contents = [message.content for message in messages]
-        self.assertIn("Start with the objective.", contents)
-        self.assertIn("[revealed fact] Revenue is flat year over year.", contents)
+        self.assertTrue(any("Start with the objective." in content for content in contents))
+        self.assertTrue(any("[revealed fact] Revenue is flat year over year." in content for content in contents))
         self.assertFalse(any("Judge: internal note" in content for content in contents))
         self.assertEqual(
             update["transcript"][-1],
