@@ -42,8 +42,7 @@ lmstudio_llm_server = ChatOpenAI(
 )
 
 
-# OpenAI model (direct API, not OpenRouter) - kept for connectivity tests and
-# as a manual fallback; no active graph role is wired to this client.
+# OpenAI model (direct API, not OpenRouter)
 openai_llm_server = ChatOpenAI(
     model=os.getenv("OPENAI_MODEL", "gpt-5.4-nano"),
     base_url=_normalize_base_url(os.getenv("OPENAI_BASE_URL", "https://api.openai.com")),
@@ -61,9 +60,9 @@ interviewer_llm_server = ChatOpenAI(
     temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.6),
 )
 
-# OpenRouter Llama 3.1 8B Candidate model
+# OpenRouter Gemma 2 27B Candidate model
 candidate_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "meta-llama/llama-3.1-8b-instruct"),
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "google/gemma-2-27b-it"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.8),
@@ -77,8 +76,7 @@ judge_llm_server = ChatOpenAI(
     temperature=os.getenv("JUDGE_TEMPERATURE", 0.0),
 )
 
-# OpenRouter Phi-4 Feedback model - free-form prose, so no forced JSON
-# response_format here; callers that need JSON bind it per-call via invoke_json_llm.
+# OpenRouter Phi-4 Feedback model
 feedback_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "microsoft/phi-4"),
     base_url=_openrouter_base_url,
@@ -87,9 +85,7 @@ feedback_llm_server = ChatOpenAI(
 )
 
 
-# Alternative: GPU-hosted models on the university HPC cluster. Model name is
-# fixed to what server.bash actually serves on this port (Mistral-Small-24B),
-# independent of OPENROUTER_MODEL_CANDIDATE (now Llama-3.1-8B for the OpenRouter role).
+# Alternative: GPU-hosted models on the university HPC cluster
 candidate_llm_server_gpu = ChatOpenAI(
     model="mistralai/mistral-small-24b-instruct-2501",
     base_url="http://localhost:18403/v1",
@@ -97,15 +93,6 @@ candidate_llm_server_gpu = ChatOpenAI(
     temperature=float(os.getenv("CANDIDATE_TEMPERATURE", 0.8)),
 )
 
-# Alternative: GPT-3.5 Turbo 16k Candidate model via OpenRouter (not wired into
-# any active graph role). OpenAI is retiring gpt-3.5-turbo, 16k included, on
-# 2026-10-23 - treat this as a temporary/legacy option only.
-candidate_llm_server_gpt35 = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE_GPT35", "openai/gpt-3.5-turbo-16k"),
-    base_url=_openrouter_base_url,
-    api_key=_openrouter_api_key,
-    temperature=float(os.getenv("CANDIDATE_TEMPERATURE", 0.7)),
-)
 
 # judge_llm_server_gpu = ChatOpenAI(
 #     model=model_llama70B,
