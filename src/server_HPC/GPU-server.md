@@ -38,7 +38,7 @@ tail -f logs/mistral.log
 tail -f logs/llama70b.log
 tail -f logs/run_all_scenarios.log 
 
-tail -f logs/exp3.1_4496222.out
+tail -f logs/exp3.3_4498174.out
 
 tail -f logs/hf-llm-server-candidate-exp02HPC_4329802.err 
 tail -f logs/langgraph-agents-experiment_4329758.out 

@@ -400,6 +400,16 @@ def _merge_adjacent_messages(messages: list) -> list:
     return coalesced
 
 
+def _is_rate_limited(exc: Exception) -> bool:
+    """Detect OpenRouter/upstream-provider 429s so callers can back off
+    instead of burning the structured->unconstrained fallback on a transient
+    shared-pool rate limit (e.g. qwen-2.5-72b-instruct on DeepInfra)."""
+    if getattr(exc, "status_code", None) == 429:
+        return True
+    text = str(exc)
+    return "Error code: 429" in text or "'code': 429" in text
+
+
 def invoke_json_llm(
     llm,
     messages: list,
@@ -442,23 +452,38 @@ def invoke_json_llm(
 
     structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
 
+    def _invoke_with_backoff(call_llm, invoke_messages: list, max_attempts: int = 3, base_delay: float = 5.0):
+        # Shared provider pools (e.g. qwen-2.5-72b-instruct on DeepInfra) return
+        # 429 "engine_overloaded" under load; a short backoff usually lets the
+        # next attempt land on a free provider instead of burning straight
+        # into the structured->unconstrained fallback.
+        for attempt in range(max_attempts):
+            try:
+                return call_llm.invoke(invoke_messages)
+            except Exception as exc:
+                if attempt == max_attempts - 1 or not _is_rate_limited(exc):
+                    raise
+                delay = base_delay * (2 ** attempt)
+                print(f"{server_label} server rate-limited (attempt {attempt + 1}/{max_attempts}); retrying in {delay:.0f}s...")
+                time.sleep(delay)
+
     def _invoke(target_llm, invoke_messages: list):
         invoke_messages = _merge_adjacent_messages(invoke_messages)
         if target_llm is llm:
             try:
-                return llm.invoke(invoke_messages)
+                return _invoke_with_backoff(llm, invoke_messages)
             except Exception as exc:
                 print(f"Error calling {server_label} server: {exc}")
                 raise
         try:
-            return target_llm.invoke(invoke_messages)
+            return _invoke_with_backoff(target_llm, invoke_messages)
         except Exception as exc:
             # Some OpenRouter-routed providers advertise structured_outputs
             # support but reject this particular schema/request - fall back
             # to an unconstrained call rather than losing the turn.
             print(f"Structured call to {server_label} server failed ({exc}); retrying unconstrained.")
             try:
-                return llm.invoke(invoke_messages)
+                return _invoke_with_backoff(llm, invoke_messages)
             except Exception as fallback_exc:
                 print(f"Error calling {server_label} server: {fallback_exc}")
                 raise
