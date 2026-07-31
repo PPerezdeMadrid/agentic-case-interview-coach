@@ -80,9 +80,13 @@ judge_llm_server = ChatOpenAI(
     temperature=os.getenv("JUDGE_TEMPERATURE", 0.0),
 )
 
-# OpenRouter Phi-4 Feedback model
+# OpenRouter Feedback model (was microsoft/phi-4 until 2026-07-31: its 16,384-token
+# context window couldn't fit conversations that reach 16K tokens on their own,
+# causing structured feedback calls to hit the length cutoff before producing
+# valid JSON. Now reuses the interviewer's Llama-3.3 70B, which has a 131,072
+# token context window.)
 feedback_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "microsoft/phi-4"),
+    model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "meta-llama/llama-3.3-70b-instruct"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("FEEDBACK_TEMPERATURE", 0.3),
