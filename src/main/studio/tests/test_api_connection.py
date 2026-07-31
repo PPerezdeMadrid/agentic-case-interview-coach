@@ -73,28 +73,28 @@ class APIConnectionTests(unittest.TestCase):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.interviewer_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection (interviewer/Qwen) failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (interviewer/Llama-3.3-70B) failed: {detail}")
 
     def test_candidate_openrouter_connection(self):
         if not os.getenv("OPENROUTER_API_KEY"):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.candidate_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection (candidate/Mistral) failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (candidate/Gemma-2-27B) failed: {detail}")
 
     def test_judge_openrouter_connection(self):
         if not os.getenv("OPENROUTER_API_KEY"):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.judge_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection (judge/Llama-70B) failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (judge/Qwen2.5-72B) failed: {detail}")
 
     def test_feedback_openrouter_connection(self):
         if not os.getenv("OPENROUTER_API_KEY"):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.feedback_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection (feedback/GPT-4o-mini) failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (feedback/Phi-4) failed: {detail}")
 
 
 if __name__ == "__main__":
