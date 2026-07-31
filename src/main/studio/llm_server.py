@@ -60,12 +60,16 @@ interviewer_llm_server = ChatOpenAI(
     temperature=os.getenv("INTERVIEWER_TEMPERATURE", 0.6),
 )
 
-# OpenRouter Gemma 2 27B Candidate model
+# OpenRouter Gemma 3 27B Candidate model
+# max_tokens is capped explicitly: some OpenRouter providers (e.g. NextBit)
+# default an unset max_tokens to the full context length, which then rejects
+# the request as soon as prompt tokens are added on top of it.
 candidate_llm_server = ChatOpenAI(
-    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "google/gemma-2-27b-it"),
+    model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "google/gemma-3-27b-it"),
     base_url=_openrouter_base_url,
     api_key=_openrouter_api_key,
     temperature=os.getenv("CANDIDATE_TEMPERATURE", 0.8),
+    max_tokens=int(os.getenv("CANDIDATE_MAX_TOKENS", "1024")),
 )
 
 # OpenRouter Qwen2.5 72B Judge model

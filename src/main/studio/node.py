@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from typing import Literal
 
@@ -73,9 +74,11 @@ interviewer_llm = interviewer_llm_server
 feedback_llm = feedback_llm_server
 
 MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
-MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = 4
+MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = int(
+    os.getenv("MAX_INTERVIEWER_TURNS_BEFORE_JUDGE", "10")
+)
 DEFAULT_THREAD_ID = "main_default"
-MAX_INTERVIEWER_JSON_RETRIES = 3
+MAX_INTERVIEWER_JSON_RETRIES = int(os.getenv("MAX_INTERVIEWER_JSON_RETRIES", "3"))
 
 # Field names are derived from the schemas in state.py so the prompt text,
 # response_format hint, and normalize_eval_payload all stay in sync.

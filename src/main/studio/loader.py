@@ -1,9 +1,18 @@
 from __future__ import annotations
 
 import json
+import os
 import random
 from pathlib import Path
 from typing import Any
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+_project_env = Path(__file__).resolve().parents[3] / ".env"
+if _project_env.exists():
+    load_dotenv(_project_env, override=False)
 
 
 def _resolve_runtime_root() -> Path:
@@ -50,7 +59,7 @@ SCENARIOS_DIR = REPO_ROOT / "scenarios" / "synthetic-based"
 CASE_DIRS = (REPO_ROOT / "synthetic-dataset",)
 RUBRIC_PATH = REPO_ROOT / "scenarios" / "rubric" / "rubric.json"
 DEFAULT_RUBRIC_ID = "default_consulting_rubric"
-DEFAULT_MAX_JUDGE_ROUNDS = 2
+DEFAULT_MAX_JUDGE_ROUNDS = int(os.getenv("MAX_JUDGE_ROUNDS", "7"))
 ROUNDS_TILL_JUDGE = 3
 
 

@@ -80,7 +80,7 @@ class APIConnectionTests(unittest.TestCase):
             self.skipTest("OPENROUTER_API_KEY is not set in .env")
         client = llm_server.candidate_llm_server
         ok, detail = _check_endpoint(client.openai_api_base, client.openai_api_key.get_secret_value())
-        self.assertTrue(ok, f"OpenRouter connection (candidate/Gemma-2-27B) failed: {detail}")
+        self.assertTrue(ok, f"OpenRouter connection (candidate/Gemma-3-27B) failed: {detail}")
 
     def test_judge_openrouter_connection(self):
         if not os.getenv("OPENROUTER_API_KEY"):

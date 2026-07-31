@@ -1,3 +1,4 @@
+import os
 import time
 from typing import Literal
 
@@ -46,8 +47,8 @@ candidate_llm = candidate_llm_server # candidate_llm_server_gpu
 baseline_llm = judge_llm_server
 
 DEFAULT_THREAD_ID = "main_baseline"
-MAX_BASELINE_TURNS = 4
-MAX_BASELINE_JSON_RETRIES = 3
+MAX_BASELINE_TURNS = int(os.getenv("MAX_BASELINE_TURNS", "15"))
+MAX_BASELINE_JSON_RETRIES = int(os.getenv("MAX_BASELINE_JSON_RETRIES", "3"))
 
 CASE_PERFORMANCE_FIELDS = [
     "case_opening",
