@@ -3,33 +3,31 @@
   "csv_path": "database/node_eval/interviewer_eval/interviewer_golden_set_socratic_function.csv",
   "model": "meta-llama/llama-3.3-70b-instruct",
   "socratic_judge_model": "qwen/qwen-2.5-72b-instruct",
-  "computed_at": "2026-08-01T14:49:43+00:00",
+  "computed_at": "2026-08-01T17:05:48+00:00",
   "n_total": 65,
   "n_scored": 65,
   "n_errors": 0,
-  "n_correct": 29,
-  "accuracy": 0.4462,
+  "n_correct": 36,
+  "accuracy": 0.5538,
   "records": [
     {
       "conversation_id": "SOC_01",
       "predicted": {
         "action": "question",
-        "content": "What specifically do you think is driving the cost increase in the new format?",
+        "content": "What specifically do you think is off about the cost structure for this new format?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "premise_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'premise_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_02",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by the economics of the format not working anymore? What specific issues do you see with the current format?",
+        "content": "What specifically do you mean by 'the whole economics of this format don't really work anymore'? What aspects of the format do you think are causing the issues with profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -42,7 +40,7 @@
       "conversation_id": "SOC_03",
       "predicted": {
         "action": "question",
-        "content": "What specific areas of the tournament would you focus on to make it more efficient, and how would you structure your analysis to identify the root causes of the margin deterioration?",
+        "content": "What specific areas of the tournament do you think could be made more efficient to improve margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -55,7 +53,7 @@
       "conversation_id": "SOC_04",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the tournament's scale do you think are driving the profitability issue, and how would you propose to analyze them?",
+        "content": "What do you mean by 'scale problem', and how do you think it's contributing to the decline in profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -68,7 +66,7 @@
       "conversation_id": "SOC_05",
       "predicted": {
         "action": "question",
-        "content": "What's the basis for your assumption that broadcasting revenue isn't the problem, and how do you plan to analyze the impact of the expansion on the tournament's profitability?",
+        "content": "What makes you think broadcasting revenue scales roughly in line with the number of matches played?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -81,7 +79,7 @@
       "conversation_id": "SOC_06",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that the extra costs from expansion are mostly one-off setup costs that won't repeat next cycle?",
+        "content": "What makes you think the extra costs from expansion are mostly one-off setup costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -94,29 +92,27 @@
       "conversation_id": "SOC_07",
       "predicted": {
         "action": "question",
-        "content": "What if the incremental costs aren't split evenly across the three host countries - how might that change your approach to understanding the impact of the expansion on profitability?",
+        "content": "What makes you think the host countries will split the incremental costs evenly, and what implications might this have for the tournament's overall profitability?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "premise_testing"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_08",
       "predicted": {
         "action": "question",
-        "content": "What's your objective in analyzing this case - are you looking to identify a one-time issue with this edition, or develop a repeatable model for future expansions? And how do you plan to structure your analysis to explain the decline in EBITDA margin despite revenue growth?",
+        "content": "That's a good starting point. Can you clarify what you think the Secretary General is looking for from your analysis - is it a one-time diagnosis of this edition, or a repeatable model for future expansions?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "clarity"
       },
       "correct": false,
       "failed_checks": [
-        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+        "socratic_function: expected 'premise_testing', got 'clarity'"
       ],
       "error": null
     },
@@ -124,7 +120,7 @@
       "conversation_id": "SOC_09",
       "predicted": {
         "action": "question",
-        "content": "What suggests to you that the cost side is the primary area to focus on, given the expansion and revenue growth?",
+        "content": "What evidence suggests that the cost side is the primary driver of the declining EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -137,7 +133,7 @@
       "conversation_id": "SOC_10",
       "predicted": {
         "action": "question",
-        "content": "What's that based on? Why do you think broadcasting isn't worth exploring?",
+        "content": "What's that priority based on?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -150,7 +146,7 @@
       "conversation_id": "SOC_11",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that expanding to three host countries was the wrong call?",
+        "content": "What makes you think that expanding to three host countries was the wrong call?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -163,7 +159,7 @@
       "conversation_id": "SOC_12",
       "predicted": {
         "action": "question",
-        "content": "What's that based on?",
+        "content": "What makes you think the issue is primarily a demand problem, given the significant increase in match count and teams?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -176,7 +172,7 @@
       "conversation_id": "SOC_13",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that going back to a single host country would be the most effective way to address the decline in profitability?",
+        "content": "What exactly suggests that going back to a single host country would cut costs and simplify logistics enough to improve profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -191,7 +187,7 @@
       "conversation_id": "SOC_14",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that renegotiating the broadcasting deal would be enough to offset the decline in profitability?",
+        "content": "What evidence suggests that renegotiating the broadcasting deal to a per-match pricing structure would be sufficient to offset the decline in EBITDA margin, considering the increased costs associated with the expansion?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -206,7 +202,7 @@
       "conversation_id": "SOC_15",
       "predicted": {
         "action": "question",
-        "content": "What suggests that cutting the prize money pool would be enough to offset the decline in EBITDA margin?",
+        "content": "What evidence suggests that cutting the prize money pool would be enough to offset the decline in EBITDA margin, given the expansion and changes in the tournament format?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -221,7 +217,7 @@
       "conversation_id": "SOC_16",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that capping the tournament at 48 teams will address the decline in profitability?",
+        "content": "What's the reasoning behind capping the tournament at 48 teams - how does that address the falling EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -236,7 +232,7 @@
       "conversation_id": "SOC_17",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that the costs associated with rolling out three host countries are the main reason for the deteriorating profitability, despite the 45% growth in total revenue?",
+        "content": "What evidence suggests that the profitability issue is solely a result of poor cost control, rather than a potential mismatch between revenue growth and cost increases?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -251,7 +247,7 @@
       "conversation_id": "SOC_18",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that broadcasting revenue won't be impacted by the expansion to 104 matches, and that it's not worth analyzing further?",
+        "content": "What makes you think ticketing and hospitality are the main drivers of the story, and broadcasting can be dismissed as a fixed package?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -266,7 +262,7 @@
       "conversation_id": "SOC_19",
       "predicted": {
         "action": "question",
-        "content": "What specifically suggests that 48 teams is the primary driver of cost overruns, rather than other factors such as the increased number of matches or the addition of two host countries?",
+        "content": "What exactly suggests that having 48 teams is the main driver of the cost overruns?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -281,7 +277,7 @@
       "conversation_id": "SOC_20",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that the Committee's cost management is the primary issue, rather than the structural changes caused by the expansion?",
+        "content": "What evidence suggests that the issue is solely a matter of poor cost management, rather than a structural problem related to the expansion?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -296,22 +292,20 @@
       "conversation_id": "SOC_21",
       "predicted": {
         "action": "question",
-        "content": "What makes you think there's a value-capture issue in this model?",
+        "content": "What do you mean by 'value-capture issue' in this context, and what makes you think that's the root of the problem?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "premise_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'premise_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_22",
       "predicted": {
         "action": "question",
-        "content": "What specifically about the numbers doesn't add up to you?",
+        "content": "Can you start by summarizing the situation and what you think the Secretary General is asking you to achieve?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -324,7 +318,7 @@
       "conversation_id": "SOC_23",
       "predicted": {
         "action": "question",
-        "content": "What specifically makes you think that something is broken with the way the tournament is being run?",
+        "content": "What specifically makes you think that something is broken with how the tournament is being run?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -339,22 +333,20 @@
       "conversation_id": "SOC_24",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the expansion do you think might be driving this mismatch between revenue growth and declining profitability?",
+        "content": "Can you elaborate on what you mean by a mismatch, and how you plan to approach analyzing the issue?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'perspective_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_25",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'not sustainable' - what specific aspects of the format are you concerned about?",
+        "content": "What do you mean by 'sustainable' in this context, and what specific issues do you see with the current format?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -367,20 +359,22 @@
       "conversation_id": "SOC_26",
       "predicted": {
         "action": "question",
-        "content": "What specifically about the economics of the situation feels fragile to you?",
+        "content": "What specifically makes you think the economics of the situation are fragile?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "clarity"
+        "socratic_function": "premise_testing"
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'clarity', got 'premise_testing'"
+      ],
       "error": null
     },
     {
       "conversation_id": "SOC_27",
       "predicted": {
         "action": "question",
-        "content": "What suggests to you that there's a leverage problem behind the margin drop?",
+        "content": "What do you mean by 'leverage problem', and what evidence do you have to support the idea that this is driving the margin drop?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -395,37 +389,33 @@
       "conversation_id": "SOC_28",
       "predicted": {
         "action": "question",
-        "content": "What specifically do you mean by 'bad execution', and what evidence do you have to suggest that this is the primary cause of the declining EBITDA margin?",
+        "content": "What specifically do you mean by 'bad execution,' and what evidence do you have to suggest that it's the primary cause of the declining EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "premise_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'premise_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_29",
       "predicted": {
         "action": "question",
-        "content": "What would you like to focus on first: understanding the drivers of the revenue growth, or exploring the factors contributing to the decline in EBITDA margin?",
+        "content": "Can you clarify what specific aspects of the expansion you think are driving the decline in profitability, and how you plan to approach your analysis?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'perspective_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_30",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that the cost side is the main issue here?",
+        "content": "What specifically makes you think the cost side is bloated?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -440,7 +430,7 @@
       "conversation_id": "SOC_31",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'revenue quality', and how does it contribute to the decline in EBITDA margin?",
+        "content": "What do you mean by 'revenue quality', and what suggests it's the primary issue here?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -453,7 +443,7 @@
       "conversation_id": "SOC_32",
       "predicted": {
         "action": "question",
-        "content": "What specifically suggests to you that there's a fundamental inefficiency in how the tournament is being run?",
+        "content": "What specifically do you think is inefficient about the current operation, and what evidence do you have to support that claim?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -468,22 +458,20 @@
       "conversation_id": "SOC_33",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that the format change is the cause of the profitability issue?",
+        "content": "Can you elaborate on what you mean by the format change breaking the underlying model? What specific aspects of the model do you think are affected, and how do you plan to analyze the impact on profitability?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "premise_testing"
+        "socratic_function": "clarity"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'clarity', got 'premise_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_34",
       "predicted": {
         "action": "question",
-        "content": "What specifically about the drivers seems misaligned to you?",
+        "content": "What do you mean by 'misaligned' - can you specify which drivers or factors you think are out of alignment?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -496,7 +484,7 @@
       "conversation_id": "SOC_35",
       "predicted": {
         "action": "question",
-        "content": "What specifically suggests that the expansion is the cause of the margin squeeze?",
+        "content": "What exactly suggests that the expansion is the cause of the margin squeeze?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -511,7 +499,7 @@
       "conversation_id": "SOC_36",
       "predicted": {
         "action": "question",
-        "content": "What specifically about the cost-revenue relationship seems unbalanced to you, given the expansion from 32 to 48 teams and the projected 45% revenue growth?",
+        "content": "What specifically about the cost-revenue relationship seems unbalanced to you, and where would you focus your analysis to understand the drivers of the declining EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -524,7 +512,7 @@
       "conversation_id": "SOC_37",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'monetization gap' in this context, and what evidence suggests that's a key issue here?",
+        "content": "What do you mean by 'monetization gap' in this context, and what specific factors do you think are contributing to it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "clarity"
@@ -537,35 +525,35 @@
       "conversation_id": "SOC_38",
       "predicted": {
         "action": "question",
-        "content": "What specifically do you mean by 'the model' and what financial issues do you see with it?",
+        "content": "What specifically suggests to you that the model doesn't hold together financially?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "clarity"
+        "socratic_function": "premise_testing"
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'clarity', got 'premise_testing'"
+      ],
       "error": null
     },
     {
       "conversation_id": "SOC_39",
       "predicted": {
         "action": "question",
-        "content": "You've assumed the three host countries are sharing venues and infrastructure. How do you think the costs of venues, security, and local operations will be affected by having three host countries instead of one?",
+        "content": "What's the basis for your assumption that the host countries are sharing venues and infrastructure, and how do you think this affects the tournament's profitability?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "premise_testing"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_40",
       "predicted": {
         "action": "question",
-        "content": "What makes you think ticketing is the primary driver of revenue growth, given the expansion to 48 teams and three co-host countries?",
+        "content": "What evidence suggests that ticketing is the main driver of revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -578,22 +566,20 @@
       "conversation_id": "SOC_41",
       "predicted": {
         "action": "question",
-        "content": "What objective are you trying to achieve with your analysis - is it to identify a one-time issue with this edition, or to develop a repeatable model for future expansions? And how do you plan to structure your analysis to explain the decline in EBITDA margin despite revenue growth?",
+        "content": "What makes you think the margin figures already fully account for any one-off setup costs?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "premise_testing"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_42",
       "predicted": {
         "action": "question",
-        "content": "What makes you think the prize money increase is a rounding error and can be ignored in your analysis?",
+        "content": "What's that based on? Why do you think the prize money increase is a rounding error?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -619,13 +605,15 @@
       "conversation_id": "SOC_44",
       "predicted": {
         "action": "question",
-        "content": "What makes you think that the cost numbers speak for themselves, and that you can skip analyzing the revenue side entirely?",
+        "content": "What makes you think that focusing only on the cost side will be enough to explain the deterioration in profitability, given that revenue is also growing?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "premise_testing"
+        "socratic_function": "perspective_testing"
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'premise_testing', got 'perspective_testing'"
+      ],
       "error": null
     },
     {
@@ -645,7 +633,7 @@
       "conversation_id": "SOC_46",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests to you that the expansion was mismanaged from the start?",
+        "content": "What do you mean by 'mismanaged from the start', and what evidence do you have to support this claim?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -658,7 +646,7 @@
       "conversation_id": "SOC_47",
       "predicted": {
         "action": "question",
-        "content": "What specific factors do you think are driving the Secretary General's concern about the margin decline, and how would you propose to analyze the situation to address these concerns?",
+        "content": "What makes you think the Secretary General is being too conservative about the margin decline?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -671,7 +659,7 @@
       "conversation_id": "SOC_48",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that broadcasters are the primary beneficiaries of this expansion, rather than the Committee?",
+        "content": "What makes you think that broadcasters are the primary beneficiaries of this expansion, rather than the Committee?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -684,7 +672,7 @@
       "conversation_id": "SOC_49",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that ticketing and hospitality revenue will scale one-for-one with the extra matches?",
+        "content": "What makes you think ticketing and hospitality revenue will scale one-for-one with the extra matches?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -697,7 +685,7 @@
       "conversation_id": "SOC_50",
       "predicted": {
         "action": "question",
-        "content": "What suggests that the three-host-country decision is the primary driver of the deteriorating profitability, and how do you plan to analyze its impact?",
+        "content": "What specifically do you hope to find or achieve by focusing on the three-host-country decision, and how does it relate to the overall objective of explaining the deteriorating profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -710,22 +698,20 @@
       "conversation_id": "SOC_51",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'governance problem' in this context, and what evidence suggests that's the primary issue here?",
+        "content": "What makes you think this is a governance problem rather than a financial one?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "clarity"
+        "socratic_function": "premise_testing"
       },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'premise_testing', got 'clarity'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "SOC_52",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that the 24% projected margin has fully accounted for the increased security costs?",
+        "content": "What leads you to assume that the 24% projected margin already fully accounts for the tripled security costs across host countries?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -738,7 +724,7 @@
       "conversation_id": "SOC_53",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that ticket prices are the main issue, and how do you think raising them would impact revenue and profitability?",
+        "content": "What evidence suggests that raising ticket prices will be enough to close the margin gap, given the expansion and changes in the tournament structure?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -753,7 +739,7 @@
       "conversation_id": "SOC_54",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that cutting security personnel at each venue would be enough to offset the decline in EBITDA margin, given the expansion's impact on costs and revenue?",
+        "content": "What makes you think that cutting security personnel is the most effective way to address the decline in EBITDA margin, and what evidence do you have to support this claim?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -768,7 +754,7 @@
       "conversation_id": "SOC_55",
       "predicted": {
         "action": "question",
-        "content": "What's the reasoning behind delaying the expansion, and how do you think it would impact the cost and revenue dynamics?",
+        "content": "What makes you think that delaying the expansion by one cycle would allow costs to catch up with revenue, given that the current expansion is driving a 45% increase in revenue and a significant increase in match count?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -783,22 +769,7 @@
       "conversation_id": "SOC_56",
       "predicted": {
         "action": "question",
-        "content": "What specific costs do you think centralizing venue construction would help save, and how would that impact the overall profitability of the tournament?",
-        "block_id": "",
-        "ready_for_judge": false,
-        "socratic_function": "clarity"
-      },
-      "correct": false,
-      "failed_checks": [
-        "socratic_function: expected 'perspective_testing', got 'clarity'"
-      ],
-      "error": null
-    },
-    {
-      "conversation_id": "SOC_57",
-      "predicted": {
-        "action": "question",
-        "content": "What's the reasoning behind having the host countries fully self-fund their infrastructure, and how do you think this would impact the Committee's financials?",
+        "content": "What evidence suggests that centralizing venue construction under one host country's contractors would be enough to offset the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -810,10 +781,23 @@
       "error": null
     },
     {
+      "conversation_id": "SOC_57",
+      "predicted": {
+        "action": "question",
+        "content": "How do you think having the host countries fully self-fund their infrastructure would address the underlying causes of the margin decline, given the expansion's impact on both revenue and costs?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": "perspective_testing"
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
       "conversation_id": "SOC_58",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that shortening the group stage would have a significant impact on profitability, and how do you think this change would affect the overall cost base?",
+        "content": "What makes you think that shortening the group stage would have a significant impact on profitability, and how do you think it would affect the overall tournament structure and revenue streams?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -828,7 +812,7 @@
       "conversation_id": "SOC_59",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that selling more sponsorship inventory will be enough to offset the decline in EBITDA margin?",
+        "content": "What evidence suggests that selling more sponsorship inventory will address the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -843,20 +827,22 @@
       "conversation_id": "SOC_60",
       "predicted": {
         "action": "question",
-        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "content": "What makes you think a bigger broadcasting deal would be enough to offset the decline in EBITDA margin, given that the number of matches is increasing by 62.5%?",
         "block_id": "",
         "ready_for_judge": false,
-        "socratic_function": "perspective_testing"
+        "socratic_function": "premise_testing"
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "socratic_function: expected 'perspective_testing', got 'premise_testing'"
+      ],
       "error": null
     },
     {
       "conversation_id": "SOC_61",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that reducing the rate of prize money growth will have a significant impact on the tournament's profitability?",
+        "content": "What evidence suggests that reducing the rate of prize money growth will address the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -871,7 +857,7 @@
       "conversation_id": "SOC_62",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that adding a fourth host country would improve profitability, given that the current expansion to three host countries is associated with a decline in EBITDA margin?",
+        "content": "What evidence suggests that adding a fourth host country would help spread costs further and improve profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -886,7 +872,7 @@
       "conversation_id": "SOC_63",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that renegotiating broadcasting will address the profitability issue?",
+        "content": "What makes you think renegotiating broadcasting will address the margin dilution issue, given that the current contract structure sells rights as a fixed package per tournament rather than per match?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -901,7 +887,7 @@
       "conversation_id": "SOC_64",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that outsourcing local operations would be enough to offset the decline in EBITDA margin?",
+        "content": "What makes you think outsourcing all local operations to third parties would be enough to offset the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
@@ -916,7 +902,7 @@
       "conversation_id": "SOC_65",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that scaling back sponsorship activation spend will have a significant impact on the declining EBITDA margin?",
+        "content": "What's the basis for recommending a reduction in sponsorship activation spend, given that sponsorship and licensing are driving the revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": "premise_testing"
