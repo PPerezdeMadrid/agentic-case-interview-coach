@@ -3,18 +3,18 @@
   "csv_path": "database/node_eval/interviewer_eval/interviewer_golden_set_turn_control.csv",
   "model": "meta-llama/llama-3.3-70b-instruct",
   "socratic_judge_model": "qwen/qwen-2.5-72b-instruct",
-  "computed_at": "2026-08-01T16:15:09+00:00",
+  "computed_at": "2026-08-01T16:55:21+00:00",
   "n_total": 65,
   "n_scored": 65,
   "n_errors": 0,
-  "n_correct": 33,
-  "accuracy": 0.5077,
+  "n_correct": 34,
+  "accuracy": 0.5231,
   "records": [
     {
       "conversation_id": "TR_01",
       "predicted": {
         "action": "question",
-        "content": "You've identified some potential issues with the revenue and cost structure, but how do you think the expansion could be made to pay for itself, given the falling EBITDA margin?",
+        "content": "You've identified some key issues with the expansion, including the potential for revenue per match to fall and the tripling of fixed infrastructure and security costs. What potential solutions would you propose to address the margin dilution and make the expansion more profitable?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -29,7 +29,7 @@
       "conversation_id": "TR_02",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that monetizing hydration breaks can close a significant portion of the margin gap?",
+        "content": "That's an interesting idea about hydration breaks, but how do you think it would address the underlying issues driving the margin decline?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -44,22 +44,20 @@
       "conversation_id": "TR_03",
       "predicted": {
         "action": "question",
-        "content": "You've identified that broadcasting revenue is largely fixed, while costs are scaling with the number of host countries. How do you think the broadcasting contract structure is contributing to the revenue per match falling, and are there any potential changes to this structure that could help recover some of the lost value?",
+        "content": "You've identified some key issues with the expansion, but how do you think the expansion can be made to pay for itself? What specific recommendations would you make to the Secretary General to address the margin dilution?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "must_contain: missing at least one of ['recommend']"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "TR_04",
       "predicted": {
         "action": "question",
-        "content": "You've identified a potential structural issue with the expansion, with a largely fixed revenue model and a cost model that's scaling with the format change. Can you walk me through what you think the implications of this are for the tournament's profitability, and how you would propose addressing them?",
+        "content": "You've identified that broadcasting is a fixed package, which might not be capturing the full value of the additional matches. Can you walk me through your thoughts on how the broadcasting revenue stream contributes to the margin dilution, and whether there are any potential levers to pull to improve it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -74,7 +72,7 @@
       "conversation_id": "TR_05",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the previous edition had 64 matches and this one has 104 matches. Given that, how do you think the expansion affects the overall revenue and cost structure?",
+        "content": "As I mentioned, the previous edition had 64 matches and this one has 104 matches. Given that the broadcasting rights are sold as a fixed package, how do you think the revenue per match has changed, and what implications does that have for the overall profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -89,7 +87,7 @@
       "conversation_id": "TR_06",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the previous edition had 64 matches and the current edition has 104 matches. Given that you're looking at the structural impact of the expansion, what specific cost areas do you think are driving the margin dilution?",
+        "content": "As I mentioned, the previous edition had 64 matches and this one has 104 matches. Given that you're looking to understand the structural changes, what specific cost components do you think are driving the margin dilution?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -104,7 +102,7 @@
       "conversation_id": "TR_07",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned that the cost structure looks off for the new format, but can you tell me what specifically about the cost structure concerns you and what evidence you have to support that concern?",
+        "content": "What specific cost lines do you think are driving the margin dilution, and how do you think they relate to the revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -119,7 +117,7 @@
       "conversation_id": "TR_08",
       "predicted": {
         "action": "question",
-        "content": "Let's take a step back. Can you recap the situation in your own words and propose how you'd structure the analysis to identify the reasons for the deteriorating profitability despite revenue growth?",
+        "content": "Let's take a step back. Can you recap the situation in your own words and propose how you'd structure the analysis to address the Secretary General's concerns about profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -134,7 +132,7 @@
       "conversation_id": "TR_09",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that broadcasters would be willing to move away from a fixed package deal and toward a per-match value capture model?",
+        "content": "You mentioned that broadcasting rights are sold as a fixed package, which may not capture the full value of the additional matches. How do you think this revenue structure contributes to the decline in EBITDA margin, and what evidence supports your claim that renegotiating broadcasting contracts toward per-match value capture would be effective?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -149,7 +147,7 @@
       "conversation_id": "TR_10",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned that broadcasting rights are sold as a fixed package, which may not capture the full value of the additional matches. What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "content": "What evidence suggests that hosting across three countries will roughly triplicate fixed venue, security, and logistics costs, rather than scaling with the 62.5% increase in matches?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -164,7 +162,7 @@
       "conversation_id": "TR_11",
       "predicted": {
         "action": "question",
-        "content": "You've proposed renegotiating broadcasting contracts toward per-match value. What evidence suggests this is feasible, and how would you address potential broadcaster resistance to giving up the certainty of a fixed package?",
+        "content": "What evidence suggests that renegotiating broadcasting contracts toward per-match value will be enough to offset the increased costs and restore margin growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -179,7 +177,7 @@
       "conversation_id": "TR_12",
       "predicted": {
         "action": "question",
-        "content": "You mentioned that broadcasters may prefer the certainty of a flat package. What evidence suggests that this is a significant risk, and how would you propose mitigating it?",
+        "content": "You've recommended a per-match value study on the current broadcasting portfolio. What specific factors would you consider in this study to determine the feasibility of renegotiating broadcasting contracts?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -194,7 +192,7 @@
       "conversation_id": "TR_13",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests ticket prices are the primary factor affecting profitability in this expansion?",
+        "content": "What evidence suggests that ticket prices are the main driver of the decline in profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -207,7 +205,7 @@
       "conversation_id": "TR_14",
       "predicted": {
         "action": "question",
-        "content": "This is a case study for our discussion today. Let's focus on the Interconta World Football Cup Organizing Committee's situation: they're experiencing a decline in EBITDA margin despite revenue growth. How would you approach this problem, and what are your initial thoughts on what might be causing the margin decline?",
+        "content": "This is a case study for practice. Let's focus on the Interconta World Football Cup Organizing Committee's situation. Can you recap the situation and clarify the objective before analyzing?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -220,7 +218,7 @@
       "conversation_id": "TR_15",
       "predicted": {
         "action": "question",
-        "content": "Can you start by summarizing the situation and what you think the Secretary General is looking for in terms of analysis and recommendations?",
+        "content": "What would you like to clarify or assume about the Committee's objectives before starting your analysis of the profitability issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -233,7 +231,7 @@
       "conversation_id": "TR_16",
       "predicted": {
         "action": "question",
-        "content": "How do you think the expansion from 32 to 48 teams and the change from one to three host countries might impact the tournament's revenue and costs, and what would be your first step in analyzing this situation?",
+        "content": "How does your experience with the football club relate to the Interconta World Football Cup's expansion and declining EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -246,7 +244,7 @@
       "conversation_id": "TR_17",
       "predicted": {
         "action": "question",
-        "content": "You mentioned reviewing everything holistically - can you walk me through what that means in this context, and what specific aspects of the business you'd look at first?",
+        "content": "You mentioned reviewing everything holistically - what specific aspects of the business would you look at first to understand the impact of the expansion on profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -259,7 +257,7 @@
       "conversation_id": "TR_18",
       "predicted": {
         "action": "question",
-        "content": "You've described the situation. How would you structure your analysis to explain why profitability is deteriorating despite revenue growth?",
+        "content": "How would you structure your analysis to understand why profitability is deteriorating despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -272,7 +270,7 @@
       "conversation_id": "TR_19",
       "predicted": {
         "action": "question",
-        "content": "Let's dive into the case. Can you recap the situation and clarify what you think the Committee is asking for: is it a one-time diagnosis of this edition, or a repeatable model for future editions?",
+        "content": "Let's put the interview process aside for now. Can you walk me through your initial thoughts on why the Interconta World Football Cup Organizing Committee's EBITDA margin is falling despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -285,7 +283,7 @@
       "conversation_id": "TR_20",
       "predicted": {
         "action": "question",
-        "content": "What specific synergies do you think can be leveraged, and how would you optimize the value chain in the context of the Interconta World Football Cup?",
+        "content": "Can you give me a specific example of how you would streamline operations in the context of the Interconta World Football Cup, and what metrics you would use to measure the success of those efforts?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -298,7 +296,7 @@
       "conversation_id": "TR_21",
       "predicted": {
         "action": "question",
-        "content": "What makes you think that scaling back to one host country would fix the margin problem, and what potential consequences might this have on the tournament's revenue and growth?",
+        "content": "What's the basis for your conclusion that scaling back to one host country would fix the margin problem?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -311,7 +309,7 @@
       "conversation_id": "TR_22",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that renegotiating broadcasting contracts to be priced per match would fix the margin issue?",
+        "content": "What's the basis for your recommendation to renegotiate broadcasting contracts, and how do you think that would address the margin issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -324,7 +322,7 @@
       "conversation_id": "TR_23",
       "predicted": {
         "action": "question",
-        "content": "What makes you think monetizing hydration breaks and other unused ad space would be enough to close the profitability gap, given the significant changes in the tournament's format and the resulting impacts on revenue and costs?",
+        "content": "What's the basis for your conclusion that monetizing hydration breaks and other unused ad space would be enough to close the gap in profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -337,7 +335,7 @@
       "conversation_id": "TR_24",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that cutting costs and raising ticket prices will be enough to offset the margin decline, given the expansion's impact on the cost base and revenue streams?",
+        "content": "What exactly suggests that cutting costs and raising ticket prices will be enough to offset the margin decline, given the expansion's impact on the cost base and revenue streams?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -350,7 +348,7 @@
       "conversation_id": "TR_25",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned that gradually slowing the growth of prize money could be one way to address the margin dilution. How do you think this would affect the tournament's competitiveness and attractiveness to teams and players?",
+        "content": "You've identified some potential issues with the revenue and cost structure. Can you walk me through how you would quantify the impact of these issues on the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -365,7 +363,7 @@
       "conversation_id": "TR_26",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact split of infrastructure cost across the three host countries. Make a reasonable assumption for it and tell me how it would factor into your analysis.",
+        "content": "We don't have the exact split of infrastructure cost across the three host countries. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -380,20 +378,7 @@
       "conversation_id": "TR_27",
       "predicted": {
         "action": "question",
-        "content": "You've identified some key factors contributing to the margin dilution, but what potential solutions or recommendations would you propose to the Secretary General to address this issue?",
-        "block_id": "",
-        "ready_for_judge": false,
-        "socratic_function": ""
-      },
-      "correct": true,
-      "failed_checks": [],
-      "error": null
-    },
-    {
-      "conversation_id": "TR_28",
-      "predicted": {
-        "action": "question",
-        "content": "You've mentioned that broadcasting is a fixed package, which might not be capturing the full value of the additional matches. Can you elaborate on how you think the broadcasting deal is contributing to the revenue dilution, and whether you see any opportunities to renegotiate or restructure it?",
+        "content": "You've covered the main points, but what specific steps would you propose the Secretary General take to address the margin dilution and make the expansion pay for itself?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -405,10 +390,23 @@
       "error": null
     },
     {
+      "conversation_id": "TR_28",
+      "predicted": {
+        "action": "question",
+        "content": "You've identified some key issues with the current format, including the potential for revenue per match to be falling and the tripling of fixed infrastructure and security costs. How do you think the Organizing Committee could address the margin dilution, and what steps would you recommend they take?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
       "conversation_id": "TR_29",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned that the three host countries likely triplicate fixed infrastructure and security costs. How do you think this triplication affects the per-match cost economics, and what implications might it have for the overall profitability of the tournament?",
+        "content": "You've flagged security spend as an area to unpack further. What specific factors within security spend do you think are driving the increased costs, and how do you think they could be optimized?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -423,7 +421,7 @@
       "conversation_id": "TR_30",
       "predicted": {
         "action": "question",
-        "content": "You've identified some key issues with the expansion, including the potential for revenue per match to be falling and the tripling of fixed infrastructure and security costs. What do you think the Committee should do to address the margin dilution, and how can they make the expansion pay for itself?",
+        "content": "You've mentioned that the cost base is scaling faster than the revenue base, and that three host countries probably triplicates fixed infrastructure and security costs. Can you walk me through your thinking on how the cost base is changing with the expansion, and what specific costs you think are driving the margin dilution?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -438,7 +436,7 @@
       "conversation_id": "TR_31",
       "predicted": {
         "action": "question",
-        "content": "You've identified some key issues with the expansion, but what do you think is the most important factor driving the decline in EBITDA margin, and how would you address it?",
+        "content": "You've identified a potential structural issue with the revenue and cost models. What specific evidence or data would you use to support the claim that the issue is indeed structural, rather than a one-off execution issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -453,7 +451,7 @@
       "conversation_id": "TR_32",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the previous edition's EBITDA margin was 38%. Given that, how do you think the expansion to 48 teams and three host countries is affecting the cost structure, and what would you prioritize to address the margin dilution?",
+        "content": "As I mentioned, the previous edition's EBITDA margin was 38%. Given that, what other factors do you think are contributing to the decline in EBITDA margin despite the revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -468,7 +466,7 @@
       "conversation_id": "TR_33",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the upcoming edition has 104 matches. Given that, how do you think the increased number of matches affects the overall revenue and cost structure of the tournament?",
+        "content": "As I mentioned, this edition has 104 matches. Given that, how do you think the revenue and cost per match have changed compared to the previous edition?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -483,7 +481,7 @@
       "conversation_id": "TR_34",
       "predicted": {
         "action": "question",
-        "content": "You've established a good structure and identified some key issues. What's the next step you'd like to take in analyzing the impact of the expansion on profitability?",
+        "content": "You'd like to go back to the beginning - what specifically would you like to revisit or re-evaluate before moving forward with your analysis?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -498,7 +496,7 @@
       "conversation_id": "TR_35",
       "predicted": {
         "action": "question",
-        "content": "You mentioned the cost structure is 'just off' - can you elaborate on what specifically concerns you about it and how you would propose addressing those issues?",
+        "content": "You mentioned the cost structure is off, but what specific costs do you think are driving this issue, and how do you think they can be addressed?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -513,7 +511,7 @@
       "conversation_id": "TR_36",
       "predicted": {
         "action": "question",
-        "content": "As we discussed earlier, total revenue is up 45% versus the prior edition, driven primarily by growth in sponsorship and licensing, which are tied to global brand reach rather than match count. Broadcasting, on the other hand, is sold largely as a fixed tournament package, so its per-match value has fallen materially. How do you think this split affects your analysis of the profitability issue?",
+        "content": "The primary revenue streams are broadcasting, sponsorship, and licensing, with sponsorship and licensing driving the 45% revenue growth. Broadcasting rights are sold as a fixed package, which has led to a material fall in per-match value. How do you think this revenue stream split affects the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -528,7 +526,7 @@
       "conversation_id": "TR_37",
       "predicted": {
         "action": "question",
-        "content": "As you've already outlined the key points, let's move forward. What specific areas of the cost base do you think are most likely to be driving the margin dilution, and how would you propose addressing them?",
+        "content": "You've got a good handle on the situation. What's the most critical factor you think is driving the margin dilution, and how would you propose addressing it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -543,7 +541,7 @@
       "conversation_id": "TR_38",
       "predicted": {
         "action": "question",
-        "content": "Can you walk me through your thought process on how to address the decline in EBITDA margin despite the revenue growth?",
+        "content": "Can you identify a specific cost or revenue stream where you think synergies can be leveraged or optimized, and walk me through how you would actually change it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -558,7 +556,7 @@
       "conversation_id": "TR_39",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that the current broadcasting contract structure is the main driver of the revenue dilution, and how do you think the value per match could be captured in future deals?",
+        "content": "What evidence suggests that the current broadcasting contract structure is not built to monetize a larger-format tournament, and how do you think this contributes to the margin dilution?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -573,7 +571,7 @@
       "conversation_id": "TR_40",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned that broadcasting revenue isn't growing to match the increase in matches. What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "content": "You've identified broadcasting revenue as a key area for renegotiation. Can you walk me through how you think the value of the broadcasting deal will change when it's spread across 104 matches instead of 64?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -588,7 +586,7 @@
       "conversation_id": "TR_41",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that renegotiating broadcasting deals toward per-match value will be effective in addressing the margin dilution, and how do you plan to mitigate the potential risks of reducing the appeal of a single large fixed-package deal to major broadcasters?",
+        "content": "You've identified the commercial model as the key issue and proposed renegotiating broadcasting rights and locking in cost-sharing targets. How do you think the Committee should prioritize these efforts, and what specific metrics or targets would you use to measure their success?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -603,7 +601,7 @@
       "conversation_id": "TR_42",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that renegotiating broadcasting rights toward a per-match structure would be effective in capturing more value?",
+        "content": "How do you think the broadcasting rights renegotiation and cost-sharing targets would impact the tournament's overall profitability, and what specific metrics or benchmarks would you use to measure their success?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -618,7 +616,7 @@
       "conversation_id": "TR_43",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that broadcasting rights are sold predominantly as a fixed package per tournament, rather than per match, and how does this impact the revenue per match?",
+        "content": "You've identified a structural mismatch between revenue and costs. Can you walk me through how you think the current broadcasting contract structure is contributing to this mismatch, and how renegotiating toward per-match value would address it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -633,7 +631,7 @@
       "conversation_id": "TR_44",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that the current broadcasting contract structure is not built to monetize a larger-format tournament, and how do you think a per-match value capture model would address this issue?",
+        "content": "You've proposed renegotiating broadcasting rights toward per-match value capture. What potential risks or challenges do you see in this approach, and how might they impact the overall success of the expansion?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -648,7 +646,7 @@
       "conversation_id": "TR_45",
       "predicted": {
         "action": "question",
-        "content": "You've proposed pushing future broadcasting deals toward per-match value capture. How do you think this would impact the appeal of the broadcasting deal to major broadcasters, and what potential risks or limitations do you see in this approach?",
+        "content": "What evidence suggests that per-match value capture and cost-sharing commitments will be enough to offset the margin dilution caused by the expansion?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -663,7 +661,7 @@
       "conversation_id": "TR_46",
       "predicted": {
         "action": "question",
-        "content": "This engagement is a paid consulting project for the Interconta World Football Cup Organizing Committee. Now that we have that clarified, can you tell me how you plan to approach the issue of profitability deterioration despite the revenue growth?",
+        "content": "That's not specified, but let's focus on the case at hand. Can you recap the situation and propose a structure for analyzing why profitability is deteriorating despite the revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -676,7 +674,7 @@
       "conversation_id": "TR_47",
       "predicted": {
         "action": "question",
-        "content": "What makes you think it's a pricing problem?",
+        "content": "What exactly suggests pricing is the main issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -689,7 +687,7 @@
       "conversation_id": "TR_48",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the expansion's impact on profitability would you like to investigate first, and how do you plan to approach this analysis?",
+        "content": "What would be your first step in analyzing why the profitability is deteriorating despite the growth in revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -702,7 +700,7 @@
       "conversation_id": "TR_49",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the Olympics budget overruns do you think are relevant to the IWFC's situation, and how do you think they might inform your analysis?",
+        "content": "What specifically about the Olympics budget overruns makes you think of the Interconta World Football Cup's situation, and how do you think it applies to the tournament's expanding format and falling EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -715,7 +713,7 @@
       "conversation_id": "TR_50",
       "predicted": {
         "action": "question",
-        "content": "Take your time, and when you're ready, can you walk me through your initial thoughts on the situation and how you plan to approach it?",
+        "content": "Take your time, and when you're ready, can you walk me through how you plan to approach this problem?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -728,7 +726,7 @@
       "conversation_id": "TR_51",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that marketing spend is the main issue?",
+        "content": "What exactly suggests that marketing spending is the main issue driving the decline in profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -741,7 +739,7 @@
       "conversation_id": "TR_52",
       "predicted": {
         "action": "question",
-        "content": "What's your understanding of the Secretary General's objectives, and how do you plan to approach this analysis to explain the deterioration in profitability despite the revenue growth?",
+        "content": "How would you like to approach this analysis, and what are the key factors you think will be important in explaining the decline in EBITDA margin despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -754,7 +752,7 @@
       "conversation_id": "TR_53",
       "predicted": {
         "action": "question",
-        "content": "What specifically would make you think the expansion is or isn't a good use of the Committee's money?",
+        "content": "What specific factors would you consider when evaluating whether the expansion is a good use of the Committee's money?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -767,7 +765,7 @@
       "conversation_id": "TR_54",
       "predicted": {
         "action": "question",
-        "content": "How would you propose to break down the impact of the expansion on the tournament's profitability?",
+        "content": "How would you propose to structure your analysis to understand why profitability is deteriorating despite the growth in revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -780,7 +778,7 @@
       "conversation_id": "TR_55",
       "predicted": {
         "action": "question",
-        "content": "You've asked about the Committee's history and leadership twice now. Let's move on from that and focus on the profitability question. What's your first move to understand why profitability is deteriorating despite the growth in revenue?",
+        "content": "Let's stay focused on the case - what's your first move on the profitability question? You've been asked about the Committee, but how do you plan to approach the issue of declining EBITDA margin despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -793,7 +791,7 @@
       "conversation_id": "TR_56",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned looking at the overall strategic direction, but can you walk me through how you would specifically analyze the impact of the expansion on the tournament's profitability?",
+        "content": "You've mentioned looking at the overall strategic direction, but can you be more specific about what aspects of the strategy you think are most relevant to addressing the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -806,7 +804,7 @@
       "conversation_id": "TR_57",
       "predicted": {
         "action": "question",
-        "content": "Can you provide a more specific analysis of the growth-versus-profitability tension in this case, considering the expansion from 32 to 48 teams and the increase in revenue and costs?",
+        "content": "What specific factors do you think are driving the tension between growth and profitability in this case?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -819,7 +817,7 @@
       "conversation_id": "TR_58",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of other major sporting events would you benchmark, and what data would you use to make a comparison?",
+        "content": "You mentioned benchmarking against other major sporting events. What specific aspects of those events would you compare to the Interconta World Football Cup, and how would that help you understand the profitability issue here?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -832,7 +830,7 @@
       "conversation_id": "TR_59",
       "predicted": {
         "action": "question",
-        "content": "You've mentioned understanding all stakeholders, but can you propose a structure for your analysis to identify the key drivers of the margin decline?",
+        "content": "You've mentioned understanding all stakeholders, but which specific stakeholder do you think is most critical to address the profitability issue, and what would you want to know from them?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -845,7 +843,7 @@
       "conversation_id": "TR_60",
       "predicted": {
         "action": "question",
-        "content": "What makes you think adding a fourth host country would help spread the costs, and how do you think it would impact the overall cost base?",
+        "content": "How do you think adding a fourth host country would affect the cost base and revenue streams of the tournament, given that the current expansion from 32 to 48 teams is already projected to increase costs and reduce EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -858,7 +856,7 @@
       "conversation_id": "TR_61",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that cutting prize money would be enough to offset the decline in EBITDA margin?",
+        "content": "What's the reasoning behind cutting prize money as the solution to the profitability issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -871,7 +869,7 @@
       "conversation_id": "TR_62",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that delaying the expansion would be the best way to get costs under control, given the projected 45% revenue growth?",
+        "content": "What evidence suggests that delaying the expansion would help get costs under control, and how do you think that would impact the tournament's overall profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -884,7 +882,7 @@
       "conversation_id": "TR_63",
       "predicted": {
         "action": "question",
-        "content": "What makes you think that raising ticket prices alone will be enough to cover the gap in profitability, and how do you expect it to impact the overall revenue and costs of the tournament?",
+        "content": "What evidence suggests that raising ticket prices alone will be enough to cover the gap in profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -897,7 +895,7 @@
       "conversation_id": "TR_64",
       "predicted": {
         "action": "question",
-        "content": "What evidence suggests that selling more sponsorship inventory would be enough to address the decline in EBITDA margin?",
+        "content": "What's that based on?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -910,7 +908,7 @@
       "conversation_id": "TR_65",
       "predicted": {
         "action": "question",
-        "content": "What exactly suggests that outsourcing local operations is the main solution to the profitability problem?",
+        "content": "What's the basis for your recommendation to outsource all local operations, and how do you think it would impact the tournament's profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
