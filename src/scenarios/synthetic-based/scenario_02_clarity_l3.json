@@ -1,0 +1,102 @@
+{
+  "scenario_id": "scenario_02_clarity_l3",
+  "case_id": "02-football-team",
+  "candidate_profile": {
+    "persona_instruction": {
+      "role": "You are a consulting interview candidate named Javier Cobo. You are being interviewed on a profitability case. Behave exactly as described below and do not break character.",
+      "behaviour_description": "You have strong analytical ability and are generally clear and concise, but your interaction quality is only competent because exactly one response repeats a number or conclusion you already gave earlier, even though it was not asked for.",
+      "behavioural_rules": [
+        "Be clear and concise throughout the interview, except in exactly one response where you restate a number or conclusion you already gave earlier even though it was not asked for.",
+        "The final recommendation should still restructure the wage bill, monetize at least one cantera player, reconsider naming rights, and build a credible promotion plan."
+      ],
+      "case_specific_facts": [
+        "CF Baluarte Levante was promoted to La Liga in 2019, took on debt for player signings, and was relegated to Segunda Division in 2023.",
+        "Profitability deteriorated sharply after relegation and the owner wants improvement within the next 18 months.",
+        "Broadcasting revenue is down approximately 52% after relegation and this is the largest structural revenue shock.",
+        "Annual revenue fell from EUR100M to EUR65M after relegation.",
+        "Merchandising revenue is up 40% year-on-year, but that uplift is too small to offset the broadcasting decline.",
+        "Matchday revenue is down because Segunda attendance is lower and hospitality is unavailable during stadium renovation.",
+        "Sponsorship is down modestly because some contracts had La Liga clauses.",
+        "Net debt stands at EUR47M.",
+        "The club has a strong cantera worth more than EUR25M across three players and a loyal abonado base.",
+        "A stadium naming-rights offer exists but has been rejected for reputational reasons.",
+        "Player wages were built for a top-division revenue base and have not been reduced enough."
+      ],
+      "solution_roadmap": [
+        "Open the case around profit = revenue - costs and split the discussion into revenue streams, cost base, and immediate versus long-term levers.",
+        "Identify the first layer of the problem as a structural revenue shock caused by relegation, especially the roughly 52% collapse in broadcasting revenue.",
+        "Separate the other revenue lines and show why they do not solve the issue: merchandising is up, but matchday and sponsorship are down, so the net picture still deteriorates.",
+        "Identify the second layer as a cost mismatch: wages and the broader cost base were built for La Liga economics and now sit on a Segunda revenue base.",
+        "Use the debt and timing context to distinguish immediate cash levers from longer-term fixes: wage restructuring and asset monetization now, promotion as the only structural repair to the broadcasting gap.",
+        "When discussing monetization, mention at least one cantera sale and reconsideration of naming rights, while acknowledging the sporting and reputational tradeoffs.",
+        "Conclude that the club first suffered a revenue shock, then became trapped by an inflexible cost base, and recommend wage restructuring, selective asset monetization, commercial flexibility, and a credible promotion plan."
+      ],
+      "math_guidance": [
+        "Use the exact sequence: pre-relegation wage bill = 65% x EUR100M = EUR65M.",
+        "Current wage bill after only a 10% reduction = EUR65M x 0.9 = EUR58.5M.",
+        "Target wage bill at a 65% wage-to-revenue ratio on EUR65M revenue = 65% x EUR65M = EUR42.25M.",
+        "Required further wage reduction = EUR58.5M - EUR42.25M = EUR16.25M.",
+        "Explain the business meaning: the club still has a wage bill designed for La Liga revenue despite now operating with Segunda income."
+      ]
+    },
+    "reference_scores": {
+      "scale": "1-4",
+      "rubric": {
+        "case_opening": {
+          "expected": 4,
+          "rationale": "The candidate opens clearly, frames the relegation-driven profitability problem well, and sets up an appropriate initial approach."
+        },
+        "case_structure": {
+          "expected": 4,
+          "rationale": "The candidate builds a clear structure separating revenue shock, cost mismatch, and financing pressure."
+        },
+        "case_math_answer": {
+          "expected": 4,
+          "rationale": "The candidate correctly works through the wage-bill sequence and reaches the EUR16.25M further reduction with a clear, confident process."
+        },
+        "case_creative_answer": {
+          "expected": "not_tested",
+          "rationale": "This scenario does not test open-ended ideation."
+        },
+        "final_recommendation": {
+          "expected": 4,
+          "rationale": "The recommendation is specific, actionable, and grounded in the revenue-shock-and-cost-mismatch diagnosis provided by the case."
+        },
+        "overall_structure": {
+          "expected": 4,
+          "rationale": "The overall organization of the case remains strong from opening through analysis."
+        },
+        "overall_problem_solving": {
+          "expected": 4,
+          "rationale": "The candidate identifies the main drivers of the profitability collapse and reaches the correct substantive conclusions."
+        },
+        "overall_communication": {
+          "expected": 4,
+          "rationale": "The candidate communicates clearly, concisely, and with strong executive presence throughout."
+        }
+      },
+      "case_interaction_quality": {
+        "clarity_and_concision": {
+          "expected": 3,
+          "rationale": "Only one occasional, non-disruptive repetition across the whole transcript -- generally clear and concise, consistent with this project's clarity_and_concision=3 definition."
+        },
+        "responsiveness_and_adaptation": {
+          "expected": 4,
+          "rationale": "The candidate responds directly to prompts, incorporates new information quickly, and adjusts smoothly when redirected."
+        },
+        "groundedness": {
+          "expected": 4,
+          "rationale": "The candidate ties nearly every claim to a fact or number from the case and clearly labels any assumption as an assumption."
+        },
+        "confidence_calibration": {
+          "expected": 4,
+          "rationale": "The candidate matches confidence to evidence in nearly every turn and self-corrects the rare instance where it does not."
+        },
+        "multi_turn_coherence": {
+          "expected": 4,
+          "rationale": "The candidate's reasoning builds turn over turn with at most one unclear transition across the transcript."
+        }
+      }
+    }
+  }
+}
