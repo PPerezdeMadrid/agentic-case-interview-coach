@@ -64,9 +64,12 @@
     <noscript><button class="button" type="submit">Load batch</button></noscript>
   </form>
   {% if batch %}
-  <form method="post" action="{{ url_for('delete_batch_page', dir_name=batch) }}" onsubmit="return confirm('Delete batch {{ batch }}? This removes the batch directory from disk and cannot be undone.');">
-    <button class="button button--danger" type="submit">Delete this batch</button>
-  </form>
+  <div class="inline-actions">
+    <a class="button" href="{{ url_for('download_batch_page', dir_name=batch) }}">Download as .zip</a>
+    <form method="post" action="{{ url_for('delete_batch_page', dir_name=batch) }}" onsubmit="return confirm('Delete batch {{ batch }}? This removes the batch directory from disk and cannot be undone.');">
+      <button class="button button--danger" type="submit">Delete this batch</button>
+    </form>
+  </div>
   {% endif %}
   {% else %}
   <div class="prompt-box">

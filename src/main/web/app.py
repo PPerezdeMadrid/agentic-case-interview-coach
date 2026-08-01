@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from flask import Flask, abort, flash, jsonify, redirect, render_template, request, url_for
+from flask import Flask, abort, flash, jsonify, redirect, render_template, request, send_file, url_for
 
 from dashboard_store import (
     CASE_PERFORMANCE_SECTION,
@@ -25,6 +25,7 @@ from experiment_store import (
     list_batches,
     load_batch,
     load_scenario_detail,
+    zip_batch,
 )
 from node_eval.baseline_eval import (
     build_agentic_vs_baseline_comparison,
@@ -160,6 +161,21 @@ def experiment_index():
         abort(404, f"Batch '{dir_name}' not found.")
 
     return render_template("experiment.html", batches=batches, batch=dir_name, overview=overview)
+
+
+@app.get("/experiment/<dir_name>/download")
+def download_batch_page(dir_name: str):
+    try:
+        buffer = zip_batch(dir_name)
+    except FileNotFoundError as exc:
+        abort(404, str(exc))
+
+    return send_file(
+        buffer,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=f"{dir_name}.zip",
+    )
 
 
 @app.post("/experiment/<dir_name>/delete")

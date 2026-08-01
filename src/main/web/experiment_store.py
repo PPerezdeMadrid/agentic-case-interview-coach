@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import io
 import json
 import math
 import shutil
+import zipfile
 from collections import defaultdict
 from functools import lru_cache
 from pathlib import Path
@@ -105,6 +107,21 @@ def delete_batch(dir_name: str) -> None:
         raise FileNotFoundError(f"Batch '{dir_name}' not found.")
 
     shutil.rmtree(batch_dir)
+
+
+def zip_batch(dir_name: str) -> io.BytesIO:
+    """Zip every file in a batch's directory into an in-memory buffer, ready for send_file."""
+    batch_dir = BATCH_RUNS_DIR / dir_name
+    if batch_dir.parent.resolve() != BATCH_RUNS_DIR.resolve() or not batch_dir.is_dir():
+        raise FileNotFoundError(f"Batch '{dir_name}' not found.")
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(batch_dir.rglob("*")):
+            if path.is_file():
+                archive.write(path, arcname=str(Path(dir_name) / path.relative_to(batch_dir)))
+    buffer.seek(0)
+    return buffer
 
 
 def parse_transcript(transcript: list[str]) -> list[dict[str, Any]]:

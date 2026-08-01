@@ -173,6 +173,12 @@ textarea {
   background: #591616;
 }
 
+.inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .chip-row,
 .metric-grid,
 .meta-grid,
