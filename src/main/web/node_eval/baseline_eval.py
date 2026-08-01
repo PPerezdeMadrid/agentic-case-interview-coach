@@ -5,12 +5,15 @@
 
 Same pattern as node_eval/interviewer_eval.py -- baseline is graded on the exact
 same golden-set fixtures as the interviewer (see build_baseline_golden_sets.py),
-so `golden_set` names line up 1:1 between the two (`evidence_handling`,
-`guardrail`, `turn_control`, `socratic_function`), which is what lets
-`build_agentic_vs_baseline_comparison` below pair them up by category. Not
-recomputed on page load: each row costs one (or two, for the socratic-function
-golden set) real baseline LLM call. Rerun via
-`make baseline-eval BASELINE_GOLDEN_SET=<name>` and reload to refresh.
+so `golden_set` names line up 1:1 between the two for `evidence_handling`,
+`guardrail`, and `socratic_function`, which is what lets
+`build_agentic_vs_baseline_comparison` below pair them up by category.
+`turn_control` is the one exception -- baseline has no counterpart golden set
+for it at all (see build_baseline_golden_sets.py's module docstring), so
+app.py never calls into this module for that golden_set. Not recomputed on
+page load: each row costs one (or two, for the socratic-function golden set)
+real baseline LLM call. Rerun via `make baseline-eval BASELINE_GOLDEN_SET=<name>`
+and reload to refresh.
 """
 from __future__ import annotations
 

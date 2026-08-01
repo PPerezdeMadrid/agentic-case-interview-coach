@@ -1,4 +1,4 @@
-"""Build four baseline golden-set CSVs for the World Cup case (04-worldcup-test),
+"""Build three baseline golden-set CSVs for the World Cup case (04-worldcup-test),
 reusing the *exact same* transcripts/categories/expected answers as
 build_interviewer_golden_sets.py -- imported directly from that module rather than
 copied, so the two node types are graded on literally the same fixtures.
@@ -8,14 +8,25 @@ that fuses the interviewer + judge + eval roles, but its own system prompt
 (doc/prompts/baseline_graph_system_prompt.md) carries near-identical behavioural
 rules to the interviewer's (doc/prompts/interviewer_graph_system_prompt.md) --
 reveal visible blocks on request, state case-data/"provide upon request" facts
-plainly, never leak hidden guidance or the expected recommendation, and force a
-turn-3 wrap-up asking for the final recommendation -- and both graphs share the
-same 4-turn budget (MAX_BASELINE_TURNS == MAX_INTERVIEWER_TURNS_BEFORE_JUDGE == 4),
-so turn_index 1/2/3 fixtures line up exactly. The one asymmetry: baseline's prompt
-never received the interviewer's Socratic question-style few-shots
-(interviewer_question_style_few_shots.md), so the socratic_function file is
-expected to be a much harder golden set for baseline -- that gap is itself the
-point of running it, not a reason to skip the file.
+plainly, and never leak hidden guidance or the expected recommendation. The one
+asymmetry: baseline's prompt never received the interviewer's Socratic
+question-style few-shots (interviewer_question_style_few_shots.md), so the
+socratic_function file is expected to be a much harder golden set for baseline --
+that gap is itself the point of running it, not a reason to skip the file.
+
+turn_control (TURN_CONTROL_ITEMS) is not built for baseline at all -- no
+baseline_golden_set_turn_control.csv, no baseline-eval run for it, no row in the
+workbench's agentic-vs-baseline comparison (app.py already guards this with
+`if golden_set != "turn_control"`). Turn-budget control isn't a shared mechanism
+between the two graphs: the interviewer's MAX_INTERVIEWER_TURNS_BEFORE_JUDGE is a
+*per-round* budget that recurs every time the judge sends the interview back for
+another round (up to MAX_JUDGE_ROUNDS times), while baseline's MAX_BASELINE_TURNS
+is a single *total* budget for the whole interview with no rounds at all -- so
+"final turn" means a structurally different thing in each graph, and there's no
+shared fixture (short or long) that tests both fairly. turn_control is an
+agentic-only golden set; see written-dissertation/problems.md (2026-08-01
+entries) for the full diagnosis and the alternatives considered before landing
+here.
 
 `baseline_input` is produced by calling the real, side-effect-free
 `baseline._build_baseline_messages(...)` -- the exact function `baseline_node`
@@ -56,7 +67,6 @@ from build_interviewer_golden_sets import (  # noqa: E402
     EVIDENCE_ITEMS,
     GUARDRAIL_ITEMS,
     SOCRATIC_ITEMS,
-    TURN_CONTROL_ITEMS,
 )
 
 CASE_ID = "04-worldcup-test"
@@ -117,7 +127,7 @@ def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) ->
 def main() -> None:
     case = build_case()
 
-    for items in (SOCRATIC_ITEMS, EVIDENCE_ITEMS, GUARDRAIL_ITEMS, TURN_CONTROL_ITEMS):
+    for items in (SOCRATIC_ITEMS, EVIDENCE_ITEMS, GUARDRAIL_ITEMS):
         for item in items:
             _assert_turn_index_matches(item)
 
@@ -189,28 +199,10 @@ def main() -> None:
     )
     print(f"{len(guardrail_rows)} rows -> baseline_golden_set_guardrail.csv")
 
-    turn_rows = [
-        {
-            "conversation_id": item["id"],
-            "category": item["category"],
-            "turn_index": item["turn_index"],
-            "expected_action": item["expected_action"],
-            "expected_ready_for_judge": item["expected_ready_for_judge"],
-            "must_contain": item["must_contain"],
-            "baseline_input": render_baseline_input(case, item["transcript"], item["turn_index"]),
-            "notes": item["notes"],
-        }
-        for item in TURN_CONTROL_ITEMS
-    ]
-    _write_csv(
-        OUTPUT_DIR / "baseline_golden_set_turn_control.csv",
-        ["conversation_id", "category", "turn_index", "expected_action", "expected_ready_for_judge", "must_contain", "baseline_input", "notes"],
-        turn_rows,
-    )
-    print(f"{len(turn_rows)} rows -> baseline_golden_set_turn_control.csv")
+    # turn_control is deliberately not built for baseline -- see module docstring.
 
-    total = len(socratic_rows) + len(evidence_rows) + len(guardrail_rows) + len(turn_rows)
-    print(f"Total: {total} rows across 4 files, written to {OUTPUT_DIR}")
+    total = len(socratic_rows) + len(evidence_rows) + len(guardrail_rows)
+    print(f"Total: {total} rows across 3 files, written to {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":

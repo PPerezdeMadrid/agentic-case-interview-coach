@@ -61,7 +61,7 @@ help:
 	@printf "%s\n" "                    Agents > Interviewer page"
 	@printf "%s\n" "  make baseline-eval [BASELINE_GOLDEN_SET=evidence_handling] [LIMIT=<n>]"
 	@printf "%s\n" "                    Run a baseline golden-set CSV (database/node_eval/baseline_eval/,"
-	@printf "%s\n" "                    same 4 golden sets as interviewer-eval, plus 'worldcup' -- baseline's"
+	@printf "%s\n" "                    same golden sets as interviewer-eval minus turn_control, plus 'worldcup' -- baseline's"
 	@printf "%s\n" "                    ready_for_evaluation call graded on the judge golden set, built via"
 	@printf "%s\n" "                    node_eval/baseline_eval/build_baseline_judge_golden_set.py) against"
 	@printf "%s\n" "                    the real baseline LLM; read the agentic-vs-baseline comparison on the"
@@ -193,7 +193,9 @@ golden-set-sync-check:
 # --- the recursive $(MAKE) calls automatically). ---
 # Usage: make node-eval-all [LIMIT=<n>]
 INTERVIEWER_GOLDEN_SETS := socratic_function evidence_handling guardrail turn_control
-BASELINE_GOLDEN_SETS := worldcup socratic_function evidence_handling guardrail turn_control
+# turn_control excluded: baseline has no counterpart golden set for it (see
+# build_baseline_golden_sets.py module docstring).
+BASELINE_GOLDEN_SETS := worldcup socratic_function evidence_handling guardrail
 
 node-eval-all: golden-set-sync-check
 	@printf "\n%s\n" "=== judge-eval (worldcup) ==="

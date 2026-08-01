@@ -16,11 +16,12 @@ Usage: make golden-set-sync-check
 from __future__ import annotations
 
 import csv
-import sys
 from pathlib import Path
 
 DATABASE_DIR = Path(__file__).resolve().parents[3] / "database" / "node_eval"
 
+# turn_control has no baseline counterpart at all -- see the module docstring in
+# build_baseline_golden_sets.py -- so it's intentionally not one of these pairs.
 PAIRS = [
     ("judge_eval/judge_golden_set_worldcup.csv", "baseline_eval/baseline_golden_set_worldcup.csv"),
     (
@@ -32,7 +33,6 @@ PAIRS = [
         "baseline_eval/baseline_golden_set_evidence_handling.csv",
     ),
     ("interviewer_eval/interviewer_golden_set_guardrail.csv", "baseline_eval/baseline_golden_set_guardrail.csv"),
-    ("interviewer_eval/interviewer_golden_set_turn_control.csv", "baseline_eval/baseline_golden_set_turn_control.csv"),
 ]
 
 

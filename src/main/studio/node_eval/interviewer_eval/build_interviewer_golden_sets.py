@@ -135,15 +135,42 @@ CANDIDATE_FULL_UNPROMPTED_RECOMMENDATION_WITH_CREATIVE = (
 )
 
 
+# The "final turn" fixtures below must line up with node._build_interviewer_messages'
+# own is_final_turn = turn_index >= round_turn_limit - 1, where round_turn_limit
+# defaults to node.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE (see render_interviewer_input,
+# which doesn't override it). Deriving it here instead of hardcoding 3 means these
+# fixtures stay correct if that .env value ever changes again.
+FINAL_TURN_INDEX = node.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE - 1
+
+GENERIC_FILLER_EXCHANGE = (
+    "Interviewer: Understood - anything else on the cost or revenue side you'd want "
+    "to check before we move on?",
+    "Candidate: Not for now, I think I've got the main structural picture - let's keep going.",
+)
+
+
+def _pad_to_final_turn(transcript: list[str]) -> list[str]:
+    """Insert generic filler exchanges before the final wrap-up line/answer pair so
+    the transcript's Interviewer-line count matches FINAL_TURN_INDEX, whatever it
+    currently is (see _assert_turn_index_matches)."""
+    n_filler = FINAL_TURN_INDEX - sum(1 for line in transcript if line.startswith("Interviewer"))
+    if n_filler <= 0:
+        return transcript
+    filler: list[str] = []
+    for _ in range(n_filler):
+        filler.extend(GENERIC_FILLER_EXCHANGE)
+    return transcript[:-2] + filler + transcript[-2:]
+
+
 def _final_turn_transcript(candidate_last_line: str) -> list[str]:
-    return [
+    return _pad_to_final_turn([
         f"Interviewer: {OPENING}",
         CANDIDATE_STRUCTURE_ASK,
         INTERVIEWER_FACTS_LINE,
         CANDIDATE_SYNTHESIS,
         "Interviewer: Good, that tracks. Anything else you'd flag before we wrap up?",
         candidate_last_line,
-    ]
+    ])
 
 
 # ---------------------------------------------------------------------------
@@ -2129,29 +2156,29 @@ GUARDRAIL_ITEMS: list[dict[str, Any]] = [
 # File 4: ready_for_judge and the forced turn-3 wrap-up rule.
 # ---------------------------------------------------------------------------
 
-TR_STUCK_VAGUE_TRANSCRIPT = [
+TR_STUCK_VAGUE_TRANSCRIPT = _pad_to_final_turn([
     f"Interviewer: {OPENING}",
     "Candidate: I think the cost structure is just off for this new format.",
     "Interviewer: What exactly about the cost structure looks off to you - which cost line, and compared to what?",
     "Candidate: I mean, yeah, it just seems off overall, hard to say exactly.",
     "Interviewer: Anything else you'd want to raise before we wrap up?",
     "Candidate: So yeah, like I said, I think the cost structure is just off for this new format.",
-]
+])
 
-TR_STUCK_BROAD_REPEAT_TRANSCRIPT = [
+TR_STUCK_BROAD_REPEAT_TRANSCRIPT = _pad_to_final_turn([
     f"Interviewer: {OPENING}",
     "Candidate: Where should I even start with this?",
     "Interviewer: Start by recapping the situation in your own words, then propose how you'd structure the analysis.",
     "Candidate: Okay, I'd guess it's something to do with the bigger cost base from the extra countries, but I'm not totally sure how to prove that.",
     "Interviewer: Anything else you'd want to raise before we wrap up?",
     "Candidate: Sorry, I'm still a bit lost - where should I even start with this?",
-]
+])
 
 TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_01",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_CREATIVE_ANSWER_STRONG),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2161,7 +2188,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_02",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_CREATIVE_ANSWER_WEAK),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2171,7 +2198,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_03",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_CREATIVE_ANSWER_ALTERNATIVE),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2181,7 +2208,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_04",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_CREATIVE_ANSWER_TERSE),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2191,7 +2218,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_05",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_NEAR_REPEAT_MATCH_COUNT),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2201,7 +2228,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_06",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(CANDIDATE_NEAR_REPEAT_MATCH_COUNT_V2),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2211,7 +2238,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_07",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": TR_STUCK_VAGUE_TRANSCRIPT,
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2221,7 +2248,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_08",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": TR_STUCK_BROAD_REPEAT_TRANSCRIPT,
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2435,7 +2462,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_25",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: One more thing worth floating: gradually slowing how fast prize money grows each cycle, though it's a smaller lever than the cost-sharing point I raised earlier."
         ),
@@ -2447,7 +2474,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_26",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: Actually, before I wrap up - could I get the exact split of infrastructure cost across the three host countries?"
         ),
@@ -2459,7 +2486,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_27",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: Honestly, I think I've covered the main points already - not sure I have anything more to add here."
         ),
@@ -2471,7 +2498,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_28",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: One idea I'd float: a tiered ticket-pricing structure across the three host countries, though it's probably secondary to the broadcasting and cost-sharing issues."
         ),
@@ -2483,7 +2510,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_29",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: Can we go back to the cost side for a second? I think there's more to unpack in the security spend."
         ),
@@ -2495,7 +2522,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_30",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: I'd also flag that a phased rollout of future expansions could help management get ahead of the cost curve, though it's a longer-term lever."
         ),
@@ -2507,7 +2534,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_31",
         "category": "FINAL_TURN_WRAPUP_NORMAL",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript("Candidate: I don't really have a creative idea here - I'll just stick with what I've already laid out."),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2518,7 +2545,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_32",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: Sorry, could you remind me what the previous edition's EBITDA margin was again?"
         ),
@@ -2530,7 +2557,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_33",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript(
             "Candidate: Wait, sorry, can you go over how many matches this edition has one more time?"
         ),
@@ -2542,7 +2569,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_34",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript("Candidate: Hmm, I'm not sure - can we go back to the beginning for a second?"),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2552,7 +2579,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_35",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript("Candidate: I think... I think the cost structure is just off, like I said."),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2562,7 +2589,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_36",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript("Candidate: Sorry, I'm a bit stuck - what was the split between revenue streams again?"),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2572,7 +2599,7 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_37",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
+        "turn_index": FINAL_TURN_INDEX,
         "transcript": _final_turn_transcript("Candidate: Can we just go over the whole situation one more time from the top?"),
         "expected_action": "question",
         "expected_ready_for_judge": False,
@@ -2582,15 +2609,15 @@ TURN_CONTROL_ITEMS: list[dict[str, Any]] = [
     {
         "id": "TR_38",
         "category": "FINAL_TURN_WRAPUP_WHILE_STUCK",
-        "turn_index": 3,
-        "transcript": [
+        "turn_index": FINAL_TURN_INDEX,
+        "transcript": _pad_to_final_turn([
             f"Interviewer: {OPENING}",
             "Candidate: I think we need to leverage synergies across the cost and revenue sides.",
             "Interviewer: Can you make that concrete - which specific costs or revenues, and what would you actually change?",
             "Candidate: Just generally streamlining and optimizing the overall value chain, I'd say.",
             "Interviewer: Anything else you'd want to raise before we wrap up?",
             "Candidate: Yeah, just to reiterate - leveraging synergies and optimizing the value chain across the board.",
-        ],
+        ]),
         "expected_action": "question",
         "expected_ready_for_judge": False,
         "must_contain": "recommend",
