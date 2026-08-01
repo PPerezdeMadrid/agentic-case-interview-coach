@@ -3,18 +3,18 @@
   "csv_path": "database/node_eval/interviewer_eval/interviewer_golden_set_evidence_handling.csv",
   "model": "meta-llama/llama-3.3-70b-instruct",
   "socratic_judge_model": "qwen/qwen-2.5-72b-instruct",
-  "computed_at": "2026-08-01T11:39:47+00:00",
+  "computed_at": "2026-08-01T14:53:58+00:00",
   "n_total": 65,
   "n_scored": 65,
   "n_errors": 0,
-  "n_correct": 61,
-  "accuracy": 0.9385,
+  "n_correct": 60,
+  "accuracy": 0.9231,
   "records": [
     {
       "conversation_id": "EVI_04",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the tournament is expanding from 32 to 48 national teams, which means the number of matches is increasing from 64 to 104. How do you think this increase in match count will affect the revenue and cost streams of the tournament?",
+        "content": "The upcoming edition has 104 matches, compared to 64 matches in the previous edition. How do you think this increase in match count might impact revenue and costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -27,7 +27,7 @@
       "conversation_id": "EVI_05",
       "predicted": {
         "action": "question",
-        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. How do you think this impacts the revenue per match?",
+        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. How do you think this impacts the revenue per match with the increased number of matches?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -40,7 +40,7 @@
       "conversation_id": "EVI_06",
       "predicted": {
         "action": "question",
-        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage. With this in mind, how do you think this increase in costs might be affecting the overall profitability of the tournament?",
+        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage. How do you think this change affects the overall cost base of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -53,7 +53,7 @@
       "conversation_id": "EVI_07",
       "predicted": {
         "action": "question",
-        "content": "The previous edition had a total revenue of EUR 3.0B and total costs of EUR 1.86B, which implies an EBITDA margin of 38%. Given this starting point, how do you think the expansion to 48 teams and three co-host countries might affect the revenue and cost streams?",
+        "content": "The previous edition had a total revenue of EUR 3.0B and total costs of EUR 1.86B, which implied an EBITDA margin of 38%. With 64 matches, the revenue per match was roughly EUR 46.9M and the cost per match was roughly EUR 29.1M. How do you think these numbers inform the issue of profitability in the upcoming edition?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -66,7 +66,7 @@
       "conversation_id": "EVI_08",
       "predicted": {
         "action": "question",
-        "content": "For the previous edition, the total revenue was EUR 3.0B and the total costs were EUR 1.86B, with 64 matches. This works out to revenue per match of roughly EUR 46.9M and cost per match of roughly EUR 29.1M. For the upcoming edition, the total revenue is projected at EUR 4.35B, with an EBITDA margin of 24% and 104 matches. This implies a total cost of EUR 3.31B, with revenue per match of roughly EUR 41.8M and cost per match of roughly EUR 31.8M. How do you think this information helps explain the deterioration in profitability despite the growth in revenue?",
+        "content": "For the previous edition, total revenue was EUR 3.0B and total costs were EUR 1.86B, with 64 matches. This translates to revenue per match of roughly EUR 46.9M and cost per match of roughly EUR 29.1M. For the upcoming edition, total revenue is projected at EUR 4.35B, with an EBITDA margin of 24% and 104 matches. This implies revenue per match of roughly EUR 41.8M and cost per match of roughly EUR 31.8M. How do you think these changes in per-match economics will impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -79,7 +79,7 @@
       "conversation_id": "EVI_09",
       "predicted": {
         "action": "question",
-        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, with an EBITDA margin of roughly 24%. How do you think the expansion from 32 to 48 teams, and the increase in match count from 64 to 104, might impact the revenue and cost streams?",
+        "content": "The total revenue for the upcoming edition is projected at EUR 4.35B, which represents a 45% growth from the previous edition. The EBITDA margin is projected to be around 24%. With this information, how do you plan to approach the analysis of the deteriorating profitability despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -92,7 +92,7 @@
       "conversation_id": "EVI_10",
       "predicted": {
         "action": "question",
-        "content": "We don't have an exact figure for that. Make a reasonable assumption for the prize money pool and tell me how it would factor into the cost side of your analysis.",
+        "content": "We don't have an exact figure for that. Assume a reasonable value and tell me how it would factor into the cost side of your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -105,20 +105,22 @@
       "conversation_id": "EVI_11",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact split of the 45% revenue growth between sponsorship, licensing, and ticketing. Make a reasonable assumption for it and tell me how you'd use it in your analysis to explain the deteriorating profitability despite the growth.",
+        "content": "The 45% revenue growth is primarily driven by sponsorship and licensing, which are tied to global brand reach rather than match count. While we don't have an exact split between sponsorship, licensing, and ticketing, we do know that broadcasting revenue has a fallen material per-match value due to the increased number of matches. How would you like to proceed with your analysis given this information?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
       "error": null
     },
     {
       "conversation_id": "EVI_12",
       "predicted": {
         "action": "question",
-        "content": "We don't have that exact figure to share. Make a reasonable assumption for the incremental ad revenue from a fully monetized hydration-break sponsorship and tell me how you'd use it in your analysis.",
+        "content": "We don't have that exact figure to share. Make a reasonable assumption for the incremental ad revenue from a hydration-break sponsorship and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -131,7 +133,7 @@
       "conversation_id": "EVI_13",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'one thing' to focus on, and what's your objective in analyzing this case?",
+        "content": "What specific aspect of the case do you think is most critical to understanding the decline in EBITDA margin, given the expansion from 32 to 48 teams and the growth in revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -144,7 +146,7 @@
       "conversation_id": "EVI_14",
       "predicted": {
         "action": "question",
-        "content": "What specifically makes you think this is a structural problem, rather than something else?",
+        "content": "What makes you think it's a structural problem?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -157,7 +159,7 @@
       "conversation_id": "EVI_15",
       "predicted": {
         "action": "question",
-        "content": "What do you think the Committee is most concerned about regarding the expansion, and how would you frame your analysis to address their concerns?",
+        "content": "What would you like to focus on first: understanding the impact of the expansion on revenue and costs, or identifying the key drivers of the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -183,7 +185,7 @@
       "conversation_id": "EVI_17",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, there are 104 matches this edition. Given the increase in match count and revenue growth, how do you think the expansion will impact the tournament's profitability?",
+        "content": "As I mentioned, there are 104 matches this edition. Given that increase from 64 matches, how do you think the expansion will impact the revenue and cost streams?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -196,7 +198,7 @@
       "conversation_id": "EVI_18",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, broadcasting is sold as one fixed package for the whole tournament, not priced per match. How do you think this packaging approach affects the revenue per match, given the increase in match count from 64 to 104?",
+        "content": "As I mentioned, broadcasting is sold as one fixed package for the whole tournament, not priced per match. How do you think the expansion to 48 teams and the increase in match count might affect the revenue generated from broadcasting?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -209,7 +211,7 @@
       "conversation_id": "EVI_19",
       "predicted": {
         "action": "question",
-        "content": "The previous edition had 64 matches. Given that the upcoming edition has 104 matches, how do you think the increase in match count will impact the revenue and cost streams?",
+        "content": "As I mentioned earlier, the previous edition had 64 matches. Given that, how do you think the expansion to 104 matches might impact revenue and costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -222,20 +224,22 @@
       "conversation_id": "EVI_20",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the last edition was hosted in a single country, whereas the upcoming edition will be hosted across three co-host countries. Given this expansion, how do you think the increase in matches from 64 to 104 might impact the revenue and cost structure of the tournament?",
+        "content": "As I mentioned, the upcoming edition has three co-host countries, whereas the previous edition had a different format. What would you like to analyze first to understand the impact of this expansion on profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['single']"
+      ],
       "error": null
     },
     {
       "conversation_id": "EVI_21",
       "predicted": {
         "action": "question",
-        "content": "The increase in venue and security costs is largely due to the fact that we now have three host countries, which means three full sets of venue, transport, and security infrastructure instead of one. Additionally, team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage. How do you think this change in cost structure will impact the overall profitability of the tournament?",
+        "content": "The main driver of the increased venue and security costs is the expansion to three co-host countries, which means we need to replicate the full set of venue, transport, and security infrastructure three times instead of once. This has roughly triplicated these costs, rather than scaling them by 62.5% in line with the match count increase. How do you think this change in cost structure might impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -248,7 +252,7 @@
       "conversation_id": "EVI_22",
       "predicted": {
         "action": "question",
-        "content": "The prize money pool has increased in line with the number of qualifying teams. Given that context, how do you think the expansion from 32 to 48 teams might affect the cost base, and what would you like to explore next to understand the profitability issue?",
+        "content": "The prize money pool has increased in line with the number of qualifying teams. Given this, how do you think the expansion to 48 teams and three host countries affects the overall cost base, and what specific costs do you think are driving the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -261,7 +265,7 @@
       "conversation_id": "EVI_23",
       "predicted": {
         "action": "question",
-        "content": "What happens to the value of the broadcasting deal when it's spread across more matches?",
+        "content": "What's the basis for assuming broadcasting revenue would scale up proportionally with more matches?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -276,7 +280,7 @@
       "conversation_id": "EVI_24",
       "predicted": {
         "action": "question",
-        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage. With three host countries, this inter-country movement is a new cost that did not exist in the single-host format. How do you think this change in cost structure might impact the overall profitability of the tournament?",
+        "content": "What specifically about the expansion do you think might be driving up team travel and accommodation costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -289,7 +293,7 @@
       "conversation_id": "EVI_25",
       "predicted": {
         "action": "question",
-        "content": "The three host countries will each have their own full set of venue, transport, and security infrastructure instead of sharing. How do you think this will impact the overall cost of the tournament?",
+        "content": "Each host country will have its own full set of venues and security infrastructure, rather than sharing them. How do you think this will impact the overall cost base of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -302,7 +306,7 @@
       "conversation_id": "EVI_26",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned earlier, the previous edition had 32 teams and 64 matches. Given this information, how do you think the expansion to 48 teams and 104 matches might impact revenue and costs?",
+        "content": "As I mentioned, the previous edition had 32 teams and 64 matches. How do you think the increase in match count and team count will impact the revenue and cost streams of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -315,7 +319,7 @@
       "conversation_id": "EVI_27",
       "predicted": {
         "action": "question",
-        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. How do you think this pricing structure might impact the revenue per match?",
+        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. How do you think this affects the revenue streams for the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -328,22 +332,20 @@
       "conversation_id": "EVI_28",
       "predicted": {
         "action": "question",
-        "content": "What specific areas of the cost base do you think might be driving the deterioration in profitability, given the expansion to 48 teams and three host countries?",
+        "content": "The expansion to three host countries means that venues, transport, and security infrastructure costs are roughly tripled, while team travel and accommodation costs have risen due to inter-country movement during the group stage. Prize money has also increased in line with the number of qualifying teams. How do you think these changes in the cost base might be affecting the profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "must_contain: missing at least one of ['security', 'travel']"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_29",
       "predicted": {
         "action": "question",
-        "content": "The previous edition's total cost was EUR 1.86B. How do you plan to use this information to analyze the impact of the expansion on profitability?",
+        "content": "The previous edition's total cost was EUR 1.86B. How do you think the cost base will change with the expansion to 48 teams and three co-host countries?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -356,7 +358,7 @@
       "conversation_id": "EVI_30",
       "predicted": {
         "action": "question",
-        "content": "The cost per match in the previous edition was roughly EUR 29.1M. How do you think the expansion to 48 teams and three co-host countries might affect the cost per match in the upcoming edition?",
+        "content": "The cost per match in the previous edition was roughly EUR 29.1M. How do you think the cost per match might change with the expansion to 48 teams and three co-host countries?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -369,20 +371,22 @@
       "conversation_id": "EVI_31",
       "predicted": {
         "action": "question",
-        "content": "The projected total cost for this upcoming edition can be calculated based on the projected revenue and EBITDA margin. With a projected revenue of EUR 4.35B and an EBITDA margin of 24%, the implied total cost would be roughly EUR 3.31B. What would you like to focus on next to understand the deterioration in profitability despite the growth?",
+        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, with an EBITDA margin of 24%. How would you use this information to estimate the total cost for this edition?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": true,
-      "failed_checks": [],
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['3.31']"
+      ],
       "error": null
     },
     {
       "conversation_id": "EVI_32",
       "predicted": {
         "action": "question",
-        "content": "The total revenue for the upcoming edition is projected at EUR 4.35B, with 104 matches. Based on this, the revenue per match would be roughly EUR 41.8M. How do you think this compares to the previous edition, and what implications might it have for the tournament's profitability?",
+        "content": "The projected revenue per match for the upcoming edition is roughly EUR 41.8M, which is down about 11% from the previous edition. How do you think this change in revenue per match might impact the tournament's profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -395,7 +399,7 @@
       "conversation_id": "EVI_33",
       "predicted": {
         "action": "question",
-        "content": "The cost per match for the upcoming edition is roughly EUR 31.8M, which is up about 9% from the previous edition. How do you think this increase in cost per match might be affecting the tournament's profitability?",
+        "content": "The total revenue for the upcoming edition is projected at EUR 4.35B, with a total of 104 matches. The implied total cost is EUR 3.31B. Based on this, the cost per match can be calculated as roughly EUR 31.8M. How do you think this cost per match compares to the previous edition, and what implications might it have for the tournament's profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -408,22 +412,7 @@
       "conversation_id": "EVI_34",
       "predicted": {
         "action": "question",
-        "content": "To determine the percentage decrease in revenue per match, let's first calculate the revenue per match for both editions. The previous edition had a total revenue of EUR 3.0B and 64 matches, while the upcoming edition has a total revenue of EUR 4.35B and 104 matches. What are your calculations for the revenue per match in both editions, and how do you think this decrease in revenue per match might impact the overall profitability of the tournament?",
-        "block_id": "",
-        "ready_for_judge": false,
-        "socratic_function": ""
-      },
-      "correct": false,
-      "failed_checks": [
-        "must_contain: missing at least one of ['11%']"
-      ],
-      "error": null
-    },
-    {
-      "conversation_id": "EVI_35",
-      "predicted": {
-        "action": "question",
-        "content": "The cost per match has risen from roughly EUR 29.1M to EUR 31.8M, which represents a rise of about 9%. How does that impact your analysis of the tournament's profitability?",
+        "content": "As we can calculate from the provided data, revenue per match has fallen from roughly EUR 46.9M to EUR 41.8M, which is a decrease of approximately 11%. How do you think this decrease in revenue per match might impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -433,10 +422,25 @@
       "error": null
     },
     {
+      "conversation_id": "EVI_35",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is driving the change in cost per match, and how would you calculate that percentage rise?",
+        "block_id": "",
+        "ready_for_judge": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['9%']"
+      ],
+      "error": null
+    },
+    {
       "conversation_id": "EVI_36",
       "predicted": {
         "action": "question",
-        "content": "The cost per match for the previous edition was roughly EUR 29.1M, and for the upcoming edition, it's roughly EUR 31.8M. With this information, how do you think the expansion from 32 to 48 teams and the increase in match count from 64 to 104 will impact the overall profitability of the tournament?",
+        "content": "The cost per match for the previous edition was roughly EUR 29.1M, while the cost per match for the upcoming edition is roughly EUR 31.8M. What insights do you gather from this information, and how do you think it relates to the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -449,7 +453,7 @@
       "conversation_id": "EVI_37",
       "predicted": {
         "action": "question",
-        "content": "As the total revenue is projected to grow 45% and the match count is increasing by 62.5%, the revenue per match is likely to decrease. Based on the data, the revenue per match for the previous edition was roughly EUR 46.9M, and for the upcoming edition, it's roughly EUR 41.8M. How do you think this change in revenue per match might impact the profitability of the tournament?",
+        "content": "As we've expanded from 64 to 104 matches, broadcasting rights are sold predominantly as a fixed package per tournament, not per match. With total revenue up 45% and match count up 62.5%, the per-match revenue has likely fallen. Based on the data, revenue per match was roughly EUR 46.9M in the previous edition, and it's implied to be around EUR 41.8M in the upcoming edition. How do you think this change in revenue per match might impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -475,7 +479,7 @@
       "conversation_id": "EVI_39",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact average ticket price for this edition versus last time. Make a reasonable assumption for it and tell me how you'd use it in your analysis to understand the impact of the expansion on profitability.",
+        "content": "We don't have the exact average ticket price figure to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -488,22 +492,20 @@
       "conversation_id": "EVI_40",
       "predicted": {
         "action": "question",
-        "content": "The upcoming edition is being played across three co-host countries, with a total of 104 matches. While the exact number of stadiums is not specified, the expansion to three host countries means that the venue, transport, and security infrastructure costs will be roughly triplicated instead of scaled by 62.5%. How do you think this increased cost base will impact the profitability of the tournament?",
+        "content": "We don't have the exact figure for the number of stadiums being used. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "must_contain: missing at least one of ['assum']"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_41",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact split of the increased infrastructure cost across the three host countries. Make a reasonable assumption about how the costs might be allocated and tell me how you'd use that assumption in your analysis.",
+        "content": "We don't have the exact split of the increased infrastructure cost across the three host countries individually. Make a reasonable assumption for it and tell me how you'd use it in your analysis to explain the deteriorating profitability despite revenue growth.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -516,7 +518,7 @@
       "conversation_id": "EVI_42",
       "predicted": {
         "action": "question",
-        "content": "We don't have a specific discount rate to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis to evaluate the expansion's cash flows.",
+        "content": "We don't have a specific discount rate to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -529,7 +531,7 @@
       "conversation_id": "EVI_43",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact expiry date of the current broadcasting contract to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
+        "content": "We don't have the exact expiry date of the current broadcasting contract to share. Make a reasonable assumption for it if necessary, and tell me how you'd approach analyzing the impact of the expansion on profitability.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -542,7 +544,7 @@
       "conversation_id": "EVI_44",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact figure for security personnel per venue. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
+        "content": "We don't have the exact figure for security personnel per venue to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis of the tournament's cost structure.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -555,7 +557,7 @@
       "conversation_id": "EVI_45",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact figure for projected ticket attendance. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
+        "content": "We don't have the exact figure for ticket attendance. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -568,7 +570,7 @@
       "conversation_id": "EVI_46",
       "predicted": {
         "action": "question",
-        "content": "We don't have a specific exchange rate to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis. What's your next step in understanding the impact of the expansion on profitability?",
+        "content": "We don't have a specific exchange rate to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis. What's your first step in diagnosing the decline in EBITDA margin despite revenue growth?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -581,7 +583,7 @@
       "conversation_id": "EVI_47",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact figure for hospitality revenue this edition. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
+        "content": "We don't have the exact figure for hospitality revenue. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -594,7 +596,7 @@
       "conversation_id": "EVI_48",
       "predicted": {
         "action": "question",
-        "content": "We don't have the exact figure for the Committee's current cash reserve. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
+        "content": "We don't have the exact figure for the cash reserve. Make a reasonable assumption for it and tell me how you'd use it in your analysis.",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -607,7 +609,7 @@
       "conversation_id": "EVI_49",
       "predicted": {
         "action": "question",
-        "content": "Can you walk me through your initial thoughts on the case? What are the key factors you think are driving the decline in EBITDA margin despite the revenue growth?",
+        "content": "What's your initial thought on how to break down the problem of declining profitability despite revenue growth, and what are the key factors you'd consider in your analysis?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -620,7 +622,7 @@
       "conversation_id": "EVI_50",
       "predicted": {
         "action": "question",
-        "content": "That's a fair starting point. Before diving into the numbers, can you clarify what you're trying to achieve with your analysis? Are you looking to identify the root cause of the margin decline, or are you trying to recommend a way to recover the margin?",
+        "content": "That's a good starting point. What do you think might be driving the deterioration in profitability despite the growth in revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -633,7 +635,7 @@
       "conversation_id": "EVI_51",
       "predicted": {
         "action": "question",
-        "content": "What would you like to focus on first: understanding the drivers of the 45% revenue growth, or exploring the factors contributing to the decline in EBITDA margin?",
+        "content": "Let's break it down. What are your initial thoughts on how the expansion from 32 to 48 teams, and the addition of two more host countries, might affect the tournament's revenue and costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -646,7 +648,7 @@
       "conversation_id": "EVI_52",
       "predicted": {
         "action": "question",
-        "content": "What specifically do you think is the key aspect of the broadcasting deal that's relevant to the tournament's revenue and profitability?",
+        "content": "Can you walk me through what you mean by 'your read' on the broadcasting deal? What specific aspects of it are you looking at?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -659,7 +661,7 @@
       "conversation_id": "EVI_53",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by 'structural' in this context? Are you thinking about the impact of the expansion on revenue and costs, or something else?",
+        "content": "What specifically makes you think this might be a structural issue, and how would you propose to analyze it?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -672,7 +674,7 @@
       "conversation_id": "EVI_54",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the expansion do you think are most relevant to understanding the decline in EBITDA margin, and how do you plan to structure your analysis?",
+        "content": "What would be your first step in analyzing the impact of the expansion on the tournament's profitability?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -685,7 +687,7 @@
       "conversation_id": "EVI_55",
       "predicted": {
         "action": "question",
-        "content": "What do you mean by the 'bigger piece of the story' - are you looking at the relative change in revenue versus costs, or something else?",
+        "content": "What leads you to wonder whether it's the cost side or the revenue side that's driving the decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -698,7 +700,7 @@
       "conversation_id": "EVI_56",
       "predicted": {
         "action": "question",
-        "content": "Let's take a step back. Can you recap the situation and clarify what you're trying to achieve? What are your thoughts on how to approach this problem, and what structure would you propose to analyze the impact of the expansion on profitability?",
+        "content": "What specific aspects of the case are you concerned you might be spending too much time on, and how do you think you should prioritize your analysis?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -711,7 +713,7 @@
       "conversation_id": "EVI_57",
       "predicted": {
         "action": "question",
-        "content": "What would be your first step in analyzing why profitability is deteriorating despite the growth in revenue, and how would you propose to structure your analysis?",
+        "content": "To clarify, the Secretary General is looking for a diagnosis of why profitability is deteriorating despite revenue growth, and a recommendation on whether and how the expansion can be made to pay for itself. Can you propose a structure for your analysis, and what key factors do you think you'll need to consider?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -724,7 +726,7 @@
       "conversation_id": "EVI_58",
       "predicted": {
         "action": "question",
-        "content": "What specific aspects of the case are you considering, and how do you plan to approach the analysis of the Interconta World Football Cup's profitability?",
+        "content": "Can you walk me through your thought process so far? What specific aspects of the case are you considering, and how do you think they relate to the profitability issue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -737,7 +739,7 @@
       "conversation_id": "EVI_59",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, 48 teams are competing this edition, up from 32 previously. Given this expansion, what are your initial thoughts on how the increased number of teams and matches might impact the tournament's revenue and costs?",
+        "content": "As I mentioned, 48 teams are competing this edition. What are your thoughts on how the increased number of teams might impact the tournament's revenue and costs?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -750,7 +752,7 @@
       "conversation_id": "EVI_60",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, travel costs went up because delegations must move between host countries during the group stage. What's your next step in analyzing the impact of the expansion on profitability?",
+        "content": "As I mentioned, travel costs went up because delegations must move between host countries during the group stage. How do you think this increase in travel costs contributes to the overall decline in EBITDA margin?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -763,7 +765,7 @@
       "conversation_id": "EVI_61",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the prize money increase scales directly with the larger number of qualifying teams. Given that, how do you think the increase in prize money will impact the overall profitability of the tournament?",
+        "content": "As I mentioned, the prize money increase scales directly with the larger number of qualifying teams. Given that, how do you think the increased prize money will impact the overall profitability of the tournament?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -776,7 +778,7 @@
       "conversation_id": "EVI_62",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the previous edition's total revenue and cost were EUR 3.0B and EUR 1.86B, respectively. Given that the upcoming edition is expanding from 32 to 48 national teams, how do you think the increased match count will impact the revenue and cost per match?",
+        "content": "As I mentioned, the previous edition's total revenue and cost were EUR 3.0B and EUR 1.86B, respectively. Given that the tournament is expanding from 32 to 48 teams, how do you think the increased match count will impact the revenue and cost structure?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -789,7 +791,7 @@
       "conversation_id": "EVI_63",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned earlier, the projected revenue is EUR 4.35B at a 24% EBITDA margin. Given this information, what are your initial thoughts on why the profitability is deteriorating despite the revenue growth?",
+        "content": "As I mentioned earlier, the projected revenue is EUR 4.35B at roughly a 24% EBITDA margin. Given this information, what do you think is driving the decline in EBITDA margin despite the growth in revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -802,7 +804,7 @@
       "conversation_id": "EVI_64",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the venue and security costs are higher because three host countries need three full sets of infrastructure instead of one. How do you think the increased number of matches and teams will impact the revenue streams, such as broadcasting and sponsorship?",
+        "content": "As I mentioned, the venue and security costs are higher because three host countries need three full sets of venue, transport, and security infrastructure instead of one. What specific cost components do you think are driving the increase in costs, and how do you plan to address them?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -828,7 +830,7 @@
       "conversation_id": "EVI_66",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, 64 matches were played in the previous edition. Given the increase in match count and revenue growth, how do you think the expansion will impact the cost base, and what areas would you focus on to improve profitability?",
+        "content": "As I mentioned, 64 matches were played in the previous edition. Given that the number of matches has increased to 104, how do you think the revenue per match might be affected?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -841,7 +843,7 @@
       "conversation_id": "EVI_67",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, the previous cost-per-match figure was roughly EUR 29.1M. Given that the match count has increased by 62.5%, how do you think the cost per match might be affected in the upcoming edition?",
+        "content": "As I mentioned, the previous cost-per-match figure was roughly EUR 29.1M per match. Given that the total revenue is projected to grow 45% versus the last edition, but the EBITDA margin is falling, what are your thoughts on how the expansion from 32 to 48 teams might be affecting the cost base?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""
@@ -854,7 +856,7 @@
       "conversation_id": "EVI_68",
       "predicted": {
         "action": "question",
-        "content": "As I mentioned, revenue per match falls by roughly 11%, from about EUR 46.9M to EUR 41.8M per match. Given this decrease, how do you think the expansion from 32 to 48 teams affects the overall profitability of the tournament?",
+        "content": "As I mentioned, revenue per match falls by roughly 11%, from about EUR 46.9M to EUR 41.8M per match. Given this decrease, what do you think is driving the decline in EBITDA margin despite the growth in total revenue?",
         "block_id": "",
         "ready_for_judge": false,
         "socratic_function": ""

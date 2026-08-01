@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test test-api-connection run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test test-api-connection run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval node-eval-all golden-set-sync-check
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -63,9 +63,18 @@ help:
 	@printf "%s\n" "                    Run a baseline golden-set CSV (database/node_eval/baseline_eval/,"
 	@printf "%s\n" "                    same 4 golden sets as interviewer-eval, plus 'worldcup' -- baseline's"
 	@printf "%s\n" "                    ready_for_evaluation call graded on the judge golden set, built via"
-	@printf "%s\n" "                    node_eval/baseline_eval/build_baseline_worldcup_golden_set.py) against"
+	@printf "%s\n" "                    node_eval/baseline_eval/build_baseline_judge_golden_set.py) against"
 	@printf "%s\n" "                    the real baseline LLM; read the agentic-vs-baseline comparison on the"
 	@printf "%s\n" "                    workbench's Agents > Judge / Agents > Interviewer pages"
+	@printf "%s\n" "  make golden-set-sync-check"
+	@printf "%s\n" "                    Verify every baseline golden-set CSV still covers the same"
+	@printf "%s\n" "                    conversation_ids as the judge/interviewer CSV it mirrors -- no LLM"
+	@printf "%s\n" "                    calls, run this after editing any judge/interviewer golden-set builder"
+	@printf "%s\n" "  make node-eval-all [LIMIT=<n>]"
+	@printf "%s\n" "                    Full node-level sweep: golden-set-sync-check, then judge-eval"
+	@printf "%s\n" "                    (worldcup), interviewer-eval x4, baseline-eval x5 (worldcup + the"
+	@printf "%s\n" "                    same 4) -- sequential, so results stay attributable to one run"
+	@printf "%s\n" "                    each and OpenRouter rate limits aren't hit in parallel"
 	@printf "%s\n" ""
 	@printf "%s\n" "make setup-hpc persists RUNNER=hpc for later commands in $(RUNNER_STATE_FILE)"
 
@@ -172,3 +181,29 @@ baseline-eval:
 	$(PY) main/studio/node_eval/baseline_eval/run_baseline_golden_set.py \
 		--csv database/node_eval/baseline_eval/baseline_golden_set_$(BASELINE_GOLDEN_SET).csv \
 		$(if $(LIMIT),--limit $(LIMIT),)
+
+# --- Verify baseline golden-set CSVs still cover the same conversation_ids as the ---
+# --- judge/interviewer CSVs they mirror. No LLM calls; run after editing any builder. ---
+golden-set-sync-check:
+	$(PY) main/studio/node_eval/check_golden_set_sync.py
+
+# --- Full node-level golden-set sweep: sync check, then every judge/interviewer/ ---
+# --- baseline golden set, sequentially (shares GOLDEN_SET/LIMIT vars with the ---
+# --- single-target rules above; LIMIT set on the command line is inherited by ---
+# --- the recursive $(MAKE) calls automatically). ---
+# Usage: make node-eval-all [LIMIT=<n>]
+INTERVIEWER_GOLDEN_SETS := socratic_function evidence_handling guardrail turn_control
+BASELINE_GOLDEN_SETS := worldcup socratic_function evidence_handling guardrail turn_control
+
+node-eval-all: golden-set-sync-check
+	@printf "\n%s\n" "=== judge-eval (worldcup) ==="
+	$(MAKE) judge-eval GOLDEN_SET=worldcup
+	@for gs in $(INTERVIEWER_GOLDEN_SETS); do \
+		printf "\n%s\n" "=== interviewer-eval ($$gs) ==="; \
+		$(MAKE) interviewer-eval INTERVIEWER_GOLDEN_SET=$$gs || exit 1; \
+	done
+	@for gs in $(BASELINE_GOLDEN_SETS); do \
+		printf "\n%s\n" "=== baseline-eval ($$gs) ==="; \
+		$(MAKE) baseline-eval BASELINE_GOLDEN_SET=$$gs || exit 1; \
+	done
+	@printf "\n%s\n" "=== node-eval-all done ==="

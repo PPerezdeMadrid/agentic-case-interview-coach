@@ -80,6 +80,20 @@ judge_llm_server = ChatOpenAI(
     temperature=os.getenv("JUDGE_TEMPERATURE", 0.0),
 )
 
+# OpenRouter Baseline model (single fused interviewer+judge+evaluator+feedback role).
+# Pinned to its own env var rather than aliasing judge_llm_server: it used to just
+# read `baseline_llm = judge_llm_server`, which meant baseline silently followed
+# whatever model the agentic judge role happened to be running (drifted from
+# Llama-3.1-70B to Llama-3.3-70B to Qwen-2.5-72B across judge-role changes,
+# without anyone deciding that for baseline specifically). Fixed 2026-08-01 by
+# decoupling: baseline stays on Llama-3.3-70B regardless of future judge changes.
+baseline_llm_server = ChatOpenAI(
+    model=os.getenv("OPENROUTER_MODEL_BASELINE", "meta-llama/llama-3.3-70b-instruct"),
+    base_url=_openrouter_base_url,
+    api_key=_openrouter_api_key,
+    temperature=os.getenv("BASELINE_TEMPERATURE", 0.0),
+)
+
 # OpenRouter Feedback model (was microsoft/phi-4 until 2026-07-31: its 16,384-token
 # context window couldn't fit conversations that reach 16K tokens on their own,
 # causing structured feedback calls to hit the length cutoff before producing

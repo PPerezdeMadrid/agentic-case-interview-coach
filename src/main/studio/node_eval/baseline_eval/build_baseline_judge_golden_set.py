@@ -1,9 +1,15 @@
-"""Build a baseline "enough evidence" golden-set CSV reusing the exact same 70
+"""Build a baseline "enough evidence" golden-set CSV reusing the exact same
 World Cup transcripts/categories/expected labels as
 judge_eval/build_judge_golden_set_worldcup.py -- imported directly (not
 copied), so the agentic judge and baseline's analogous readiness decision are
 graded on literally the same fixtures. Mirrors how build_baseline_golden_sets.py
 reuses the interviewer's fixtures for the other 4 golden-set files.
+
+Because ITEMS is imported rather than copied, this script's output always
+matches the judge builder's current item count -- but only once *re-run*. If
+judge_eval/build_judge_golden_set_worldcup.py's ITEMS grows and this script
+isn't re-run afterwards, the two CSVs silently drift apart (see
+check_golden_set_sync.py, which catches exactly that).
 
 Baseline has no separate judge node: `enough_evidence` in its graph state is
 set directly from `ready_for_evaluation`, the boolean the single fused

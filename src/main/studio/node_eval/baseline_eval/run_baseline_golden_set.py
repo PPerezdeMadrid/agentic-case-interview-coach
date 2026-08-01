@@ -1,6 +1,6 @@
 """Run a baseline golden-set CSV (see build_baseline_golden_sets.py) against the
-real baseline LLM (`baseline.interviewer_llm` -- Llama-3.1-70B via OpenRouter, the
-single model baseline uses for every role) and grade each row generically, the
+real baseline LLM (`baseline.baseline_llm` -- the single model baseline uses for
+every role) and grade each row generically, the
 same way run_interviewer_golden_set.py grades the interviewer -- this script is a
 near-identical sibling of that one, adapted for baseline's schema differences:
 
@@ -60,7 +60,7 @@ if str(INTERVIEWER_EVAL_DIR) not in sys.path:
 from langchain_core.messages import SystemMessage  # noqa: E402
 
 import baseline  # noqa: E402
-from run_interviewer_golden_set import _CASE_DATA, _classify_socratic_function  # noqa: E402
+from run_interviewer_golden_set import SOCRATIC_JUDGE_LLM, _CASE_DATA, _classify_socratic_function  # noqa: E402
 from state import BaselineTurnOutput  # noqa: E402
 from utils import invoke_json_llm, resolve_reveal_content  # noqa: E402
 
@@ -98,7 +98,7 @@ def _baseline_one(baseline_input: str, *, classify_function: bool) -> tuple[dict
     (predicted_dict_or_None, error_dict_or_None)."""
     try:
         payload, _usage_log = invoke_json_llm(
-            baseline.interviewer_llm,
+            baseline.baseline_llm,
             [SystemMessage(content=baseline_input)],
             node="baseline_golden_set_eval",
             schema=BaselineTurnOutput,
@@ -208,8 +208,8 @@ def run(csv_path: Path, *, limit: int | None = None) -> dict[str, Any]:
     output = {
         "golden_set": golden_set,
         "csv_path": str(csv_path),
-        "model": getattr(baseline.interviewer_llm, "model_name", ""),
-        "socratic_judge_model": getattr(baseline.judge_llm, "model_name", ""),
+        "model": getattr(baseline.baseline_llm, "model_name", ""),
+        "socratic_judge_model": getattr(SOCRATIC_JUDGE_LLM, "model_name", ""),
         "computed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "n_total": len(rows),
         "n_scored": n_scored,

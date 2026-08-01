@@ -402,14 +402,40 @@ def _merge_adjacent_messages(messages: list) -> list:
     return coalesced
 
 
-def _is_rate_limited(exc: Exception) -> bool:
-    """Detect OpenRouter/upstream-provider 429s so callers can back off
-    instead of burning the structured->unconstrained fallback on a transient
-    shared-pool rate limit (e.g. qwen-2.5-72b-instruct on DeepInfra)."""
+def _is_transient_provider_error(exc: Exception) -> bool:
+    """Detect OpenRouter/upstream-provider errors worth a backed-off retry:
+    real 429s (shared-pool rate limits, e.g. qwen-2.5-72b-instruct on
+    DeepInfra), plus 400s that OpenRouter's own routing produced rather than
+    our request being malformed -- e.g. "Provider returned error" naming a
+    `provider_name` because the provider it picked (e.g. Novita) doesn't
+    support this model/endpoint combination. Retrying those usually lands on
+    a different provider instead of repeating the identical failure. A
+    genuinely malformed request from our own code fails with a provider-less
+    error and should NOT be retried here.
+    """
     if getattr(exc, "status_code", None) == 429:
         return True
     text = str(exc)
-    return "Error code: 429" in text or "'code': 429" in text
+    if "Error code: 429" in text or "'code': 429" in text:
+        return True
+    return "'provider_name'" in text and ("'code': 400" in text or "Error code: 400" in text)
+
+
+def _summarize_provider_error(exc: Exception) -> str:
+    """Collapse OpenRouter's deeply nested error payload (provider name, HTTP
+    code, nested `previous_errors`, doc links...) down to one readable line
+    for logging, instead of dumping the whole raw dict per retry attempt."""
+    text = str(exc)
+    provider_match = re.search(r"'provider_name':\s*'([^']+)'", text)
+    code_match = re.search(r"'code':\s*(\d+)", text)
+    message_match = re.search(r"'message':\s*'([^']*)'", text)
+    tags = [tag for tag in (
+        f"code={code_match.group(1)}" if code_match else None,
+        f"provider={provider_match.group(1)}" if provider_match else None,
+    ) if tag]
+    prefix = f"[{', '.join(tags)}] " if tags else ""
+    message = message_match.group(1) if message_match else text[:200]
+    return f"{prefix}{message}"
 
 
 def invoke_json_llm(
@@ -454,19 +480,25 @@ def invoke_json_llm(
 
     structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
 
-    def _invoke_with_backoff(call_llm, invoke_messages: list, max_attempts: int = 3, base_delay: float = 5.0):
-        # Shared provider pools (e.g. qwen-2.5-72b-instruct on DeepInfra) return
-        # 429 "engine_overloaded" under load; a short backoff usually lets the
-        # next attempt land on a free provider instead of burning straight
-        # into the structured->unconstrained fallback.
+    def _invoke_with_backoff(call_llm, invoke_messages: list, max_attempts: int = 4, base_delay: float = 5.0):
+        # Shared provider pools (e.g. qwen-2.5-72b-instruct on DeepInfra/Novita)
+        # return 429 "engine_overloaded" under load, or a 400 when OpenRouter
+        # routed to a provider that can't actually serve this model/endpoint;
+        # a short backoff usually lets the next attempt land on a working
+        # provider instead of burning straight into the structured->unconstrained
+        # fallback (or failing the whole call outright).
         for attempt in range(max_attempts):
             try:
                 return call_llm.invoke(invoke_messages)
             except Exception as exc:
-                if attempt == max_attempts - 1 or not _is_rate_limited(exc):
+                if attempt == max_attempts - 1 or not _is_transient_provider_error(exc):
                     raise
                 delay = base_delay * (2 ** attempt)
-                print(f"{server_label} server rate-limited (attempt {attempt + 1}/{max_attempts}); retrying in {delay:.0f}s...")
+                print(
+                    f"{server_label} server hit a transient provider error "
+                    f"(attempt {attempt + 1}/{max_attempts}): {_summarize_provider_error(exc)}; "
+                    f"retrying in {delay:.0f}s..."
+                )
                 time.sleep(delay)
 
     def _invoke(target_llm, invoke_messages: list):
@@ -475,7 +507,7 @@ def invoke_json_llm(
             try:
                 return _invoke_with_backoff(llm, invoke_messages)
             except Exception as exc:
-                print(f"Error calling {server_label} server: {exc}")
+                print(f"Error calling {server_label} server: {_summarize_provider_error(exc)}")
                 raise
         try:
             return _invoke_with_backoff(target_llm, invoke_messages)
@@ -483,11 +515,11 @@ def invoke_json_llm(
             # Some OpenRouter-routed providers advertise structured_outputs
             # support but reject this particular schema/request - fall back
             # to an unconstrained call rather than losing the turn.
-            print(f"Structured call to {server_label} server failed ({exc}); retrying unconstrained.")
+            print(f"Structured call to {server_label} server failed ({_summarize_provider_error(exc)}); retrying unconstrained.")
             try:
                 return _invoke_with_backoff(llm, invoke_messages)
             except Exception as fallback_exc:
-                print(f"Error calling {server_label} server: {fallback_exc}")
+                print(f"Error calling {server_label} server: {_summarize_provider_error(fallback_exc)}")
                 raise
 
     print(f"Calling {server_label} server...")

@@ -1,21 +1,21 @@
 {
   "golden_set": "worldcup",
   "csv_path": "database/node_eval/judge_eval/judge_golden_set_worldcup.csv",
-  "model": "meta-llama/llama-3.3-70b-instruct",
-  "computed_at": "2026-07-23T11:24:10+00:00",
-  "n_total": 79,
-  "n_scored": 79,
-  "n_errors": 0,
-  "n_correct": 68,
-  "accuracy": 0.8608,
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "computed_at": "2026-08-01T14:38:41+00:00",
+  "n_total": 99,
+  "n_scored": 97,
+  "n_errors": 2,
+  "n_correct": 88,
+  "accuracy": 0.9072,
   "confusion": {
-    "true_positive": 32,
-    "true_negative": 36,
-    "false_positive": 9,
-    "false_negative": 2
+    "true_positive": 33,
+    "true_negative": 55,
+    "false_positive": 1,
+    "false_negative": 8
   },
-  "precision": 0.7805,
-  "recall": 0.9412,
+  "precision": 0.9706,
+  "recall": 0.8049,
   "records": [
     {
       "conversation_id": "WC_01",
@@ -23,9 +23,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify the objective and propose a structure for analyzing the case",
-        "Introduce the core data, such as the tournament structure and cost base, and ask the candidate to analyze it",
-        "Raise the case-specific exhibits, such as the revenue and cost economics, and ask the candidate to incorporate them into their analysis"
+        "ask the candidate to request and use the detailed revenue and cost data",
+        "ask the candidate to break down the revenue and cost per match",
+        "ask the candidate to provide a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -35,9 +35,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down the revenue streams (broadcasting, sponsorship, ticketing, hospitality, licensing) and cost streams (venues, host-country logistics, team travel and accommodation, security, prize money) to understand the profitability issue.",
-        "Request the candidate to quantify the impact of the expansion on the tournament's financials, including the effect on revenue per match and cost per match.",
-        "Ask the candidate for a final recommendation on how to address the profitability issue, including potential solutions such as renegotiating broadcasting deals or implementing cost-sharing agreements with host countries."
+        "ask the candidate to request and engage with the detailed revenue and cost data",
+        "ensure the candidate performs the per-match revenue and cost quantification",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -47,9 +47,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify their understanding of the case and identify the key drivers of the profitability problem",
-        "Test the candidate's ability to analyze the case data and quantify the impact of the expansion on revenue and costs",
-        "Request a clear and well-supported recommendation from the candidate, including specific actions to address the profitability issue"
+        "ask the candidate to break down the revenue and cost streams and how they are affected by the expansion",
+        "ask the candidate to request and use specific figures for revenue, cost, and per-match economics",
+        "ask the candidate to provide a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -59,8 +59,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis to understand how they synthesize the information and address the business problem.",
-        "Ensure the candidate provides a clear and concise recommendation supported by case evidence, including risks and next steps."
+        "provide the requested revenue and cost data for the two tournament editions",
+        "ask the candidate to break down the revenue and cost per match for both editions",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -70,9 +71,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation",
-        "Raise the math question related to the broadcasting deal",
-        "Explore the cost base and revenue streams in more detail"
+        "provide the candidate with the detailed revenue and cost data for both the previous and upcoming editions",
+        "ask the candidate to work through the per-match revenue and cost figures to identify the root cause of margin dilution",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -82,8 +83,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis",
-        "Check if the candidate can quantify the impact of the expansion on revenue and costs per match"
+        "provide the candidate with the detailed revenue and cost figures",
+        "ask the candidate to work through the per-match revenue and cost calculations",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -93,7 +95,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to work through the specific financial figures, such as revenue per match and cost per match",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -103,7 +106,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to work through the specific financial figures (revenue per match, cost per match) to quantify the impact of the expansion",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -113,8 +117,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation on how to address the profitability issue given the expansion.",
-        "Explore the math question of how the expansion affects revenue and costs per match more thoroughly to understand the structural issues behind the margin dilution."
+        "ask the candidate to work through the specific financial figures (revenue and cost per match) provided in the case data",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -124,9 +128,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to analyze the impact of the expansion on revenue streams (broadcasting, sponsorship, ticketing, hospitality, licensing) and cost streams (venues, host-country logistics, team travel and accommodation, security, prize money).",
-        "Request the candidate to quantify the effects of the expansion on per-match economics, comparing the old and new formats.",
-        "Ask the candidate to provide a final recommendation on how to address the profitability issue, considering the case data and potential risks."
+        "ask the candidate to break down the revenue and cost streams to understand the root cause of the margin dilution",
+        "ask the candidate to calculate the per-match revenue and cost figures to quantify the impact of the expansion",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -136,9 +140,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify their understanding of the case's profitability issue and the expansion's impact on revenue and costs.",
-        "Request that the candidate provide a more detailed analysis of the case, including the core data and case-specific exhibits.",
-        "Test the candidate's ability to break down the revenue and cost streams, and to identify the key drivers of the profitability issue."
+        "ask the candidate to engage with the core data about revenue and cost economics",
+        "ensure the candidate breaks down the profitability issue into revenue streams and cost streams",
+        "prompt the candidate to request and use specific figures to analyze the profitability issue"
       ],
       "error": null
     },
@@ -148,26 +152,30 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify their understanding of the case and the objectives of the analysis",
-        "Request that the candidate propose a structure for their analysis, including the key revenue and cost streams",
-        "Test the candidate's ability to quantify the impact of the expansion on the tournament's financial model, including the effect on per-match revenue and costs"
+        "ask the candidate to break down the revenue and cost streams",
+        "request the specific figures for revenue and cost per match",
+        "ask the candidate to provide a final recommendation based on the analysis"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_13",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to work through the per-match revenue and cost calculations to quantify the impact of the expansion"
+      ],
       "error": null
     },
     {
       "conversation_id": "WC_14",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to work through the per-match revenue and cost calculations to quantify the impact of the expansion"
+      ],
       "error": null
     },
     {
@@ -176,7 +184,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis of the revenue and cost per match and how the expansion can be made to pay for itself."
+        "ask the candidate to complete the revenue and cost per match calculations",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -186,24 +195,29 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis to assess their ability to synthesize information and provide a clear direction."
+        "ask the candidate to complete the revenue and cost per match calculations and provide numerical insights",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_21",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
       "error": null
     },
     {
       "conversation_id": "WC_22",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
       "error": null
     },
     {
@@ -212,9 +226,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match, specifically addressing the broadcasting revenue dilution.",
-        "Raise the dedicated math question about the broadcasting deal's value when spread across 104 matches instead of 64.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including potential strategies for renegotiating broadcasting deals and setting cost-sharing targets with host countries."
+        "ask the candidate to break down revenue and cost streams in more detail",
+        "ask the candidate to request and use specific data points, such as the number of matches and the revenue and cost figures",
+        "ask the candidate to perform a per-match revenue and cost analysis"
       ],
       "error": null
     },
@@ -224,9 +238,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis.",
-        "Raise the case's math question regarding the impact of match count on revenue and cost to understand the profitability issue better.",
-        "Explore the creative/brainstorm question to identify potential solutions for improving profitability despite the expansion."
+        "ask the candidate to request and engage with the detailed revenue and cost data",
+        "guide the candidate to break down the revenue and cost streams and their changes",
+        "ask the candidate to calculate and compare revenue and cost per match"
       ],
       "error": null
     },
@@ -234,19 +248,21 @@
       "conversation_id": "WC_25",
       "expected_enough_evidence": false,
       "predicted_enough_evidence": false,
-      "correct": true,
-      "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
-      ],
-      "error": null
+      "correct": false,
+      "predicted_focus_areas": [],
+      "error": {
+        "message": "Error code: 400 - {'error': {'message': 'Provider returned error', 'code': 400, 'metadata': {'raw': '{\"code\":400, \"reason\":\"INVALID_REQUEST_BODY\", \"message\":\"model: qwen/qwen-2.5-72b-instruct does not support endpoint: completions\", \"metadata\":{}}', 'provider_name': 'Novita', 'is_byok': False, 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'DeepInfra', 'raw': 'qwen/qwen-2.5-72b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3GJo0fkBfUnouJ6Q4PCHo7kXw4J'}"
+      }
     },
     {
       "conversation_id": "WC_26",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
+      "predicted_enough_evidence": false,
+      "correct": false,
       "predicted_focus_areas": [],
-      "error": null
+      "error": {
+        "message": "Error code: 400 - {'error': {'message': 'Provider returned error', 'code': 400, 'metadata': {'raw': '{\"code\":400, \"reason\":\"INVALID_REQUEST_BODY\", \"message\":\"model: qwen/qwen-2.5-72b-instruct does not support endpoint: completions\", \"metadata\":{}}', 'provider_name': 'Novita', 'is_byok': False, 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'DeepInfra', 'raw': 'qwen/qwen-2.5-72b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3GJo0fkBfUnouJ6Q4PCHo7kXw4J'}"
+      }
     },
     {
       "conversation_id": "WC_27",
@@ -275,9 +291,11 @@
     {
       "conversation_id": "WC_30",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to calculate and interpret the per-match revenue and cost figures for both editions"
+      ],
       "error": null
     },
     {
@@ -291,9 +309,11 @@
     {
       "conversation_id": "WC_32",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to calculate revenue and cost per match for both editions to understand the per-match economics"
+      ],
       "error": null
     },
     {
@@ -342,24 +362,29 @@
       "predicted_enough_evidence": false,
       "correct": false,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate to work through the specific per-match revenue and cost figures",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_39",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to recalculate revenue and cost per match for the upcoming edition using the correct number of matches (104)"
+      ],
       "error": null
     },
     {
       "conversation_id": "WC_40",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to recalculate the cost per match for the upcoming edition using the total costs, not the EBITDA margin"
+      ],
       "error": null
     },
     {
@@ -429,17 +454,21 @@
     {
       "conversation_id": "WC_51",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to calculate revenue and cost per match for both the previous and upcoming editions to quantify the profitability issue"
+      ],
       "error": null
     },
     {
       "conversation_id": "WC_52",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to break down the revenue and cost per match for both the previous and upcoming editions to quantify the margin dilution"
+      ],
       "error": null
     },
     {
@@ -448,24 +477,29 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to complete the per-match revenue and cost calculations",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_57",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
       "error": null
     },
     {
       "conversation_id": "WC_58",
       "expected_enough_evidence": false,
-      "predicted_enough_evidence": true,
-      "correct": false,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
       "error": null
     },
     {
@@ -474,9 +508,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match to understand the margin dilution.",
-        "Raise the case's math question regarding the change in revenue and cost per match due to the expansion.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including potential strategies for improving the revenue model or reducing costs."
+        "ask the candidate to request and work through the core data about revenue and cost changes",
+        "ask the candidate to break down the revenue and cost per match to understand the per-match economics",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -486,16 +520,19 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate to calculate per-match revenue and cost for both the previous and upcoming editions",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
     {
       "conversation_id": "WC_61",
       "expected_enough_evidence": true,
-      "predicted_enough_evidence": true,
-      "correct": true,
-      "predicted_focus_areas": [],
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to calculate revenue per match and cost per match for both editions, and explain the implications"
+      ],
       "error": null
     },
     {
@@ -512,7 +549,8 @@
       "predicted_enough_evidence": false,
       "correct": false,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate to work through the specific revenue and cost figures provided in the case data",
+        "explicitly ask the candidate for a final recommendation, including supporting evidence, risks, and next steps"
       ],
       "error": null
     },
@@ -562,9 +600,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to clarify their understanding of the case and its objectives",
-        "Explore the candidate's thought process on the revenue and cost implications of the expansion",
-        "Request a more detailed analysis of the potential solutions to address the profitability issue"
+        "ask the candidate to request and engage with the core data about revenue and cost economics",
+        "ensure the candidate performs the quantification step to understand revenue and cost per match",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -574,9 +612,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of marketing and fan engagement on revenue and profitability.",
-        "Request the candidate to analyze the revenue and cost streams affected by the expansion, including broadcasting rights, sponsorship, and hosting costs.",
-        "Have the candidate provide a recommendation on how to address the profitability issue, considering the structural changes in revenue and cost due to the expansion."
+        "ask the candidate to request and use the detailed revenue and cost data",
+        "guide the candidate to break down the revenue and cost per match for both editions",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -586,9 +624,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to break down the revenue and cost structure to understand the impact of expansion on profitability.",
-        "Raise the case's math question regarding the per-match revenue and cost to assess the candidate's ability to quantify the issue.",
-        "Discuss the implications of the tournament's revenue model being largely fixed-package versus the cost model being linear-to-triplicated with the expansion."
+        "ask the candidate to request and engage with the core data about revenue and cost economics",
+        "ensure the candidate performs the quantification step, specifically calculating revenue and cost per match",
+        "ask the candidate for a final recommendation based on the analysis"
       ],
       "error": null
     },
@@ -598,9 +636,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match to understand the structural margin dilution.",
-        "Raise the case's math question about broadcasting revenue to explore the per-match revenue dilution.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including potential strategies for renegotiating broadcasting deals and setting cost-sharing targets with host countries."
+        "ask the candidate to request and engage with the core data about revenue and cost economics",
+        "ensure the candidate performs the quantification step, specifically calculating revenue and cost per match",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -610,7 +648,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "help the candidate complete the per-match revenue and cost calculations",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -620,9 +659,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match to understand the profitability issue.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including any proposed changes to the commercial model or cost structure.",
-        "Explore the candidate's understanding of the case's core data, including revenue growth, EBITDA margin decline, and the implications of the expansion on these metrics."
+        "ask the candidate to request and engage with the core data on revenue and cost streams",
+        "ask the candidate to break down the per-match economics of the old and new formats",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -632,7 +671,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to calculate revenue and cost per match using the provided figures",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -642,7 +682,7 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -652,9 +692,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself.",
-        "Raise the case's math question regarding the impact of the expansion on revenue and costs per match.",
-        "Explore the creative/brainstorm question to identify potential solutions for improving profitability despite the expansion."
+        "ask the candidate to request and use specific data points for revenue, costs, and per-match economics",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -664,9 +703,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match.",
-        "Raise the case's math question regarding the value of the broadcasting deal when spread across 104 matches instead of 64.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including potential risks and next steps."
+        "provide the candidate with the core financial data and ask them to break down the revenue and cost streams",
+        "ask the candidate to perform a quantitative analysis of the per-match revenue and cost economics",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -676,9 +715,9 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate to quantify the impact of the expansion on revenue and costs per match to understand the profitability issue better.",
-        "Request a final recommendation from the candidate on how to address the profitability issue, including potential strategies for improving the revenue model or reducing costs.",
-        "Explore the case's specific exhibits, such as the effect of hosting the tournament across three countries on costs and revenue, to deepen the analysis."
+        "ask the candidate to break down the revenue and cost streams and how they are affected by the expansion",
+        "prompt the candidate to request and use specific figures for revenue and cost per match",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -696,7 +735,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate to calculate revenue and cost per match using the provided figures",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -706,7 +746,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to break down the revenue and cost per match to understand the profitability dilution",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -716,7 +757,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation regarding the expansion and how it can be made to pay for itself."
+        "ask the candidate to calculate revenue and cost per match for both the previous and upcoming editions",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -726,7 +768,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis of the profitability issue and how the expansion can be made to pay for itself."
+        "ask the candidate to break down the revenue and cost per match to understand the profitability issue",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -736,7 +779,8 @@
       "predicted_enough_evidence": false,
       "correct": true,
       "predicted_focus_areas": [
-        "Ask the candidate for a final recommendation based on their analysis."
+        "ask the candidate to calculate revenue and cost per match for both the previous and upcoming editions",
+        "ask the candidate for a final recommendation based on their analysis"
       ],
       "error": null
     },
@@ -758,6 +802,206 @@
     },
     {
       "conversation_id": "WC_90",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_91",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_92",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": false,
+      "correct": false,
+      "predicted_focus_areas": [
+        "ask the candidate to work through the specific revenue and cost per match figures provided in the case data"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_93",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to break down the revenue and cost streams and analyze the impact of the expansion on per-match economics",
+        "ensure the candidate requests and uses specific figures to quantify the financial impact of the expansion"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_94",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to request and engage with the core financial and structural data",
+        "ensure the candidate works through the specific financial figures and quantification step"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_95",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to break down the revenue and cost streams to understand the profitability issue",
+        "ask the candidate to work through the specific figures for revenue and cost per match",
+        "ask the candidate for a final recommendation after engaging with the data"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_96",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to complete their recommendation, as they have not yet provided a full recommendation"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_97",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_98",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to request and engage with the core data on revenue and cost streams",
+        "prompt the candidate to break down the revenue and cost per match for both the previous and upcoming editions",
+        "ask the candidate for a final recommendation once they have engaged with the core data and quantification"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_99",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to request and use specific data points, such as match count, revenue growth, and cost breakdown",
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_100",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "provide the candidate with the core data on revenue and cost economics, including the per-match quantification",
+        "ask the candidate to break down the revenue and cost streams and analyze the per-match economics",
+        "once the candidate has analyzed the data, ask for a final recommendation on how to address the margin dilution"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_101",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to request and engage with the core data on revenue and cost streams",
+        "prompt the candidate to break down the revenue and cost per match for the old and new formats",
+        "ask the candidate for a final recommendation based on the analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_102",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to break down the revenue and cost per match using the provided figures",
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_103",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to break down and quantify the revenue and cost per match for both the previous and upcoming editions",
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_104",
+      "expected_enough_evidence": false,
+      "predicted_enough_evidence": false,
+      "correct": true,
+      "predicted_focus_areas": [
+        "ask the candidate to calculate revenue per match and cost per match using the provided figures",
+        "ask the candidate for a final recommendation based on their analysis"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_105",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_106",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_107",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_108",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_109",
+      "expected_enough_evidence": true,
+      "predicted_enough_evidence": true,
+      "correct": true,
+      "predicted_focus_areas": [],
+      "error": null
+    },
+    {
+      "conversation_id": "WC_110",
       "expected_enough_evidence": true,
       "predicted_enough_evidence": true,
       "correct": true,
