@@ -1,0 +1,29 @@
+Starting experiment batch 'exp3.1'
+Running make run-all (RUNNER=hpc, LABEL=exp3.1, N=4)...
+/software/conda/ppdm1/conda/bin/conda run -n coach --no-capture-output python run_all_scenarios.py --graph both --repeat 4 --label "exp3.1"
+python-dotenv could not parse statement starting at line 26
+python-dotenv could not parse statement starting at line 26
+Traceback (most recent call last):
+  File "/sharedscratch/ppdm1/agentic-case-interview-coach/src/run_all_scenarios.py", line 20, in <module>
+    import agentic  # noqa: E402
+    ^^^^^^^^^^^^^^
+  File "/sharedscratch/ppdm1/agentic-case-interview-coach/src/main/studio/agentic.py", line 4, in <module>
+    import node as node_module
+  File "/sharedscratch/ppdm1/agentic-case-interview-coach/src/main/studio/node.py", line 9, in <module>
+    from llm_server import (
+  File "/sharedscratch/ppdm1/agentic-case-interview-coach/src/main/studio/llm_server.py", line 57, in <module>
+    interviewer_llm_server = ChatOpenAI(
+                             ^^^^^^^^^^^
+  File "/software/conda/ppdm1/conda/envs/coach/lib/python3.11/site-packages/langchain_core/load/serializable.py", line 118, in __init__
+    super().__init__(*args, **kwargs)
+  File "/software/conda/ppdm1/conda/envs/coach/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/software/conda/ppdm1/conda/envs/coach/lib/python3.11/site-packages/langchain_openai/chat_models/base.py", line 1308, in validate_environment
+    self.root_client = openai.OpenAI(**client_params, **sync_specific)  # type: ignore[arg-type]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/software/conda/ppdm1/conda/envs/coach/lib/python3.11/site-packages/openai/_client.py", line 230, in __init__
+    raise OpenAIError(
+openai.OpenAIError: Missing credentials. Please pass an `api_key`, `workload_identity`, `admin_api_key`, or set the `OPENAI_API_KEY` or `OPENAI_ADMIN_KEY` environment variable.
+ERROR conda.cli.main_run:execute(148): `conda run python run_all_scenarios.py --graph both --repeat 4 --label exp3.1` failed. (See above for error)
+make: *** [Makefile:115: run-all] Error 1

@@ -1,0 +1,183 @@
+Starting HF/FastAPI LLM server (Mistral-Small-24B, candidate only) + experiment batch 'exp02HPC'
+GPU information:
+Fri Jul 24 09:44:16 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.42.06              Driver Version: 555.42.06      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:41:00.0 Off |                    0 |
+| N/A   24C    P0             60W /  500W |       1MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Starting Mistral-Small-24B server on GPU 0...
+  still waiting for Mistral-Small-24B on port 18403... (10s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (20s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (30s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (40s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (50s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (60s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (70s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (80s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (90s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (100s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (110s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (120s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (130s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (140s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (150s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (160s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (170s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (180s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (190s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (200s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (210s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (220s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (230s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (240s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (250s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (260s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (270s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (280s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (290s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (300s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (310s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (320s elapsed)
+Mistral-Small-24B server on port 18403 is up (320s)
+Candidate server is up: http://127.0.0.1:18403/v1/models
+Running make run-all (RUNNER=hpc, LABEL=exp02HPC, N=4)...
+/software/conda/ppdm1/conda/bin/conda run -n coach --no-capture-output python run_all_scenarios.py --graph both --repeat 4 --label "exp02HPC"
+[agentic] 1/104 scenario_01_01 (repeat 1/4)
+Calling Candidate server...
+Calling Interviewer server...
+Calling Candidate server...
+Calling Interviewer server...
+Calling Candidate server...
+Calling Interviewer server...
+Calling Candidate server...
+Calling Judge Case Guide Scout server...
+RAG being used, consulting ConsultingCaseGuide-PPML.pdf file
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  20%|██        | 1/5 [00:00<00:00,  6.31it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 5 files:  40%|████      | 2/5 [00:14<00:25,  8.47s/it]Fetching 5 files: 100%|██████████| 5/5 [00:14<00:00,  2.89s/it]
+[1;31m2026-07-24 09:54:48.760132780 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144634, index: 3, mask: {4, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760132429 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144633, index: 2, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760131738 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144632, index: 1, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760178616 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144635, index: 4, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760127950 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144631, index: 0, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760381737 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144636, index: 5, mask: {6, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.760418226 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144637, index: 6, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.765721238 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144683, index: 52, mask: {53, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.765721749 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144686, index: 55, mask: {56, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.765723492 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144682, index: 51, mask: {52, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.782312997 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144708, index: 77, mask: {78, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.784382064 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144689, index: 58, mask: {59, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.784415406 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144701, index: 70, mask: {71, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.797940855 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144697, index: 66, mask: {67, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.798127846 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144698, index: 67, mask: {68, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.799012689 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144710, index: 79, mask: {80, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.798952886 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144688, index: 57, mask: {58, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.817576663 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144744, index: 113, mask: {114, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.825334947 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144694, index: 63, mask: {64, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.825396272 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144670, index: 39, mask: {40, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.832488035 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144727, index: 96, mask: {97, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.832589746 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144750, index: 119, mask: {120, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.832957447 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144736, index: 105, mask: {106, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.834614810 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144707, index: 76, mask: {77, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.836733881 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144728, index: 97, mask: {98, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.836793663 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144746, index: 115, mask: {116, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.844087696 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144716, index: 85, mask: {86, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.844507815 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144738, index: 107, mask: {108, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.854791213 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144740, index: 109, mask: {110, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.860958559 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144752, index: 121, mask: {122, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.862803224 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144754, index: 123, mask: {124, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.867941908 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144652, index: 21, mask: {22, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.879230354 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144647, index: 16, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.883491008 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144676, index: 45, mask: {46, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.895733496 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144655, index: 24, mask: {25, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.898267797 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144684, index: 53, mask: {54, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.898338210 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144690, index: 59, mask: {60, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.905185643 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144705, index: 74, mask: {75, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.905288306 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144719, index: 88, mask: {89, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.917935144 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144672, index: 41, mask: {42, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.918501869 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144673, index: 42, mask: {43, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.921067338 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144737, index: 106, mask: {107, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926854570 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144646, index: 15, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926975016 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144681, index: 50, mask: {51, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.815469594 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144751, index: 120, mask: {121, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.834640799 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144671, index: 40, mask: {41, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.799040240 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144648, index: 17, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.798256137 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144661, index: 30, mask: {31, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.834668361 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144715, index: 84, mask: {85, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.921056678 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144733, index: 102, mask: {103, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.946738484 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144660, index: 29, mask: {30, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.955692314 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144659, index: 28, mask: {29, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.854702817 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144724, index: 93, mask: {94, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.854763251 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144747, index: 116, mask: {117, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.917715021 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144685, index: 54, mask: {55, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.917758392 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144692, index: 61, mask: {62, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926912569 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144687, index: 56, mask: {57, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.807863696 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144699, index: 68, mask: {69, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.810035416 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144721, index: 90, mask: {91, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.862783106 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144753, index: 122, mask: {123, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.895690947 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144678, index: 47, mask: {48, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.883481751 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144675, index: 44, mask: {45, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.854729998 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144745, index: 114, mask: {115, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.964692351 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144725, index: 94, mask: {95, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.862756907 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144713, index: 82, mask: {83, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.799116694 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144696, index: 65, mask: {66, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.799118618 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144680, index: 49, mask: {50, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926692475 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144739, index: 108, mask: {109, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.917839074 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144657, index: 26, mask: {27, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.807781081 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144691, index: 60, mask: {61, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.917694342 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144720, index: 89, mask: {90, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926957062 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144700, index: 69, mask: {70, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.879159591 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144702, index: 71, mask: {72, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926812080 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144743, index: 112, mask: {113, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.926753490 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144726, index: 95, mask: {96, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.799132233 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144679, index: 48, mask: {49, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.807841234 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144717, index: 86, mask: {87, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.946698579 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144656, index: 25, mask: {26, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933993801 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144704, index: 73, mask: {74, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.938684163 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144654, index: 23, mask: {24, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.942680280 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144730, index: 99, mask: {100, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.942680911 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144703, index: 72, mask: {73, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.938695634 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144677, index: 46, mask: {47, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933926134 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144714, index: 83, mask: {84, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.940683559 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144741, index: 110, mask: {111, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.934011224 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144732, index: 101, mask: {102, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.937689985 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144749, index: 118, mask: {119, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.988777718 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144649, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933963915 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144695, index: 64, mask: {65, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933937706 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144723, index: 92, mask: {93, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.937723378 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144711, index: 80, mask: {81, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.940705851 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144693, index: 62, mask: {63, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.938684634 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144722, index: 91, mask: {92, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.941711901 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144748, index: 117, mask: {118, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.937708800 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144709, index: 78, mask: {79, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933966129 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144757, index: 126, mask: {127, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.934041291 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144674, index: 43, mask: {44, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.940696022 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144729, index: 98, mask: {99, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933981558 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144651, index: 20, mask: {21, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.937700094 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144712, index: 81, mask: {82, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933958485 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144756, index: 125, mask: {126, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.934008219 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144731, index: 100, mask: {101, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.941722881 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144718, index: 87, mask: {88, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933947905 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144755, index: 124, mask: {125, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.934029418 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144735, index: 104, mask: {105, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.933980637 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144650, index: 19, mask: {20, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.941692374 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144653, index: 22, mask: {23, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.941745023 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144742, index: 111, mask: {112, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.946681186 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144734, index: 103, mask: {104, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:49.008691988 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144658, index: 27, mask: {28, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-07-24 09:54:48.964831984 [E:onnxruntime:Default, env.cc:228 ThreadMain] pthread_setaffinity_np failed for thread: 4144706, index: 75, mask: {76, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Shutting down candidate server (PID 4142525)...

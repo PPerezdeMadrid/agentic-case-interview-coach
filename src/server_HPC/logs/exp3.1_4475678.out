@@ -1,0 +1,320 @@
+Starting experiment batch 'exp3.1'
+Running make run-all (RUNNER=hpc, LABEL=exp3.1, N=4)...
+/software/conda/ppdm1/conda/bin/conda run -n coach --no-capture-output python run_all_scenarios.py --graph both --repeat 4 --label "exp3.1"
+[agentic] 1/104 scenario_01_01 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 2/104 scenario_01_01 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 3/104 scenario_01_01 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 4/104 scenario_01_01 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 5/104 scenario_01_02 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 6/104 scenario_01_02 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 7/104 scenario_01_02 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 8/104 scenario_01_02 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 9/104 scenario_01_03 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 10/104 scenario_01_03 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 11/104 scenario_01_03 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 12/104 scenario_01_03 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 13/104 scenario_01_04 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 14/104 scenario_01_04 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 15/104 scenario_01_04 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 16/104 scenario_01_04 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 17/104 scenario_01_05 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 18/104 scenario_01_05 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 19/104 scenario_01_05 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 20/104 scenario_01_05 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 21/104 scenario_01_06 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 22/104 scenario_01_06 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 23/104 scenario_01_06 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 24/104 scenario_01_06 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 25/104 scenario_01_07 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 26/104 scenario_01_07 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 27/104 scenario_01_07 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 28/104 scenario_01_07 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 29/104 scenario_01_08 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 30/104 scenario_01_08 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 31/104 scenario_01_08 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 32/104 scenario_01_08 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 33/104 scenario_02_01 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 34/104 scenario_02_01 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 35/104 scenario_02_01 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 36/104 scenario_02_01 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 37/104 scenario_02_02 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 38/104 scenario_02_02 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 39/104 scenario_02_02 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 40/104 scenario_02_02 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 41/104 scenario_02_03 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 42/104 scenario_02_03 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 43/104 scenario_02_03 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 44/104 scenario_02_03 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 45/104 scenario_02_04 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 46/104 scenario_02_04 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 47/104 scenario_02_04 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 48/104 scenario_02_04 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 49/104 scenario_02_05 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 50/104 scenario_02_05 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 51/104 scenario_02_05 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 52/104 scenario_02_05 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 53/104 scenario_02_06 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 54/104 scenario_02_06 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 55/104 scenario_02_06 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 56/104 scenario_02_06 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 57/104 scenario_02_07 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 58/104 scenario_02_07 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 59/104 scenario_02_07 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 60/104 scenario_02_07 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 61/104 scenario_02_08 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 62/104 scenario_02_08 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 63/104 scenario_02_08 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 64/104 scenario_02_08 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 65/104 scenario_02_09 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 66/104 scenario_02_09 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 67/104 scenario_02_09 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 68/104 scenario_02_09 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 69/104 scenario_03_01 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 70/104 scenario_03_01 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 71/104 scenario_03_01 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 72/104 scenario_03_01 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 73/104 scenario_03_02 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 74/104 scenario_03_02 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 75/104 scenario_03_02 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 76/104 scenario_03_02 (repeat 4/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 77/104 scenario_03_03 (repeat 1/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 78/104 scenario_03_03 (repeat 2/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 79/104 scenario_03_03 (repeat 3/4)
+Calling Candidate server...
+Structured call to Candidate server failed (Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}); retrying unconstrained.
+Error calling Candidate server: Error code: 403 - {'error': {'message': 'Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/workspaces/default/keys/11e669c16fb182c5c334b10ecff54a97c1ca02346d22abdbcd888c381b97d894', 'code': 403}}
+[agentic] 80/104 scenario_03_03 (repeat 4/4)

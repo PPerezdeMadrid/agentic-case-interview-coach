@@ -1,0 +1,58 @@
+Starting HF/FastAPI LLM server (Mistral-Small-24B, candidate only) + experiment batch 'exp02HPC'
+GPU information:
+Thu Jul 23 15:35:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.42.06              Driver Version: 555.42.06      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:81:00.0 Off |                    0 |
+| N/A   27C    P0             61W /  500W |       1MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Starting Mistral-Small-24B server on GPU 0...
+  still waiting for Mistral-Small-24B on port 18403... (10s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (20s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (30s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (40s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (50s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (60s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (70s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (80s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (90s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (100s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (110s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (120s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (130s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (140s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (150s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (160s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (170s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (180s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (190s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (200s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (210s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (220s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (230s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (240s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (250s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (260s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (270s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (280s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (290s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (300s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (310s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (320s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (330s elapsed)
+  still waiting for Mistral-Small-24B on port 18403... (340s elapsed)
+Shutting down candidate server (PID 3444649)...
