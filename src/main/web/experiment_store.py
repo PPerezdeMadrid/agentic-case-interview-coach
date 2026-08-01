@@ -4,6 +4,7 @@ import io
 import json
 import math
 import shutil
+import sys
 import zipfile
 from collections import defaultdict
 from functools import lru_cache
@@ -15,6 +16,12 @@ from dashboard_store import NOT_TESTED, to_numeric_score
 WEB_DIR = Path(__file__).resolve().parent
 MAIN_DIR = WEB_DIR.parent
 BATCH_RUNS_DIR = MAIN_DIR / "artifacts" / "batch_runs"
+
+STUDIO_DIR = MAIN_DIR / "studio"
+if str(STUDIO_DIR) not in sys.path:
+    sys.path.insert(0, str(STUDIO_DIR))
+
+from loader import LoaderError, _find_scenario_path  # noqa: E402
 
 SECTION_LABELS = {
     "case_performance": "Case Performance (Eval Case Performance)",
@@ -558,8 +565,9 @@ def _extract_case_prompt(transcript: list[str]) -> str:
 def _load_scenario_json(scenario_ref: str) -> dict[str, Any]:
     if not scenario_ref:
         return {}
-    path = Path(scenario_ref)
-    if not path.exists():
+    try:
+        path = _find_scenario_path(scenario_ref)
+    except LoaderError:
         return {}
     try:
         return json.loads(path.read_text())

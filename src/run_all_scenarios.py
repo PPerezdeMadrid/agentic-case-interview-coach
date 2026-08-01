@@ -238,18 +238,17 @@ def run_graph_for_scenario(
     repeat_index: int,
     repeat_count: int,
 ) -> dict[str, Any]:
-    scenario_ref = str(scenario_path)
     scenario_id = scenario_path.stem
     thread_id = f"{runtime.name}_{scenario_id}_{index:03d}_r{repeat_index:02d}_{batch_id}"
 
     state_builder = getattr(runtime.module, runtime.state_builder_name)
-    state = state_builder(scenario_ref=scenario_ref, seed=seed)
+    state = state_builder(scenario_ref=str(scenario_path), seed=seed)
     config = runtime.module.build_graph_config(thread_id)
     result = runtime.module.graph.invoke(state, config=config)
     return build_record(
         runtime.name,
         thread_id,
-        scenario_ref,
+        scenario_id,
         result,
         repeat_index=repeat_index,
         repeat_count=repeat_count,
@@ -276,7 +275,7 @@ def run_batch(
         "scenario_count": len(scenario_paths),
         "repeat_count": repeat_count,
         "total_runs_per_graph": total_runs_per_graph,
-        "scenarios": [str(path) for path in scenario_paths],
+        "scenarios": [path.stem for path in scenario_paths],
         "graphs": {},
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -326,7 +325,7 @@ def run_batch(
                     record = build_record(
                         runtime.name,
                         thread_id=thread_id,
-                        scenario_ref=str(scenario_path),
+                        scenario_ref=scenario_path.stem,
                         result=None,
                         repeat_index=repeat_index,
                         repeat_count=repeat_count,
