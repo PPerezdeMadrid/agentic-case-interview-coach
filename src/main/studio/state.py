@@ -63,6 +63,7 @@ class AgenticGraphState(BaseCaseState):
 
     focus_areas: Annotated[list[str], replace_focus_areas]
     judge_round: NotRequired[int]
+    total_turns_used: NotRequired[int]
     candidate_reasoning: NotRequired[str]
 
 

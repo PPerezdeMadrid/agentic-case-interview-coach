@@ -124,11 +124,13 @@ def candidate_transcript_messages(visible_transcript: list[str]) -> list:
 def resolve_reveal_content(case_data: dict, action: str, block_id: str, content: str) -> tuple[str, str]:
     """Swap in the case block's real content when the interviewer/baseline chose to
     reveal one, falling back to a plain question if the block isn't actually
-    candidate-visible. Shared by node.interviewer_node and baseline.baseline_node."""
-    if action != "reveal" or not block_id:
+    candidate-visible -- including when "reveal" was chosen with no block_id at all,
+    which is just as unresolvable as naming a block that doesn't exist or isn't
+    visible. Shared by node.interviewer_node and baseline.baseline_node."""
+    if action != "reveal":
         return action, content
 
-    revealed_block = get_case_block_by_id(case_data, block_id)
+    revealed_block = get_case_block_by_id(case_data, block_id) if block_id else None
     if not isinstance(revealed_block, dict) or revealed_block.get("visible_to_candidate") is not True:
         return "question", content
 

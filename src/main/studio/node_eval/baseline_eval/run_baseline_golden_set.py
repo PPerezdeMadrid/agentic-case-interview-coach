@@ -60,9 +60,9 @@ if str(INTERVIEWER_EVAL_DIR) not in sys.path:
 from langchain_core.messages import SystemMessage  # noqa: E402
 
 import baseline  # noqa: E402
-from run_interviewer_golden_set import _classify_socratic_function  # noqa: E402
+from run_interviewer_golden_set import _CASE_DATA, _classify_socratic_function  # noqa: E402
 from state import BaselineTurnOutput  # noqa: E402
-from utils import invoke_json_llm  # noqa: E402
+from utils import invoke_json_llm, resolve_reveal_content  # noqa: E402
 
 BASELINE_EVAL_DIR = Path(__file__).resolve().parents[4] / "database" / "node_eval" / "baseline_eval"
 DEFAULT_CSV_PATH = BASELINE_EVAL_DIR / "baseline_golden_set_evidence_handling.csv"
@@ -112,9 +112,17 @@ def _baseline_one(baseline_input: str, *, classify_function: bool) -> tuple[dict
     if parsed is None:
         return None, {"message": "Baseline LLM did not return a parseable JSON payload."}
 
+    # baseline_node runs every LLM move through this same downgrade before it ever
+    # reaches the transcript, so grading the raw LLM output without it scores a
+    # state the real graph never actually produces (e.g. a "reveal" of a
+    # non-existent or hidden block, which the graph silently turns into a
+    # "question" with the same content).
+    action, content = resolve_reveal_content(
+        _CASE_DATA, parsed["action"], parsed["block_id"], parsed["content"]
+    )
     predicted = {
-        "action": parsed["action"],
-        "content": parsed["content"],
+        "action": action,
+        "content": content,
         "block_id": parsed["block_id"],
         "ready_for_evaluation": parsed["ready_for_evaluation"],
         "socratic_function": "",

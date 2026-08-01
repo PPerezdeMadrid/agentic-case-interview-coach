@@ -77,6 +77,16 @@ MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
 MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = int(
     os.getenv("MAX_INTERVIEWER_TURNS_BEFORE_JUDGE", "10")
 )
+# Ceiling on interviewer turns across the *whole* conversation, not per judge
+# round. Without this, judge_node resetting turn_index to 0 on every "not enough
+# evidence" round let the interviewer earn a fresh MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+# turns each round, for a worst case of MAX_INTERVIEWER_TURNS_BEFORE_JUDGE x
+# MAX_JUDGE_ROUNDS turns (10 x 7 = 70 by default) -- far beyond the baseline
+# graph's flat MAX_BASELINE_TURNS budget. Defaults to the same value so the two
+# graphs' effective turn budgets are comparable.
+MAX_INTERVIEWER_TURNS_TOTAL = int(
+    os.getenv("MAX_INTERVIEWER_TURNS_TOTAL", "15")
+)
 DEFAULT_THREAD_ID = "main_default"
 MAX_INTERVIEWER_JSON_RETRIES = int(os.getenv("MAX_INTERVIEWER_JSON_RETRIES", "3"))
 
@@ -150,8 +160,9 @@ def _build_interviewer_messages(
     case_data_facts: str,
     focus_areas: list[str],
     turn_index: int,
+    round_turn_limit: int = MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
 ) -> list[SystemMessage]:
-    is_final_turn = turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE - 1
+    is_final_turn = turn_index >= round_turn_limit - 1
     return [
         SystemMessage(
             content=(
@@ -186,6 +197,7 @@ def _invoke_interviewer_move(
     case_data_facts: str,
     focus_areas: list[str],
     turn_index: int,
+    round_turn_limit: int = MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
 ) -> tuple[str, str, str, bool, str, list[dict]]:
     messages = _build_interviewer_messages(
         case_prompt,
@@ -195,6 +207,7 @@ def _invoke_interviewer_move(
         case_data_facts,
         focus_areas,
         turn_index,
+        round_turn_limit,
     )
     payload, usage_log = invoke_json_llm(
         interviewer_llm,
@@ -250,7 +263,15 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
             "transcript": transcript,
         }
 
-    if turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE:
+    # This round's turn budget is whatever's left of the whole-conversation total,
+    # capped at MAX_INTERVIEWER_TURNS_BEFORE_JUDGE -- so a round started with only a
+    # few turns remaining in the total budget can't still claim a full fresh round.
+    # judge_node only routes back here when total_turns_used < MAX_INTERVIEWER_TURNS_TOTAL,
+    # so this is always positive.
+    total_turns_used = state.get("total_turns_used", 0)
+    round_turn_limit = min(MAX_INTERVIEWER_TURNS_BEFORE_JUDGE, MAX_INTERVIEWER_TURNS_TOTAL - total_turns_used)
+
+    if turn_index >= round_turn_limit:
         # The candidate just answered the final-recommendation ask issued on the
         # previous turn. Hand off to the judge without another interviewer
         # message so the candidate's recommendation stays the last word before
@@ -268,11 +289,12 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
         case_data_facts,
         focus_areas if isinstance(focus_areas, list) else [],
         turn_index,
+        round_turn_limit,
     )
 
     interviewer_action, content = resolve_reveal_content(case_data, interviewer_action, revealed_block_id, content)
 
-    if turn_index >= MAX_INTERVIEWER_TURNS_BEFORE_JUDGE - 1:
+    if turn_index >= round_turn_limit - 1:
         # This move is the forced final-turn wrap-up asking for the candidate's
         # recommendation -- they have not answered yet, so evidence cannot be
         # complete no matter what the LLM set ready_for_judge to. Trusting it here
@@ -345,6 +367,10 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     """Decide whether there is enough evidence to evaluate the candidate."""
     judge_round = state.get("judge_round", 0)
+    # turn_index currently holds however many interviewer turns this round used
+    # (it was reset to 0 when this round started), so folding it into the running
+    # total here is what lets the *next* round's budget shrink accordingly.
+    total_turns_used = state.get("total_turns_used", 0) + state.get("turn_index", 0)
     transcript = state.get("transcript", [])
     rubric_data = state.get("rubric_data", {})
 
@@ -396,20 +422,26 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     enough_evidence = bool(payload.get("enough_evidence", False))
     new_focus_areas = normalize_focus_areas(payload.get("focus_areas", []))
 
-    if judge_round + 1 >= MAX_JUDGE_ROUNDS and not enough_evidence:
+    rounds_exhausted = judge_round + 1 >= MAX_JUDGE_ROUNDS
+    turns_exhausted = total_turns_used >= MAX_INTERVIEWER_TURNS_TOTAL
+    if (rounds_exhausted or turns_exhausted) and not enough_evidence:
         enough_evidence = True
         new_focus_areas = []
 
     update = {
         "judge_round": judge_round + 1,
+        "total_turns_used": total_turns_used,
         "enough_evidence": enough_evidence,
         "focus_areas": None if enough_evidence else new_focus_areas,
         "rag_query_log": [case_guide_log] if case_guide_log else [],
         "llm_usage": scout_usage_log + usage_log,
     }
     if not enough_evidence:
-        # Reset the interviewer-turn budget so judge coaching leads to another
-        # interviewer -> candidate exchange instead of an immediate bounce back.
+        # Reset the interviewer's per-round turn counter so coaching leads to
+        # another interviewer -> candidate exchange instead of an immediate
+        # bounce back. total_turns_used keeps accumulating above, so the next
+        # round's budget (computed in interviewer_node) is whatever remains of
+        # MAX_INTERVIEWER_TURNS_TOTAL, not a fresh full round every time.
         update["turn_index"] = 0
     return update
 

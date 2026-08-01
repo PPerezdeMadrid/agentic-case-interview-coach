@@ -233,6 +233,50 @@ class AgenticGraphTests(unittest.TestCase):
             "Interviewer: How would you prioritise between revenue and cost drivers first?",
         )
 
+    def test_interviewer_round_budget_shrinks_with_remaining_total(self) -> None:
+        # Checks that a round started with little of the whole-conversation turn
+        # budget left (Fix 6) gets a correspondingly small round_turn_limit,
+        # instead of always claiming a full fresh MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+        # turns regardless of what earlier rounds already spent.
+        state = make_state()
+        mock_llm = Mock()
+        mock_llm.bind.return_value = mock_llm
+        state["turn_index"] = 1
+        state["total_turns_used"] = agentic.node_module.MAX_INTERVIEWER_TURNS_TOTAL - 2
+        state["transcript"] = [
+            "Interviewer: Our profits are down. What would you look at first?",
+            "Candidate: I would split revenue and costs.",
+            "Interviewer: Which side would you prioritize first?",
+            "Candidate: I would start with revenue.",
+        ]
+
+        observed_prompt = {}
+
+        def fake_invoke(messages):
+            observed_prompt["content"] = messages[0].content
+            return SimpleNamespace(
+                content=json.dumps(
+                    {
+                        "action": "question",
+                        "content": "Before we close, what's your final recommendation?",
+                        "block_id": "",
+                        "ready_for_judge": True,
+                    }
+                )
+            )
+
+        mock_llm.invoke.side_effect = fake_invoke
+        with patch.object(agentic, "interviewer_llm", mock_llm):
+            update = agentic.interviewer_node(state)
+
+        # Only 2 turns remain in the total budget, well under the default
+        # MAX_INTERVIEWER_TURNS_BEFORE_JUDGE (10), so this round's final-turn
+        # signal must fire at turn_index 1, not wait until turn_index 9.
+        self.assertIn("final turn before judge evaluation: yes", observed_prompt["content"])
+        # ready_for_judge=True from the mock must still be overridden to False:
+        # the candidate hasn't answered this final ask yet.
+        self.assertFalse(update["enough_evidence"])
+
     def test_judge_max_rounds(self) -> None:
         # Checks that the judge forces evaluation after the maximum number of rounds.
         state = make_state()
@@ -261,10 +305,13 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertTrue(update["enough_evidence"])
         self.assertIsNone(update["focus_areas"])
 
-    def test_judge_resets_turn_budget_when_more_evidence_is_needed(self) -> None:
-        # Checks that judge coaching reopens the interviewer->candidate loop.
+    def test_judge_resets_round_turn_index_but_accumulates_total(self) -> None:
+        # Checks that judge coaching reopens the interviewer->candidate loop by
+        # resetting the *per-round* turn_index, while total_turns_used keeps a
+        # running count across rounds instead of forgetting turns already spent.
         state = make_state()
         state["turn_index"] = agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+        state["total_turns_used"] = 0
         state["transcript"] = [
             "Interviewer: Our profits are down. What would you look at first?",
             "Candidate: I would split revenue and costs.",
@@ -287,10 +334,33 @@ class AgenticGraphTests(unittest.TestCase):
 
         self.assertFalse(update["enough_evidence"])
         self.assertEqual(update["turn_index"], 0)
+        self.assertEqual(update["total_turns_used"], agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE)
         self.assertEqual(
             agentic.route_after_judge_agentic_02(update),
             "interviewer",
         )
+
+    def test_judge_forces_evaluation_when_total_turn_budget_exhausted(self) -> None:
+        # Checks that the whole-conversation turn budget (Fix 6) can force
+        # evaluation on its own, even on an early judge round that the
+        # judge_round-count cap alone would never catch.
+        state = make_state()
+        state["judge_round"] = 0
+        state["turn_index"] = agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+        state["total_turns_used"] = agentic.node_module.MAX_INTERVIEWER_TURNS_TOTAL - agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
+        mock_llm = Mock()
+        mock_llm.bind.return_value = mock_llm
+        mock_llm.invoke.return_value = SimpleNamespace(
+            content=json.dumps({"enough_evidence": False, "focus_areas": ["still missing math"]})
+        )
+
+        with patch.object(agentic, "judge_llm", mock_llm):
+            update = agentic.judge_node(state)
+
+        self.assertEqual(update["total_turns_used"], agentic.node_module.MAX_INTERVIEWER_TURNS_TOTAL)
+        self.assertTrue(update["enough_evidence"])
+        self.assertIsNone(update["focus_areas"])
+        self.assertNotIn("turn_index", update)
 
     def test_interviewer_retries_invalid_json_before_controlled_fallback(self) -> None:
         # Checks that the interviewer retries JSON repair instead of immediately using a generic fallback.
@@ -486,7 +556,7 @@ class AgenticGraphTests(unittest.TestCase):
                         )
                     )
                 return SimpleNamespace(content=json.dumps({"enough_evidence": True, "focus_areas": []}))
-            if "You are evaluating consulting case performance" in combined:
+            if "You are the case-performance judge" in combined:
                 if "Available support sources:" in combined:
                     return SimpleNamespace(
                         content=json.dumps(
@@ -504,7 +574,7 @@ class AgenticGraphTests(unittest.TestCase):
                         }
                     )
                 )
-            if "You are evaluating interview interaction quality" in combined:
+            if "You are the interaction-quality judge" in combined:
                 if "Available support source" in combined:
                     return SimpleNamespace(
                         content=json.dumps({"case_guide_query": "What communication criteria apply here?"})

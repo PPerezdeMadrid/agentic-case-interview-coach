@@ -40,10 +40,19 @@ Interviewer: "What if the issue is falling store traffic instead?"
 Candidate: "I think the company should expand to new cities."
 Interviewer: "How would you prioritize expansion versus fixing current stores?"
 
-Stuck-candidate pattern — give the missing fact instead of pressure-testing:
+Missing-fact pattern — give the fact or tell them to assume, instead of pressure-testing; this applies the first time a fact is genuinely missing, not only once the candidate repeats themselves:
 
 Candidate (turn 2, repeats turn 1 almost word for word): "How much does the company charge per unit sold?"
 Interviewer (hidden guidance lists this fact as available "upon request"): "We charge a flat annual fee per unit; we don't have a further breakdown than that. Given what you know so far, why might margins still be under pressure?"
 
 Candidate (repeats an earlier request for a number that is not in any visible block and not listed as available upon request): "What is the exact customer acquisition cost?"
 Interviewer: "We don't have that exact figure to share. Make a reasonable assumption for it and tell me how you'd use it in your analysis."
+
+Candidate (turn 1, their first and only ask so far — no repetition yet): "What's the exact euro value of the prize money pool for this edition?"
+Interviewer (prize money is only ever described qualitatively — "scales with the number of qualifying teams" — in the hidden guidance, and no such figure exists anywhere else in the case): "We don't have an exact figure for that. Assume a reasonable value and tell me how it would factor into the cost side of your analysis." — this is action "question", said on the very first ask: waiting for the candidate to repeat the question before admitting the figure isn't available would just waste a turn, since nothing about the answer changes between the first ask and the second.
+
+Already-answered pattern — reconfirm in one clause and move on, don't re-reveal:
+
+Interviewer (turn 1): "The upcoming edition has three co-host countries, versus one previously."
+Candidate (turn 2, asking again for the same fact): "Sorry, wait — how many countries are hosting again?"
+Interviewer (turn 2): "As I mentioned, three co-host countries. Given that split, how do you think hosting costs get allocated across them?" — action "question", not "reveal": the fact is already on the record, so this reconfirms it in one clause and immediately opens the next question, instead of re-explaining it or triggering a fresh block reveal.

@@ -3,8 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 
-TOTAL_TURNS = 3
-
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 _PROMPTS_DIR = _REPO_ROOT / "doc" / "prompts"
 
@@ -27,8 +25,14 @@ INTERVIEWER_GRAPH_SYSTEM_PROMPT = _compose_prompt(
     "interviewer_question_style_few_shots.md",
 )
 JUDGE_GRAPH_SYSTEM_PROMPT = _load_prompt("judge_graph_system_prompt.md")
-CASE_EVAL_SYSTEM_PROMPT = _load_prompt("case_eval_system_prompt.md")
-DIALOG_EVAL_SYSTEM_PROMPT = _load_prompt("dialog_eval_system_prompt.md")
+CASE_EVAL_SYSTEM_PROMPT = _compose_prompt(
+    "case_eval_system_prompt.md",
+    "case_eval_calibration_few_shots.md",
+)
+DIALOG_EVAL_SYSTEM_PROMPT = _compose_prompt(
+    "dialog_eval_system_prompt.md",
+    "dialog_eval_calibration_few_shots.md",
+)
 FEEDBACK_SYSTEM_PROMPT = _load_prompt("feedback_system_prompt.md")
 CASE_GUIDE_NAVIGATION_PROMPT = _load_prompt("case_guide_navigation_prompt.md")
 # Baseline is a single node that combines interviewer, judge, and grader, so

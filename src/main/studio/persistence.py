@@ -191,6 +191,7 @@ def build_initial_graph_state(
         "trace_step_index": 0,
         "rubric_data": bundle["rubric"],
         "judge_round": 0,
+        "total_turns_used": 0,
         "retrieved_profitability_context": [],
         "rag_query_log": [],
     }
@@ -292,6 +293,7 @@ def _snapshot_trace_relevant_state(state: dict[str, Any]) -> dict[str, Any]:
     return {
         "turn_index": int(state.get("turn_index", 0) or 0),
         "judge_round": int(state.get("judge_round", 0) or 0),
+        "total_turns_used": int(state.get("total_turns_used", 0) or 0),
         "enough_evidence": bool(state.get("enough_evidence", False)),
         "focus_areas": state.get("focus_areas", []),
         "transcript": state.get("transcript", []),

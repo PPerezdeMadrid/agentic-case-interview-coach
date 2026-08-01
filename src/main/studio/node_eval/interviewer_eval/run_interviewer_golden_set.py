@@ -13,16 +13,23 @@ if str(STUDIO_DIR) not in sys.path:
 from langchain_core.messages import SystemMessage  # noqa: E402
 from pydantic import BaseModel, ConfigDict  # noqa: E402
 
+import loader  # noqa: E402
 import node  # noqa: E402
+from build_interviewer_golden_sets import CASE_ID  # noqa: E402
 from llm_server import judge_llm_server  # noqa: E402
 from state import InterviewerMove  # noqa: E402
-from utils import invoke_json_llm, parse_interviewer_output  # noqa: E402
+from utils import invoke_json_llm, parse_interviewer_output, resolve_reveal_content  # noqa: E402
 
 INTERVIEWER_EVAL_DIR = Path(__file__).resolve().parents[4] / "database" / "node_eval" / "interviewer_eval"
 DEFAULT_CSV_PATH = INTERVIEWER_EVAL_DIR / "interviewer_golden_set_evidence_handling.csv"
 
 
 SOCRATIC_JUDGE_LLM = judge_llm_server
+
+# All golden-set CSVs built by build_interviewer_golden_sets.py share this one case
+# (see its CASE_ID), so the real block data needed to replicate the graph's
+# resolve_reveal_content step is the same for every row this runner scores.
+_CASE_DATA = loader.adapt_case(loader.load_case(CASE_ID))
 
 SOCRATIC_FUNCTIONS = (
     "clarity",
@@ -119,6 +126,12 @@ def _interviewer_one(interviewer_input: str, *, classify_function: bool) -> tupl
         return None, {"message": "Interviewer LLM did not return a parseable JSON payload."}
 
     action, content, block_id, ready_for_judge, _reasoning = parsed
+    # interviewer_node runs every LLM move through this same downgrade before it
+    # ever reaches the transcript, so grading the raw LLM output without it scores
+    # a state the real graph never actually produces (e.g. a "reveal" of a
+    # non-existent or hidden block, which the graph silently turns into a
+    # "question" with the same content).
+    action, content = resolve_reveal_content(_CASE_DATA, action, block_id, content)
     predicted = {
         "action": action,
         "content": content,
