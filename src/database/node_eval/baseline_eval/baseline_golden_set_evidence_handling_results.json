@@ -2,49 +2,45 @@
   "golden_set": "evidence_handling",
   "csv_path": "database/node_eval/baseline_eval/baseline_golden_set_evidence_handling.csv",
   "model": "meta-llama/llama-3.3-70b-instruct",
-  "socratic_judge_model": "meta-llama/llama-3.3-70b-instruct",
-  "computed_at": "2026-07-23T10:21:49+00:00",
-  "n_total": 15,
-  "n_scored": 15,
+  "socratic_judge_model": "qwen/qwen-2.5-72b-instruct",
+  "computed_at": "2026-08-01T15:36:36+00:00",
+  "n_total": 65,
+  "n_scored": 65,
   "n_errors": 0,
-  "n_correct": 7,
-  "accuracy": 0.4667,
+  "n_correct": 43,
+  "accuracy": 0.6615,
   "records": [
     {
       "conversation_id": "EVI_04",
       "predicted": {
-        "action": "reveal",
-        "content": "The previous edition had 32 teams and 64 matches, while the upcoming edition has 48 teams and 104 matches, played across three co-host countries.",
-        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "action": "question",
+        "content": "The previous edition had 64 matches, and the upcoming edition will have 104 matches.",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_05",
       "predicted": {
-        "action": "reveal",
+        "action": "question",
         "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
-        "block_id": "Facts to provide upon request",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_06",
       "predicted": {
         "action": "question",
-        "content": "What do you think is the main driver of the increase in team travel and accommodation costs, and how do you think this cost increase will impact the overall profitability of the tournament?",
+        "content": "What are you trying to understand about the team travel and accommodation costs? Are you looking for the drivers of the increase or something else?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -56,53 +52,49 @@
     {
       "conversation_id": "EVI_07",
       "predicted": {
-        "action": "reveal",
-        "content": "The previous edition's total revenue was EUR 3.0B, and the total cost was EUR 1.86B, which implies an EBITDA margin of 38%. What structure would you propose to analyze the current edition's profitability issues?",
-        "block_id": "Data - Revenue and Cost Economics",
+        "action": "question",
+        "content": "What do you think might be driving the decline in EBITDA margin despite the growth in revenue?",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
       "correct": false,
       "failed_checks": [
-        "action: expected 'question', got 'reveal'"
+        "must_contain: missing at least one of ['3.0']"
       ],
       "error": null
     },
     {
       "conversation_id": "EVI_08",
       "predicted": {
-        "action": "reveal",
-        "content": "The previous edition had 64 matches with a total revenue of EUR 3.0B and total costs of EUR 1.86B, resulting in a revenue per match of roughly EUR 46.9M and a cost per match of roughly EUR 29.1M. The upcoming edition has 104 matches with a projected total revenue of EUR 4.35B and an implied total cost of EUR 3.31B, resulting in a revenue per match of roughly EUR 41.8M and a cost per match of roughly EUR 31.8M. How would you like to proceed with your analysis?",
-        "block_id": "Data - Revenue and Cost Economics",
+        "action": "question",
+        "content": "The previous edition had a total revenue of EUR 3.0B and 64 matches, resulting in a revenue per match of roughly EUR 46.9M. The total cost for the previous edition was EUR 1.86B, resulting in a cost per match of roughly EUR 29.1M. The upcoming edition has a projected total revenue of EUR 4.35B and 104 matches, resulting in a revenue per match of roughly EUR 41.8M. The implied total cost for the upcoming edition is EUR 3.31B, resulting in a cost per match of roughly EUR 31.8M.",
+        "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_09",
       "predicted": {
-        "action": "reveal",
-        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, and the projected EBITDA margin is 24%. The previous edition had a total revenue of EUR 3.0B and an EBITDA margin of 38%. How would you like to proceed with analyzing the decline in profitability?",
+        "action": "question",
+        "content": "The projected total revenue for the upcoming edition is EUR 4.35B, and the projected EBITDA margin is 24%. Can you think about how the expansion from 32 to 48 teams and the change from one host country to three co-host countries might affect the revenue and cost streams of the tournament?",
         "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
-      "correct": false,
-      "failed_checks": [
-        "action: expected 'question', got 'reveal'"
-      ],
+      "correct": true,
+      "failed_checks": [],
       "error": null
     },
     {
       "conversation_id": "EVI_10",
       "predicted": {
         "action": "question",
-        "content": "What's the basis for your question about the prize money pool? How do you think it relates to the profitability issue?",
+        "content": "The prize money pool has increased in line with the number of qualifying teams. Can you think about how this increase might impact the overall cost structure of the tournament?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -116,15 +108,14 @@
     {
       "conversation_id": "EVI_11",
       "predicted": {
-        "action": "reveal",
-        "content": "The revenue growth is driven primarily by sponsorship and licensing, which are tied to global brand reach rather than match count. Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
+        "action": "question",
+        "content": "What do you think might be driving the difference between the 45% revenue growth and the 62.5% increase in match count?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
       },
       "correct": false,
       "failed_checks": [
-        "action: expected 'question', got 'reveal'",
         "must_contain: missing at least one of ['assum']"
       ],
       "error": null
@@ -133,7 +124,7 @@
       "conversation_id": "EVI_12",
       "predicted": {
         "action": "question",
-        "content": "How do you think the expansion from 32 to 48 teams and the introduction of three co-host countries might affect the tournament's cost structure, and what implications could this have for profitability?",
+        "content": "What makes you think that hydration-break sponsorship is a key area to focus on in terms of revenue generation for the tournament?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -148,7 +139,7 @@
       "conversation_id": "EVI_13",
       "predicted": {
         "action": "question",
-        "content": "What specific aspect of the tournament's expansion do you think is most relevant to understanding the decline in EBITDA margin, and how would you structure your analysis to address the Secretary General's concerns?",
+        "content": "Let's start by recapping the situation: the Interconta World Football Cup is expanding from 32 to 48 teams, and despite a 45% growth in revenue, the EBITDA margin is expected to fall from 38% to 24%. What do you think is the main driver of this decline in profitability?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -161,7 +152,7 @@
       "conversation_id": "EVI_14",
       "predicted": {
         "action": "question",
-        "content": "That's a fair assumption\u2014structural problems can indeed lead to profitability issues. Can you propose a structure for how you'd like to analyze this case, and what key factors you think might be driving the decline in EBITDA margin?",
+        "content": "What specific aspects of the expansion do you think might be driving the decline in EBITDA margin, and how do you plan to approach this analysis?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -174,7 +165,7 @@
       "conversation_id": "EVI_15",
       "predicted": {
         "action": "question",
-        "content": "Let's break it down. The Interconta World Football Cup Organizing Committee is concerned about the deteriorating profitability despite revenue growth. Can you recap the situation and propose a structure to analyze this problem?",
+        "content": "What do you think are the most important factors to consider when analyzing the impact of the tournament expansion on profitability?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -187,7 +178,7 @@
       "conversation_id": "EVI_16",
       "predicted": {
         "action": "question",
-        "content": "To confirm, there are three co-host countries for this edition of the tournament. Now, can you tell me how you plan to approach the case and what factors you think might be contributing to the decline in EBITDA margin despite the revenue growth?",
+        "content": "Three co-host countries are hosting the tournament. Now, can you tell me how you plan to approach this case and what factors you think might be contributing to the decline in EBITDA margin despite the revenue growth?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -200,7 +191,7 @@
       "conversation_id": "EVI_17",
       "predicted": {
         "action": "question",
-        "content": "You already know there are 104 matches this edition. What do you think is driving the increase in total revenue despite the expansion, and how might that impact profitability?",
+        "content": "You already know there are 104 matches this edition. What do you think is driving the decline in EBITDA margin despite the revenue growth?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""
@@ -213,7 +204,693 @@
       "conversation_id": "EVI_18",
       "predicted": {
         "action": "question",
-        "content": "You've already been told that broadcasting is sold as a fixed package for the whole tournament. What's your next step in analyzing the impact of the tournament expansion on profitability?",
+        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. Given what you know so far, how do you think this affects the revenue per match?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_19",
+      "predicted": {
+        "action": "question",
+        "content": "In the previous edition, there were 64 matches played.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_20",
+      "predicted": {
+        "action": "question",
+        "content": "The previous edition of the tournament was hosted in a single country, with 32 teams and 64 matches. The upcoming edition is expanding to 48 teams and 104 matches, played across three co-host countries.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_21",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is the main driver of the increased costs - is it the additional matches, the three host countries, or something else?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['security']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_22",
+      "predicted": {
+        "action": "question",
+        "content": "The prize money pool has increased in line with the number of qualifying teams, from 32 to 48 teams.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_23",
+      "predicted": {
+        "action": "question",
+        "content": "What's driving your question about broadcasting revenue scalability - are you thinking about how it relates to the overall profitability of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['fixed']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_24",
+      "predicted": {
+        "action": "question",
+        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage. This is a new cost that did not exist in the single-host format. What do you think is the main driver of the increase in costs, and how do you think it will impact the overall profitability of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_25",
+      "predicted": {
+        "action": "question",
+        "content": "Three host countries means three full sets of venue, transport, and security infrastructure instead of one.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_26",
+      "predicted": {
+        "action": "question",
+        "content": "The previous edition had 32 teams and 64 matches, played in a single host country. The upcoming edition has 48 teams and 104 matches, played across three co-host countries.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_27",
+      "predicted": {
+        "action": "question",
+        "content": "Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
+        "block_id": "Prompt #1 - Interconta World Football Cup Profitability Diagnosis",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_28",
+      "predicted": {
+        "action": "question",
+        "content": "What specific aspects of the cost base do you think might be driving the decline in profitability, and how do you plan to investigate them?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['security', 'travel']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_29",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is driving the decline in EBITDA margin despite the growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['1.86']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_30",
+      "predicted": {
+        "action": "question",
+        "content": "What do you plan to compare the cost per match in the previous edition to, in order to understand the impact of the expansion on profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['29.1']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_31",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think might be driving the increase in costs for the upcoming edition, given that the tournament is expanding from 32 to 48 teams and being played across three co-host countries?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['3.31']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_32",
+      "predicted": {
+        "action": "question",
+        "content": "The total revenue is projected to grow 45% versus the last edition, from EUR 3.0B to EUR 4.35B. The number of matches is increasing from 64 to 104. Based on this, the revenue per match can be calculated as EUR 4.35B / 104 matches, which is roughly EUR 41.8M per match.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_33",
+      "predicted": {
+        "action": "question",
+        "content": "How do you plan to use the cost per match to understand the impact of the tournament expansion on profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['31.8']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_34",
+      "predicted": {
+        "action": "question",
+        "content": "What's the basis for your question about revenue per match - are you thinking about how the expansion affects revenue streams or costs?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['11%']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_35",
+      "predicted": {
+        "action": "question",
+        "content": "Can you walk me through your initial thoughts on how to approach this case, and what you think are the key factors driving the decline in EBITDA margin despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['9%']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_36",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['29.1', '31.8']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_37",
+      "predicted": {
+        "action": "question",
+        "content": "The revenue per match has fallen due to the expansion. Broadcasting rights are sold predominantly as a fixed package per tournament, not per match. What do you think is the main driver of the 45% revenue growth, and how do you think it will impact the profitability of the tournament?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['46.9', '41.8']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_38",
+      "predicted": {
+        "action": "question",
+        "content": "The previous edition had a total revenue of EUR 3.0B and total costs of EUR 1.86B, with an EBITDA margin of 38%. The upcoming edition has a projected total revenue of EUR 4.35B and an EBITDA margin of 24%.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_39",
+      "predicted": {
+        "action": "question",
+        "content": "The average ticket price for the previous edition was not explicitly stated, but we can discuss the revenue and cost economics. Total revenue is projected to grow 45% versus the last edition, with a match count increase of 62.5% (64 to 104 matches). Broadcasting rights are sold predominantly as a fixed package per tournament, not per match.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_40",
+      "predicted": {
+        "action": "question",
+        "content": "The number of stadiums being used is not explicitly stated, but we do know that the cost base has increased due to the addition of two more host countries. How do you think the increase in host countries might affect the tournament's costs and revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_41",
+      "predicted": {
+        "action": "question",
+        "content": "What would you do with the information on the exact split of infrastructure costs across the host countries, and how would it help you address the profitability issue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_42",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is driving the decline in EBITDA margin despite the 45% growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_43",
+      "predicted": {
+        "action": "question",
+        "content": "What's the significance of the broadcasting contract's expiry date in understanding the tournament's revenue and profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_44",
+      "predicted": {
+        "action": "question",
+        "content": "What's the main driver of the cost increase that you think is causing the profitability to deteriorate?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_45",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think might be driving your interest in ticket attendance - is it related to revenue, costs, or something else?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": false,
+      "failed_checks": [
+        "must_contain: missing at least one of ['assum']"
+      ],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_46",
+      "predicted": {
+        "action": "question",
+        "content": "The currency exchange rate is not explicitly provided, but let's assume it's not the main driver of the profitability issue. Can you tell me what you think is the primary reason for the decline in EBITDA margin despite the 45% revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_47",
+      "predicted": {
+        "action": "question",
+        "content": "The exact euro figure for hospitality revenue this edition isn't available. Can you make a reasonable assumption about it and proceed with your analysis?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_48",
+      "predicted": {
+        "action": "question",
+        "content": "The cash reserve figure is not available. How would you like to proceed with your analysis, or what assumption would you like to make about the cash reserve?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_49",
+      "predicted": {
+        "action": "question",
+        "content": "Can you start by recapping the situation and clarifying what you understand the client's objective to be? What structure would you propose for analyzing why profitability is deteriorating despite revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_50",
+      "predicted": {
+        "action": "question",
+        "content": "What are you trying to achieve by looking at the revenue or cost side, and how do you think that will help you address the profitability issue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_51",
+      "predicted": {
+        "action": "question",
+        "content": "What are your initial thoughts on why the profitability is deteriorating despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_52",
+      "predicted": {
+        "action": "question",
+        "content": "What specifically do you think about the broadcasting deal and how it might be affecting the tournament's profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_53",
+      "predicted": {
+        "action": "question",
+        "content": "What are the main factors that could be driving the decline in EBITDA margin despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_54",
+      "predicted": {
+        "action": "question",
+        "content": "Let's start by recapping the situation: we have a 45% increase in revenue, but a decline in EBITDA margin from 38% to 24%. What are your initial thoughts on what might be driving this decline in profitability?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_55",
+      "predicted": {
+        "action": "question",
+        "content": "What specific aspects of the cost side and the revenue side do you think are most relevant to understanding the decline in EBITDA margin?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_56",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is driving the decline in EBITDA margin despite the 45% revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_57",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is the main driver of the decline in EBITDA margin despite the growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_58",
+      "predicted": {
+        "action": "question",
+        "content": "What do you think is the main driver of the decline in EBITDA margin despite the 45% growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_59",
+      "predicted": {
+        "action": "question",
+        "content": "You already know there are 48 teams competing this edition, up from 32 previously. What do you think is the main driver of the decline in EBITDA margin despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_60",
+      "predicted": {
+        "action": "question",
+        "content": "Team travel and accommodation costs have risen because teams and their delegations must move between host countries during the group stage.",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_61",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_62",
+      "predicted": {
+        "action": "question",
+        "content": "The previous edition's total revenue was EUR 3.0B and total cost was EUR 1.86B. What would you like to do with this information now?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_63",
+      "predicted": {
+        "action": "question",
+        "content": "The projected revenue for this edition is EUR 4.35B, with an EBITDA margin of roughly 24%. What would you like to analyze first to understand why the profitability is deteriorating despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_64",
+      "predicted": {
+        "action": "question",
+        "content": "Three host countries means three full sets of venue, transport, and security infrastructure instead of one. Given this, how do you think the cost per match might be affected by the expansion to 48 teams?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_65",
+      "predicted": {
+        "action": "question",
+        "content": "You've already been told the last edition was hosted in a single country. Let's move forward - what are your initial thoughts on why the profitability might be deteriorating despite the revenue growth?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_66",
+      "predicted": {
+        "action": "question",
+        "content": "There were 64 matches in the previous edition. Now that we have that established, can you tell me what you think might be driving the decline in EBITDA margin despite the growth in revenue?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_67",
+      "predicted": {
+        "action": "question",
+        "content": "What happens to the value of the broadcasting deal when it's spread across 104 matches instead of 64?",
+        "block_id": "",
+        "ready_for_evaluation": false,
+        "socratic_function": ""
+      },
+      "correct": true,
+      "failed_checks": [],
+      "error": null
+    },
+    {
+      "conversation_id": "EVI_68",
+      "predicted": {
+        "action": "question",
+        "content": "You already know that revenue per match falls by roughly 11%, from about EUR 46.9M to EUR 41.8M per match. What do you think is driving this decline?",
         "block_id": "",
         "ready_for_evaluation": false,
         "socratic_function": ""

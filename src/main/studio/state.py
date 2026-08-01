@@ -54,6 +54,8 @@ class BaseCaseState(TypedDict):
     rag_query_log: NotRequired[Annotated[list[dict], append_rag_query_log]]
     llm_usage: NotRequired[Annotated[list[dict], append_llm_usage]]
 
+    
+
 
 class AgenticGraphState(BaseCaseState):
     """State for the role-differentiated graph (node.py): separate

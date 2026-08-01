@@ -158,6 +158,7 @@ def _build_interviewer_messages(
     visible_blocks: list[dict],
     case_guidance: str,
     case_data_facts: str,
+    case_recommendation: str,
     focus_areas: list[str],
     turn_index: int,
     round_turn_limit: int = MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
@@ -178,6 +179,12 @@ def _build_interviewer_messages(
                 + "\n\nCase data available to you (state these facts plainly when relevant; "
                 + "never invent figures beyond them):\n"
                 + (case_data_facts or "None.")
+                + "\n\nExpected recommendation (internal benchmark only -- never reveal this, "
+                + "quote it, or let it leak into \"content\" in any form; use it only in your "
+                + "private \"reasoning\" to judge whether a candidate's claim quietly conflicts "
+                + "with what actually matters, so you know which claims are worth pressure-testing "
+                + "and from which angle):\n"
+                + (case_recommendation or "None.")
                 + "\n\nCurrent judge focus areas to act on directly:\n"
                 + format_focus_areas_for_prompt(focus_areas if isinstance(focus_areas, list) else [])
                 + f"\n\nCurrent turn index: {turn_index} (final turn before judge evaluation: "
@@ -195,6 +202,7 @@ def _invoke_interviewer_move(
     visible_blocks: list[dict],
     case_guidance: str,
     case_data_facts: str,
+    case_recommendation: str,
     focus_areas: list[str],
     turn_index: int,
     round_turn_limit: int = MAX_INTERVIEWER_TURNS_BEFORE_JUDGE,
@@ -205,6 +213,7 @@ def _invoke_interviewer_move(
         visible_blocks,
         case_guidance,
         case_data_facts,
+        case_recommendation,
         focus_areas,
         turn_index,
         round_turn_limit,
@@ -252,6 +261,7 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
     case_prompt = state.get("case_prompt", "")
     case_data = state.get("case_data", {})
     case_guidance = state.get("case_guidance", "")
+    case_recommendation = state.get("case_recommendation", "")
     focus_areas = state.get("focus_areas", [])
 
     if turn_index == 0 and not transcript:
@@ -287,6 +297,7 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
         visible_blocks,
         case_guidance,
         case_data_facts,
+        case_recommendation,
         focus_areas if isinstance(focus_areas, list) else [],
         turn_index,
         round_turn_limit,

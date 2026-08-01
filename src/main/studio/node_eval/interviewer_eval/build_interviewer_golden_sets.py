@@ -3003,6 +3003,7 @@ def build_case() -> dict[str, Any]:
         "case_prompt": utils.extract_case_prompt(case_data),
         "case_guidance": utils.extract_case_guidance(case_data),
         "case_data_facts": utils.extract_case_data_facts(case_data),
+        "case_recommendation": utils.extract_case_recommendation(case_data),
         "visible_blocks": get_candidate_visible_blocks(case_data),
     }
 
@@ -3016,6 +3017,7 @@ def render_interviewer_input(case: dict[str, Any], transcript: list[str], turn_i
         case["visible_blocks"],
         case["case_guidance"],
         case["case_data_facts"],
+        case["case_recommendation"],
         [],  # focus_areas: left empty for this batch, see module docstring.
         turn_index,
     )
