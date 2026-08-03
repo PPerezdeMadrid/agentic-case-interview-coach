@@ -26,9 +26,7 @@ DEFAULT_CSV_PATH = INTERVIEWER_EVAL_DIR / "interviewer_golden_set_evidence_handl
 
 SOCRATIC_JUDGE_LLM = judge_llm_server
 
-# All golden-set CSVs built by build_interviewer_golden_sets.py share this one case
-# (see its CASE_ID), so the real block data needed to replicate the graph's
-# resolve_reveal_content step is the same for every row this runner scores.
+# All golden-set CSVs share this one case (see CASE_ID), so resolve_reveal_content's block data is the same for every row.
 _CASE_DATA = loader.adapt_case(loader.load_case(CASE_ID))
 
 SOCRATIC_FUNCTIONS = (
@@ -126,11 +124,7 @@ def _interviewer_one(interviewer_input: str, *, classify_function: bool) -> tupl
         return None, {"message": "Interviewer LLM did not return a parseable JSON payload."}
 
     action, content, block_id, ready_for_judge, _reasoning = parsed
-    # interviewer_node runs every LLM move through this same downgrade before it
-    # ever reaches the transcript, so grading the raw LLM output without it scores
-    # a state the real graph never actually produces (e.g. a "reveal" of a
-    # non-existent or hidden block, which the graph silently turns into a
-    # "question" with the same content).
+    # Mirrors interviewer_node's own downgrade step, so a reveal of a hidden/missing block is graded as the graph actually renders it.
     action, content = resolve_reveal_content(_CASE_DATA, action, block_id, content)
     predicted = {
         "action": action,
@@ -148,9 +142,7 @@ def _interviewer_one(interviewer_input: str, *, classify_function: bool) -> tupl
 
 
 def _grade(row: dict[str, str], predicted: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Grades one row against whichever expected_*/must_contain-style columns it has.
-    Returns (correct, failed_checks) -- failed_checks lists the specific check(s) that
-    tripped, for the per-row detail table."""
+    """Grades a row against whichever expected_*/must_contain columns it has. Returns (correct, failed_checks)."""
     failed: list[str] = []
 
     expected_action = row.get("expected_action", "").strip()

@@ -1,34 +1,7 @@
-"""Build a baseline golden-set CSV that puts baseline through the exact same 70
-World Cup transcripts as `judge_eval/build_judge_golden_set_worldcup.py`, so the
-workbench's Agents > Judge page can show baseline's readiness call
-(`ready_for_evaluation`) side by side with the real judge's `enough_evidence`
-call on identical fixtures -- same transcripts, same categories, same expected
-answer, just graded through baseline's fused single-call architecture instead
-of a dedicated judge node.
-
-Reuses `judge_eval.build_judge_golden_set_worldcup.ITEMS`/`build_case` (imported,
-not copied) for the transcripts/category/expected labels, and
-`baseline._build_baseline_messages` (the same pure prompt-assembly function
-`baseline_node` itself calls) to render each row's `baseline_input`. Two fields
-baseline_node would normally compute from live graph state have no equivalent
-in the golden set and are derived instead:
-
-  * `visible_blocks` -- comes from `case_data` alone (adapter.get_candidate_visible_blocks),
-    which the judge golden set's `state` already carries, so no derivation needed.
-  * `turn_index` -- baseline increments this by 1 per non-evaluate turn, i.e. it
-    equals how many "Interviewer:"/"Interviewer reveal:" lines already exist in
-    the transcript when baseline is asked to move next. Counted directly from
-    each item's transcript.
-
-`case_guide_context`/`profitability_context` are left empty (`[]`), matching how
-`build_judge_golden_set_worldcup.capture_judge_prompt` mocks judge's own
-case-guide scouting to empty -- one decision call per row, no RAG-scouting call.
-
-Writes CSV columns matching the schema `run_baseline_golden_set.py` already
-knows how to grade generically: only `expected_ready_for_judge` is populated
-(from `expected_enough_evidence`), so that script's existing `_grade()` scores
-purely on the readiness call with no changes needed -- run via:
-    make baseline-eval BASELINE_GOLDEN_SET=worldcup
+"""Puts baseline through judge_eval/build_judge_golden_set_worldcup.py's same 70 transcripts (ITEMS/build_case, imported not copied) so the workbench can show baseline's ready_for_evaluation next to judge's enough_evidence on identical fixtures.
+visible_blocks and turn_index aren't in the golden set's state, so they're derived here: visible_blocks from case_data, turn_index by counting Interviewer:/Interviewer reveal: lines already in each transcript.
+case_guide_context/profitability_context are left empty, matching how the judge builder mocks its own case-guide scouting call to empty.
+CSV columns match run_baseline_golden_set.py's existing grader -- run via make baseline-eval BASELINE_GOLDEN_SET=worldcup.
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.node_eval.baseline_eval.build_baseline_worldcup_golden_set
@@ -63,9 +36,7 @@ OUTPUT_PATH = (
 
 
 def _turn_index(transcript: list[str]) -> int:
-    """How many interviewer turns (question or reveal) already happened -- the
-    same quantity baseline_node's own `turn_index` counts, one increment per
-    non-evaluate baseline call."""
+    """How many interviewer turns (question or reveal) already happened -- same quantity baseline_node's own turn_index counts."""
     return sum(
         1 for line in transcript if line.startswith("Interviewer:") or line.startswith("Interviewer reveal:")
     )

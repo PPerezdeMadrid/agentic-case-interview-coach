@@ -31,15 +31,13 @@ def strip_code_fences(text: str) -> str:
 
 
 def _find_fenced_json(text: str) -> str | None:
-    """Locate a ```/```json fenced block anywhere in the text, not only ones
-    wrapping the entire response (models often add a sentence before/after)."""
+    """Locate a fenced block anywhere in the text, not just ones wrapping the whole response."""
     match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL | re.IGNORECASE)
     return match.group(1) if match else None
 
 
 def _find_balanced_json(text: str) -> str | None:
-    """Extract the first brace-balanced {...} object, scanning past any
-    conversational preamble the model wrote before the JSON started."""
+    """Extract the first brace-balanced {...} object, skipping any preamble before it."""
     start = text.find("{")
     if start == -1:
         return None
@@ -69,9 +67,7 @@ def _find_balanced_json(text: str) -> str | None:
 
 
 def load_json_object(text: str) -> dict:
-    """Parse the JSON object an LLM was asked to return, tolerating the
-    conversational preamble/postamble ("Here is the JSON object...", trailing
-    notes) and code fences models sometimes add around the payload."""
+    """Parse the JSON object an LLM was asked to return, tolerating preamble/postamble text and code fences."""
     cleaned = strip_thinking(text)
     for candidate in (strip_code_fences(cleaned), _find_fenced_json(cleaned), _find_balanced_json(cleaned)):
         if not candidate:
@@ -106,10 +102,7 @@ def get_candidate_visible_transcript(transcript: list[str]) -> list[str]:
 
 
 def candidate_transcript_messages(visible_transcript: list[str]) -> list:
-    """Replay the visible transcript as real conversation turns so the candidate
-    sees its own prior answers as assistant turns instead of as text described
-    inside the system prompt.
-    """
+    """Replay the transcript as real turns so the candidate sees its own prior answers as assistant turns, not text in the system prompt."""
     messages: list = []
     for line in visible_transcript:
         if line.startswith("Candidate:"):
@@ -122,11 +115,8 @@ def candidate_transcript_messages(visible_transcript: list[str]) -> list:
 
 
 def resolve_reveal_content(case_data: dict, action: str, block_id: str, content: str) -> tuple[str, str]:
-    """Swap in the case block's real content when the interviewer/baseline chose to
-    reveal one, falling back to a plain question if the block isn't actually
-    candidate-visible -- including when "reveal" was chosen with no block_id at all,
-    which is just as unresolvable as naming a block that doesn't exist or isn't
-    visible. Shared by node.interviewer_node and baseline.baseline_node."""
+    """Swap in the case block's real content on reveal, falling back to a plain question if the
+    block_id is missing, unknown, or not candidate-visible."""
     if action != "reveal":
         return action, content
 
@@ -333,16 +323,8 @@ def normalize_eval_payload(payload: dict, fields: list[str]) -> dict:
 
 
 def extract_token_usage(response: object, *, node: str, model: str = "", duration_seconds: float | None = None) -> dict:
-    """Read prompt/completion/total token counts off a ChatOpenAI response.
-
-    Works for both OpenRouter and LM Studio since both go through the same
-    OpenAI-compatible `usage` payload in the raw response.
-
-    `duration_seconds`, when given, is the wall-clock time the triggering
-    `llm.invoke()` call took -- timed by the caller since it isn't part of
-    the response payload itself (unlike token counts, no provider echoes
-    this back).
-    """
+    """Read prompt/completion/total token counts off a ChatOpenAI response. `duration_seconds`
+    is timed by the caller since no provider echoes it back."""
     metadata = getattr(response, "response_metadata", None)
     metadata = metadata if isinstance(metadata, dict) else {}
     token_usage = metadata.get("token_usage")
@@ -365,9 +347,8 @@ def extract_token_usage(response: object, *, node: str, model: str = "", duratio
 
 
 def _json_schema_response_format(schema: type[BaseModel]) -> dict:
-    """Build an OpenAI/OpenRouter `response_format: json_schema` payload from a
-    Pydantic model. Requires `extra="forbid"` on the model so every generated
-    object schema has `additionalProperties: false`, as strict mode expects."""
+    """Build an OpenAI/OpenRouter `response_format: json_schema` payload from a Pydantic model.
+    Requires `extra="forbid"` on the model so strict mode's `additionalProperties: false` holds."""
     return {
         "type": "json_schema",
         "json_schema": {
@@ -379,17 +360,8 @@ def _json_schema_response_format(schema: type[BaseModel]) -> dict:
 
 
 def _merge_adjacent_messages(messages: list) -> list:
-    """Merge adjacent same-role messages into one before a call.
-
-    Our message lists routinely end up with two messages of the same role in
-    a row -- e.g. the candidate's trailing "update data_gathered" instruction
-    stacked after a transcript that already ends on an interviewer turn, or a
-    JSON-repair retry stacking a HumanMessage onto a list that already ends
-    with one. OpenAI-compatible providers tolerate that, but some
-    OpenRouter-routed providers (e.g. Gemma via NextBit) reject it with
-    "Conversation roles must alternate user/assistant/...". Merging is lossless
-    (content is preserved, just joined) so it's safe to apply unconditionally.
-    """
+    """Merge adjacent same-role messages into one -- some OpenRouter providers (e.g. Gemma via
+    NextBit) reject back-to-back same-role messages with a "roles must alternate" error."""
     if not messages:
         return list(messages)
     coalesced = [messages[0]]
@@ -403,16 +375,9 @@ def _merge_adjacent_messages(messages: list) -> list:
 
 
 def _is_transient_provider_error(exc: Exception) -> bool:
-    """Detect OpenRouter/upstream-provider errors worth a backed-off retry:
-    real 429s (shared-pool rate limits, e.g. qwen-2.5-72b-instruct on
-    DeepInfra), plus 400s that OpenRouter's own routing produced rather than
-    our request being malformed -- e.g. "Provider returned error" naming a
-    `provider_name` because the provider it picked (e.g. Novita) doesn't
-    support this model/endpoint combination. Retrying those usually lands on
-    a different provider instead of repeating the identical failure. A
-    genuinely malformed request from our own code fails with a provider-less
-    error and should NOT be retried here.
-    """
+    """Detect OpenRouter errors worth a backed-off retry: real 429s, plus 400s carrying a
+    `provider_name` (OpenRouter routed to a provider that can't serve this model). A malformed
+    request from our own code has no `provider_name` and should NOT be retried."""
     if getattr(exc, "status_code", None) == 429:
         return True
     text = str(exc)
@@ -422,9 +387,7 @@ def _is_transient_provider_error(exc: Exception) -> bool:
 
 
 def _summarize_provider_error(exc: Exception) -> str:
-    """Collapse OpenRouter's deeply nested error payload (provider name, HTTP
-    code, nested `previous_errors`, doc links...) down to one readable line
-    for logging, instead of dumping the whole raw dict per retry attempt."""
+    """Collapse OpenRouter's deeply nested error payload down to one readable line for logging."""
     text = str(exc)
     provider_match = re.search(r"'provider_name':\s*'([^']+)'", text)
     code_match = re.search(r"'code':\s*(\d+)", text)
@@ -448,31 +411,10 @@ def invoke_json_llm(
     on_exhausted: Callable[[str], dict] | None = None,
     retries: int = 3,
 ) -> tuple[dict, list[dict]]:
-    """Invoke an LLM expected to reply with a JSON object, retrying with an
-    explicit repair instruction when the reply doesn't parse (e.g. the model
-    wrapped it in a preamble/fence `load_json_object` still can't salvage).
-
-    `schema`, when given, is sent as a `response_format: json_schema` hint on
-    the first attempt. This is best-effort: OpenRouter's open-weight models
-    advertise support inconsistently across upstream providers, so a rejected
-    request falls back to an unconstrained call, and every reply (constrained
-    or not) still goes through `load_json_object` and `accept` rather than
-    being trusted outright.
-
-    `accept` decides whether a parsed payload is good enough to return; it
-    defaults to "non-empty dict", but callers with extra structural
-    requirements (e.g. the interviewer's action/content fields) can pass a
-    stricter check so retries keep going until a usable payload appears.
-
-    `on_exhausted`, when given, receives the last raw response text once
-    retries run out and can turn it into a usable payload instead of `{}`
-    (e.g. the candidate treats un-JSON-ed prose as a perfectly good answer).
-
-    Returns (payload, usage_log). `payload` is only `{}` if every attempt
-    failed to produce an accepted payload and `on_exhausted` was not given
-    or also came up empty, so downstream `not_tested` defaults reflect a
-    genuine coverage gap rather than a parsing failure.
-    """
+    """Invoke an LLM expected to return JSON, retrying with a repair instruction on parse failure.
+    `schema` is best-effort -- a rejected request falls back to an unconstrained call, still routed
+    through `load_json_object`/`accept`. `on_exhausted` can salvage the last raw text instead of
+    returning `{}` once retries run out."""
     usage_log: list[dict] = []
     model_name = getattr(llm, "model_name", "")
     is_acceptable = accept or (lambda payload: bool(payload))
@@ -481,12 +423,7 @@ def invoke_json_llm(
     structured_llm = llm.bind(response_format=_json_schema_response_format(schema)) if schema else llm
 
     def _invoke_with_backoff(call_llm, invoke_messages: list, max_attempts: int = 4, base_delay: float = 5.0):
-        # Shared provider pools (e.g. qwen-2.5-72b-instruct on DeepInfra/Novita)
-        # return 429 "engine_overloaded" under load, or a 400 when OpenRouter
-        # routed to a provider that can't actually serve this model/endpoint;
-        # a short backoff usually lets the next attempt land on a working
-        # provider instead of burning straight into the structured->unconstrained
-        # fallback (or failing the whole call outright).
+        # A short backoff usually lands the next attempt on a different provider in the pool.
         for attempt in range(max_attempts):
             try:
                 return call_llm.invoke(invoke_messages)
@@ -512,9 +449,7 @@ def invoke_json_llm(
         try:
             return _invoke_with_backoff(target_llm, invoke_messages)
         except Exception as exc:
-            # Some OpenRouter-routed providers advertise structured_outputs
-            # support but reject this particular schema/request - fall back
-            # to an unconstrained call rather than losing the turn.
+            # Some providers advertise structured_outputs support but reject this schema anyway.
             print(f"Structured call to {server_label} server failed ({_summarize_provider_error(exc)}); retrying unconstrained.")
             try:
                 return _invoke_with_backoff(llm, invoke_messages)

@@ -37,15 +37,8 @@ def _check_endpoint(base_url: str, api_key: str) -> tuple[bool, str]:
 
 
 class APIConnectionTests(unittest.TestCase):
-    """Pings every configured LLM endpoint before graph nodes ever call them.
-
-    Run this ahead of `make langgraph` to catch a down server or a bad/missing
-    API key immediately, instead of hitting it mid-run inside LangGraph Studio.
-
-    Covers all four active agentic-graph roles (interviewer, candidate, judge,
-    feedback -- all OpenRouter per node.py) plus the two clients kept around
-    for manual/fallback use only (lmstudio_llm_server, openai_llm_server).
-    """
+    """Pings every configured LLM endpoint before graph nodes call them; run ahead of `make langgraph`
+    to catch a down server or bad API key early. Covers the four active roles plus the two fallback-only clients."""
 
     def test_lmstudio_connection(self):
         if not os.getenv("LMSTUDIO_RUN_LOCAL_TESTS"):

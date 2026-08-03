@@ -1,8 +1,5 @@
-"""Replay a batch's stored transcripts through the judge's
-eval nodes (`eval_case_performance` / `eval_dialog_quality`) with every RAG
-retrieval call disabled, and compare the resulting `case_performance` /
-`quality_dialog` scores against the batch's original (with-RAG) scores for
-that exact same transcript.
+"""Replay a batch's stored transcripts through the judge eval nodes with RAG disabled,
+and compare scores against the batch's original (with-RAG) run for the same transcript.
 
 Usage (from src/, with the project venv active):
     python rag_ablation_eval.py --batch 20260713T104633Z_exp2
@@ -51,9 +48,8 @@ def _load_batch(dir_name: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
 
 
 def _rebuild_state(graph_name: str, record: dict[str, Any]) -> dict[str, Any]:
-    """Reload the scenario bundle (case data/guidance/rubric are deterministic
-    per scenario_ref) and drop in the batch's actual transcript, so the eval
-    nodes see exactly what they saw the first time -- just without RAG."""
+    """Rebuilds via scenario_ref (deterministic) plus the batch's actual transcript,
+    so eval nodes see exactly what they saw the first time -- just without RAG."""
     scenario_ref = record.get("scenario_ref", "")
     if graph_name == "baseline":
         state = baseline.build_initial_baseline_state(scenario_ref=scenario_ref)
@@ -66,9 +62,7 @@ def _rebuild_state(graph_name: str, record: dict[str, Any]) -> dict[str, Any]:
 
 def _evaluate_without_rag(graph_name: str, state: dict[str, Any]) -> tuple[dict, dict, list[dict]]:
     if graph_name == "baseline":
-        # baseline_node evaluates case_performance and quality_dialog together in a
-        # single combined call; force it down that path regardless of the replayed
-        # transcript's own turn_index.
+        # Force the combined eval path regardless of the replayed transcript's own turn_index.
         state = dict(state)
         state["turn_index"] = baseline.MAX_BASELINE_TURNS
         with patch.multiple(
@@ -79,10 +73,8 @@ def _evaluate_without_rag(graph_name: str, state: dict[str, Any]) -> tuple[dict,
             result = baseline.baseline_node(state)
         return result["case_performance"], result["quality_dialog"], result["llm_usage"]
 
-    # agentic.eval_case_performance_node/eval_dialog_quality_node call
-    # _sync_node_dependencies() first, which copies agentic's own
-    # retrieve_* names into node.py -- so patching them here (not node.py's
-    # copies) is what actually reaches the node functions.
+    # Patch agentic's own retrieve_* names, not node.py's copies -- _sync_node_dependencies()
+    # re-copies them into node.py before the node functions run.
     with patch.multiple(
         agentic,
         retrieve_case_guide_context=lambda *args, **kwargs: [],

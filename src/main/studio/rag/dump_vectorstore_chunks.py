@@ -1,8 +1,5 @@
-"""Dump every chunk in the persisted vector stores to CSV for manual review.
-
-Produces one row per chunk (chunk_id, page, content) so a human can read
-through the full document and pick out the `source_chunk_ids` that answer
-each query in the golden evaluation datasets (see doc/evaluation/RAG-evaluation.md).
+"""Dump every chunk in the persisted vector stores to CSV for manual review
+(used to pick `source_chunk_ids` for the golden RAG eval datasets, see doc/evaluation/RAG-evaluation.md).
 
 Usage:
     python -m src.main.studio.rag.dump_vectorstore_chunks

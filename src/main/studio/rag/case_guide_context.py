@@ -47,16 +47,9 @@ def get_pending_case_guide_context(
     *,
     top_k: int = DEFAULT_TOP_K,
 ) -> tuple[list[str], dict]:
-    """Fetch the case-guide excerpt the *previous* baseline turn asked for, if
-    any. Baseline has no separate scouting call -- the single combined schema
-    (see BaselineTurnOutput.case_guide_query) lets the model flag a query
-    opportunistically while producing its move, so the earliest that query can
-    be resolved and shown back to the model is the following turn. Mirrors
-    baseline.get_pending_profitability_guide_context.
-
-    Returns (snippets, rag_query_log_entry) so callers can persist the retrieval
-    query and retrieved chunk ids alongside the rest of the graph state.
-    """
+    """Fetch the case-guide excerpt the *previous* turn queued (baseline has no separate
+    scouting call, so a query can only be resolved on the following turn). Mirrors
+    baseline.get_pending_profitability_guide_context."""
     query = str(state.get("pending_case_guide_query", "") or "").strip()
     if not query:
         return [], {}

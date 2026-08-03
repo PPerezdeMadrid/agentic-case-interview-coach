@@ -757,9 +757,7 @@ ITEMS: list[dict[str, Any]] = [
 
 
 def build_case_library() -> dict[str, dict[str, Any]]:
-    """Derive case_prompt/case_guidance/case_data/case_recommendation for each case_id
-    using the exact same loader/utils functions judge_node's real callers use, so this
-    golden set can never silently drift from what production actually feeds the judge."""
+    """Derive per-case fields using the same loader/utils functions judge_node's real callers use, so this can't drift from production."""
     cases: dict[str, dict[str, Any]] = {}
     for case_id in CASE_IDS:
         raw_case = loader.load_case(case_id)
@@ -777,8 +775,7 @@ def build_case_library() -> dict[str, dict[str, Any]]:
 def assemble_state(
     item: dict[str, Any], cases: dict[str, dict[str, Any]], rubric_data: dict[str, Any]
 ) -> dict[str, Any]:
-    """Reconstitute the exact AgenticGraphState slice judge_node(state) reads for one
-    golden-set item -- this is what a harness should pass to judge_node/agentic.judge_node."""
+    """Reconstitute the AgenticGraphState slice judge_node(state) reads for one golden-set item."""
     case = cases[item["case_id"]]
     return {
         "judge_round": item["judge_round"],

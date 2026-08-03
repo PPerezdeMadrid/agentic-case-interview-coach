@@ -31,8 +31,7 @@ def _sync_node_dependencies() -> None:
     node_module.retrieve_case_guide_context = retrieve_case_guide_context
     node_module.retrieve_profitability_guide_context = retrieve_profitability_guide_context
     case_guide_context_module.load_selected_simulation_bundle = load_selected_simulation_bundle
-    # build_initial_interview_state/load_scenario_node now live in persistence.py
-    # (shared with baseline.py), so this module's patch point must reach there too.
+    # These now live in persistence.py (shared with baseline.py), so the patch point must reach there too.
     persistence.load_selected_simulation_bundle = load_selected_simulation_bundle
 
 

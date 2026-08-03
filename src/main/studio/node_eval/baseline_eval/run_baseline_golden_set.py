@@ -1,38 +1,8 @@
-"""Run a baseline golden-set CSV (see build_baseline_golden_sets.py) against the
-real baseline LLM (`baseline.baseline_llm` -- the single model baseline uses for
-every role) and grade each row generically, the
-same way run_interviewer_golden_set.py grades the interviewer -- this script is a
-near-identical sibling of that one, adapted for baseline's schema differences:
-
-  * `BaselineTurnOutput.action` adds a third value, "evaluate" (baseline fuses the
-    interviewer + judge roles into one node, so it can end the interview itself
-    instead of handing off) -- expected_action columns from the interviewer
-    golden sets never expect "evaluate" within turns 1-3, since both graphs share
-    the same 4-turn budget and force evaluation only once that budget is
-    exhausted (see build_baseline_golden_sets.py's module docstring).
-  * `BaselineTurnOutput.ready_for_evaluation` is baseline's analogue of
-    `InterviewerMove.ready_for_judge` -- both are booleans a "question"/"reveal"
-    move can carry independently of the move's action, so the turn_control
-    golden set's `expected_ready_for_judge` column is graded directly against
-    `predicted["ready_for_evaluation"]` with no reinterpretation needed.
-
-Each row's `baseline_input` is already the exact rendered SystemMessage content
-`baseline_node`'s move-decision call would send, so this sends it as-is through
-the same `invoke_json_llm(..., schema=BaselineTurnOutput)` helper (with the same
-retry/accept behavior) `baseline_node` itself uses, then runs it through
-`parse_baseline_output` -- same normalization the real node applies.
-`require_evaluate` is left False: whether the model chooses to evaluate on its
-own is exactly what the turn_control file's `expected_ready_for_judge` checks.
-
-Rows with an `expected_socratic_function` get the same one extra classification
-call as the interviewer eval, reusing that script's classifier (imported, not
-copied) so both node types are scored against literally the same taxonomy by the
-same independent judge model.
-
-This costs one (or two, for the socratic-function file) real LLM call per row, so
-it's a deliberate offline/Makefile step, not something the dashboard recomputes
-on page load. Writes a JSON cache (read by the workbench's Agents > Baseline
-page) into the same directory as the source golden set.
+"""Runs a baseline golden-set CSV against the real baseline LLM and grades it generically -- a near-identical sibling of run_interviewer_golden_set.py, adapted for baseline's schema.
+BaselineTurnOutput.action adds "evaluate" (baseline fuses interviewer+judge, so it can end the interview itself); expected_action never expects it within turns 1-3, since both graphs share the same 4-turn budget.
+ready_for_evaluation is baseline's analogue of ready_for_judge, graded directly with no reinterpretation. require_evaluate is left False since whether the model chooses to evaluate on its own is exactly what expected_ready_for_judge checks.
+Rows with expected_socratic_function reuse the interviewer eval's classifier (imported, not copied) so both node types are scored by the same taxonomy and judge model.
+This costs 1-2 real LLM calls per row, so it's a deliberate offline/Makefile step -- writes a JSON cache read by the workbench's Agents > Baseline page.
 
 Usage (from src/, with the project venv active):
     python main/studio/node_eval/baseline_eval/run_baseline_golden_set.py \\
@@ -112,11 +82,7 @@ def _baseline_one(baseline_input: str, *, classify_function: bool) -> tuple[dict
     if parsed is None:
         return None, {"message": "Baseline LLM did not return a parseable JSON payload."}
 
-    # baseline_node runs every LLM move through this same downgrade before it ever
-    # reaches the transcript, so grading the raw LLM output without it scores a
-    # state the real graph never actually produces (e.g. a "reveal" of a
-    # non-existent or hidden block, which the graph silently turns into a
-    # "question" with the same content).
+    # Mirrors baseline_node's own downgrade step, so a reveal of a hidden/missing block is graded as the graph actually renders it.
     action, content = resolve_reveal_content(
         _CASE_DATA, parsed["action"], parsed["block_id"], parsed["content"]
     )
@@ -136,8 +102,7 @@ def _baseline_one(baseline_input: str, *, classify_function: bool) -> tuple[dict
 
 
 def _grade(row: dict[str, str], predicted: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Grades one row against whichever expected_*/must_contain-style columns it has.
-    Returns (correct, failed_checks)."""
+    """Grades a row against whichever expected_*/must_contain columns it has. Returns (correct, failed_checks)."""
     failed: list[str] = []
 
     expected_action = row.get("expected_action", "").strip()

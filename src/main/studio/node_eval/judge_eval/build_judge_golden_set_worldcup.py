@@ -1124,7 +1124,7 @@ ITEMS: list[dict[str, Any]] = [
             "cost-sharing agreements with host countries.",
         ),
     },
-    # ------------------------------------------------------- Second batch: more depth on weak categories
+    # Second batch: more depth on weak categories
     {
         "id": "WC_51",
         "category": "INCOMPLETE_COVERAGE",
@@ -1923,7 +1923,7 @@ ITEMS: list[dict[str, Any]] = [
             f"Candidate: {REC_STRONG}",
         ),
     },
-    # ------------------------------------------------------- Third batch: balance small categories to 10 rows each
+    # Third batch: balance small categories to 10 rows each
     {
         "id": "WC_91",
         "category": "FULL_COVERAGE_CLEAN",
@@ -2413,10 +2413,8 @@ def build_case() -> dict[str, Any]:
 
 
 def capture_judge_prompt(state: dict[str, Any]) -> str:
-    """Run the real judge_node with judge_llm mocked, capturing the exact
-    SystemMessage content of the main decision call (the second of the two calls
-    judge_node makes -- the first is the case-guide scouting decision, forced empty
-    here since there's no live vectorstore in this offline builder)."""
+    """Mock judge_llm and capture the SystemMessage from judge_node's second (main
+    decision) call; the first, case-guide scouting, call is forced empty (no live vectorstore here)."""
     captured: dict[str, str] = {}
     call_count = {"n": 0}
 

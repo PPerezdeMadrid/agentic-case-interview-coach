@@ -1,8 +1,6 @@
 """Retrieval evaluation: Precision@K, Recall@K, Hit Rate, MRR.
 
-Evaluated against the generation golden sets (`generation_golden_set_case_guide.csv`
-and `generation_golden_set_profitability.csv`), which carry exact per-query
-`source_chunk_ids` -- the chunk-level ground truth retrieval metrics need.
+Evaluated against golden sets that carry exact per-query `source_chunk_ids` as ground truth.
 """
 from __future__ import annotations
 

@@ -58,18 +58,9 @@ PROFITABILITY_CITATION_LABEL = _PROFITABILITY_SOURCE_NAVIGATION["citation_label"
 def get_embeddings() -> FastEmbedEmbeddings:
     global _embeddings_singleton
     if _embeddings_singleton is None:
-        # Cap onnxruntime's thread pool to the CPUs actually allocated to this
-        # job -- left unset, it sizes itself to the node's full core count and
-        # tries to pin threads to cores outside the SLURM cgroup, spamming
-        # pthread_setaffinity_np "Invalid argument" errors.
+        # Cap onnxruntime's threads to the SLURM-allocated CPUs -- unset, it spans the whole node and pins threads outside the cgroup, erroring.
         threads = int(os.environ.get("SLURM_CPUS_PER_TASK", os.cpu_count() or 1))
-        # fastembed's own default cache_dir is a system tempdir, which on the
-        # HPC cluster is job-scoped and wiped after the job ends -- every job
-        # re-downloads the ONNX weights from HuggingFace instead of caching
-        # them once. Point it at the same persistent HF cache (respects
-        # HF_HOME, already set to /sharedscratch/$USER/huggingface by
-        # server.bash) used for the LLM weights, so it downloads once and
-        # every later job loads it from disk with no network call.
+        # Use the persistent HF cache (not fastembed's tempdir default) so ONNX weights survive across HPC jobs instead of re-downloading.
         _embeddings_singleton = FastEmbedEmbeddings(
             model_name=EMBEDDING_MODEL_NAME, threads=threads, cache_dir=str(HF_HUB_CACHE)
         )

@@ -1,15 +1,4 @@
-"""Check that each baseline golden-set CSV covers exactly the same
-conversation_ids as the judge/interviewer CSV it's supposed to mirror.
-
-The baseline builders (build_baseline_judge_golden_set.py,
-build_baseline_golden_sets.py) import their fixtures live from the judge/
-interviewer builders, so in source they can never disagree on content. But
-each builder only writes its own CSV when *it* is re-run -- growing
-judge_eval/build_judge_golden_set_worldcup.py's ITEMS (or the interviewer
-builder's) without re-running the matching baseline builder leaves the two
-on-disk CSVs silently out of sync. This script catches that after the fact,
-by conversation_id set rather than row count, so a same-size-but-different-ids
-drift is caught too.
+"""Checks that each baseline golden-set CSV has the same conversation_ids as the judge/interviewer CSV it mirrors -- catches drift when upstream ITEMS grows but the baseline builder isn't re-run. Compares by id set, not row count, so same-size-but-different-ids drift is caught too.
 
 Usage: make golden-set-sync-check
 """
@@ -20,8 +9,7 @@ from pathlib import Path
 
 DATABASE_DIR = Path(__file__).resolve().parents[3] / "database" / "node_eval"
 
-# turn_control has no baseline counterpart at all -- see the module docstring in
-# build_baseline_golden_sets.py -- so it's intentionally not one of these pairs.
+# turn_control has no baseline counterpart (see build_baseline_golden_sets.py), so it's not one of these pairs.
 PAIRS = [
     ("judge_eval/judge_golden_set_worldcup.csv", "baseline_eval/baseline_golden_set_worldcup.csv"),
     (

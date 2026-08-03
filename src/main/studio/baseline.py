@@ -79,14 +79,8 @@ def get_pending_profitability_guide_context(
     *,
     top_k: int,
 ) -> tuple[list[dict], dict]:
-    """Fetch the profitability excerpt the *previous* baseline turn asked for,
-    if any. Baseline has no separate scouting call -- the single combined
-    schema (see BaselineTurnOutput.profitability_query) lets the model flag a
-    query opportunistically while producing its move, so the earliest that
-    query can be resolved and shown back to the model is the following turn.
-
-    Returns (chunks, rag_query_log_entry).
-    """
+    """Fetch the profitability excerpt the *previous* turn asked for, if any -- baseline has no
+    separate scouting call, so a query can only be resolved on the following turn."""
     query = str(state.get("pending_profitability_query", "") or "").strip()
     if not query:
         return [], {}
@@ -167,8 +161,7 @@ def parse_baseline_output(payload: dict, *, require_evaluate: bool = False) -> d
 
 
 def _invoke_baseline_move(messages: list[SystemMessage], *, force_evaluation: bool) -> tuple[dict, list[dict]]:
-    """Call the baseline's single combined model for this turn, with JSON-repair
-    retries via invoke_json_llm, mirroring node.py's interviewer/eval nodes."""
+    """Call the baseline's single combined model for this turn, with JSON-repair retries."""
 
     def on_exhausted(_raw_output: str) -> dict:
         if force_evaluation:
@@ -266,10 +259,8 @@ def _build_baseline_messages(
     case_guide_context: list[dict],
     profitability_context: list[dict],
 ) -> list[SystemMessage]:
-    """Pure prompt-assembly for one baseline turn -- no LLM call, no RAG lookup,
-    factored out of baseline_node so a golden-set harness can call the exact
-    rendered prompt directly, same reasoning as node._build_interviewer_messages
-    (see build_interviewer_golden_sets.py)."""
+    """Pure prompt-assembly for one baseline turn, factored out so a golden-set harness can call
+    the exact rendered prompt directly (see build_interviewer_golden_sets.py)."""
     is_final_turn = turn_index >= MAX_BASELINE_TURNS - 1
     force_evaluation = turn_index >= MAX_BASELINE_TURNS
     situation = (

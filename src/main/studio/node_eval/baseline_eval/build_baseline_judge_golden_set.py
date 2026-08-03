@@ -1,35 +1,7 @@
-"""Build a baseline "enough evidence" golden-set CSV reusing the exact same
-World Cup transcripts/categories/expected labels as
-judge_eval/build_judge_golden_set_worldcup.py -- imported directly (not
-copied), so the agentic judge and baseline's analogous readiness decision are
-graded on literally the same fixtures. Mirrors how build_baseline_golden_sets.py
-reuses the interviewer's fixtures for the other 4 golden-set files.
-
-Because ITEMS is imported rather than copied, this script's output always
-matches the judge builder's current item count -- but only once *re-run*. If
-judge_eval/build_judge_golden_set_worldcup.py's ITEMS grows and this script
-isn't re-run afterwards, the two CSVs silently drift apart (see
-check_golden_set_sync.py, which catches exactly that).
-
-Baseline has no separate judge node: `enough_evidence` in its graph state is
-set directly from `ready_for_evaluation`, the boolean the single fused
-interviewer/judge/eval node returns on every turn (see baseline_node in
-baseline.py). This script renders `baseline._build_baseline_messages(...)`
-for each of the judge golden set's transcripts and asks whether *baseline
-itself* would consider the evidence complete -- baseline's direct analogue
-of judge_node's enough_evidence call.
-
-`turn_index` is fixed at 2 for every row (not the final turn, not over the
-4-turn budget) so the decision reflects the model's own judgment rather than
-the deterministic forced-evaluation override -- the same design choice the
-judge golden set makes by fixing judge_round=0 on every row (baseline's
-MAX_BASELINE_TURNS-driven force is baseline's analogue of judge's
-MAX_JUDGE_ROUNDS override).
-
-Output columns intentionally match run_baseline_golden_set.py's existing
-generic grader (`expected_ready_for_judge` graded against the real
-predicted["ready_for_evaluation"]), so no new runner is needed -- this reuses
-the exact same script the other 4 baseline golden sets use.
+"""Builds a baseline "enough evidence" golden-set CSV reusing judge_eval/build_judge_golden_set_worldcup.py's ITEMS (imported, not copied) so judge and baseline are graded on identical fixtures -- re-run this after that file's ITEMS changes or the CSVs drift (see check_golden_set_sync.py).
+Baseline has no separate judge node: enough_evidence comes directly from ready_for_evaluation, the fused node's per-turn readiness call (see baseline_node).
+turn_index is fixed at 2 (not final, not over budget) so the decision reflects the model's own judgment, not the forced-evaluation override -- mirrors the judge golden set's judge_round=0.
+Output columns match run_baseline_golden_set.py's existing grader, so no new runner is needed.
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.node_eval.baseline_eval.build_baseline_judge_golden_set

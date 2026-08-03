@@ -53,10 +53,8 @@ def local_model_dir(repo_id: str) -> Path:
 def resolve_model_source(repo_id: str) -> tuple[str, dict]:
     """Returns (model_name_or_path, extra_from_pretrained_kwargs) for a downloaded model.
 
-    Handles both `hf download <repo_id> --local-dir ...` (flat directory of real
-    files) and a plain `hf download <repo_id>` (standard HF hub cache layout:
-    models--org--name/snapshots/<rev>/...), since either can end up under
-    HF_HOME/hub depending on how the weights were fetched.
+    Handles both `--local-dir` (flat directory) and plain `hf download` (standard
+    hub cache layout) since either can end up under HF_HOME/hub.
     """
     model_dir = local_model_dir(repo_id)
     if (model_dir / "config.json").exists():

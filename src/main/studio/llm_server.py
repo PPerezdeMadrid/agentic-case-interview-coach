@@ -61,9 +61,8 @@ interviewer_llm_server = ChatOpenAI(
 )
 
 # OpenRouter Gemma 3 27B Candidate model
-# max_tokens is capped explicitly: some OpenRouter providers (e.g. NextBit)
-# default an unset max_tokens to the full context length, which then rejects
-# the request as soon as prompt tokens are added on top of it.
+# max_tokens capped explicitly -- some providers (e.g. NextBit) default an unset value to the
+# full context length and then reject the request once prompt tokens are added on top.
 candidate_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_CANDIDATE", "google/gemma-3-27b-it"),
     base_url=_openrouter_base_url,
@@ -81,12 +80,8 @@ judge_llm_server = ChatOpenAI(
 )
 
 # OpenRouter Baseline model (single fused interviewer+judge+evaluator+feedback role).
-# Pinned to its own env var rather than aliasing judge_llm_server: it used to just
-# read `baseline_llm = judge_llm_server`, which meant baseline silently followed
-# whatever model the agentic judge role happened to be running (drifted from
-# Llama-3.1-70B to Llama-3.3-70B to Qwen-2.5-72B across judge-role changes,
-# without anyone deciding that for baseline specifically). Fixed 2026-08-01 by
-# decoupling: baseline stays on Llama-3.3-70B regardless of future judge changes.
+# Own env var rather than aliasing judge_llm_server, so baseline's model doesn't silently
+# drift whenever the agentic judge role changes.
 baseline_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_BASELINE", "meta-llama/llama-3.3-70b-instruct"),
     base_url=_openrouter_base_url,
@@ -94,11 +89,8 @@ baseline_llm_server = ChatOpenAI(
     temperature=os.getenv("BASELINE_TEMPERATURE", 0.0),
 )
 
-# OpenRouter Feedback model (was microsoft/phi-4 until 2026-07-31: its 16,384-token
-# context window couldn't fit conversations that reach 16K tokens on their own,
-# causing structured feedback calls to hit the length cutoff before producing
-# valid JSON. Now reuses the interviewer's Llama-3.3 70B, which has a 131,072
-# token context window.)
+# OpenRouter Feedback model -- reuses interviewer's Llama-3.3 70B (131K context); phi-4's 16K
+# window used to truncate feedback calls on long conversations before valid JSON was produced.
 feedback_llm_server = ChatOpenAI(
     model=os.getenv("OPENROUTER_MODEL_FEEDBACK", "meta-llama/llama-3.3-70b-instruct"),
     base_url=_openrouter_base_url,

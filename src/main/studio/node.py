@@ -77,21 +77,14 @@ MAX_JUDGE_ROUNDS = DEFAULT_MAX_JUDGE_ROUNDS
 MAX_INTERVIEWER_TURNS_BEFORE_JUDGE = int(
     os.getenv("MAX_INTERVIEWER_TURNS_BEFORE_JUDGE", "10")
 )
-# Ceiling on interviewer turns across the *whole* conversation, not per judge
-# round. Without this, judge_node resetting turn_index to 0 on every "not enough
-# evidence" round let the interviewer earn a fresh MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
-# turns each round, for a worst case of MAX_INTERVIEWER_TURNS_BEFORE_JUDGE x
-# MAX_JUDGE_ROUNDS turns (10 x 7 = 70 by default) -- far beyond the baseline
-# graph's flat MAX_BASELINE_TURNS budget. Defaults to the same value so the two
-# graphs' effective turn budgets are comparable.
+# Whole-conversation ceiling, not per-round -- turn_index resets every judge round otherwise.
 MAX_INTERVIEWER_TURNS_TOTAL = int(
     os.getenv("MAX_INTERVIEWER_TURNS_TOTAL", "15")
 )
 DEFAULT_THREAD_ID = "main_default"
 MAX_INTERVIEWER_JSON_RETRIES = int(os.getenv("MAX_INTERVIEWER_JSON_RETRIES", "3"))
 
-# Field names are derived from the schemas in state.py so the prompt text,
-# response_format hint, and normalize_eval_payload all stay in sync.
+# Derived from state.py schemas so prompt text and normalize_eval_payload stay in sync.
 CASE_PERFORMANCE_FIELDS = list(CaseEvaluation.model_fields.keys())
 QUALITY_DIALOG_FIELDS = list(DialogEvaluation.model_fields.keys())
 
@@ -113,13 +106,7 @@ def _scout_case_guide(
     node_name: str,
     top_k: int = 4,
 ) -> tuple[list[str], dict, list[dict]]:
-    """Let a node decide -- with its own prompt/persona and its own LLM -- whether
-    it needs an excerpt from the Consulting Case Interview Guide right now, and
-    what to ask it. This is not a shared "RAG node": every call site supplies its
-    own base_prompt/situation/decision_instruction, so the decision is made in
-    that node's own voice. Returns ([], {}, usage_log) when the node decides it
-    doesn't need the guide this round.
-    """
+    """Let a node decide, in its own voice, whether it needs a Case Interview Guide excerpt. Returns ([], {}, usage_log) if not."""
     scouting_messages = [
         SystemMessage(
             content=(
@@ -273,19 +260,13 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
             "transcript": transcript,
         }
 
-    # This round's turn budget is whatever's left of the whole-conversation total,
-    # capped at MAX_INTERVIEWER_TURNS_BEFORE_JUDGE -- so a round started with only a
-    # few turns remaining in the total budget can't still claim a full fresh round.
-    # judge_node only routes back here when total_turns_used < MAX_INTERVIEWER_TURNS_TOTAL,
-    # so this is always positive.
+    # Capped at whatever's left of the total budget, so a round can't claim a full fresh allotment.
     total_turns_used = state.get("total_turns_used", 0)
     round_turn_limit = min(MAX_INTERVIEWER_TURNS_BEFORE_JUDGE, MAX_INTERVIEWER_TURNS_TOTAL - total_turns_used)
 
     if turn_index >= round_turn_limit:
-        # The candidate just answered the final-recommendation ask issued on the
-        # previous turn. Hand off to the judge without another interviewer
-        # message so the candidate's recommendation stays the last word before
-        # evaluation, instead of a dangling interviewer question.
+        # Candidate already answered the final-recommendation ask; hand off without another message
+        # so their recommendation stays the last word before evaluation.
         return {"enough_evidence": True}
 
     visible_blocks = get_candidate_visible_blocks(case_data) if isinstance(case_data, dict) else []
@@ -306,10 +287,8 @@ def interviewer_node(state: AgenticGraphState) -> AgenticGraphState:
     interviewer_action, content = resolve_reveal_content(case_data, interviewer_action, revealed_block_id, content)
 
     if turn_index >= round_turn_limit - 1:
-        # This move is the forced final-turn wrap-up asking for the candidate's
-        # recommendation -- they have not answered yet, so evidence cannot be
-        # complete no matter what the LLM set ready_for_judge to. Trusting it here
-        # would route straight to judge and drop their answer from the transcript.
+        # Forced final-turn wrap-up: candidate hasn't answered yet, so evidence can't be complete
+        # regardless of what the LLM set ready_for_judge to.
         ready_for_judge = False
 
     transcript_label = "Interviewer reveal" if interviewer_action == "reveal" else "Interviewer"
@@ -355,9 +334,7 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
         node="candidate",
         schema=CandidateResponse,
         accept=lambda candidate: bool(str(candidate.get("answer", "")).strip()),
-        # The model's raw prose is still a perfectly usable candidate answer
-        # even when it skips the JSON envelope, so treat it as one rather
-        # than spending retries or losing the reply to a canned fallback.
+        # Raw prose without the JSON envelope is still a usable answer -- don't burn retries on it.
         on_exhausted=lambda raw_text: {"answer": strip_thinking(raw_text)},
         retries=1,
     )
@@ -378,9 +355,8 @@ def candidate_node(state: AgenticGraphState) -> AgenticGraphState:
 def judge_node(state: AgenticGraphState) -> AgenticGraphState:
     """Decide whether there is enough evidence to evaluate the candidate."""
     judge_round = state.get("judge_round", 0)
-    # turn_index currently holds however many interviewer turns this round used
-    # (it was reset to 0 when this round started), so folding it into the running
-    # total here is what lets the *next* round's budget shrink accordingly.
+    # turn_index holds this round's interviewer turns (reset to 0 at round start); fold into the
+    # running total so the next round's budget shrinks accordingly.
     total_turns_used = state.get("total_turns_used", 0) + state.get("turn_index", 0)
     transcript = state.get("transcript", [])
     rubric_data = state.get("rubric_data", {})
@@ -448,11 +424,8 @@ def judge_node(state: AgenticGraphState) -> AgenticGraphState:
         "llm_usage": scout_usage_log + usage_log,
     }
     if not enough_evidence:
-        # Reset the interviewer's per-round turn counter so coaching leads to
-        # another interviewer -> candidate exchange instead of an immediate
-        # bounce back. total_turns_used keeps accumulating above, so the next
-        # round's budget (computed in interviewer_node) is whatever remains of
-        # MAX_INTERVIEWER_TURNS_TOTAL, not a fresh full round every time.
+        # Reset per-round counter; total_turns_used keeps accumulating so the next round's
+        # budget is whatever remains of MAX_INTERVIEWER_TURNS_TOTAL, not a fresh full round.
         update["turn_index"] = 0
     return update
 
@@ -474,8 +447,7 @@ def eval_case_performance_node(state: AgenticGraphState) -> AgenticGraphState:
         + format_rubric(rubric_data if isinstance(rubric_data, dict) else {}, CASE_PERFORMANCE_FIELDS)
     )
 
-    # This node can draw on two sources, so it scouts both in one decision rather
-    # than through the single-source _scout_case_guide helper.
+    # Draws on two sources, so it scouts both in one decision rather than via _scout_case_guide.
     scouting_messages = [
         SystemMessage(
             content=(
@@ -634,8 +606,7 @@ def give_feedback_node(state: AgenticGraphState) -> AgenticGraphState:
         ),
         node_name="give_feedback",
     )
-    # Reuse the profitability excerpts eval_case_performance already retrieved this
-    # round (state-carried, already citation-tagged) instead of re-querying here.
+    # Reuse profitability excerpts eval_case_performance already retrieved this round.
     profitability_context = state.get("retrieved_profitability_context", [])
     messages = [
         SystemMessage(

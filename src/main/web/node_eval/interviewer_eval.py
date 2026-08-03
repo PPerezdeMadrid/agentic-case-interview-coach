@@ -1,13 +1,9 @@
-"""Interviewer golden-set evaluation dashboard data: reads the
-`interviewer_golden_set_<name>_results.json` files that
-`main/studio/node_eval/interviewer_eval/run_interviewer_golden_set.py` writes into
-`src/database/node_eval/interviewer_eval/`.
+"""Interviewer golden-set evaluation dashboard data: reads results JSON written by
+run_interviewer_golden_set.py.
 
-Same pattern as node_eval/judge_eval.py, whose `category_breakdown` is reused
-as-is here -- it isn't judge-specific, just aggregates generic {category,
-correct, error} records. Not recomputed on page load: each row costs one (or
-two, for the socratic-function golden set) real interviewer LLM call. Rerun via
-`make interviewer-eval INTERVIEWER_GOLDEN_SET=<name>` and reload to refresh.
+Reuses judge_eval.category_breakdown since it's a generic {category, correct, error}
+aggregator, not judge-specific. Not recomputed on page load -- rerun via
+`make interviewer-eval INTERVIEWER_GOLDEN_SET=<name>`.
 """
 from __future__ import annotations
 
@@ -23,8 +19,7 @@ INTERVIEWER_EVAL_DIR = SRC_DIR / "database" / "node_eval" / "interviewer_eval"
 
 _CACHE: dict[str, dict[str, Any]] = {}
 
-# Read from the source CSV rather than duplicated into the (much smaller) results JSON
-# cache, same reasoning as judge_eval._load_csv_metadata.
+# Read from the source CSV, not the results JSON cache -- same reasoning as judge_eval._load_csv_metadata.
 _METADATA_COLUMNS = [
     "category",
     "turn_index",
@@ -60,8 +55,7 @@ def _load_csv_metadata(golden_set: str) -> dict[str, dict[str, str]]:
 
 
 def list_interviewer_golden_sets() -> list[str]:
-    """Golden-set names (e.g. 'evidence_handling') that already have results computed,
-    derived from whichever interviewer_golden_set_<name>_results.json files exist."""
+    """Golden-set names (e.g. 'evidence_handling') that already have results computed."""
     if not INTERVIEWER_EVAL_DIR.exists():
         return []
     names = []

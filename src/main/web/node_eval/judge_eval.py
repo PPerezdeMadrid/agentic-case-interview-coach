@@ -1,12 +1,8 @@
-"""Judge golden-set evaluation dashboard data: reads the
-`judge_golden_set_<name>_results.json` files that
-`main/studio/node_eval/judge_eval/run_judge_golden_set.py` writes into
-`src/database/node_eval/judge_eval/`.
+"""Judge golden-set evaluation dashboard data: reads results JSON written by
+run_judge_golden_set.py.
 
-Not recomputed on page load: each row costs one real judge LLM call. This only
-reads whatever the last `run_judge_golden_set.py` run wrote for that golden set.
-Rerun it (see `make judge-eval`) and reload this page to refresh -- same pattern
-as `rag_ablation.py` for RAG ablation results.
+Not recomputed on page load -- each row costs a real judge LLM call; rerun via
+`make judge-eval` (same pattern as rag_ablation.py).
 """
 from __future__ import annotations
 
@@ -30,9 +26,7 @@ def _csv_path(golden_set: str) -> Path:
 
 
 def _load_csv_metadata(golden_set: str) -> dict[str, dict[str, str]]:
-    """Map conversation_id -> {category, judge_input}, read from the source
-    golden-set CSV rather than duplicated into the (much smaller) results JSON
-    cache."""
+    """Map conversation_id -> {category, judge_input} from the CSV, not the results JSON cache."""
     path = _csv_path(golden_set)
     if not path.exists():
         return {}
@@ -47,8 +41,7 @@ def _load_csv_metadata(golden_set: str) -> dict[str, dict[str, str]]:
 
 
 def list_judge_golden_sets() -> list[str]:
-    """Golden-set names (e.g. 'worldcup') that already have results computed,
-    derived from whichever judge_golden_set_<name>_results.json files exist."""
+    """Golden-set names (e.g. 'worldcup') that already have results computed."""
     if not JUDGE_EVAL_DIR.exists():
         return []
     names = []
@@ -82,15 +75,28 @@ def load_judge_eval(golden_set: str, *, refresh: bool = False) -> dict[str, Any]
         key=lambda row: row["conversation_id"],
     )
     result = {**payload, "records": records}
+    result["weighted_score"] = weighted_readiness_score(payload.get("precision"), payload.get("recall"))
     _CACHE[golden_set] = result
     return result
 
 
+def weighted_readiness_score(precision: float | None, recall: float | None, *, beta: float = 0.5) -> float | None:
+    """F-beta of precision vs. recall for the enough_evidence/ready_for_judge call, weighted
+    toward precision (beta < 1): a false positive (declaring evidence sufficient too early,
+    cutting the interview short on a real gap) is treated as costlier than a false negative
+    (asking for one more turn). None if either input is missing (non-boolean golden sets)."""
+    if precision is None or recall is None:
+        return None
+    beta_sq = beta**2
+    denominator = beta_sq * precision + recall
+    if denominator == 0:
+        return 0.0
+    return round((1 + beta_sq) * precision * recall / denominator, 4)
+
+
 def category_breakdown(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Aggregate per-conversation records into pass/fail counts by `category`,
-    sorted worst-accuracy-first so systematic judge failures (see
-    doc/evaluation/Dialog-evaluation.md) surface immediately instead of being
-    buried in the per-conversation table."""
+    """Aggregate records into pass/fail counts by `category`, sorted worst-accuracy-first
+    (see doc/evaluation/Dialog-evaluation.md)."""
     stats: dict[str, dict[str, int]] = {}
     for row in records:
         category = row.get("category") or "(uncategorized)"

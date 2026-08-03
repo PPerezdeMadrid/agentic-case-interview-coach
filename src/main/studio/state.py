@@ -12,26 +12,22 @@ def replace_focus_areas(existing: list[str], new_values: list[str] | None) -> li
 
 
 def append_rag_query_log(existing: list[dict], new_entries: list[dict] | None) -> list[dict]:
-    """Concatenate RAG query-log entries so concurrent nodes (e.g. the two eval
-    nodes that fan out from judge) can each append without clobbering the other."""
+    """Concatenate so concurrent nodes (e.g. the two eval nodes fanning out from judge) don't clobber each other."""
     if not new_entries:
         return existing
     return existing + list(new_entries)
 
 
 def append_llm_usage(existing: list[dict], new_entries: list[dict] | None) -> list[dict]:
-    """Concatenate per-call token usage entries across nodes, same pattern as
-    append_rag_query_log so concurrent eval nodes don't clobber each other."""
+    """Same concatenation pattern as append_rag_query_log, for token usage entries."""
     if not new_entries:
         return existing
     return existing + list(new_entries)
 
 
 class BaseCaseState(TypedDict):
-    """Fields both graphs read/write identically: scenario content, transcript,
-    turn bookkeeping, and the shared final evaluation outputs. Role-specific
-    fields (multi-node judge/eval loop vs. single-call deferred RAG queries)
-    live on AgenticGraphState / BaselineState below, not here."""
+    """Fields both graphs read/write identically. Role-specific fields live on
+    AgenticGraphState / BaselineState below, not here."""
 
     case_prompt: str
     candidate_profile: dict
@@ -58,10 +54,8 @@ class BaseCaseState(TypedDict):
 
 
 class AgenticGraphState(BaseCaseState):
-    """State for the role-differentiated graph (node.py): separate
-    interviewer/candidate/judge/eval/feedback nodes, so the judge's
-    evidence-gathering loop needs its own round counter and focus areas, and
-    the candidate node reports its own reasoning trace."""
+    """State for the role-differentiated graph (node.py): separate interviewer/candidate/judge/eval/feedback
+    nodes, so the judge's evidence loop needs its own round counter and focus areas."""
 
     focus_areas: Annotated[list[str], replace_focus_areas]
     judge_round: NotRequired[int]
@@ -70,17 +64,15 @@ class AgenticGraphState(BaseCaseState):
 
 
 class BaselineState(BaseCaseState):
-    """State for the single-call baseline graph (baseline.py): one combined
-    model does interviewer + judge + eval + feedback per turn, with no
-    separate scouting call, so a RAG query it flags this turn can only be
-    resolved and shown back on the *next* turn -- hence the pending_* fields."""
+    """State for the single-call baseline graph (baseline.py): no separate scouting call, so a RAG
+    query flagged this turn can only be resolved and shown back on the *next* turn -- hence pending_*."""
 
     pending_case_guide_query: NotRequired[str]
     pending_profitability_query: NotRequired[str]
 
 
 class InterviewerMove(BaseModel):
-    model_config = ConfigDict(extra="forbid") # Restrict extra fields
+    model_config = ConfigDict(extra="forbid")
 
     reasoning: str
     action: Literal["question", "reveal"]
@@ -106,8 +98,7 @@ class JudgeResponse(BaseModel):
 
 
 class CaseGuideRagScoutingDecision(BaseModel):
-    """A node's own decision on whether it needs an excerpt from the Consulting
-    Case Interview Guide right now, and what to ask it. Empty string = no."""
+    """A node's decision on whether it needs a Case Interview Guide excerpt. Empty string = no."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -115,8 +106,7 @@ class CaseGuideRagScoutingDecision(BaseModel):
 
 
 class CaseAndProfitabilityRagScoutingDecision(BaseModel):
-    """Same as CaseGuideRagScoutingDecision, for a node (eval_case_performance)
-    that can also consult the profitability methodology textbook."""
+    """Same as CaseGuideRagScoutingDecision, plus the profitability methodology textbook."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -155,18 +145,11 @@ class DialogEvaluation(BaseModel):
 
 
 class BaselineTurnOutput(BaseModel):
-    """The baseline's single per-turn schema, reused on every call whether it's
-    an ordinary interviewer move or the terminal call that also produces the
-    full evaluation. case_performance/quality_dialog/feedback must be null
-    unless action is "evaluate", in which case all three must be populated in
-    that same response - the baseline gets no separate judge/eval/feedback
-    turns the way the role-differentiated agentic graph does.
-
-    case_guide_query and profitability_query are this same call's own
-    opportunistic decision on whether it wants an excerpt from the Consulting
-    Case Interview Guide / the profitability methodology textbook - empty
-    string if not. Baseline has no separate scouting turn, so a query written
-    now can only be fetched and shown on the *next* baseline turn."""
+    """The baseline's single per-turn schema, reused whether it's an ordinary move or the terminal
+    call. case_performance/quality_dialog/feedback are null unless action is "evaluate", in which
+    case all three are populated together -- baseline has no separate judge/eval/feedback turns.
+    case_guide_query/profitability_query are this call's own opportunistic RAG ask (empty = none);
+    with no separate scouting turn, a query written now is only fetched on the *next* turn."""
 
     model_config = ConfigDict(extra="forbid")
 

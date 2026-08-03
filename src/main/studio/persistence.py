@@ -201,8 +201,7 @@ def load_scenario_node(
     state: dict[str, Any],
     config: RunnableConfig | None = None,
 ) -> dict[str, Any]:
-    """Load scenario assets into state if they are not present yet. Shared by the
-    agentic and baseline graphs, which need identical scenario-loading behavior."""
+    """Load scenario assets into state if not present yet; shared by the agentic and baseline graphs."""
     thread_id = resolve_thread_id(state, config)
     if state.get("case_prompt") and state.get("case_guidance") and state.get("case_recommendation"):
         return {"thread_id": thread_id}

@@ -28,8 +28,7 @@ SECTION_LABELS = {
     "quality_dialog": "Dialog Quality (Eval Dialog Quality)",
 }
 
-# Maps SECTION_LABELS keys (as produced by the judge / stored in combined_results.jsonl)
-# to the section keys used inside a scenario JSON's candidate_profile.reference_scores.
+# Maps SECTION_LABELS keys (judge output) to reference_scores section keys in scenario JSON.
 REFERENCE_SCORE_SECTION_MAP = {
     "case_performance": "rubric",
     "quality_dialog": "case_interaction_quality",
@@ -245,10 +244,8 @@ def compute_graph_metrics(records: list[dict[str, Any]]) -> list[dict[str, Any]]
 # Rubric dimensions are scored 1-4, so the widest possible miss is 3 points.
 MAX_SCORE_SPAN = 3.0
 BIAS_EPSILON = 0.15
-# Leads with the same green/blue pair the agentic/baseline comparison bars use
-# elsewhere in the dashboard (--chart-agentic / --chart-baseline in styles.css,
-# validated as a CVD-safe pair), so "agentic" and "baseline" read as the same
-# colors everywhere; extra colors cover any additional graph_name beyond those two.
+# Leads with the same green/blue pair as --chart-agentic/--chart-baseline in styles.css
+# (CVD-safe) so colors stay consistent; extra colors cover any additional graph_name.
 BAR_PALETTE = ["#357a38", "#3f76b0", "#a8622a", "#7a3d78", "#8a7a1f"]
 
 
@@ -279,12 +276,16 @@ def _bias_label(signed_bias: float | None) -> str:
     return "match"
 
 
-def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
-    """
-    Compare each graph's judge scores against the scenario's own author-defined
-    reference score (candidate_profile.reference_scores), pooled across every
-    repeat in the batch. This is what answers "which graph scores accurately"
-    and "who wins".
+def compute_accuracy_stats(
+    records: list[dict[str, Any]], reference_filter: set[int] | None = None
+) -> dict[str, Any]:
+    """Compare each graph's judge scores against the scenario's reference score, pooled
+    across every repeat -- answers "which graph scores accurately" and "who wins".
+
+    reference_filter, if given, restricts every dimension's pairs to only those whose
+    reference score rounds to one of the given values (e.g. {1, 2} to look only at the
+    deliberately-flawed cases) -- this is what powers the Case Performance / Dialog Quality
+    filter buttons on the dashboard.
     """
     graph_names = sorted({record.get("graph_name", "unknown") for record in records})
 
@@ -303,6 +304,8 @@ def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
                 to_numeric_score(reference_entry.get("score")) if isinstance(reference_entry, dict) else None
             )
             if actual is None or reference_value is None:
+                continue
+            if reference_filter is not None and int(round(reference_value)) not in reference_filter:
                 continue
             pairs[key][graph_name].append((actual, reference_value))
 
@@ -351,14 +354,21 @@ def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
             graph_pooled_errors[graph_name].extend(abs_errors)
 
         candidates = [(g, row_graphs[g]["mae"]) for g in graph_names if row_graphs[g]["mae"] is not None]
+        is_tie = False
         if candidates:
             best_mae = min(mae for _, mae in candidates)
             winners = [g for g, mae in candidates if mae == best_mae]
             if len(winners) == 1:
                 row_graphs[winners[0]]["is_winner"] = True
                 graph_dim_wins[winners[0]] += 1
+            elif len(winners) > 1:
+                # Every graph tied on MAE for this dimension -- no one gets credit for the win,
+                # so dims_won across graphs can sum to less than total_dims.
+                is_tie = True
 
-        rows.append({"section": section_key, "section_label": label, "dimension": dimension, "graphs": row_graphs})
+        rows.append(
+            {"section": section_key, "section_label": label, "dimension": dimension, "graphs": row_graphs, "is_tie": is_tie}
+        )
 
     summary = []
     for graph_name in graph_names:
@@ -390,8 +400,201 @@ def compute_accuracy_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
         "summary": summary,
         "graph_names": graph_names,
         "total_dims": len(rows),
+        "ties": sum(1 for row in rows if row["is_tie"]),
         "overall_winner": overall_winner,
     }
+
+
+def compute_accuracy_by_reference_value(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Same (actual, reference) pairs as compute_accuracy_stats, pooled across every dimension and
+    scenario, but bucketed by the exact reference score (1-4) instead of by dimension. A graph's
+    pooled MAE across dimensions can look strong purely because most reference scores in the batch
+    are 3s/4s -- this reveals whether that's a real discrimination or just an easy majority."""
+    graph_names = sorted({record.get("graph_name", "unknown") for record in records})
+
+    pairs_by_ref: dict[float, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+
+    for record in records:
+        graph_name = record.get("graph_name", "unknown")
+        reference = load_reference_scores(record.get("scenario_ref", ""))
+        for section_key, _label, dimension, score, _rationale in iter_dimension_scores(record):
+            actual = to_numeric_score(score)
+            reference_entry = reference.get(section_key, {}).get(dimension, {})
+            reference_value = (
+                to_numeric_score(reference_entry.get("score")) if isinstance(reference_entry, dict) else None
+            )
+            if actual is None or reference_value is None:
+                continue
+            pairs_by_ref[reference_value][graph_name].append(actual)
+
+    rows = []
+    graph_bucket_wins: dict[str, int] = defaultdict(int)
+    for reference_value in sorted(pairs_by_ref):
+        by_graph = pairs_by_ref[reference_value]
+        row_graphs: dict[str, Any] = {}
+
+        for graph_name in graph_names:
+            actuals = by_graph.get(graph_name, [])
+            if not actuals:
+                row_graphs[graph_name] = {
+                    "n_compared": 0,
+                    "mae": None,
+                    "rmse": None,
+                    "signed_bias": None,
+                    "severity": "empty",
+                    "bias": "",
+                    "is_winner": False,
+                }
+                continue
+
+            abs_errors = [abs(a - reference_value) for a in actuals]
+            signed_errors = [a - reference_value for a in actuals]
+            mae = _mean(abs_errors)
+            row_graphs[graph_name] = {
+                "n_compared": len(actuals),
+                "mae": mae,
+                "rmse": _rmse(abs_errors),
+                "signed_bias": _mean(signed_errors),
+                "severity": _severity(mae),
+                "bias": _bias_label(_mean(signed_errors)),
+                "is_winner": False,
+            }
+
+        candidates = [(g, row_graphs[g]["mae"]) for g in graph_names if row_graphs[g]["mae"] is not None]
+        is_tie = False
+        if candidates:
+            best_mae = min(mae for _, mae in candidates)
+            winners = [g for g, mae in candidates if mae == best_mae]
+            if len(winners) == 1:
+                row_graphs[winners[0]]["is_winner"] = True
+                graph_bucket_wins[winners[0]] += 1
+            elif len(winners) > 1:
+                is_tie = True
+
+        rows.append({"reference_value": reference_value, "graphs": row_graphs, "is_tie": is_tie})
+
+    total_buckets = len(rows)
+    summary = [{"graph_name": g, "buckets_won": graph_bucket_wins.get(g, 0)} for g in graph_names]
+    ranked = sorted(summary, key=lambda s: -s["buckets_won"])
+    overall_winner = None
+    if ranked and ranked[0]["buckets_won"] > 0 and (len(ranked) == 1 or ranked[0]["buckets_won"] > ranked[1]["buckets_won"]):
+        overall_winner = ranked[0]["graph_name"]
+
+    return {
+        "rows": rows,
+        "graph_names": graph_names,
+        "summary": summary,
+        "total_buckets": total_buckets,
+        "ties": sum(1 for row in rows if row["is_tie"]),
+        "overall_winner": overall_winner,
+    }
+
+
+def _quadratic_weighted_kappa(matrix: dict[int, dict[int, int]], classes: list[int]) -> float | None:
+    """Cohen's kappa with quadratic-distance weights between classes -- the standard metric for
+    ordinal grading agreement (essay scoring, clinical severity grading) because it corrects for
+    the agreement you'd expect by chance alone. Unlike MAE, this doesn't reward a judge for landing
+    on the majority class (3s/4s) -- guessing the majority class every time scores close to 0 here,
+    not close to 1, because the expected/chance matrix already accounts for that skew."""
+    if len(classes) < 2:
+        return None
+    total = sum(matrix[i][j] for i in classes for j in classes)
+    if total == 0:
+        return None
+    row_marginals = {i: sum(matrix[i][j] for j in classes) for i in classes}
+    col_marginals = {j: sum(matrix[i][j] for i in classes) for j in classes}
+    span = max(classes) - min(classes)
+    if span == 0:
+        return None
+
+    numerator = 0.0
+    denominator = 0.0
+    for i in classes:
+        for j in classes:
+            weight = ((i - j) ** 2) / (span**2)
+            expected = row_marginals[i] * col_marginals[j] / total
+            numerator += weight * matrix[i][j]
+            denominator += weight * expected
+
+    if denominator == 0:
+        return None
+    return round(1 - numerator / denominator, 3)
+
+
+def compute_classification_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Treats each 1-4 rubric score as a class and pools every (judge score, reference score)
+    pair per graph -- across every dimension and scenario -- into a confusion matrix, then derives
+    macro-averaged recall/precision/F1 from it. Pooled MAE can look fine purely because a graph
+    nails the majority class (mostly 3s/4s); per-class recall exposes a judge that never predicts
+    the minority classes even when MAE looks acceptable."""
+    graph_names = sorted({record.get("graph_name", "unknown") for record in records})
+    pairs_by_graph: dict[str, list[tuple[int, int]]] = defaultdict(list)
+
+    for record in records:
+        graph_name = record.get("graph_name", "unknown")
+        reference = load_reference_scores(record.get("scenario_ref", ""))
+        for section_key, _label, dimension, score, _rationale in iter_dimension_scores(record):
+            actual = to_numeric_score(score)
+            reference_entry = reference.get(section_key, {}).get(dimension, {})
+            reference_value = (
+                to_numeric_score(reference_entry.get("score")) if isinstance(reference_entry, dict) else None
+            )
+            if actual is None or reference_value is None:
+                continue
+            pairs_by_graph[graph_name].append((int(round(actual)), int(round(reference_value))))
+
+    classes = sorted({c for pairs in pairs_by_graph.values() for pair in pairs for c in pair})
+
+    summary = []
+    confusion = {}
+    for graph_name in graph_names:
+        pairs = pairs_by_graph.get(graph_name, [])
+        matrix = {ref: {pred: 0 for pred in classes} for ref in classes}
+        for actual, reference_value in pairs:
+            matrix[reference_value][actual] += 1
+
+        per_class: dict[int, dict[str, Any]] = {}
+        for c in classes:
+            support = sum(matrix[c].values())
+            if support == 0:
+                # No scenario in this batch has reference score `c` for any dimension --
+                # recall is undefined without ground-truth instances, so skip it entirely
+                # rather than let it silently drag the macro average toward 0 or None.
+                continue
+            tp = matrix[c][c]
+            predicted_count = sum(matrix[r][c] for r in classes)
+            recall = round(100 * tp / support, 1)
+            precision = round(100 * tp / predicted_count, 1) if predicted_count else 0.0
+            f1 = round(2 * precision * recall / (precision + recall), 1) if (precision + recall) > 0 else 0.0
+            per_class[c] = {
+                "recall": recall,
+                "precision": precision,
+                "f1": f1,
+                "support": support,
+                "predicted_count": predicted_count,
+            }
+
+        macro_recall = _mean([v["recall"] for v in per_class.values()])
+        macro_precision = _mean([v["precision"] for v in per_class.values()])
+        macro_f1 = _mean([v["f1"] for v in per_class.values()])
+        mae = _mean([abs(a - r) for a, r in pairs]) if pairs else None
+        qwk = _quadratic_weighted_kappa(matrix, classes) if classes else None
+
+        summary.append(
+            {
+                "graph_name": graph_name,
+                "n_compared": len(pairs),
+                "mae": mae,
+                "macro_recall": macro_recall,
+                "macro_precision": macro_precision,
+                "macro_f1": macro_f1,
+                "qwk": qwk,
+                "per_class": per_class,
+            }
+        )
+        confusion[graph_name] = {"matrix": matrix}
+
+    return {"summary": summary, "confusion": confusion, "classes": classes, "graph_names": graph_names}
 
 
 def _overscore_severity(rate: float | None) -> str:
@@ -405,14 +608,9 @@ def _overscore_severity(rate: float | None) -> str:
 
 
 def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
-    """
-    For dimensions the scenario author explicitly marked 'not_tested' (the case has no
-    moment that exercises that dimension), track how often each graph's judge scored it
-    with a real number anyway. compute_accuracy_stats can't see this: it only ever compares
-    pairs where both the judge score and the reference are numeric, so a judge that
-    fabricates a score for a not_tested dimension is pooled out of that comparison
-    entirely instead of being penalized for it.
-    """
+    """Tracks how often a graph's judge scores a 'not_tested' dimension anyway --
+    compute_accuracy_stats can't catch this since it only compares pairs where both
+    scores are numeric."""
     graph_names = sorted({record.get("graph_name", "unknown") for record in records})
 
     all_keys: set[tuple[str, str, str]] = set()
@@ -429,9 +627,8 @@ def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
                 reference_raw = reference_entry.get("score") if isinstance(reference_entry, dict) else None
                 if str(reference_raw).strip().lower() != NOT_TESTED:
                     continue
-                # Look up directly rather than via iter_dimension_scores: a graph that never
-                # even emits this dimension's key is still a "did not overscore" case, not
-                # one to silently drop from the not_tested denominator.
+                # Direct lookup, not iter_dimension_scores: a missing key is still a "did not
+                # overscore" case, not one to drop from the denominator.
                 entry = record_section.get(dimension)
                 score = entry.get("score") if isinstance(entry, dict) else entry
                 key = (section_key, label, dimension)
@@ -482,9 +679,8 @@ def compute_overscoring_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def build_accuracy_bar_chart(accuracy_rows: list[dict[str, Any]], graph_names: list[str]) -> dict[str, Any] | None:
-    """Precompute a grouped bar chart (one row per rubric dimension, one bar per
-    graph) from the same accuracy_pct numbers the heatmap above already shows,
-    so the dashboard doesn't need a second scoring pass to plot them."""
+    """Precompute a grouped bar chart (dimension x graph) from the same accuracy_pct
+    numbers the heatmap shows, avoiding a second scoring pass."""
     rows = [row for row in accuracy_rows if any(row["graphs"].get(g, {}).get("n_compared") for g in graph_names)]
     if not rows or not graph_names:
         return None
@@ -674,16 +870,19 @@ def load_scenario_detail(records: list[dict[str, Any]], slug: str) -> dict[str, 
     }
 
 
-def build_overview(dir_name: str) -> dict[str, Any]:
+def build_overview(dir_name: str, reference_filter: set[int] | None = None) -> dict[str, Any]:
     batch = load_batch(dir_name)
     records = batch["records"]
-    accuracy = compute_accuracy_stats(records)
+    accuracy = compute_accuracy_stats(records, reference_filter=reference_filter)
     return {
         "dir_name": dir_name,
         "summary": batch["summary"],
         "graph_metrics": compute_graph_metrics(records),
         "scenarios": list_scenarios(records),
         "accuracy": accuracy,
+        "reference_filter": sorted(reference_filter) if reference_filter else None,
+        "classification": compute_classification_stats(records),
+        "accuracy_by_reference": compute_accuracy_by_reference_value(records),
         "accuracy_bars": build_accuracy_bar_chart(accuracy["rows"], accuracy["graph_names"]),
         "overscoring": compute_overscoring_stats(records),
         "errors": list_errors(records),

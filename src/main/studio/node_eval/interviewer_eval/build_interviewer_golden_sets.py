@@ -135,11 +135,7 @@ CANDIDATE_FULL_UNPROMPTED_RECOMMENDATION_WITH_CREATIVE = (
 )
 
 
-# The "final turn" fixtures below must line up with node._build_interviewer_messages'
-# own is_final_turn = turn_index >= round_turn_limit - 1, where round_turn_limit
-# defaults to node.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE (see render_interviewer_input,
-# which doesn't override it). Deriving it here instead of hardcoding 3 means these
-# fixtures stay correct if that .env value ever changes again.
+# Derived, not hardcoded, so fixtures stay in sync with node's own is_final_turn check.
 FINAL_TURN_INDEX = node.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE - 1
 
 GENERIC_FILLER_EXCHANGE = (
@@ -150,9 +146,7 @@ GENERIC_FILLER_EXCHANGE = (
 
 
 def _pad_to_final_turn(transcript: list[str]) -> list[str]:
-    """Insert generic filler exchanges before the final wrap-up line/answer pair so
-    the transcript's Interviewer-line count matches FINAL_TURN_INDEX, whatever it
-    currently is (see _assert_turn_index_matches)."""
+    """Pad transcript with filler exchanges so its Interviewer-line count matches FINAL_TURN_INDEX."""
     n_filler = FINAL_TURN_INDEX - sum(1 for line in transcript if line.startswith("Interviewer"))
     if n_filler <= 0:
         return transcript
@@ -3036,8 +3030,7 @@ def build_case() -> dict[str, Any]:
 
 
 def render_interviewer_input(case: dict[str, Any], transcript: list[str], turn_index: int) -> str:
-    """Call the real, side-effect-free node._build_interviewer_messages -- no mocking
-    needed, unlike the judge builder, since this function never calls an LLM."""
+    """Calls the real node._build_interviewer_messages directly -- no mocking needed since it never calls an LLM."""
     messages = node._build_interviewer_messages(
         case["case_prompt"],
         transcript,

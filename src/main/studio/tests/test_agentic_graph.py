@@ -125,7 +125,6 @@ def make_state() -> dict:
 
 class AgenticGraphTests(unittest.TestCase):
     def test_initial_state(self) -> None:
-        # Checks that the initial graph state is populated from the runtime bundle.
         bundle = make_runtime_bundle()
 
         with patch.object(agentic, "load_selected_simulation_bundle", return_value=bundle):
@@ -139,7 +138,6 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertIn("case_structure", agentic.format_rubric(state["rubric_data"]))
 
     def test_interviewer_first_turn(self) -> None:
-        # Checks that the first interviewer turn uses the case prompt without calling the LLM.
         state = make_state()
         mock_llm = Mock()
 
@@ -155,9 +153,7 @@ class AgenticGraphTests(unittest.TestCase):
         )
 
     def test_candidate_visible_transcript(self) -> None:
-        # Checks that the candidate sees only public transcript lines, replayed as
-        # real conversation turns (not flattened into the system prompt), and
-        # supports plain-text fallback.
+        # Candidate sees only public transcript lines, passed as real messages (not flattened into the system prompt).
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -178,9 +174,7 @@ class AgenticGraphTests(unittest.TestCase):
             update = agentic.candidate_node(state)
 
         messages = observed_messages["messages"]
-        # Adjacent same-role messages are coalesced (some OpenRouter-routed
-        # providers reject non-alternating roles), so the system prompt and
-        # persona share messages[0] rather than being separate messages.
+        # Adjacent same-role messages are coalesced (some OpenRouter providers reject non-alternating roles), so system prompt + persona share messages[0].
         self.assertTrue(messages[0].content.startswith(agentic.node_module.CANDIDATE_SYSTEM_PROMPT))
         contents = [message.content for message in messages]
         self.assertTrue(any("Start with the objective." in content for content in contents))
@@ -193,7 +187,6 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertEqual(update["data_gathered"], [])
 
     def test_interviewer_focus_areas(self) -> None:
-        # Checks that judge focus areas are injected into the interviewer prompt as direct instructions.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -234,10 +227,7 @@ class AgenticGraphTests(unittest.TestCase):
         )
 
     def test_interviewer_round_budget_shrinks_with_remaining_total(self) -> None:
-        # Checks that a round started with little of the whole-conversation turn
-        # budget left (Fix 6) gets a correspondingly small round_turn_limit,
-        # instead of always claiming a full fresh MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
-        # turns regardless of what earlier rounds already spent.
+        # Round's turn budget shrinks with remaining total turns (Fix 6), not a fresh MAX_INTERVIEWER_TURNS_BEFORE_JUDGE each round.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -269,16 +259,12 @@ class AgenticGraphTests(unittest.TestCase):
         with patch.object(agentic, "interviewer_llm", mock_llm):
             update = agentic.interviewer_node(state)
 
-        # Only 2 turns remain in the total budget, well under the default
-        # MAX_INTERVIEWER_TURNS_BEFORE_JUDGE (10), so this round's final-turn
-        # signal must fire at turn_index 1, not wait until turn_index 9.
+        # Only 2 turns remain, so the final-turn signal must fire at turn_index 1, not wait until turn_index 9 (default budget).
         self.assertIn("final turn before judge evaluation: yes", observed_prompt["content"])
-        # ready_for_judge=True from the mock must still be overridden to False:
-        # the candidate hasn't answered this final ask yet.
+        # ready_for_judge=True from the mock is overridden to False -- the candidate hasn't answered this final ask yet.
         self.assertFalse(update["enough_evidence"])
 
     def test_judge_max_rounds(self) -> None:
-        # Checks that the judge forces evaluation after the maximum number of rounds.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -306,9 +292,7 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertIsNone(update["focus_areas"])
 
     def test_judge_resets_round_turn_index_but_accumulates_total(self) -> None:
-        # Checks that judge coaching reopens the interviewer->candidate loop by
-        # resetting the *per-round* turn_index, while total_turns_used keeps a
-        # running count across rounds instead of forgetting turns already spent.
+        # Judge coaching resets the *per-round* turn_index, but total_turns_used keeps accumulating across rounds.
         state = make_state()
         state["turn_index"] = agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
         state["total_turns_used"] = 0
@@ -341,9 +325,7 @@ class AgenticGraphTests(unittest.TestCase):
         )
 
     def test_judge_forces_evaluation_when_total_turn_budget_exhausted(self) -> None:
-        # Checks that the whole-conversation turn budget (Fix 6) can force
-        # evaluation on its own, even on an early judge round that the
-        # judge_round-count cap alone would never catch.
+        # Whole-conversation turn budget (Fix 6) forces evaluation on its own, even on an early round the judge_round cap alone wouldn't catch.
         state = make_state()
         state["judge_round"] = 0
         state["turn_index"] = agentic.node_module.MAX_INTERVIEWER_TURNS_BEFORE_JUDGE
@@ -363,7 +345,6 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertNotIn("turn_index", update)
 
     def test_interviewer_retries_invalid_json_before_controlled_fallback(self) -> None:
-        # Checks that the interviewer retries JSON repair instead of immediately using a generic fallback.
         state = make_state()
         state["turn_index"] = 1
         state["transcript"] = ["Interviewer: Our profits are down. What would you look at first?"]
@@ -395,11 +376,7 @@ class AgenticGraphTests(unittest.TestCase):
         )
 
     def test_judge_scouts_case_guide_with_its_own_prompt_and_llm(self) -> None:
-        # Checks that judge_node itself decides -- with its own prompt/persona and its
-        # own judge_llm, in a single node -- whether it needs an excerpt from the case
-        # guide, rather than routing through a separate/generic RAG-query node. A
-        # non-empty decision should drive retrieval; the query used should be exactly
-        # what judge wrote, not a raw situation dump.
+        # judge_node scouts the case guide itself in one call with its own prompt/llm; the retrieval query is exactly what judge wrote, not a raw situation dump.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -436,8 +413,7 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertTrue(update["llm_usage"])
 
     def test_judge_can_decide_it_does_not_need_the_guide(self) -> None:
-        # Checks that retrieval is genuinely conditional: when judge's own scouting
-        # decision leaves case_guide_query empty, no retrieval call is made at all.
+        # Retrieval is genuinely conditional -- an empty case_guide_query from judge's scouting means no retrieval call at all.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -454,10 +430,7 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertEqual(update["rag_query_log"], [])
 
     def test_eval_case_performance_scouts_both_sources_in_one_decision(self) -> None:
-        # Checks that eval_case_performance_node -- in its own single scouting call,
-        # with its own CASE_EVAL_SYSTEM_PROMPT -- decides what (if anything) it needs
-        # from each of the two sources it has access to, grounded in a short
-        # description of each source rather than a generic query-writer prompt.
+        # eval_case_performance_node scouts both sources in one call with its own CASE_EVAL_SYSTEM_PROMPT, not a generic query-writer prompt.
         state = make_state()
         state["enough_evidence"] = True
         mock_llm = Mock()
@@ -512,18 +485,11 @@ class AgenticGraphTests(unittest.TestCase):
         self.assertEqual(update["rag_query_log"][0]["source"], "profitability_guide")
 
     def test_graph_end_to_end(self) -> None:
-        # Checks the full graph run, including final feedback and SQLite persistence.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
-        # Every role (candidate/judge/interviewer/feedback) is patched to the same mock_llm
-        # below. `eval_case_performance` and `eval_dialog_quality` run as parallel branches
-        # of the same graph superstep (see route_after_judge_agentic_02, which fans out to
-        # both), so their calls to this shared mock race each other. A plain ordered
-        # `side_effect` list is not safe under that race: whichever branch's thread happens
-        # to call first "steals" the next list item meant for the other branch, making the
-        # test flaky. Routing by the distinguishing text of each prompt instead makes the
-        # response independent of call order/thread interleaving.
+        # eval_case_performance/eval_dialog_quality run as parallel branches of one superstep and race each other against
+        # this shared mock, so a plain ordered side_effect list would be flaky -- route by each prompt's distinguishing text instead.
         def fake_invoke(messages):
             prompt = messages[0].content if messages else ""
             combined = "\n".join(getattr(message, "content", "") for message in messages)
@@ -670,7 +636,6 @@ class AgenticGraphTests(unittest.TestCase):
 
 class BaselineGraphTests(unittest.TestCase):
     def test_baseline_prompt_context(self) -> None:
-        # Checks that the baseline interviewer prompt includes retrieved guide context.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -718,7 +683,6 @@ class BaselineGraphTests(unittest.TestCase):
         )
 
     def test_baseline_retrieves_context_inline(self) -> None:
-        # Checks that the baseline interviewer retrieves guide snippets directly during prompt construction.
         state = make_state()
         mock_llm = Mock()
         mock_llm.bind.return_value = mock_llm
@@ -759,9 +723,7 @@ class BaselineGraphTests(unittest.TestCase):
         )
 
     def test_pending_case_guide_context_empty_without_pending_query(self) -> None:
-        # Baseline has no separate scouting call, so a turn with nothing queued
-        # in pending_case_guide_query (e.g. the first live turn) must not hit
-        # retrieval at all -- the model hasn't had a chance to ask for anything yet.
+        # Baseline has no separate scouting call, so a turn with nothing queued in pending_case_guide_query must not hit retrieval at all.
         state = {"scenario_ref": "scenario_test"}
 
         with patch.object(case_guide_context, "retrieve_case_guide_context") as retrieve:
@@ -772,8 +734,7 @@ class BaselineGraphTests(unittest.TestCase):
         self.assertEqual(log_entry, {})
 
     def test_pending_case_guide_context_retrieves_queued_query(self) -> None:
-        # Checks that a query the *previous* baseline turn queued in
-        # pending_case_guide_query is what actually gets retrieved and shown now.
+        # Query queued by the *previous* turn's pending_case_guide_query is what gets retrieved now.
         state = {"pending_case_guide_query": "How should I structure a profitability drop case?"}
 
         with patch.object(

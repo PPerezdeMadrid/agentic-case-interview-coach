@@ -142,12 +142,7 @@ def load_case(case_id: str) -> dict[str, Any]:
 
 
 def load_rubric(rubric_id: str = DEFAULT_RUBRIC_ID) -> dict[str, Any]:
-    """
-    Load the shared rubric.
-
-    The source repo currently exposes a single rubric file, so rubric_id is accepted
-    for runtime compatibility but resolved to the shared JSON asset.
-    """
+    """Load the shared rubric; rubric_id is accepted for compatibility but only one rubric file exists."""
     if rubric_id != DEFAULT_RUBRIC_ID:
         raise LoaderError(
             f"Unsupported rubric_id '{rubric_id}'. Available rubric_id: '{DEFAULT_RUBRIC_ID}'."
@@ -267,11 +262,7 @@ def adapt_rubric(raw_rubric: dict[str, Any]) -> dict[str, Any]:
 
 
 def load_simulation_bundle(scenario_ref: str | Path) -> dict[str, Any]:
-    """
-    Load and adapt one scenario, its referenced case, and the shared rubric.
-
-    Returns a runtime-ready bundle without requiring any edits to the source JSON files.
-    """
+    """Load and adapt one scenario, its referenced case, and the shared rubric."""
     raw_scenario = load_scenario(scenario_ref)
     scenario = adapt_scenario(raw_scenario)
     raw_case = load_case(scenario["case_id"])

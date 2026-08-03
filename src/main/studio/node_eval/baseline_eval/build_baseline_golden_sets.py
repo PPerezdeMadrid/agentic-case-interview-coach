@@ -1,44 +1,7 @@
-"""Build three baseline golden-set CSVs for the World Cup case (04-worldcup-test),
-reusing the *exact same* transcripts/categories/expected answers as
-build_interviewer_golden_sets.py -- imported directly from that module rather than
-copied, so the two node types are graded on literally the same fixtures.
-
-Why the same fixtures are a fair test for baseline too: baseline is a single node
-that fuses the interviewer + judge + eval roles, but its own system prompt
-(doc/prompts/baseline_graph_system_prompt.md) carries near-identical behavioural
-rules to the interviewer's (doc/prompts/interviewer_graph_system_prompt.md) --
-reveal visible blocks on request, state case-data/"provide upon request" facts
-plainly, and never leak hidden guidance or the expected recommendation. The one
-asymmetry: baseline's prompt never received the interviewer's Socratic
-question-style few-shots (interviewer_question_style_few_shots.md), so the
-socratic_function file is expected to be a much harder golden set for baseline --
-that gap is itself the point of running it, not a reason to skip the file.
-
-turn_control (TURN_CONTROL_ITEMS) is not built for baseline at all -- no
-baseline_golden_set_turn_control.csv, no baseline-eval run for it, no row in the
-workbench's agentic-vs-baseline comparison (app.py already guards this with
-`if golden_set != "turn_control"`). Turn-budget control isn't a shared mechanism
-between the two graphs: the interviewer's MAX_INTERVIEWER_TURNS_BEFORE_JUDGE is a
-*per-round* budget that recurs every time the judge sends the interview back for
-another round (up to MAX_JUDGE_ROUNDS times), while baseline's MAX_BASELINE_TURNS
-is a single *total* budget for the whole interview with no rounds at all -- so
-"final turn" means a structurally different thing in each graph, and there's no
-shared fixture (short or long) that tests both fairly. turn_control is an
-agentic-only golden set; see written-dissertation/problems.md (2026-08-01
-entries) for the full diagnosis and the alternatives considered before landing
-here.
-
-`baseline_input` is produced by calling the real, side-effect-free
-`baseline._build_baseline_messages(...)` -- the exact function `baseline_node`
-calls before invoking the combined interviewer/judge/eval LLM -- with case-guide
-and profitability RAG context forced empty. That RAG retrieval is a live,
-non-deterministic side channel unrelated to every mechanism these golden sets
-test, so forcing it empty here is the same scope decision
-build_interviewer_golden_sets.py makes by leaving focus_areas empty, and the same
-reasoning build_judge_golden_set_worldcup.py uses to force judge's own case-guide
-scouting call empty (there it needed mocking since judge_node's prompt assembly
-isn't factored into a pure function; here it doesn't, since _build_baseline_messages
-already is one).
+"""Builds baseline golden-set CSVs for 04-worldcup-test, reusing build_interviewer_golden_sets.py's fixtures (imported, not copied) so both node types are graded on identical data.
+socratic_function is deliberately harder for baseline -- its prompt never got the interviewer's Socratic few-shots.
+turn_control is skipped: the interviewer's per-round turn budget and baseline's single total budget aren't comparable, so no shared fixture exists for it.
+baseline_input calls the real baseline._build_baseline_messages with RAG context forced empty (a live, non-deterministic side channel out of scope here).
 
 Usage (from repo root, with the project venv active):
     python -m src.main.studio.node_eval.baseline_eval.build_baseline_golden_sets
@@ -87,10 +50,7 @@ def build_case() -> dict[str, Any]:
 
 
 def render_baseline_input(case: dict[str, Any], transcript: list[str], turn_index: int) -> str:
-    """Call the real, side-effect-free baseline._build_baseline_messages -- no
-    mocking needed, same reasoning as build_interviewer_golden_sets.py's
-    render_interviewer_input, since this function never calls an LLM or touches
-    the vectorstore itself."""
+    """Calls the real baseline._build_baseline_messages -- no mocking needed since it's side-effect-free."""
     messages = baseline._build_baseline_messages(
         case["case_prompt"],
         case["case_data"],

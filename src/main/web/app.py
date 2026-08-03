@@ -155,8 +155,10 @@ def experiment_index():
     requested_dir = str(request.args.get("batch", "")).strip()
     dir_name = requested_dir if any(b["dir_name"] == requested_dir for b in batches) else batches[0]["dir_name"]
 
+    reference_filter = {int(v) for v in request.args.getlist("ref") if v.isdigit()} or None
+
     try:
-        overview = build_overview(dir_name)
+        overview = build_overview(dir_name, reference_filter=reference_filter)
     except FileNotFoundError:
         abort(404, f"Batch '{dir_name}' not found.")
 
@@ -277,10 +279,8 @@ def agents_judge():
         except FileNotFoundError as exc:
             error = str(exc)
 
-        # Baseline has no judge node of its own, so it's graded on this same
-        # golden set's transcripts via its own ready_for_evaluation call (see
-        # build_baseline_worldcup_golden_set.py) -- only available when that
-        # golden set name is "worldcup", the one baseline has been run against.
+        # Baseline has no judge node -- graded via its own ready_for_evaluation call on
+        # this golden set's transcripts, only available for "worldcup".
         try:
             baseline_result = load_baseline_eval(JUDGE_BASELINE_GOLDEN_SET, refresh=refresh)
             baseline_categories = category_breakdown(baseline_result["records"])
@@ -337,12 +337,8 @@ def agents_interviewer():
         except FileNotFoundError as exc:
             error = str(exc)
 
-        # Baseline is graded on this exact same golden_set (see
-        # build_baseline_golden_sets.py), so pull its numbers alongside the
-        # agentic interviewer's for a side-by-side comparison on one page.
-        # turn_control is excluded: baseline shares the interviewer's
-        # TURN_CONTROL_ITEMS verbatim, so its "score" isn't an independent
-        # measurement -- show it as unevaluated ('-') instead of a number.
+        # turn_control excluded: baseline shares the interviewer's TURN_CONTROL_ITEMS
+        # verbatim, so its "score" isn't an independent measurement.
         if golden_set != "turn_control":
             try:
                 baseline_result = load_baseline_eval(golden_set, refresh=refresh)

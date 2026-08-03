@@ -16,11 +16,7 @@ def get_opening_prompt(case_data: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def get_candidate_visible_blocks(case_data: dict[str, Any]) -> list[dict[str, Any]]:
-    """
-    Return all blocks the candidate is allowed to see.
-
-    In practice these are also the candidate-visible exhibits.
-    """
+    """Return all blocks the candidate is allowed to see (the candidate-visible exhibits)."""
     visible_blocks = case_data.get("visible_blocks", [])
     if not isinstance(visible_blocks, list):
         return []

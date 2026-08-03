@@ -189,26 +189,36 @@
   {% else %}
 
   {% if result or baseline_result %}
+  {% set agentic_rank = (result.weighted_score if result and result.weighted_score is not none else result.accuracy) if result else none %}
+  {% set baseline_rank = (baseline_confusion.weighted_score if baseline_confusion and baseline_confusion.weighted_score is not none else (baseline_confusion.accuracy if baseline_confusion else none)) %}
   <div class="metric-grid">
-    <div class="metric-card{{ ' metric-card--winner' if result and baseline_confusion and (result.accuracy or 0) >= (baseline_confusion.accuracy or 0) else '' }}">
+    <div class="metric-card{{ ' metric-card--winner' if agentic_rank is not none and baseline_rank is not none and agentic_rank >= baseline_rank else '' }}">
       <span>Agentic (Judge) accuracy</span>
       <strong>{{ pct(result.accuracy) if result else '–' }}</strong>
     </div>
-    <div class="metric-card{{ ' metric-card--winner' if result and baseline_confusion and (baseline_confusion.accuracy or 0) > (result.accuracy or 0) else '' }}">
+    <div class="metric-card{{ ' metric-card--winner' if agentic_rank is not none and baseline_rank is not none and baseline_rank > agentic_rank else '' }}">
       <span>Baseline accuracy</span>
       <strong>{{ pct(baseline_confusion.accuracy) if baseline_confusion else '–' }}</strong>
     </div>
     <div class="metric-card">
-      <span>Gap (agentic &minus; baseline)</span>
+      <span>Gap (agentic &minus; baseline), weighted</span>
       <strong>
-        {% if result and result.accuracy is not none and baseline_confusion and baseline_confusion.accuracy is not none %}
-          {{ pct(result.accuracy - baseline_confusion.accuracy) }}
+        {% if agentic_rank is not none and baseline_rank is not none %}
+          {{ pct(agentic_rank - baseline_rank) }}
         {% else %}
           &ndash;
         {% endif %}
       </strong>
     </div>
   </div>
+  <p class="helper">
+    Ranking above uses the precision-weighted score (F&beta;, &beta;=0.5), not raw
+    accuracy, whenever both sides have one: a false positive
+    (<code>enough_evidence</code> called true too early, cutting the interview short
+    on a real gap) is treated as costlier than a false negative (asking for one more
+    turn), so a model that trades a few extra turns for fewer premature cutoffs isn't
+    penalized as the "loser" just because raw accuracy reads slightly lower.
+  </p>
   {% endif %}
 
   {% if comparison %}
@@ -240,6 +250,7 @@
     <div class="metric-card"><span>Correct</span><strong>{{ result.n_correct }}/{{ result.n_scored }}</strong></div>
     <div class="metric-card"><span>Precision</span><strong>{{ pct(result.precision) }}</strong></div>
     <div class="metric-card"><span>Recall</span><strong>{{ pct(result.recall) }}</strong></div>
+    <div class="metric-card"><span>Weighted score (F&beta;=0.5)</span><strong>{{ pct(result.weighted_score) if result.weighted_score is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Errored calls</span><strong>{{ result.n_errors }}</strong></div>
   </div>
 
@@ -377,6 +388,7 @@
     <div class="metric-card"><span>Correct</span><strong>{{ baseline_result.n_correct }}/{{ baseline_result.n_scored }}</strong></div>
     <div class="metric-card"><span>Precision</span><strong>{{ pct(baseline_confusion.precision) if baseline_confusion else '–' }}</strong></div>
     <div class="metric-card"><span>Recall</span><strong>{{ pct(baseline_confusion.recall) if baseline_confusion else '–' }}</strong></div>
+    <div class="metric-card"><span>Weighted score (F&beta;=0.5)</span><strong>{{ pct(baseline_confusion.weighted_score) if baseline_confusion and baseline_confusion.weighted_score is not none else '–' }}</strong></div>
     <div class="metric-card"><span>Errored calls</span><strong>{{ baseline_result.n_errors }}</strong></div>
   </div>
 

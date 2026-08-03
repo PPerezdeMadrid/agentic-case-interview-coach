@@ -35,10 +35,6 @@ DIALOG_EVAL_SYSTEM_PROMPT = _compose_prompt(
 )
 FEEDBACK_SYSTEM_PROMPT = _load_prompt("feedback_system_prompt.md")
 CASE_GUIDE_NAVIGATION_PROMPT = _load_prompt("case_guide_navigation_prompt.md")
-# Baseline is a single node that combines interviewer, judge, and grader, so
-# unlike the agentic graph's specialized per-role prompts, it is written as one
-# standalone persona instead of composed from their files: that specialization
-# gap is exactly what the baseline-vs-agentic comparison is meant to isolate.
-# It still shares grading criteria and question style with the agentic graph's
-# equivalent nodes by construction, just folded into a single coherent voice.
+# One standalone persona rather than composed from per-role files like the agentic graph --
+# that specialization gap is exactly what the baseline-vs-agentic comparison is meant to isolate.
 BASELINE_GRAPH_SYSTEM_PROMPT = _load_prompt("baseline_graph_system_prompt.md")

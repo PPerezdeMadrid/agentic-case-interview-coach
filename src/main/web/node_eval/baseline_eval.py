@@ -1,19 +1,9 @@
-"""Baseline golden-set evaluation dashboard data: reads the
-`baseline_golden_set_<name>_results.json` files that
-`main/studio/node_eval/baseline_eval/run_baseline_golden_set.py` writes into
-`src/database/node_eval/baseline_eval/`.
+"""Baseline golden-set evaluation dashboard data: reads results JSON written by
+run_baseline_golden_set.py.
 
-Same pattern as node_eval/interviewer_eval.py -- baseline is graded on the exact
-same golden-set fixtures as the interviewer (see build_baseline_golden_sets.py),
-so `golden_set` names line up 1:1 between the two for `evidence_handling`,
-`guardrail`, and `socratic_function`, which is what lets
-`build_agentic_vs_baseline_comparison` below pair them up by category.
-`turn_control` is the one exception -- baseline has no counterpart golden set
-for it at all (see build_baseline_golden_sets.py's module docstring), so
-app.py never calls into this module for that golden_set. Not recomputed on
-page load: each row costs one (or two, for the socratic-function golden set)
-real baseline LLM call. Rerun via `make baseline-eval BASELINE_GOLDEN_SET=<name>`
-and reload to refresh.
+`turn_control` has no baseline counterpart golden set (see build_baseline_golden_sets.py),
+so app.py never calls this module for it. Not recomputed on page load -- rerun via
+`make baseline-eval BASELINE_GOLDEN_SET=<name>`.
 """
 from __future__ import annotations
 
@@ -22,13 +12,14 @@ import json
 from pathlib import Path
 from typing import Any
 
+from node_eval.judge_eval import weighted_readiness_score
+
 SRC_DIR = Path(__file__).resolve().parents[3]
 BASELINE_EVAL_DIR = SRC_DIR / "database" / "node_eval" / "baseline_eval"
 
 _CACHE: dict[str, dict[str, Any]] = {}
 
-# Read from the source CSV rather than duplicated into the (much smaller) results
-# JSON cache, same reasoning as interviewer_eval._load_csv_metadata.
+# Read from the source CSV, not the results JSON cache -- same reasoning as interviewer_eval._load_csv_metadata.
 _METADATA_COLUMNS = [
     "category",
     "turn_index",
@@ -64,9 +55,7 @@ def _load_csv_metadata(golden_set: str) -> dict[str, dict[str, str]]:
 
 
 def list_baseline_golden_sets() -> list[str]:
-    """Golden-set names (e.g. 'evidence_handling') that already have results
-    computed, derived from whichever baseline_golden_set_<name>_results.json
-    files exist."""
+    """Golden-set names (e.g. 'evidence_handling') that already have results computed."""
     if not BASELINE_EVAL_DIR.exists():
         return []
     names = []
@@ -105,13 +94,8 @@ def load_baseline_eval(golden_set: str, *, refresh: bool = False) -> dict[str, A
 
 
 def compute_readiness_confusion(records: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """TP/TN/FP/FN + precision/recall for a golden set graded purely on
-    readiness (`expected_ready_for_judge` vs `predicted.ready_for_evaluation`)
-    -- meaningful for the `worldcup` golden set, where that's the only thing
-    scored, unlike the 4 interviewer-shaped golden sets where `correct` also
-    depends on action/block_id/must_contain checks that would make a
-    readiness-only confusion matrix misleading. Returns None if no record has
-    an `expected_ready_for_judge` label to grade against."""
+    """TP/TN/FP/FN + precision/recall on readiness alone; meaningful only for `worldcup`,
+    where readiness is the sole scored field. Returns None if no row has that label."""
     tp = tn = fp = fn = 0
     for row in records:
         expected_raw = str(row.get("expected_ready_for_judge", "")).strip()
@@ -133,14 +117,17 @@ def compute_readiness_confusion(records: list[dict[str, Any]]) -> dict[str, Any]
     if not n_scored:
         return None
 
+    precision = round(tp / (tp + fp), 4) if (tp + fp) else None
+    recall = round(tp / (tp + fn), 4) if (tp + fn) else None
     return {
         "true_positive": tp,
         "true_negative": tn,
         "false_positive": fp,
         "false_negative": fn,
         "accuracy": round((tp + tn) / n_scored, 4),
-        "precision": round(tp / (tp + fp), 4) if (tp + fp) else None,
-        "recall": round(tp / (tp + fn), 4) if (tp + fn) else None,
+        "precision": precision,
+        "recall": recall,
+        "weighted_score": weighted_readiness_score(precision, recall),
     }
 
 
@@ -148,12 +135,8 @@ def build_agentic_vs_baseline_comparison(
     agentic_categories: list[dict[str, Any]] | None,
     baseline_categories: list[dict[str, Any]] | None,
 ) -> list[dict[str, Any]]:
-    """Pair up the interviewer (agentic) and baseline per-category accuracy
-    breakdowns by category name, so the dashboard can render them side by side
-    instead of as two separate tables the reader has to cross-reference by eye.
-    Sorted by the widest agentic-minus-baseline gap first, so the categories
-    where the role-differentiated agentic graph earns its complexity (or
-    doesn't) surface immediately."""
+    """Pairs agentic and baseline per-category accuracy by category name for side-by-side
+    display, sorted by widest gap first."""
     agentic_by_category = {row["category"]: row for row in (agentic_categories or [])}
     baseline_by_category = {row["category"]: row for row in (baseline_categories or [])}
     all_categories = sorted(set(agentic_by_category) | set(baseline_by_category))

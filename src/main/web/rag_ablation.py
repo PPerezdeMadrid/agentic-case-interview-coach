@@ -1,12 +1,7 @@
-"""RAG ablation dashboard data: reads the `rag_ablation_results.json` file that
-`rag_ablation_eval.py` writes into a batch's own directory under
-`artifacts/batch_runs/<dir_name>/`, and adds a sorted flat view on top for the
-per-record detail table.
+"""Reads `rag_ablation_results.json` written by `rag_ablation_eval.py` per batch.
 
-Not recomputed on page load: each ablated record costs one judge call per
-eval node against a real LLM, so this only reads whatever the last
-`rag_ablation_eval.py` run wrote for that batch. Rerun it (see
-`make rag-ablation BATCH=<dir_name>`) and reload this page to refresh.
+Not recomputed here -- each record costs a real judge call, so rerun
+`make rag-ablation BATCH=<dir_name>` to refresh.
 """
 from __future__ import annotations
 

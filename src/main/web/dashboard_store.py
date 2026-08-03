@@ -222,10 +222,7 @@ def _extract_trace_transcript_updates(changed_fields: dict[str, Any]) -> list[di
 
 
 def to_numeric_score(value: Any) -> float | None:
-    """
-    Convert a score to float/int if possible.
-    Return None for missing, not_tested, N/A, or non-numeric values.
-    """
+    """Convert a score to float/int, or None for missing/not_tested/N/A/non-numeric values."""
     if value is None:
         return None
     if isinstance(value, bool):
@@ -244,9 +241,7 @@ def to_numeric_score(value: Any) -> float | None:
 
 
 def score_status(error: float | None) -> str:
-    """
-    Return exact match, off by 1, different, or not applicable.
-    """
+    """Return exact match, off by 1, different, or not applicable."""
     if error is None:
         return "not applicable"
     if error == 0:
@@ -280,11 +275,8 @@ def _absolute_error(left_score: Any, right_score: Any) -> float | None:
 
 
 def calculate_error_metrics(comparison_rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """
-    Given rows containing reference_score, model_score and human_score,
-    calculate MAE, exact match rate, off-by-one rate, overestimation count,
-    underestimation count, signed error, and reference-vs-human MAE.
-    """
+    """Compute MAE, exact/off-by-one match rates, over/underestimation counts, and
+    reference-vs-human MAE from comparison rows."""
     model_abs_errors: list[float] = []
     reference_abs_errors: list[float] = []
     signed_errors: list[float] = []
@@ -394,10 +386,8 @@ def build_three_way_score_comparison(
 
 
 def build_annotation_sections(comparison_rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    """
-    Group every comparison row by section so a human can score each dimension,
-    whether or not the golden set already provides a reference score.
-    """
+    """Group comparison rows by section for human scoring, regardless of whether a
+    reference score exists."""
     sections: dict[str, list[dict[str, Any]]] = {
         CASE_PERFORMANCE_SECTION: [],
         DIALOG_QUALITY_SECTION: [],

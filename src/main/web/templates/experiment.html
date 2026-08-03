@@ -137,7 +137,7 @@
       </tbody>
     </table>
   </div>
-  <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design (<code>OPENROUTER_TEMPERATURE=0</code>), so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
+  <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design, so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
 
   {% if overview.errors %}
   <details class="disclosure" id="batch-errors">
@@ -170,6 +170,187 @@
   {% endif %}
 </section>
 
+{% if overview.accuracy_by_reference.rows %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Pooled across every dimension &amp; scenario, bucketed by the reference score itself</p>
+      <h2>Accuracy by true reference score (1&ndash;4)</h2>
+      <p class="lede">A graph that just guesses the most common reference score can look accurate overall without actually discriminating between good and bad performance. This groups every (judge score, reference score) pair by the <strong>reference score itself</strong> &mdash; it shows whether a graph is actually accurate at the low end (reference 1&ndash;2, the deliberately-flawed cases) or just riding a reference distribution skewed toward 3s and 4s.</p>
+    </div>
+  </div>
+
+  {% if overview.accuracy_by_reference.summary %}
+  <div class="metric-grid accuracy-scoreboard">
+    {% for s in overview.accuracy_by_reference.summary %}
+    <div class="metric-card{{ ' metric-card--winner' if s.graph_name == overview.accuracy_by_reference.overall_winner else '' }}">
+      <span>{{ s.graph_name }}{% if s.graph_name == overview.accuracy_by_reference.overall_winner %} &bull; overall winner <span class="icon-star" aria-hidden="true"></span>{% endif %}</span>
+      <strong>{{ s.buckets_won }} / {{ overview.accuracy_by_reference.total_buckets }}</strong>
+      <p class="helper">reference scores won{% if overview.accuracy_by_reference.ties %} &bull; {{ overview.accuracy_by_reference.ties }} tied (no winner){% endif %}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% set ref_cols = 'minmax(220px, 1.4fr) repeat(' ~ (overview.accuracy_by_reference.graph_names | length) ~ ', minmax(130px, 1fr))' %}
+  <div class="heatmap">
+    <div class="heatmap-row" style="grid-template-columns: {{ ref_cols }};">
+      <div></div>
+      {% for g in overview.accuracy_by_reference.graph_names %}
+      <div class="heatmap-col-label">{{ g }}</div>
+      {% endfor %}
+    </div>
+    {% for row in overview.accuracy_by_reference.rows %}
+    <div class="heatmap-row" style="grid-template-columns: {{ ref_cols }};">
+      <div class="heatmap-dim-label">reference score {{ row.reference_value | int }}{% if row.is_tie %} <span class="tie-tag" title="Every graph had identical MAE for this reference score &mdash; no one is credited with the win">&equals; tie</span>{% endif %}</div>
+      {% for g in overview.accuracy_by_reference.graph_names %}
+      {% set cell = row.graphs.get(g) %}
+      <div class="heatmap-cell heatmap-{{ cell.severity if cell else 'empty' }}{{ ' is-winner' if cell and cell.is_winner else '' }}"{% if cell and cell.mae is not none %} title="MAE {{ cell.mae }} &middot; RMSE {{ cell.rmse }} ({{ cell.n_compared }} compared)"{% endif %}>
+        {% if cell and cell.is_winner %}<span class="trophy icon-star" aria-hidden="true" title="More accurate graph at this reference score"></span>{% endif %}
+        {% if cell and cell.mae is not none %}
+        <span class="mae-value">{{ cell.mae }}</span>
+        <span class="bias-tag">
+          {%- if cell.bias == 'over' %}&#9651; overestimates
+          {%- elif cell.bias == 'under' %}&#9661; underestimates
+          {%- else %}&#9642; matches
+          {%- endif %}
+        </span>
+        <span class="helper">{{ cell.n_compared }} compared</span>
+        {% else %}
+        <span class="helper">no comparable scores</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="chip-row" style="padding: 0 24px 24px;">
+    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; accurate</span>
+    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; so-so</span>
+    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; off</span>
+    <span class="chip">&#9651; overestimates &bull; &#9661; underestimates &bull; &#9642; matches</span>
+    <span class="chip"><span class="icon-star" aria-hidden="true"></span> more accurate graph on that row</span>
+    <span class="chip">&equals; tie (identical MAE) &mdash; no graph is credited with the win</span>
+  </div>
+</section>
+{% endif %}
+
+{% if overview.classification.summary %}
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <p class="eyebrow">Pooled across every dimension &amp; scenario &mdash; each 1&ndash;4 score treated as a class</p>
+      <h2>MAE, Recall, Precision &amp; QWK</h2>
+      <p class="lede">
+        <strong>Recall</strong> for class <em>n</em>: of every case the reference truly scored <em>n</em>, how often this graph's judge also said <em>n</em>.
+        <strong>Precision</strong> for class <em>n</em>: of every case this graph's judge scored <em>n</em>, how often the reference agreed.
+        Both are macro-averaged (unweighted mean across classes) so a judge that only ever predicts the majority class (e.g. always 4) is penalized here even while pooled MAE still looks fine.
+      </p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Graph</th>
+          <th>MAE</th>
+          <th>Macro recall</th>
+          <th>Macro precision</th>
+          <th>Macro F1</th>
+          <th>QWK</th>
+          <th>Compared</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in overview.classification.summary %}
+        <tr>
+          <td>{{ s.graph_name }}</td>
+          <td>{{ num(s.mae) }}</td>
+          <td>{{ pct(s.macro_recall) }}</td>
+          <td>{{ pct(s.macro_precision) }}</td>
+          <td>{{ pct(s.macro_f1) }}</td>
+          <td>{{ num(s.qwk) }}</td>
+          <td>{{ s.n_compared }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <ul class="metric-legend-list">
+    <li><strong>MAE</strong> &mdash; average point gap vs. the reference. Simple, but a judge that just guesses the majority class (mostly 3s/4s) can score a low MAE without discriminating good from bad performance.</li>
+    <li><strong>Recall / Precision</strong> &mdash; per-class (1&ndash;4) accuracy, so a judge that never predicts the low classes is penalized here even when its MAE looks fine.</li>
+    <li><strong>QWK</strong> (Quadratic Weighted Kappa) &mdash; the standard ordinal-agreement metric in the literature (essay scoring, clinical severity grading); corrects for the agreement expected by chance given the skewed reference distribution. 1.0 = perfect agreement, 0 = chance/majority-guessing level, negative = worse than chance. The most defensible single number for a thesis methodology section, since MAE alone can't tell "genuinely accurate" from "lucky because most cases are easy 3s/4s."</li>
+  </ul>
+
+  <details class="disclosure">
+    <summary>Show per-class breakdown</summary>
+    <div class="table-wrap disclosure-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Graph</th>
+            <th>Class (reference score)</th>
+            <th>Recall</th>
+            <th>Precision</th>
+            <th>F1</th>
+            <th>Support (n reference)</th>
+            <th>Predicted count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in overview.classification.summary %}
+          {% for c in overview.classification.classes %}
+          {% set pc = s.per_class.get(c) %}
+          <tr>
+            <td>{{ s.graph_name }}</td>
+            <td>{{ c }}</td>
+            <td>{% if pc %}{{ pct(pc.recall) }}{% else %}&ndash;{% endif %}</td>
+            <td>{% if pc %}{{ pct(pc.precision) }}{% else %}&ndash;{% endif %}</td>
+            <td>{% if pc %}{{ pct(pc.f1) }}{% else %}&ndash;{% endif %}</td>
+            <td>{{ pc.support if pc else 0 }}</td>
+            <td>{{ pc.predicted_count if pc else 0 }}</td>
+          </tr>
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <div class="panel-heading" style="padding-top: 24px;">
+    <div>
+      <h3 style="margin: 0;">Confusion matrix (reference score &times; judge score)</h3>
+      <p class="lede">Rows are the scenario's true reference score, columns are what the graph's judge said. Off-diagonal counts show exactly which direction the errors run (e.g. reference 2 read as 4). Diagonal cells (exact matches) are highlighted.</p>
+    </div>
+  </div>
+  {% for graph_name in overview.classification.graph_names %}
+  {% set conf = overview.classification.confusion.get(graph_name) %}
+  <p class="helper" style="padding: 0 24px;"><strong>{{ graph_name }}</strong></p>
+  <div class="table-wrap" style="padding-bottom: 16px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Reference &darr; \ Judge &rarr;</th>
+          {% for c in overview.classification.classes %}<th>{{ c }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for ref_c in overview.classification.classes %}
+        <tr>
+          <td>{{ ref_c }}</td>
+          {% for pred_c in overview.classification.classes %}
+          <td{% if pred_c == ref_c %} class="status status-exact-match"{% endif %}>{{ conf.matrix[ref_c][pred_c] }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
 {% if overview.accuracy.total_dims %}
 <section class="panel">
   <div class="panel-heading">
@@ -180,6 +361,25 @@
     </div>
   </div>
 
+  <form method="get" action="{{ url_for('experiment_index') }}">
+    <input type="hidden" name="batch" value="{{ batch }}">
+    <div class="filter-chip-row">
+      <span class="filter-label">Filter by reference score</span>
+      {% for v in [1, 2, 3, 4] %}
+      <label class="filter-chip">
+        <input type="checkbox" name="ref" value="{{ v }}" {% if not overview.reference_filter or v in overview.reference_filter %}checked{% endif %} onchange="this.form.submit()">
+        <span>{{ v }}</span>
+      </label>
+      {% endfor %}
+      {% if overview.reference_filter %}
+      <a class="filter-chip-reset" href="{{ url_for('experiment_index', batch=batch) }}">&times; reset</a>
+      {% endif %}
+    </div>
+  </form>
+  {% if overview.reference_filter %}
+  <p class="helper" style="padding: 4px 24px 16px;">Showing only reference score {{ overview.reference_filter | join(', ') }} in the heatmap and per-dimension table below.</p>
+  {% endif %}
+
   <div class="accuracy-top">
     {% if overview.accuracy.summary %}
     <div class="metric-grid accuracy-scoreboard">
@@ -187,7 +387,7 @@
       <div class="metric-card{{ ' metric-card--winner' if s.graph_name == overview.accuracy.overall_winner else '' }}">
         <span>{{ s.graph_name }}{% if s.graph_name == overview.accuracy.overall_winner %} &bull; overall winner <span class="icon-star" aria-hidden="true"></span>{% endif %}</span>
         <strong>{{ s.dims_won }} / {{ overview.accuracy.total_dims }}</strong>
-        <p class="helper">dimensions won &bull; MAE {{ num(s.overall_mae) }} &middot; RMSE {{ num(s.overall_rmse) }} vs reference &bull; {{ s.n_compared }} scored comparisons</p>
+        <p class="helper">dimensions won{% if overview.accuracy.ties %} &bull; {{ overview.accuracy.ties }} tied (no winner){% endif %} &bull; MAE {{ num(s.overall_mae) }} &middot; RMSE {{ num(s.overall_rmse) }} vs reference &bull; {{ s.n_compared }} scored comparisons</p>
       </div>
       {% endfor %}
     </div>
@@ -229,6 +429,7 @@
     <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; off</span>
     <span class="chip">&#9651; overestimates &bull; &#9661; underestimates &bull; &#9642; matches</span>
     <span class="chip"><span class="icon-star" aria-hidden="true"></span> more accurate graph on that row</span>
+    <span class="chip">&equals; tie (identical MAE) &mdash; no graph is credited with the win</span>
   </div>
 
   {% set n_graphs = overview.accuracy.graph_names | length %}
@@ -248,7 +449,7 @@
     <div class="heatmap-section">{{ row.section_label }}</div>
     {% endif %}
     <div class="heatmap-row" style="grid-template-columns: {{ cols }};">
-      <div class="heatmap-dim-label">{{ row.dimension }}</div>
+      <div class="heatmap-dim-label">{{ row.dimension }}{% if row.is_tie %} <span class="tie-tag" title="Every graph had identical MAE on this dimension &mdash; no one is credited with the win">&equals; tie</span>{% endif %}</div>
       {% for g in overview.accuracy.graph_names %}
       {% set cell = row.graphs.get(g) %}
       <div class="heatmap-cell heatmap-{{ cell.severity if cell else 'empty' }}{{ ' is-winner' if cell and cell.is_winner else '' }}"{% if cell and cell.mae is not none %} title="MAE {{ cell.mae }} &middot; RMSE {{ cell.rmse }} ({{ cell.n_compared }} compared)"{% endif %}>
@@ -282,6 +483,7 @@
         For every repeat where a graph returned a real number for this dimension (not <code>not_tested</code>) and the scenario has an author-defined reference score, this compares the two.
         <strong>Mean deviation</strong> is the signed average of (judge score &minus; reference score): <code>+</code> means the graph overestimates on average, <code>&minus;</code> means it underestimates, close to <code>0</code> means it lands on target.
         <strong>% exact match</strong> is the share of those comparisons where the judge's score matched the reference score exactly &mdash; treat it as anecdotal when the compared-count in parentheses is small.
+        {% if overview.reference_filter %}Reference-score filter active: only reference score {{ overview.reference_filter | join(', ') }} included (see filter above).{% endif %}
       </p>
     </div>
   </div>
