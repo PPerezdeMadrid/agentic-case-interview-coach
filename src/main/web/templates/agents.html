@@ -8,11 +8,7 @@
     <div>
       <p class="eyebrow">Agents</p>
       <h1>Agent Evaluations</h1>
-      <p class="lede">
-        Per-node evaluation of the agentic graph's individual agents against
-        hand-built, theory-grounded golden sets, independent of full-interview
-        runs.
-      </p>
+      <p class="lede">Node-level evaluations against golden sets.</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -28,22 +24,14 @@
         <tr>
           <td>Judge</td>
           <td>
-            Accuracy of the <code>enough_evidence</code> true/false decision
-            against a hand-labeled golden set of candidate/interviewer
-            transcripts at varying stages of case completion. Shows the
-            role-differentiated agentic Judge next to baseline's fused
-            <code>ready_for_evaluation</code> call on the same transcripts.
+            Checks <code>enough_evidence</code> against a labeled transcript set.
           </td>
           <td><a class="button" href="{{ url_for('agents_judge') }}">Judge behaviour</a></td>
         </tr>
         <tr>
           <td>Interviewer</td>
           <td>
-            Move accuracy (reveal/state/decline, Socratic question function,
-            leak resistance, turn control) against 4 golden sets covering
-            evidence-gathering and guardrail behaviour. Shows the
-            role-differentiated agentic interviewer next to baseline's fused
-            interviewer/judge/grader node on the same fixtures.
+            Checks move accuracy and guardrails against four golden sets.
           </td>
           <td><a class="button" href="{{ url_for('agents_interviewer') }}">Interviewer behaviour</a></td>
         </tr>

@@ -49,7 +49,7 @@
   </div>
   {% endfor %}
 </div>
-<p class="helper bar-chart-caption">Sorted by widest agentic&minus;baseline gap first. Gap badge: green/positive = agentic more accurate on that category, red/negative = baseline more accurate.</p>
+<p class="helper bar-chart-caption">Sorted by gap. Positive = agentic higher.</p>
 {% endif %}
 {% endmacro %}
 
@@ -59,10 +59,7 @@
   <div>
     <p class="eyebrow">{{ categories|length }} categories</p>
     <h3>{{ heading }}</h3>
-    <p class="lede">
-      Records grouped by the golden set's <code>category</code> column,
-      sorted worst-accuracy-first.
-    </p>
+    <p class="lede">Grouped by <code>category</code>.</p>
   </div>
 </div>
 
@@ -125,16 +122,8 @@
   <div class="panel-heading panel-heading--stack">
     <div>
       <p class="eyebrow">Agents &middot; Judge &middot; Cached</p>
-      <h1>Judge behaviour: agentic vs baseline</h1>
-      <p class="lede">
-        Runs each row of a hand-labeled golden set through the real judge LLM,
-        using the exact rendered prompt <code>judge_node</code> would send
-        (system prompt + transcript + case guidance/data/recommendation +
-        rubric), and compares its <code>enough_evidence</code> answer against
-        the golden set's <code>expected_enough_evidence</code> label. Baseline
-        has no separate judge node, so it's graded on the exact same
-        transcripts via its own fused <code>ready_for_evaluation</code> call.
-      </p>
+      <h1>Judge evaluation: agentic vs baseline</h1>
+      <p class="lede">Cached judge evaluation on shared transcripts.</p>
     </div>
     {% if result or baseline_result %}
     <div class="chip-row">
@@ -160,31 +149,11 @@
   </form>
   {% endif %}
 
-  <p class="helper" style="padding: 0 24px 24px;">
-    This page does not recompute live &mdash; each row costs one real LLM
-    call, so it only reads cached output. To (re)compute the agentic side,
-    from <code>src/</code> run
-    <code>python main/studio/node_eval/judge_eval/run_judge_golden_set.py</code> (or
-    <code>make judge-eval</code>); to (re)compute baseline's side, run
-    <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code> (first
-    regenerating the fixture via
-    <code>python main/studio/node_eval/baseline_eval/build_baseline_worldcup_golden_set.py</code>
-    if the golden set changed), then reload this page.
-    {% if golden_set %}
-    <a href="{{ url_for('agents_judge', golden_set=golden_set, refresh=1) }}">Reload cache</a>
-    {% endif %}
-  </p>
+  <p class="helper" style="padding: 0 24px 24px;">Cached results. Recompute: <code>make judge-eval</code>, <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code>. {% if golden_set %}<a href="{{ url_for('agents_judge', golden_set=golden_set, refresh=1) }}">Reload cache</a>{% endif %}</p>
 
   {% if not golden_sets %}
   <div class="prompt-box">
-    <p class="helper">
-      No judge golden-set results found under
-      <code>database/node_eval/judge_eval/</code>. Build a golden-set CSV (see
-      <code>main/studio/node_eval/judge_eval/build_judge_golden_set_worldcup.py</code>),
-      then run <code>make judge-eval</code> (or
-      <code>python main/studio/node_eval/judge_eval/run_judge_golden_set.py</code> from
-      <code>src/</code>) first.
-    </p>
+    <p class="helper">No judge results found in <code>database/node_eval/judge_eval/</code>. Build the golden set and run <code>make judge-eval</code>.</p>
   </div>
   {% else %}
 
@@ -211,14 +180,7 @@
       </strong>
     </div>
   </div>
-  <p class="helper">
-    Ranking above uses the precision-weighted score (F&beta;, &beta;=0.5), not raw
-    accuracy, whenever both sides have one: a false positive
-    (<code>enough_evidence</code> called true too early, cutting the interview short
-    on a real gap) is treated as costlier than a false negative (asking for one more
-    turn), so a model that trades a few extra turns for fewer premature cutoffs isn't
-    penalized as the "loser" just because raw accuracy reads slightly lower.
-  </p>
+  <p class="helper">Winner uses weighted score (F&beta;=0.5), not raw accuracy.</p>
   {% endif %}
 
   {% if comparison %}
@@ -258,11 +220,7 @@
     <div>
       <p class="eyebrow">Confusion matrix</p>
       <h3>Predicted vs. expected</h3>
-      <p class="lede">
-        False positive = judge said <code>enough_evidence: true</code> too
-        early; false negative = judge kept asking for more evidence when the
-        transcript already had enough.
-      </p>
+      <p class="lede">FP = stopped early. FN = asked for more evidence.</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -374,13 +332,7 @@
     <div>
       <p class="eyebrow">Baseline</p>
       <h2>Fused node: <code>ready_for_evaluation</code> accuracy</h2>
-      <p class="lede">
-        Same {{ result.records|length if result else 70 }} transcripts as the
-        agentic Judge above, rendered as baseline's own single-call prompt
-        (see <code>build_baseline_worldcup_golden_set.py</code>) and graded
-        purely on whether <code>ready_for_evaluation</code> matches the same
-        <code>expected_enough_evidence</code> label.
-      </p>
+      <p class="lede">Same transcripts, scored on baseline <code>ready_for_evaluation</code>.</p>
     </div>
   </div>
   <div class="metric-grid">
@@ -502,12 +454,7 @@
   {% endif %}
   {% else %}
   <div class="prompt-box">
-    <p class="helper">
-      No cached baseline results for the <code>worldcup</code>
-      golden set yet &mdash; run
-      <code>python main/studio/node_eval/baseline_eval/build_baseline_worldcup_golden_set.py</code>
-      then <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code> to populate this section.
-    </p>
+    <p class="helper">No cached baseline results for <code>worldcup</code>. Run <code>build_baseline_worldcup_golden_set.py</code> and <code>make baseline-eval BASELINE_GOLDEN_SET=worldcup</code>.</p>
   </div>
   {% endif %}
 

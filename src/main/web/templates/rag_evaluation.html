@@ -36,7 +36,7 @@
     <div>
       <p class="eyebrow">RAG Evaluation</p>
       <h1>Retrieval Quality &amp; Ablation</h1>
-      <p class="lede">Everything about how well retrieval-augmented generation is working, in one place: live retrieval metrics against the golden sets, and how much RAG actually moves the judge's grading.</p>
+      <p class="lede">Retrieval metrics and RAG ablation.</p>
     </div>
     <div class="chip-row">
       <a class="chip chip-link" href="#retrieval-quality">Retrieval Quality</a>
@@ -50,11 +50,7 @@
     <div>
       <p class="eyebrow">Live</p>
       <h2>Retrieval Quality</h2>
-      <p class="lede">
-        Precision@K, Recall@K, Hit Rate, and MRR for every query in the generation
-        golden sets, run live against the case-guide and profitability-guide vector
-        stores.
-      </p>
+      <p class="lede">Live retrieval metrics by query, category, and source.</p>
     </div>
     {% if retrieval_result %}
     <div class="chip-row">
@@ -74,15 +70,11 @@
       <a class="button" href="{{ url_for('rag_evaluation_index', k=top_k, refresh=1, batch=ablation_batch) }}">Recompute (bypass cache)</a>
     </div>
   </form>
-  <p class="helper" style="padding: 0 24px 24px;">
-    Ground truth comes from the <code>source_chunk_ids</code> column already annotated in
-    <code>generation_golden_set_case_guide.csv</code> and
-    <code>generation_golden_set_profitability.csv</code> &mdash; exact chunk IDs per query.
-  </p>
+  <p class="helper" style="padding: 0 24px 24px;">Ground truth comes from the annotated <code>source_chunk_ids</code> columns in the golden sets.</p>
 
   {% if retrieval_error %}
   <div class="prompt-box">
-    <p class="helper">{{ retrieval_error }} Check that <code>src/database/rag_evaluation/generation_golden_set_case_guide.csv</code> and <code>generation_golden_set_profitability.csv</code> exist and have rows.</p>
+    <p class="helper">{{ retrieval_error }} Check that the golden-set CSVs exist and contain rows.</p>
   </div>
   {% elif retrieval_result and retrieval_result.overall %}
   <div class="metric-grid">
@@ -204,7 +196,7 @@
   </div>
   {% else %}
   <div class="prompt-box">
-    <p class="helper">No rows evaluated. Check that <code>src/database/rag_evaluation/generation_golden_set_case_guide.csv</code> and <code>generation_golden_set_profitability.csv</code> exist and have rows.</p>
+    <p class="helper">No rows evaluated. Check that the golden-set CSVs exist and contain rows.</p>
   </div>
   {% endif %}
 </section>
@@ -214,14 +206,7 @@
     <div>
       <p class="eyebrow">Cached</p>
       <h2>RAG Ablation: with vs. without RAG</h2>
-      <p class="lede">
-        For a chosen experiment batch, <code>eval_case_performance</code> and
-        <code>eval_dialog_quality</code> are replayed against the exact same stored
-        transcript, but with every RAG retrieval call disabled (the guide/textbook
-        lookup still happens, it just always comes back empty). Compare the resulting
-        scores against the batch's original (with-RAG) scores for that same transcript
-        to see how much RAG actually moves the judge's grading.
-      </p>
+      <p class="lede">Replays saved transcripts with retrieval disabled and compares the resulting scores.</p>
     </div>
     {% if ablation_result %}
     <div class="chip-row">
@@ -246,21 +231,11 @@
   </form>
   {% else %}
   <div class="prompt-box">
-    <p class="helper">
-      No batches with ablation results found under <code>artifacts/batch_runs/</code>.
-      Run <code>make rag-ablation BATCH=&lt;dir_name&gt;</code> against an existing
-      experiment batch (see the <a href="{{ url_for('experiment_index') }}">Experiment</a>
-      page for available batch names) first.
-    </p>
+    <p class="helper">No ablation batches found in <code>artifacts/batch_runs/</code>. Run <code>make rag-ablation BATCH=&lt;dir_name&gt;</code>.</p>
   </div>
   {% endif %}
 
-  <p class="helper" style="padding: 0 24px 24px;">
-    This section does not recompute live &mdash; it reads the cached output of
-    <code>rag_ablation_eval.py</code>. To (re)compute a batch, from <code>src/</code> run
-    <code>python rag_ablation_eval.py --batch &lt;dir_name&gt;</code> (or
-    <code>make rag-ablation BATCH=&lt;dir_name&gt;</code>), then reload this page.
-  </p>
+  <p class="helper" style="padding: 0 24px 24px;">Reads cached <code>rag_ablation_eval.py</code> output. Recompute with <code>python rag_ablation_eval.py --batch &lt;dir_name&gt;</code> or <code>make rag-ablation BATCH=&lt;dir_name&gt;</code>.</p>
 
   {% if ablation_error %}
   <div class="prompt-box">
@@ -271,13 +246,7 @@
     <div>
       <p class="eyebrow">Overall</p>
       <h3>Score delta by dimension (without RAG &minus; with RAG)</h3>
-      <p class="lede">
-        <strong>Mean delta</strong> keeps the sign (positive = scored higher without RAG);
-        <strong>mean |delta|</strong> ignores direction, so it answers "how much do the two
-        conditions disagree" regardless of which way. <strong>Differ</strong> counts, among
-        the comparable records (both sides had a numeric score), how many actually landed on
-        a different score.
-      </p>
+      <p class="lede">Mean delta = without RAG minus with RAG. Mean |delta| ignores direction. Differ counts changed numeric scores.</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -315,7 +284,7 @@
     <div>
       <p class="eyebrow">{{ ablation_result.detail_rows | length }} dimension comparisons</p>
       <h3>Per-record detail</h3>
-      <p class="lede">Sorted by |delta| descending, so the biggest with/without-RAG disagreements surface first.</p>
+      <p class="lede">Sorted by largest absolute delta first.</p>
     </div>
   </div>
   <div class="table-wrap">

@@ -45,7 +45,7 @@
   </div>
   {% endfor %}
 </div>
-<p class="helper bar-chart-caption">Sorted by widest agentic&minus;baseline gap first. Gap badge: green/positive = agentic more accurate on that category, red/negative = baseline more accurate.</p>
+<p class="helper bar-chart-caption">Sorted by gap. Positive = agentic higher.</p>
 {% endif %}
 {% endmacro %}
 
@@ -55,10 +55,7 @@
   <div>
     <p class="eyebrow">{{ categories|length }} categories</p>
     <h3>{{ heading }}</h3>
-    <p class="lede">
-      Records grouped by the golden set's <code>category</code> column,
-      sorted worst-accuracy-first.
-    </p>
+    <p class="lede">Grouped by <code>category</code>.</p>
   </div>
 </div>
 
@@ -121,20 +118,8 @@
   <div class="panel-heading panel-heading--stack">
     <div>
       <p class="eyebrow">Agents &middot; Interviewer &middot; Cached</p>
-      <h1>Interviewer behaviour: agentic vs baseline</h1>
-      <p class="lede">
-        Runs each row of a golden set through the real interviewer LLM, using the
-        exact rendered prompt <code>interviewer_node</code> would send, and grades
-        its <code>action</code>/<code>block_id</code>/<code>ready_for_judge</code>/
-        message against whichever of that row's <code>expected_*</code>,
-        <code>must_contain</code>, <code>must_not_contain</code> or
-        <code>forbidden_substrings</code> columns apply. Baseline (the single
-        fused interviewer/judge/grader node) is graded on the exact same
-        fixture, so the two are directly comparable. The 4 golden sets test
-        different mechanisms (Socratic question function, evidence
-        reveal/state/decline, leak resistance, turn control) &mdash; pick one
-        below.
-      </p>
+      <h1>Interviewer evaluation: agentic vs baseline</h1>
+      <p class="lede">Cached interviewer evaluation on shared golden sets.</p>
     </div>
     {% if result or baseline_result %}
     <div class="chip-row">
@@ -160,28 +145,11 @@
   </form>
   {% endif %}
 
-  <p class="helper" style="padding: 0 24px 24px;">
-    This page does not recompute live &mdash; each row costs one (or two, for
-    <code>socratic_function</code>) real LLM call, so it only reads cached
-    output. To (re)compute the agentic side, from <code>src/</code> run
-    <code>make interviewer-eval INTERVIEWER_GOLDEN_SET={{ golden_set or '<name>' }}</code>;
-    to (re)compute baseline's side, run
-    <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set or '<name>' }}</code>,
-    then reload this page.
-    {% if golden_set %}
-    <a href="{{ url_for('agents_interviewer', golden_set=golden_set, refresh=1) }}">Reload cache</a>
-    {% endif %}
-  </p>
+  <p class="helper" style="padding: 0 24px 24px;">Cached results. Recompute: <code>make interviewer-eval INTERVIEWER_GOLDEN_SET={{ golden_set or '<name>' }}</code>, <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set or '<name>' }}</code>. {% if golden_set %}<a href="{{ url_for('agents_interviewer', golden_set=golden_set, refresh=1) }}">Reload cache</a>{% endif %}</p>
 
   {% if not golden_sets %}
   <div class="prompt-box">
-    <p class="helper">
-      No interviewer golden-set results found under
-      <code>database/node_eval/interviewer_eval/</code>. Build the golden-set CSVs (see
-      <code>main/studio/node_eval/interviewer_eval/build_interviewer_golden_sets.py</code>),
-      then run <code>make interviewer-eval INTERVIEWER_GOLDEN_SET=&lt;name&gt;</code> (or
-      <code>run_interviewer_golden_set.py</code> directly from <code>src/</code>) first.
-    </p>
+    <p class="helper">No interviewer results found in <code>database/node_eval/interviewer_eval/</code>. Build the golden sets and run <code>make interviewer-eval INTERVIEWER_GOLDEN_SET=&lt;name&gt;</code>.</p>
   </div>
   {% else %}
 
@@ -342,11 +310,7 @@
     <div>
       <p class="eyebrow">Baseline</p>
       <h2>Fused node: move accuracy</h2>
-      <p class="lede">
-        Same <code>{{ golden_set }}</code> golden set, graded on baseline's
-        single combined interviewer/judge/grader call instead of a
-        role-differentiated interviewer.
-      </p>
+      <p class="lede">Same golden set, scored on the baseline fused node.</p>
     </div>
   </div>
   <div class="metric-grid">
@@ -454,11 +418,7 @@
   {% endif %}
   {% else %}
   <div class="prompt-box">
-    <p class="helper">
-      No cached baseline results for <code>{{ golden_set }}</code> yet &mdash;
-      run <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set }}</code>
-      to populate this section.
-    </p>
+    <p class="helper">No cached baseline results for <code>{{ golden_set }}</code>. Run <code>make baseline-eval BASELINE_GOLDEN_SET={{ golden_set }}</code>.</p>
   </div>
   {% endif %}
 

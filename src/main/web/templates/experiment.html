@@ -46,7 +46,7 @@
     <div>
       <p class="eyebrow">Batch Experiment</p>
       <h1>Experiment Overview</h1>
-      <p class="lede">Aggregate metrics across a full batch run (all scenarios &times; repeats, baseline vs agentic), plus per-scenario drill-down to compare repeats and feedback.</p>
+      <p class="lede">Batch metrics by graph, scenario, and repeat.</p>
     </div>
   </div>
   {% if batches %}
@@ -73,7 +73,7 @@
   {% endif %}
   {% else %}
   <div class="prompt-box">
-    <p class="helper">No batch runs found under <code>artifacts/batch_runs/</code>. Run <code>make run-all N=&lt;repeat&gt;</code> or <code>make experiment CASE=... N=...</code> to generate one.</p>
+    <p class="helper">No batch runs found in <code>artifacts/batch_runs/</code>. Run <code>make run-all</code> or <code>make experiment</code>.</p>
   </div>
   {% endif %}
 </section>
@@ -137,7 +137,7 @@
       </tbody>
     </table>
   </div>
-  <p class="helper" style="padding: 0 24px 24px;">The candidate LLM runs at temperature 0 by design, so it answers deterministically — this is a reproducibility control, not a fault: it holds the candidate's behavior constant so that differences between <strong>baseline</strong> and <strong>agentic</strong> are attributable to the graph/interviewer logic being compared, not to random candidate sampling. The repeated-line and identical-text rows above describe how deterministic each graph's runs turned out, with no green/red judgment implied.</p>
+  <p class="helper" style="padding: 0 24px 24px;">Candidate runs use temperature 0. Repetition rows show deterministic output.</p>
 
   {% if overview.errors %}
   <details class="disclosure" id="batch-errors">
@@ -174,9 +174,9 @@
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Pooled across every dimension &amp; scenario, bucketed by the reference score itself</p>
+      <p class="eyebrow">Grouped by reference score</p>
       <h2>Accuracy by true reference score (1&ndash;4)</h2>
-      <p class="lede">A graph that just guesses the most common reference score can look accurate overall without actually discriminating between good and bad performance. This groups every (judge score, reference score) pair by the <strong>reference score itself</strong> &mdash; it shows whether a graph is actually accurate at the low end (reference 1&ndash;2, the deliberately-flawed cases) or just riding a reference distribution skewed toward 3s and 4s.</p>
+      <p class="lede">Error by reference score.</p>
     </div>
   </div>
 
@@ -226,9 +226,9 @@
   </div>
 
   <div class="chip-row" style="padding: 0 24px 24px;">
-    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; accurate</span>
-    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; so-so</span>
-    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; off</span>
+    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; low error</span>
+    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; medium error</span>
+    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; high error</span>
     <span class="chip">&#9651; overestimates &bull; &#9661; underestimates &bull; &#9642; matches</span>
     <span class="chip"><span class="icon-star" aria-hidden="true"></span> more accurate graph on that row</span>
     <span class="chip">&equals; tie (identical MAE) &mdash; no graph is credited with the win</span>
@@ -240,13 +240,9 @@
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Pooled across every dimension &amp; scenario &mdash; each 1&ndash;4 score treated as a class</p>
+      <p class="eyebrow">Pooled score classes</p>
       <h2>MAE, Recall, Precision &amp; QWK</h2>
-      <p class="lede">
-        <strong>Recall</strong> for class <em>n</em>: of every case the reference truly scored <em>n</em>, how often this graph's judge also said <em>n</em>.
-        <strong>Precision</strong> for class <em>n</em>: of every case this graph's judge scored <em>n</em>, how often the reference agreed.
-        Both are macro-averaged (unweighted mean across classes) so a judge that only ever predicts the majority class (e.g. always 4) is penalized here even while pooled MAE still looks fine.
-      </p>
+      <p class="lede">Macro metrics across score classes 1&ndash;4.</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -278,9 +274,9 @@
     </table>
   </div>
   <ul class="metric-legend-list">
-    <li><strong>MAE</strong> &mdash; average point gap vs. the reference. Simple, but a judge that just guesses the majority class (mostly 3s/4s) can score a low MAE without discriminating good from bad performance.</li>
-    <li><strong>Recall / Precision</strong> &mdash; per-class (1&ndash;4) accuracy, so a judge that never predicts the low classes is penalized here even when its MAE looks fine.</li>
-    <li><strong>QWK</strong> (Quadratic Weighted Kappa) &mdash; the standard ordinal-agreement metric in the literature (essay scoring, clinical severity grading); corrects for the agreement expected by chance given the skewed reference distribution. 1.0 = perfect agreement, 0 = chance/majority-guessing level, negative = worse than chance. The most defensible single number for a thesis methodology section, since MAE alone can't tell "genuinely accurate" from "lucky because most cases are easy 3s/4s."</li>
+    <li><strong>MAE</strong> &mdash; average absolute gap vs. the reference.</li>
+    <li><strong>Recall / Precision</strong> &mdash; macro class agreement across scores 1&ndash;4.</li>
+    <li><strong>QWK</strong> &mdash; ordinal agreement adjusted for chance.</li>
   </ul>
 
   <details class="disclosure">
@@ -321,7 +317,7 @@
   <div class="panel-heading" style="padding-top: 24px;">
     <div>
       <h3 style="margin: 0;">Confusion matrix (reference score &times; judge score)</h3>
-      <p class="lede">Rows are the scenario's true reference score, columns are what the graph's judge said. Off-diagonal counts show exactly which direction the errors run (e.g. reference 2 read as 4). Diagonal cells (exact matches) are highlighted.</p>
+      <p class="lede">Rows are reference scores. Columns are judge scores.</p>
     </div>
   </div>
   {% for graph_name in overview.classification.graph_names %}
@@ -355,9 +351,9 @@
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Accuracy vs. reference (author-defined reference scores)</p>
-      <h2>Who scores it right?</h2>
-      <p class="lede">Each square compares a graph's judge score to the scenario's own reference score, pooled across every repeat in this batch. Lower error (greener) means that graph's evaluation lands closer to the reference; the trophy marks whichever graph is more accurate for that specific dimension. The bars below plot the same comparison per dimension &mdash; a short bar means that graph rarely produced a numeric score to compare at all.</p>
+      <p class="eyebrow">Against scenario reference</p>
+      <h2>Accuracy by dimension</h2>
+      <p class="lede">Per-dimension error against the scenario reference. Lower is better.</p>
     </div>
   </div>
 
@@ -377,7 +373,7 @@
     </div>
   </form>
   {% if overview.reference_filter %}
-  <p class="helper" style="padding: 4px 24px 16px;">Showing only reference score {{ overview.reference_filter | join(', ') }} in the heatmap and per-dimension table below.</p>
+  <p class="helper" style="padding: 4px 24px 16px;">Filtered to reference score {{ overview.reference_filter | join(', ') }}.</p>
   {% endif %}
 
   <div class="accuracy-top">
@@ -387,7 +383,7 @@
       <div class="metric-card{{ ' metric-card--winner' if s.graph_name == overview.accuracy.overall_winner else '' }}">
         <span>{{ s.graph_name }}{% if s.graph_name == overview.accuracy.overall_winner %} &bull; overall winner <span class="icon-star" aria-hidden="true"></span>{% endif %}</span>
         <strong>{{ s.dims_won }} / {{ overview.accuracy.total_dims }}</strong>
-        <p class="helper">dimensions won{% if overview.accuracy.ties %} &bull; {{ overview.accuracy.ties }} tied (no winner){% endif %} &bull; MAE {{ num(s.overall_mae) }} &middot; RMSE {{ num(s.overall_rmse) }} vs reference &bull; {{ s.n_compared }} scored comparisons</p>
+        <p class="helper">wins{% if overview.accuracy.ties %} &bull; {{ overview.accuracy.ties }} ties{% endif %} &bull; MAE {{ num(s.overall_mae) }} &middot; RMSE {{ num(s.overall_rmse) }} &bull; {{ s.n_compared }} compared</p>
       </div>
       {% endfor %}
     </div>
@@ -419,14 +415,14 @@
       </div>
       {% endfor %}
     </div>
-    <p class="helper bar-chart-caption">Longer bar = judge score close to the reference (accurate). Short or empty = far off from the reference, or no comparable score at all for that dimension.</p>
+    <p class="helper bar-chart-caption">Longer bar = closer to the reference.</p>
     {% endif %}
   </div>
 
   <div class="chip-row" style="padding: 0 24px 16px;">
-    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; accurate</span>
-    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; so-so</span>
-    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; off</span>
+    <span class="chip"><span class="legend-dot legend-dot--good" aria-hidden="true"></span> MAE &le; 0.4 &mdash; low error</span>
+    <span class="chip"><span class="legend-dot legend-dot--fair" aria-hidden="true"></span> MAE &le; 1.0 &mdash; medium error</span>
+    <span class="chip"><span class="legend-dot legend-dot--poor" aria-hidden="true"></span> MAE &gt; 1.0 &mdash; high error</span>
     <span class="chip">&#9651; overestimates &bull; &#9661; underestimates &bull; &#9642; matches</span>
     <span class="chip"><span class="icon-star" aria-hidden="true"></span> more accurate graph on that row</span>
     <span class="chip">&equals; tie (identical MAE) &mdash; no graph is credited with the win</span>
@@ -477,14 +473,9 @@
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Eval Case Performance &amp; Eval Dialog Quality</p>
+      <p class="eyebrow">Per-dimension summary</p>
       <h2>Per-dimension: deviation from reference &amp; hit rate</h2>
-      <p class="lede">
-        For every repeat where a graph returned a real number for this dimension (not <code>not_tested</code>) and the scenario has an author-defined reference score, this compares the two.
-        <strong>Mean deviation</strong> is the signed average of (judge score &minus; reference score): <code>+</code> means the graph overestimates on average, <code>&minus;</code> means it underestimates, close to <code>0</code> means it lands on target.
-        <strong>% exact match</strong> is the share of those comparisons where the judge's score matched the reference score exactly &mdash; treat it as anecdotal when the compared-count in parentheses is small.
-        {% if overview.reference_filter %}Reference-score filter active: only reference score {{ overview.reference_filter | join(', ') }} included (see filter above).{% endif %}
-      </p>
+      <p class="lede">Mean deviation is judge minus reference. Exact match is the share of exact matches.{% if overview.reference_filter %} Filter: {{ overview.reference_filter | join(', ') }}.{% endif %}</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -514,20 +505,16 @@
       </tbody>
     </table>
   </div>
-  <p class="helper" style="padding: 0 24px 24px;">If <strong>baseline</strong> shows &ndash; on every single dimension while <strong>agentic</strong> doesn't, that's a structural difference between the two graphs' evaluation nodes (baseline isn't producing comparable numeric scores here), not noise.</p>
+  <p class="helper" style="padding: 0 24px 24px;">All <strong>baseline</strong> dashes here mean no comparable numeric scores.</p>
 </section>
 
 {% if overview.overscoring.total_dims %}
 <section class="panel">
   <div class="panel-heading">
     <div>
-      <p class="eyebrow">Dimensions the scenario author marked "not_tested"</p>
-      <h2>Does the judge know when to abstain?</h2>
-      <p class="lede">
-        Some scenarios don't exercise every rubric dimension (e.g. no standalone creative prompt) &mdash; the scenario author marks the reference score <code>not_tested</code> for those.
-        This shows how often each graph's judge scored the dimension with a real number anyway, instead of recognizing it doesn't apply.
-        <strong>The accuracy heatmap above can't see this</strong>: it only compares pairs where both scores are numeric, so a judge that fabricates scores on <code>not_tested</code> dimensions is silently pooled out of that comparison rather than penalized for it. Lower % is better.
-      </p>
+      <p class="eyebrow"><code>not_tested</code> dimensions</p>
+      <h2>Scoring on <code>not_tested</code> dimensions</h2>
+      <p class="lede">Rate of numeric scores on <code>not_tested</code> dimensions. Lower is better.</p>
     </div>
   </div>
 
@@ -537,7 +524,7 @@
     <div class="metric-card">
       <span>{{ s.graph_name }}</span>
       <strong>{{ pct(s.overscore_rate) }}</strong>
-      <p class="helper">scored a not_tested dimension anyway &bull; {{ s.n_overscored }} / {{ s.n_not_tested }} cases</p>
+      <p class="helper">numeric score on <code>not_tested</code> &bull; {{ s.n_overscored }} / {{ s.n_not_tested }}</p>
     </div>
     {% endfor %}
   </div>
@@ -582,8 +569,8 @@
   <div class="panel-heading">
     <div>
       <p class="eyebrow">{{ overview.scenarios | length }} scenarios in this batch</p>
-      <h2>Drill into a scenario</h2>
-      <p class="lede">Open a scenario to see all repeat conversations side by side (per graph) and compare their final feedback.</p>
+      <h2>Scenario detail</h2>
+      <p class="lede">Open a scenario to compare repeats and feedback.</p>
     </div>
   </div>
   <div class="table-wrap">

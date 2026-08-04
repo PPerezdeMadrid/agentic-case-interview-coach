@@ -28,6 +28,11 @@ import baseline  # noqa: E402
 
 CASE_PERFORMANCE_FIELDS = agentic.CASE_PERFORMANCE_FIELDS
 QUALITY_DIALOG_FIELDS = agentic.QUALITY_DIALOG_FIELDS
+POST_EVAL_TRANSCRIPT_PREFIXES = (
+    "Eval Case Performance:",
+    "Eval Dialog Quality:",
+    "Give Feedback:",
+)
 
 
 def _load_batch(dir_name: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -47,6 +52,25 @@ def _load_batch(dir_name: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return summary, records
 
 
+def _transcript_before_eval(record: dict[str, Any]) -> list[str]:
+    """Persisted runs include post-eval bookkeeping and final feedback appended to the
+    transcript. RAG ablation must replay the transcript as it looked *before* the eval
+    nodes ran, otherwise those extra lines can explode prompt length and also leak the
+    original scoring pass back into the replay."""
+    transcript = record.get("transcript", [])
+    if not isinstance(transcript, list):
+        return []
+
+    cleaned: list[str] = []
+    for line in transcript:
+        if not isinstance(line, str):
+            continue
+        if line.startswith(POST_EVAL_TRANSCRIPT_PREFIXES):
+            continue
+        cleaned.append(line)
+    return cleaned
+
+
 def _rebuild_state(graph_name: str, record: dict[str, Any]) -> dict[str, Any]:
     """Rebuilds via scenario_ref (deterministic) plus the batch's actual transcript,
     so eval nodes see exactly what they saw the first time -- just without RAG."""
@@ -55,7 +79,7 @@ def _rebuild_state(graph_name: str, record: dict[str, Any]) -> dict[str, Any]:
         state = baseline.build_initial_baseline_state(scenario_ref=scenario_ref)
     else:
         state = agentic.build_initial_interview_state(scenario_ref=scenario_ref)
-    state["transcript"] = record.get("transcript", [])
+    state["transcript"] = _transcript_before_eval(record)
     state["thread_id"] = record.get("thread_id", state.get("thread_id", ""))
     return state
 

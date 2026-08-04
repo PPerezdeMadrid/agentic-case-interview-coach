@@ -39,11 +39,11 @@
       <p class="eyebrow">Timeline</p>
       <h2>Agent interaction</h2>
       {% if not trace.summary.has_trace_table %}
-      <p class="lede">The database does not have an <code>agent_state_traces</code> table yet.</p>
+      <p class="lede">No <code>agent_state_traces</code> table found.</p>
       {% elif not trace.traces %}
-      <p class="lede">This run exists, but no trace rows were recorded for it.</p>
+      <p class="lede">No trace rows recorded for this run.</p>
       {% else %}
-      <p class="lede">Cada tarjeta representa un paso persistido del grafo y resume qué cambió en el estado.</p>
+      <p class="lede">Each card shows one saved graph step.</p>
       {% endif %}
     </div>
   </div>
@@ -91,7 +91,7 @@
           {% endfor %}
         </div>
         {% else %}
-        <p class="helper">No relevant state diff persisted for this step.</p>
+        <p class="helper">No state changes saved for this step.</p>
         {% endif %}
       </div>
 
@@ -107,7 +107,7 @@
       </div>
 
       <details class="trace-json">
-        <summary>Raw changed_fields_json</summary>
+        <summary>Raw state diff</summary>
         <pre>{{ item.changed_fields|tojson(indent=2) }}</pre>
       </details>
     </article>

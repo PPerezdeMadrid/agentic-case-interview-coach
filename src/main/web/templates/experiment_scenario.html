@@ -30,7 +30,7 @@
     <div>
       <p class="eyebrow">Graph: {{ g.graph_name }}</p>
       <h2>{{ g.repeats | length }} repeat conversations</h2>
-      <p class="lede">Same scenario, same graph, independent repeats &mdash; compare how much the candidate's answers actually vary.</p>
+      <p class="lede">Compare repeat variation for the same graph and scenario.</p>
     </div>
     <div class="chip-row">
       <span class="chip">candidate text identical across repeats: {{ 'yes' if g.identical_candidate_across_repeats else 'no' }}</span>

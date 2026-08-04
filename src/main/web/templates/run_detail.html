@@ -47,9 +47,9 @@
       <p class="eyebrow">Quantitative Evaluation Metrics</p>
       <h2>Model vs Human Error</h2>
       {% if run.human_evaluation %}
-      <p class="lede">Human scores are treated as the reference. Numeric metrics exclude missing and <code>not_tested</code> values.</p>
+      <p class="lede">Human scores are the reference. Missing and <code>not_tested</code> are excluded.</p>
       {% else %}
-      <p class="lede">No human evaluation available yet. Quantitative error metrics require human scores.</p>
+      <p class="lede">No human evaluation yet.</p>
       {% endif %}
     </div>
   </div>
@@ -70,7 +70,7 @@
     <div>
       <p class="eyebrow">Score Comparison</p>
       <h2>Reference vs Model vs Human</h2>
-      <p class="lede">The comparison table uses human scores as the primary reference for evaluation quality.</p>
+      <p class="lede">Comparison against reference, model, and human scores.</p>
     </div>
   </div>
   <div class="table-wrap">
@@ -154,7 +154,7 @@
     <div class="panel-heading">
       <div>
         <p class="eyebrow">Final Feedback</p>
-        <h2>Automatic Summary</h2>
+        <h2>Final feedback</h2>
       </div>
     </div>
     <div class="markdown-block">
@@ -168,7 +168,7 @@
     <div>
       <p class="eyebrow">Human Evaluation</p>
       <h2>Post-Run Annotation</h2>
-      <p class="lede">Score every dimension below to populate the Model vs Human and Reference vs Human metrics above. Reference score is shown for context only. Saving again updates the existing annotation.</p>
+      <p class="lede">Add human scores and notes for this run. Saving updates the current annotation.</p>
     </div>
   </div>
   <form class="human-form" method="post" action="{{ url_for('save_human_evaluation_page', run_id=run.run_id) }}">
@@ -231,7 +231,7 @@
     {% endfor %}
 
     {% if not run.annotation_sections['rubric'] and not run.annotation_sections['case_interaction_quality'] %}
-    <p class="helper">No dimensions found for this run yet.</p>
+    <p class="helper">No dimensions available for this run.</p>
     {% endif %}
 
     <label class="notes-field">
@@ -242,7 +242,7 @@
     <div class="form-actions">
       <button class="button" type="submit">Save Human Evaluation</button>
       {% if run.human_evaluation %}
-      <p class="helper">Last updated {{ run.human_evaluation.updated_at }}</p>
+      <p class="helper">Updated {{ run.human_evaluation.updated_at }}</p>
       {% endif %}
     </div>
   </form>
