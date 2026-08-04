@@ -5,6 +5,9 @@
 # Copy of the database
 03-mvp/database
 
+# Files for written dissertation
+written-dissertation
+
 # Persisted RAG vector store (regenerate with rag_case_guide.py)
 src/database/vectorstore/
 

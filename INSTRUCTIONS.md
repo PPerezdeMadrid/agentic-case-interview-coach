@@ -46,16 +46,27 @@ The `baseline` and `agentic` graphs both call OpenRouter for their LLM roles —
 
 ```bash
 OPENROUTER_API_KEY=sk-or-v1-...
-OPENROUTER_MODEL_INTERVIEWER=qwen/qwen3-14b
-OPENROUTER_MODEL_CANDIDATE=mistralai/mistral-small-24b-instruct-2501
-OPENROUTER_MODEL_JUDGE=meta-llama/llama-3.3-70b-instruct
-OPENROUTER_MODEL_FEEDBACK=openai/gpt-4o-mini
-CANDIDATE_TEMPERATURE=0.5
+OPENROUTER_MODEL_INTERVIEWER=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_CANDIDATE=google/gemma-3-27b-it
+OPENROUTER_MODEL_JUDGE=qwen/qwen-2.5-72b-instruct
+OPENROUTER_MODEL_FEEDBACK=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_BASELINE=meta-llama/llama-3.3-70b-instruct
+CANDIDATE_TEMPERATURE=0.7
 INTERVIEWER_TEMPERATURE=0.6
 JUDGE_TEMPERATURE=0.0
-FEEDBACK_TEMPERATURE=0.0
+FEEDBACK_TEMPERATURE=0.3
+BASELINE_TEMPERATURE=0.5
 WORKBENCH_PORT=5020
+
+# Turn / round budgets
+MAX_INTERVIEWER_TURNS_BEFORE_JUDGE=5
+MAX_JUDGE_ROUNDS=7
+MAX_BASELINE_TURNS=15
+MAX_INTERVIEWER_JSON_RETRIES=3
+MAX_BASELINE_JSON_RETRIES=3
 ```
+
+`OPENROUTER_MODEL_BASELINE` / `BASELINE_TEMPERATURE` configure the `baseline` graph's single fused interviewer/judge/grader model, pinned independently of `OPENROUTER_MODEL_JUDGE`. `MAX_INTERVIEWER_TURNS_BEFORE_JUDGE` caps interviewer turns before the agentic judge is engaged, `MAX_JUDGE_ROUNDS` caps agentic judge-checkpoint rounds, `MAX_BASELINE_TURNS` is the baseline graph's equivalent overall turn budget, and the `*_JSON_RETRIES` variables cap retries on invalid structured-output responses before falling back to the controlled fallback behavior.
 
 `LMSTUDIO_*` variables are also read by [llm_server.py](main/studio/llm_server.py), but no active graph role is wired to them by default — they only back the connectivity test (`tests.test_api_connection`) and are available as a manual local fallback:
 
@@ -117,7 +128,7 @@ python3 run_all_scenarios.py --graph both --output-dir /tmp/agentic-batch --labe
 python3 run_all_scenarios.py --graph agentic --seed 7
 ```
 
-Available case ids (see `src/synthetic-dataset/`): `01-energy-company`, `02-football-team`, `03-agriculture-company`, `04-worldcup-test`.
+Available case ids for `--case`/`CASE=` (i.e. actually referenced by a scenario's `case_id`): `01-energy-company`, `02-football-team`, `03-agriculture-company`. A fourth case asset, `04-worldcup-test`, exists in `src/synthetic-dataset/` but isn't referenced by any scenario's `case_id`; it instead backs the `worldcup` golden-set fixtures used by the node-level evaluation suites (Section 6).
 
 ### 2.2 Makefile shortcuts
 
@@ -282,6 +293,22 @@ Equivalent direct call:
 python3 rag_ablation_eval.py --batch <batch_dir_name> [--limit N]
 ```
 
+### 6.5 Golden-set sync check
+
+No-LLM check that every baseline golden-set CSV still covers the same `conversation_id`s as the judge/interviewer CSV it mirrors. Run this after editing any judge/interviewer golden-set builder.
+
+```bash
+make golden-set-sync-check
+```
+
+### 6.6 Full node-eval sweep
+
+Runs the full node-level sweep in one go: the sync check, then `judge-eval` (`worldcup`), `interviewer-eval` across all four golden sets, and `baseline-eval` across all five (`worldcup` plus the same four) — sequentially, so results stay attributable to one run each and OpenRouter rate limits aren't hit in parallel.
+
+```bash
+make node-eval-all [LIMIT=<n>]
+```
+
 
 ## 7. Command Reference (cheat sheet)
 
@@ -307,6 +334,8 @@ make judge-eval [GOLDEN_SET=worldcup]
 make interviewer-eval [INTERVIEWER_GOLDEN_SET=evidence_handling]
 make baseline-eval [BASELINE_GOLDEN_SET=evidence_handling]
 make rag-ablation BATCH=<batch_dir_name>
+make golden-set-sync-check                      # no-LLM CSV coverage check
+make node-eval-all [LIMIT=<n>]                  # full sequential node-eval sweep
 
 # --- help ---
 make help                                       # prints this same target list

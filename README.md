@@ -147,12 +147,15 @@ The `baseline` and `agentic` graphs call OpenRouter for all four roles:
 
 ```bash
 OPENROUTER_API_KEY=sk-or-v1-...
-OPENROUTER_MODEL_INTERVIEWER=qwen/qwen3-14b
-OPENROUTER_MODEL_CANDIDATE=mistralai/mistral-small-24b-instruct-2501
-OPENROUTER_MODEL_JUDGE=meta-llama/llama-3.3-70b-instruct
-OPENROUTER_MODEL_FEEDBACK=openai/gpt-4o-mini
+OPENROUTER_MODEL_INTERVIEWER=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_CANDIDATE=google/gemma-3-27b-it
+OPENROUTER_MODEL_JUDGE=qwen/qwen-2.5-72b-instruct
+OPENROUTER_MODEL_FEEDBACK=meta-llama/llama-3.3-70b-instruct
+OPENROUTER_MODEL_BASELINE=meta-llama/llama-3.3-70b-instruct
 WORKBENCH_PORT=5020
 ```
+
+`OPENROUTER_MODEL_BASELINE` is the `baseline` graph's single fused model, pinned independently of `OPENROUTER_MODEL_JUDGE`.
 
 `LMSTUDIO_*` variables are also read (used by the connectivity test and as a manual local fallback), but no active graph role is wired to them by default:
 
