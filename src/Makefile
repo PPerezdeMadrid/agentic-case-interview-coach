@@ -29,7 +29,7 @@ else
 	PY  := $(VENV_PYTHON)
 endif
 
-.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test test-api-connection run-all run-all-baseline run-all-agentic experiment rag-ablation judge-eval interviewer-eval baseline-eval node-eval-all golden-set-sync-check
+.PHONY: help setup setup-local setup-hpc env-hpc langgraph workbench app test test-api-connection run-all run-all-baseline run-all-agentic experiment rag-ablation rag-ablation-status judge-eval interviewer-eval baseline-eval node-eval-all golden-set-sync-check
 
 help:
 	@printf "%s\n" "Available targets:"
@@ -46,10 +46,15 @@ help:
 	@printf "%s\n" "  make run-all-agentic   Run agentic across all scenarios [N=<repeat>] [LABEL=...]"
 	@printf "%s\n" "  make experiment CASE=<case_id> N=<repeat> [GRAPH=agentic|baseline|both] [LABEL=...]"
 	@printf "%s\n" "                    Run every scenario of a case N times each"
-	@printf "%s\n" "  make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]"
+	@printf "%s\n" "  make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>] [RESTART=1]"
 	@printf "%s\n" "                    Replay a batch's stored transcripts through the judge eval nodes"
 	@printf "%s\n" "                    with RAG disabled, and compare eval_case/eval_dialog scores against"
-	@printf "%s\n" "                    that batch's original (with-RAG) scores for the same transcript"
+	@printf "%s\n" "                    that batch's original (with-RAG) scores for the same transcript."
+	@printf "%s\n" "                    Auto-resumes from a checkpoint if a prior run was interrupted;"
+	@printf "%s\n" "                    pass RESTART=1 to ignore it and re-score from scratch"
+	@printf "%s\n" "  make rag-ablation-status BATCH=<batch_dir_name>"
+	@printf "%s\n" "                    Read-only: print records-done + per-dimension MAE from the"
+	@printf "%s\n" "                    checkpoint. Safe to run from another shell while an sbatch job runs"
 	@printf "%s\n" "  make judge-eval [GOLDEN_SET=worldcup] [LIMIT=<n>]"
 	@printf "%s\n" "                    Run a judge golden-set CSV (database/node_eval/judge_eval/) against the"
 	@printf "%s\n" "                    real judge LLM and score enough_evidence accuracy; read the result"
@@ -143,16 +148,24 @@ experiment:
 	$(PY) run_all_scenarios.py --graph $(GRAPH) --case $(CASE) --repeat $(N) --label "$(LABEL)"
 
 # --- RAG ablation eval: replay a batch's transcripts through the judge with RAG disabled ---
-# Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]
+# Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>] [RESTART=1]
 BATCH ?=
 LIMIT ?=
+RESTART ?=
 
 rag-ablation:
 	@if [ -z "$(BATCH)" ]; then \
-		printf "%s\n" "Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>]"; \
+		printf "%s\n" "Usage: make rag-ablation BATCH=<batch_dir_name> [LIMIT=<n>] [RESTART=1]"; \
 		exit 1; \
 	fi
-	$(PY) rag_ablation_eval.py --batch $(BATCH) $(if $(LIMIT),--limit $(LIMIT),)
+	$(PY) rag_ablation_eval.py --batch $(BATCH) $(if $(LIMIT),--limit $(LIMIT),) $(if $(RESTART),--restart,)
+
+rag-ablation-status:
+	@if [ -z "$(BATCH)" ]; then \
+		printf "%s\n" "Usage: make rag-ablation-status BATCH=<batch_dir_name>"; \
+		exit 1; \
+	fi
+	$(PY) rag_ablation_eval.py --batch $(BATCH) --status
 
 # --- Judge golden-set eval: score enough_evidence accuracy against the real judge LLM ---
 # Usage: make judge-eval [GOLDEN_SET=worldcup] [LIMIT=<n>]

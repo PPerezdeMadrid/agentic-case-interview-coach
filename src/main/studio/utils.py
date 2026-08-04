@@ -375,15 +375,20 @@ def _merge_adjacent_messages(messages: list) -> list:
 
 
 def _is_transient_provider_error(exc: Exception) -> bool:
-    """Detect OpenRouter errors worth a backed-off retry: real 429s, plus 400s carrying a
-    `provider_name` (OpenRouter routed to a provider that can't serve this model). A malformed
-    request from our own code has no `provider_name` and should NOT be retried."""
+    """Detect OpenRouter errors worth a backed-off retry: real 429s, 400s carrying a
+    `provider_name` (OpenRouter routed to a provider that can't serve this model), and 400s
+    whose message says a provider can't serve this model/endpoint even when the payload omits
+    `provider_name` (e.g. langchain_openai re-raising `response_dict["error"]` as a bare
+    ValueError). A malformed request from our own code has neither shape and should NOT be
+    retried."""
     if getattr(exc, "status_code", None) == 429:
         return True
     text = str(exc)
     if "Error code: 429" in text or "'code': 429" in text:
         return True
-    return "'provider_name'" in text and ("'code': 400" in text or "Error code: 400" in text)
+    if "'provider_name'" in text and ("'code': 400" in text or "Error code: 400" in text):
+        return True
+    return "does not support endpoint" in text
 
 
 def _summarize_provider_error(exc: Exception) -> str:
