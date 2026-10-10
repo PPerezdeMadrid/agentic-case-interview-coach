@@ -257,3 +257,11 @@ archive/research/02-Dataset/data_processed/agsm_cases/
 .DS_Store
 *.drawio.bkp
 ~$*.xls*
+
+# Exception: the dissertation PDF is published with the repo
+!doc/dissertation.pdf
+
+# Third-party casebook extractions (copyrighted, not redistributed)
+archive/research/02-Dataset/data_processed/
+archive/research/02-Dataset/script/output/
+archive/research/02-Dataset/script/AGSM 2002.md

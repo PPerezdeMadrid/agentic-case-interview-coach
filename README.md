@@ -1,18 +1,54 @@
 # Agentic Case Interview Coach
 
-![Status](https://img.shields.io/badge/status-under_construction-orange)
-![Type](https://img.shields.io/badge/type-research_prototype-blue)
+![Status](https://img.shields.io/badge/status-completed-green)
+![Type](https://img.shields.io/badge/type-MSc_dissertation-blue)
+![Grade](https://img.shields.io/badge/grade-distinction-gold)
 ![Stack](https://img.shields.io/badge/stack-langgraph%20%7C%20flask%20%7C%20rag-black)
 
-> **Under construction**
+> **MSc Artificial Intelligence dissertation, University of St Andrews (August 2026), awarded a Distinction.**
 >
-> This repository is an active research prototype and is still being cleaned up for public release.
+> Full write-up: [*Multi-Agent AI System for Consulting Interview Simulation and Feedback*](doc/dissertation.pdf) (PDF, 96 pages).
 
-`Agentic Case Interview Coach` is a dissertation project focused on AI-supported consulting case interview practice.
+`Agentic Case Interview Coach` is the code behind that dissertation: AI-supported consulting case interview practice, built to test whether splitting an interview system into specialised agents makes it judge better than a single model doing everything in one call.
 
-The current system simulates case interviews end to end, compares a `baseline` runtime against a more adaptive `agentic` runtime, stores the resulting traces, and exposes a small local workbench for inspection and human evaluation.
+The system simulates case interviews end to end, compares a `baseline` runtime (one fused agent) against a multi-agent `agentic` runtime, stores the resulting traces, and exposes a small local workbench for inspection and human evaluation.
 
-> A research prototype for testing whether a more agentic interview graph produces better coaching and evaluation than a simpler baseline.
+> **Main finding:** multi-agent coordination pays off mainly when the task requires tracking state across a conversation (e.g. evidence handling), not when judging a single turn, and it costs roughly twice as much. Neither system reaches meaningful agreement with human scoring.
+
+## Results
+
+Everything below is from the dissertation (Chapter 4). Agentic vs. baseline, on identical synthetic cases and the same rubric.
+
+**Where the agentic graph wins (interviewer golden sets)**
+
+| Dimension | Agentic | Baseline | Difference |
+|---|---|---|---|
+| Evidence handling | 92.3% | 66.1% | **+26.2 pts** |
+| Socratic function: clarity | n/a | n/a | **+18.2 pts** |
+| Socratic function: premise testing | n/a | n/a | **+18.2 pts** |
+
+The evidence-handling gap comes almost entirely from one category, `TELL_TO_ASSUME_NOWHERE` (92.3% vs. 23.1%), which requires keeping track of what was already said across turns. Overall socratic function accuracy is close: 55.4% agentic vs. 50.8% baseline.
+
+**Where the baseline wins:** `perspective_testing`, 28.6% (baseline) vs. 4.8% (agentic), a 23.8-point gap and the only category across all four dimensions where the baseline leads.
+
+**Cost.** The agentic graph's advantage is not free:
+
+| Per run | Baseline | Agentic | Ratio |
+|---|---|---|---|
+| LLM calls | 10.78 | 21.56 | ~2x |
+| Tokens | 67,472 | 124,651 | ~1.85x (+85%) |
+| Duration | 97.35 s | 226.76 s | >2x |
+
+**RAG (case-interview methodology guides, top-K = 5)**
+
+- Retrieval quality: **85.1% hit rate**, **75.3% recall**, **0.617 MRR**.
+- Judge calibration effect: grounding the Judge in retrieval improves accuracy on checkable dimensions (`case_math_answer`, and `confidence_calibration` by 0.139), but also shifts its standard on `clarity_and_concision`: without RAG the Judge scores it 0.32 higher on average. Retrieval does not only add facts; it can quietly recalibrate a judge's standards.
+
+**Corpus.** 74 active scenarios: 26 mixed-profile *anchor scenarios* (carrying reference scores) and 48 controlled perturbation scenarios.
+
+See [doc/evaluation/agent-evaluation.md](doc/evaluation/agent-evaluation.md) and [doc/evaluation/RAG-evaluation.md](doc/evaluation/RAG-evaluation.md) for the evaluation design.
+
+![Judge evaluation design](doc/evaluation/judge-eval.png)
 
 ## Why It Is Interesting
 
@@ -25,7 +61,7 @@ The current system simulates case interviews end to end, compares a `baseline` r
 
 - Simulates consulting case interviews from structured scenario data
 - Compares two runtime designs: `baseline` and `agentic`
-- Uses separate LLM-driven roles for interviewer, candidate, judge, and feedback
+- Uses three specialised agents (Interviewer, Judge, Feedback) and an LLM-based candidate simulator
 - Evaluates runs against a structured rubric
 - Adds retrieval-backed guidance from consulting methodology sources
 - Stores run artifacts in SQLite for later analysis
@@ -33,15 +69,12 @@ The current system simulates case interviews end to end, compares a `baseline` r
 
 ## Project Status
 
-This repository is being published as an academic/research codebase, not as a production-ready product.
+This is the finished codebase of an academic project, not a production-ready product.
 
-Current status:
-
-- core runtime is functional
-- workbench UI is available for local inspection
-- documentation is still being consolidated
-- repository layout still includes archived experiments and research material
-- APIs, prompts, and data assets may change without notice
+- the dissertation is complete and the experiments reported in it are final
+- some large experiments were run on a server, so not every reported number can be reproduced from the local run database alone
+- the workbench UI is meant for local inspection and human annotation
+- the repository layout still includes archived experiments and research material
 
 ## Stack
 
@@ -54,7 +87,7 @@ Current status:
 - FastEmbed
 - `pypdf`
 - OpenAI-compatible LLM endpoints
-- OpenRouter for the four active LLM roles (interviewer, candidate, judge, feedback)
+- OpenRouter for the LLM calls (Interviewer, Judge, Feedback agents plus the candidate simulator)
 - LM Studio wiring exists for local dev and connectivity tests, but the active `baseline`/`agentic` graphs run entirely on OpenRouter
 
 ## Repository Layout
@@ -106,10 +139,15 @@ flowchart LR
 
 ## Main Components
 
+The agentic system has **three agents**:
+
 - `Interviewer`: drives the case conversation and follow-up questions
-- `Candidate`: simulates the interviewee from scenario instructions
 - `Judge`: checks evidence quality and identifies missing focus areas
 - `Feedback`: produces final coaching output
+
+Plus supporting pieces that are not agents:
+
+- `Candidate simulator`: an LLM playing the interviewee from scenario instructions (controlled personas), so interviews can be run end to end without a human. It is part of the test harness, not of the system under evaluation
 - `RAG layer`: injects methodology context from consulting guide sources
 - `Workbench`: lets you inspect runs and add human evaluation
 
@@ -143,7 +181,7 @@ http://localhost:5020
 
 The runtime loads a repository-level `.env` file when present.
 
-The `baseline` and `agentic` graphs call OpenRouter for all four roles:
+The `baseline` and `agentic` graphs call OpenRouter for every role. The dissertation (Appendix A) documents the Judge as **Qwen2-72B**, Interviewer and Feedback as Llama-3.3-70B and the candidate simulator as Gemma; the slugs below are what this repo's code defaults to:
 
 ```bash
 OPENROUTER_API_KEY=sk-or-v1-...
@@ -168,6 +206,7 @@ LMSTUDIO_TEMPERATURE=0.14
 
 ## Documentation
 
+- [doc/dissertation.pdf](doc/dissertation.pdf): the full dissertation (method, results, discussion)
 - [src/README.md](src/README.md): detailed runtime and development guide
 - [RAG_GUIDE_PDF.md](RAG_GUIDE_PDF.md): notes on the PDF-based RAG layer
 - [doc/summary_arch.md](doc/summary_arch.md): architecture summary
@@ -190,8 +229,11 @@ LMSTUDIO_TEMPERATURE=0.14
 
 ## License
 
-No open-source license has been added to this repository yet.
+The source code is released under the [MIT License](LICENSE). Copyright (c) 2026 Paloma Pérez de Madrid Laguna.
 
-Unless and until a `LICENSE` file is added, this project should be treated as `all rights reserved`.
+The license covers the code and the original prompts and documentation written for this project. It does **not** cover third-party material, which keeps its own copyright and terms:
 
-Code, datasets, prompts, and third-party source materials should not be assumed to be freely reusable.
+- consulting casebooks (e.g. Chicago, AGSM, Harvard, Duke) and any text or data derived from them, including the extracted files under `archive/research/`
+- the source guides used for retrieval (e.g. *Principles of Managerial Accounting*, CC BY 4.0)
+
+The dissertation PDF ([doc/dissertation.pdf](doc/dissertation.pdf)) is my own work, published with my permission as stated in its declaration. Please cite it if you reuse the results.
